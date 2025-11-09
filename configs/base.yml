@@ -1,0 +1,114 @@
+global:
+    project_name: Neurochar
+    project_frontend_url: http://localhost:3000
+    project_api_url: http://localhost:8080
+    cpanel_frontend_url: http://localhost:3001
+    cpanel_api_url: http://localhost:8081
+    tenant_main_domain: localhost:3000
+    tenant_url_scheme: http
+
+cpanel_app:
+    name: cpanel
+    version: 1.0.0
+    base:
+        start_timeout_sec: 30
+        stop_timeout_sec: 15
+        is_prod: false
+        use_fx_logger: true
+        use_logger: true
+        log_sql_queries: true
+        log_http: true
+    http:
+        port: 8081
+        prefix: "/cpanel-api"
+        under_proxy: false
+        stop_timeout_sec: 3
+    auth:
+        life_time_without_activity_sec: 10800
+        jwt_secret:
+
+cronjob_app:
+    name: cronjob
+    version: 1.0.0
+    base:
+        start_timeout_sec: 30
+        stop_timeout_sec: 15
+        is_prod: false
+        use_fx_logger: true
+        use_logger: true
+        log_sql_queries: true
+        log_jobs: true
+    jobs:
+        autostart: true
+
+        process_files_to_delete:
+            timeout_millisec: 5000
+            failed_timeout_millisec: 15000
+
+        process_unused_files:
+            timeout_millisec: 60000
+            failed_timeout_millisec: 60000
+            unused_ttl_min: 1440
+
+        process_emails_to_send:
+            timeout_millisec: 2000
+            failed_timeout_millisec: 60000
+
+        process_emails_to_delete:
+            timeout_millisec: 3600000
+            failed_timeout_millisec: 60000
+            ttl_min: 43200
+
+backend_app:
+    name: backend
+    version: 1.0.0
+    base:
+        start_timeout_sec: 30
+        stop_timeout_sec: 15
+        is_prod: false
+        use_fx_logger: true
+        use_logger: true
+        log_sql_queries: true
+        log_http: true
+    http:
+        port: 8080
+        prefix: "/api"
+        under_proxy: false
+        stop_timeout_sec: 3
+
+postgres:
+    max_attempts: 5
+    attempt_sleep_seconds: 1
+    migrations_path: migrations/sql
+    master:
+        dsn:
+
+storage:
+    up_migrations: true
+    s3_endpoint: "http://127.0.0.1:9000"
+    s3_access_key: "minioadmin"
+    s3_secret_key: "minioadmin"
+    s3_region: "local"
+    s3_url_is_host: false
+    s3_url: "http://localhost:9000"
+    #s3_url: "http://192.168.0.180:9000"
+    s3_url_host_prefix:
+    s3_url_host_postfix:
+
+emailing:
+    smtp_host: 127.0.0.1
+    smtp_port: 1025
+    smtp_user:
+    smtp_password:
+    default_from_email: no-reply@neurochar.ru
+    default_from_title: Neurochar
+
+alerts:
+    bot_token:
+    target_channel:
+
+auth:
+    access_token_lifetime_sec: 900
+    refresh_token_lifetime_hours: 720
+    jwt_access_secret:
+    jwt_refresh_secret:

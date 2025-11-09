@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package auth.v1;
+
+message AccessClaims {
+  string account_id = 1;
+  string session_id = 2;
+  string tenant_id = 3;
+  int64 role_id = 4;
+  map<string, string> meta = 5;
+}
