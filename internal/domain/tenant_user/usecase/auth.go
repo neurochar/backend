@@ -42,6 +42,17 @@ type AuthUsecase interface {
 		ip net.IP,
 	) (res *AuthSessionDTO, resErr error)
 
+	FindSessionByID(
+		ctx context.Context,
+		id uuid.UUID,
+		queryParams *uctypes.QueryGetOneParams,
+	) (res *entity.Session, resErr error)
+
+	IsSessionRevoked(
+		ctx context.Context,
+		id uuid.UUID,
+	) (res bool, resErr error)
+
 	IssueAccessJWT(access *entity.SessionAccessClaims) (resToken string, resErr error)
 
 	IssueRefreshJWT(refresh *entity.SessionRefreshClaims) (resToken string, resErr error)

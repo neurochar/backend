@@ -1,8 +1,14 @@
 package middleware
 
 import (
+	"errors"
+	"strings"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
+	appErrors "github.com/neurochar/backend/internal/app/errors"
+	tenantUserUC "github.com/neurochar/backend/internal/domain/tenant_user/usecase"
+	"github.com/neurochar/backend/internal/infra/loghandler"
 )
 
 type AuthData struct {
@@ -15,28 +21,45 @@ type AuthData struct {
 const AuthDataKey = "auth_data"
 
 func (ctrl *Controller) MiddlewareAuth(c *fiber.Ctx) error {
-	// skipErr := false
+	authHeader := c.Get("Authorization")
+	accessToken := strings.TrimPrefix(authHeader, "Bearer ")
 
-	// cookieValue := c.Cookies("auth_admin_session")
+	if accessToken == "" {
+		return c.Next()
+	}
 
-	// requestIP := net.ParseIP(middleware.GetRealIP(c))
+	claims, err := ctrl.authUC.ParseAccessToken(accessToken, true)
+	if err != nil {
+		if errors.Is(err, tenantUserUC.ErrInvalidToken) {
+			return appErrors.ErrUnauthorized
+		}
+		return err
+	}
 
-	// session, account, role, err := ctrl.authAdminUC.AuthByJWT(c.Context(), cookieValue, requestIP)
-	// if err != nil {
-	// 	if skipErr {
-	// 		return c.Next()
-	// 	}
-	// 	return err
-	// }
+	tenantID, err := uuid.Parse(claims.TenantId)
+	if err != nil {
+		return err
+	}
 
-	// c.Locals(AuthDataKey, &AuthData{
-	// 	Account: account,
-	// 	Session: session,
-	// 	Role:    role,
-	// })
+	sessionID, err := uuid.Parse(claims.SessionId)
+	if err != nil {
+		return err
+	}
 
-	// ctxData, ctxKey := loghandler.SetData(c.Context(), "request.account.id", account.ID)
-	// c.Locals(ctxKey, ctxData)
+	accountID, err := uuid.Parse(claims.AccountId)
+	if err != nil {
+		return err
+	}
+
+	c.Locals(AuthDataKey, &AuthData{
+		TenantID:  tenantID,
+		SessionID: sessionID,
+		AccountID: accountID,
+		RoleID:    uint64(claims.RoleId),
+	})
+
+	ctxData, ctxKey := loghandler.SetData(c.Context(), "request.account.id", claims.AccountId)
+	c.Locals(ctxKey, ctxData)
 
 	return c.Next()
 }

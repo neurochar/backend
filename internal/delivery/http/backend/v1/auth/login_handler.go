@@ -13,15 +13,12 @@ import (
 	appErrors "github.com/neurochar/backend/internal/app/errors"
 )
 
-const refreshCookie = "auth_refresh_token"
-
 type LoginHandlerIn struct {
 	Email        string `json:"email" validate:"required,email"`
 	Password     string `json:"password" validate:"min=0"`
 	TenantTextID string `json:"tenant_text_id" validate:"required"`
 }
 
-// LoginHandler - auth handler
 func (ctrl *Controller) LoginHandler(c *fiber.Ctx) error {
 	const op = "LoginHandler"
 
@@ -84,18 +81,6 @@ func (ctrl *Controller) LoginHandler(c *fiber.Ctx) error {
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}
-
-	// cookie := fiber.Cookie{
-	// 	Name:     refreshCookie,
-	// 	Value:    refreshJWT,
-	// 	Path:     fmt.Sprintf("/%s/v1", ctrl.cfg.CPanelApp.HTTP.Prefix),
-	// 	HTTPOnly: true,
-	// 	Secure:   ctrl.cfg.BackendApp.Base.IsProd,
-	// 	SameSite: "lax",
-	// 	Expires:  authDTO.Session.RefreshTokenExpiresAt.Add(time.Hour * 24),
-	// }
-
-	// c.Cookie(&cookie)
 
 	out, err := OutLoginDTO(c, ctrl.fileUC, authDTO.AccountDTO, refreshJWT, accessJWT)
 	if err != nil {

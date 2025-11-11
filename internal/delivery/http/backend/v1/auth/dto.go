@@ -25,10 +25,24 @@ type OutAccount struct {
 	ProfilePhoto100x100File *dto.FileDTO `json:"profilePhoto100x100File"`
 }
 
+type OutTenant struct {
+	Version int64 `json:"_version,omitempty"`
+
+	ID     uuid.UUID `json:"id"`
+	TextID string    `json:"textID"`
+	Name   string    `json:"name"`
+}
+
 type OutLogin struct {
 	Account    *OutAccount `json:"account"`
+	Tenant     *OutTenant  `json:"tenant"`
 	RefreshJWT string      `json:"refreshJWT"`
 	AccessJWT  string      `json:"accessJWT"`
+}
+
+type OutWhoIAm struct {
+	Account *OutAccount `json:"account"`
+	Tenant  *OutTenant  `json:"tenant"`
 }
 
 // Helpers
@@ -55,6 +69,22 @@ func OutAccountDTO(
 	return out, nil
 }
 
+func OutTenantDTOByAccountDTO(
+	c *fiber.Ctx,
+	fc fileUC.Usecase,
+	accountDTO *tenantUserUC.AccountDTO,
+) (*OutTenant, error) {
+	out := &OutTenant{
+		Version: accountDTO.Account.Version(),
+
+		ID:     accountDTO.Tenant.ID,
+		TextID: accountDTO.Tenant.TextID,
+		Name:   accountDTO.Tenant.Name,
+	}
+
+	return out, nil
+}
+
 func OutLoginDTO(
 	c *fiber.Ctx,
 	fc fileUC.Usecase,
@@ -62,15 +92,44 @@ func OutLoginDTO(
 	refreshJWT string,
 	accessJWT string,
 ) (*OutLogin, error) {
-	outAccout, err := OutAccountDTO(c, fc, accountDTO)
+	outAccount, err := OutAccountDTO(c, fc, accountDTO)
+	if err != nil {
+		return nil, err
+	}
+
+	outTenant, err := OutTenantDTOByAccountDTO(c, fc, accountDTO)
 	if err != nil {
 		return nil, err
 	}
 
 	out := &OutLogin{
-		Account:    outAccout,
+		Account:    outAccount,
+		Tenant:     outTenant,
 		AccessJWT:  accessJWT,
 		RefreshJWT: refreshJWT,
+	}
+
+	return out, nil
+}
+
+func OutWhoIAmDTO(
+	c *fiber.Ctx,
+	fc fileUC.Usecase,
+	accountDTO *tenantUserUC.AccountDTO,
+) (*OutWhoIAm, error) {
+	outAccount, err := OutAccountDTO(c, fc, accountDTO)
+	if err != nil {
+		return nil, err
+	}
+
+	outTenant, err := OutTenantDTOByAccountDTO(c, fc, accountDTO)
+	if err != nil {
+		return nil, err
+	}
+
+	out := &OutWhoIAm{
+		Account: outAccount,
+		Tenant:  outTenant,
 	}
 
 	return out, nil

@@ -73,4 +73,10 @@ func RegisterRoutes(groups *v1.Groups, ctrl *Controller, cpanelMdwr *middleware.
 	routeGroup := groups.Default.Group(fmt.Sprintf("/%s", url))
 
 	routeGroup.Post("/login", ipLimiterMiddleware, ctrl.LoginHandler)
+
+	routeGroup.Post("/refresh", ctrl.RefreshHandler)
+
+	routeGroup.Get("/whoiam", cpanelMdwr.MiddlewareAuthRequired, ctrl.WhoIAmHandler)
+
+	routeGroup.Post("/logout", cpanelMdwr.MiddlewareAuthRequired, ctrl.LogoutHandler)
 }

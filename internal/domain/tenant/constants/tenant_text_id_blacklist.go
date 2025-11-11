@@ -1,6 +1,7 @@
 package constants
 
 var TenantTextIDBlacklist = []string{
+	"room",
 	"cabinet",
 	"files",
 	"s3",

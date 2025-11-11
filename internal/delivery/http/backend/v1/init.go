@@ -29,7 +29,7 @@ func ProvideGroups(
 ) *Groups {
 	prefix := fmt.Sprintf("%s/v1", cfg.BackendApp.HTTP.Prefix)
 
-	defaultGroup := fiberApp.Group(prefix)
+	defaultGroup := fiberApp.Group(prefix, cpanelMdwr.MiddlewareAuth)
 
 	backoffCtrl.SetConfigForGroup(
 		BackoffDefaultGroupID,
