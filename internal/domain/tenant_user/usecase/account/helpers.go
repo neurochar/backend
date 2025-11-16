@@ -160,13 +160,15 @@ func (uc *UsecaseImpl) createAccountPasswordRecoveryCode(
 type RecoveryCodeEmailData struct {
 	Cfg       config.Config
 	Account   *entity.Account
+	Tenant    *tenantEntity.Tenant
+	TenantURL string
 	Code      string
 	RequestIP string
 }
 
 func (uc *UsecaseImpl) sendRecoveryCodeEmailToUser(
 	ctx context.Context,
-	account *entity.Account,
+	accountDTO *usecase.AccountDTO,
 	recoveryCode *entity.AccountCode,
 	requestIP net.IP,
 ) error {
@@ -174,19 +176,21 @@ func (uc *UsecaseImpl) sendRecoveryCodeEmailToUser(
 
 	data := RecoveryCodeEmailData{
 		Cfg:       uc.cfg,
-		Account:   account,
+		Account:   accountDTO.Account,
+		Tenant:    accountDTO.Tenant,
+		TenantURL: accountDTO.Tenant.GetUrl(uc.cfg.Global.TenantMainDomain, uc.cfg.Global.TenantUrlScheme),
 		Code:      recoveryCode.Code,
 		RequestIP: requestIP.String(),
 	}
 
-	msg, err := emailing.NewMessageFromJetTpl("users/email_password_recovery_code.jet", data)
+	msg, err := emailing.NewMessageFromJetTpl("tenant_users/email_password_recovery_code.jet", data)
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
 	}
 
 	err = uc.emailing.SendAsyc(emailing.Message{
-		To:            account.Email,
-		Subject:       fmt.Sprintf("Восстановление пароля на сайте %s", uc.cfg.Global.ProjectName),
+		To:            accountDTO.Account.Email,
+		Subject:       fmt.Sprintf("%s: Восстановление пароля", accountDTO.Tenant.TextID),
 		TextHtml:      msg,
 		AutoTextPlain: true,
 	}, func(sendErr error) {

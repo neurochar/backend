@@ -20,9 +20,10 @@ type OutAccount struct {
 	IsConfirmed     bool      `json:"isConfirmed"`
 	IsEmailVerified bool      `json:"isEmailVerified"`
 
-	ProfileName             string       `json:"profileName"`
-	ProfileSurname          string       `json:"profileSurname"`
-	ProfilePhoto100x100File *dto.FileDTO `json:"profilePhoto100x100File"`
+	ProfileName              string       `json:"profileName"`
+	ProfileSurname           string       `json:"profileSurname"`
+	ProfilePhoto100x100File  *dto.FileDTO `json:"profilePhoto100x100File"`
+	ProfilePhotoOriginalFile *dto.FileDTO `json:"profilePhotoOriginalFile"`
 }
 
 type OutTenant struct {
@@ -33,11 +34,16 @@ type OutTenant struct {
 	Name   string    `json:"name"`
 }
 
+type OutTokens struct {
+	RefreshJWT     string `json:"refreshJWT"`
+	RefreshLifeSec uint64 `json:"refreshLifeSec"`
+	AccessJWT      string `json:"accessJWT"`
+}
+
 type OutLogin struct {
-	Account    *OutAccount `json:"account"`
-	Tenant     *OutTenant  `json:"tenant"`
-	RefreshJWT string      `json:"refreshJWT"`
-	AccessJWT  string      `json:"accessJWT"`
+	Account *OutAccount `json:"account"`
+	Tenant  *OutTenant  `json:"tenant"`
+	OutTokens
 }
 
 type OutWhoIAm struct {
@@ -61,9 +67,10 @@ func OutAccountDTO(
 		IsConfirmed:     accountDTO.Account.IsConfirmed,
 		IsEmailVerified: accountDTO.Account.IsEmailVerified,
 
-		ProfileName:             accountDTO.Account.ProfileName,
-		ProfileSurname:          accountDTO.Account.ProfileSurname,
-		ProfilePhoto100x100File: dto.NewFileDTO(accountDTO.ProfilePhoto100x100File, fc, true),
+		ProfileName:              accountDTO.Account.ProfileName,
+		ProfileSurname:           accountDTO.Account.ProfileSurname,
+		ProfilePhoto100x100File:  dto.NewFileDTO(accountDTO.ProfilePhoto100x100File, fc, true),
+		ProfilePhotoOriginalFile: dto.NewFileDTO(accountDTO.ProfilePhotoOriginalFile, fc, true),
 	}
 
 	return out, nil
@@ -85,11 +92,27 @@ func OutTenantDTOByAccountDTO(
 	return out, nil
 }
 
+func OutTokensDTO(
+	c *fiber.Ctx,
+	refreshJWT string,
+	refreshLifeSec uint64,
+	accessJWT string,
+) (*OutTokens, error) {
+	out := &OutTokens{
+		AccessJWT:      accessJWT,
+		RefreshLifeSec: refreshLifeSec,
+		RefreshJWT:     refreshJWT,
+	}
+
+	return out, nil
+}
+
 func OutLoginDTO(
 	c *fiber.Ctx,
 	fc fileUC.Usecase,
 	accountDTO *tenantUserUC.AccountDTO,
 	refreshJWT string,
+	refreshLifeSec uint64,
 	accessJWT string,
 ) (*OutLogin, error) {
 	outAccount, err := OutAccountDTO(c, fc, accountDTO)
@@ -103,10 +126,13 @@ func OutLoginDTO(
 	}
 
 	out := &OutLogin{
-		Account:    outAccount,
-		Tenant:     outTenant,
-		AccessJWT:  accessJWT,
-		RefreshJWT: refreshJWT,
+		Account: outAccount,
+		Tenant:  outTenant,
+		OutTokens: OutTokens{
+			AccessJWT:      accessJWT,
+			RefreshLifeSec: refreshLifeSec,
+			RefreshJWT:     refreshJWT,
+		},
 	}
 
 	return out, nil

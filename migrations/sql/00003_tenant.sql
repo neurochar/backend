@@ -8,6 +8,7 @@ CREATE TABLE "tenant" (
     text_id                 TEXT NOT NULL,
     is_demo                 BOOLEAN NOT NULL DEFAULT FALSE,
     is_active               BOOLEAN NOT NULL,
+    prepared                BOOLEAN NOT NULL DEFAULT FALSE,
     "name"                  TEXT NOT NULL,
     created_at              TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at              TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -20,7 +21,7 @@ INSERT INTO "tenant" (id, text_id, is_demo, is_active, "name") VALUES ('00cb0816
 -- Таблица аккаунтов в tenant
 CREATE TABLE "tenant_account" (
     id                              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    tenant_id                       UUID NOT NULL REFERENCES "tenant"(id) ON DELETE CASCADE,
+    tenant_id                       UUID NOT NULL REFERENCES "tenant"(id) ON DELETE RESTRICT,
     role_id                         INT NOT NULL,
     email                           TEXT NOT NULL,
     password_hash                   TEXT NOT NULL,

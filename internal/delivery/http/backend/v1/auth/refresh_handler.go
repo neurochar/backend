@@ -14,7 +14,7 @@ import (
 )
 
 type RefreshHandlerIn struct {
-	RefreshToken string `json:"refresh_token" validate:"required"`
+	RefreshToken string `json:"refreshToken" validate:"required"`
 }
 
 func (ctrl *Controller) RefreshHandler(c *fiber.Ctx) error {
@@ -60,7 +60,7 @@ func (ctrl *Controller) RefreshHandler(c *fiber.Ctx) error {
 		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}
 
-	out, err := OutLoginDTO(c, ctrl.fileUC, authDTO.AccountDTO, refreshJWT, accessJWT)
+	out, err := OutTokensDTO(c, refreshJWT, uint64(ctrl.cfg.Auth.RefreshTokenLifetimeHrs)*3600, accessJWT)
 	if err != nil {
 		return err
 	}

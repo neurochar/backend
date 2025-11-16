@@ -17,6 +17,10 @@ var ErrAccountInvalidEmail = appErrors.ErrBadRequest.Extend("invalid email").Wit
 
 var ErrAccountInvalidPassword = appErrors.ErrBadRequest.Extend("invalid password").WithTextCode("INVALID_PASSWORD")
 
+var ErrAccountProfileInvalidName = appErrors.ErrBadRequest.Extend("invalid name").WithTextCode("INVALID_NAME")
+
+var ErrAccountProfileInvalidSurname = appErrors.ErrBadRequest.Extend("invalid surname").WithTextCode("INVALID_SURNAME")
+
 type Account struct {
 	ID                         uuid.UUID
 	TenantID                   uuid.UUID
@@ -122,6 +126,12 @@ func (item *Account) SetEmail(email string) error {
 	return nil
 }
 
+func (item *Account) SetRoleID(value uint64) error {
+	item.RoleID = value
+
+	return nil
+}
+
 func (item *Account) SetLastLoginAt(value *time.Time) {
 	if value != nil {
 		value = lo.ToPtr(value.Truncate(time.Microsecond))
@@ -140,6 +150,30 @@ func (item *Account) SetLastRequestAt(value *time.Time) {
 
 func (item *Account) SetLastRequestIP(value *net.IP) {
 	item.LastRequestIP = value
+}
+
+func (item *Account) SetProfileName(value string) error {
+	value = strings.TrimSpace(value)
+
+	if value == "" {
+		return ErrAccountProfileInvalidName
+	}
+
+	item.ProfileName = value
+
+	return nil
+}
+
+func (item *Account) SetProfileSurname(value string) error {
+	value = strings.TrimSpace(value)
+
+	if value == "" {
+		return ErrAccountProfileInvalidSurname
+	}
+
+	item.ProfileSurname = value
+
+	return nil
 }
 
 func NewAccount(

@@ -1,0 +1,12 @@
+Здравствуйте, {{ data.ProfileDTO.Profile.Name }}!<br />
+<br />
+Данные для входа:<br />
+Логин: {{ data.Account.Email }}<br />
+{{ if data.IsSendPassword }}
+Пароль: {{ data.Password }}<br />
+{{ end }}
+
+{{ if data.NeedActivate }}
+<br />
+Вам необходимо активировать аккаунт. Для этого необходимо перейти по ссылке: <a href="{{ data.ActivateUrl }}" target="_blank">{{ data.ActivateUrl }}</a>
+{{ end }}

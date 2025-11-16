@@ -2,16 +2,59 @@ package account
 
 import (
 	"context"
+	"errors"
 	"net"
 	"strings"
 
 	"github.com/google/uuid"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
 	"github.com/neurochar/backend/internal/common/uctypes"
+	fileEntity "github.com/neurochar/backend/internal/domain/file/entity"
+	fileUC "github.com/neurochar/backend/internal/domain/file/usecase"
+	"github.com/neurochar/backend/internal/domain/tenant_user/constants"
 	entity "github.com/neurochar/backend/internal/domain/tenant_user/entity"
 	"github.com/neurochar/backend/internal/domain/tenant_user/usecase"
+	"github.com/neurochar/backend/internal/infra/imageproc"
 	"github.com/neurochar/backend/pkg/emailnormalize"
 )
+
+func (uc *UsecaseImpl) UploadProfileImageFile(
+	ctx context.Context,
+	fileName string,
+	fileData []byte,
+) ([]*fileEntity.File, error) {
+	const op = "UploadProfileImageFile"
+
+	filesMap, _, err := uc.fileUC.UploadAndCreateFiles(ctx, fileUC.UploadFilesIn{
+		{
+			FileData: fileData,
+			Target:   string(usecase.FileTargetProfilePhotoOriginal),
+			FileName: fileName,
+			Process: func(fd []byte) ([]byte, *appErrors.AppError) {
+				return uc.imageProc.DownscaleIfLarger(fileData, 1920, 1920, imageproc.WithAllowedFormats(imageproc.FormatJPEG))
+			},
+		},
+		{
+			FileData: fileData,
+			Target:   string(usecase.FileTargetProfilePhoto100x100),
+			FileName: fileName,
+			Process: func(fd []byte) ([]byte, *appErrors.AppError) {
+				return uc.imageProc.ScaleAndCrop(fileData, 100, 100, imageproc.WithAllowedFormats(imageproc.FormatJPEG))
+			},
+		},
+	})
+	if err != nil {
+		return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	result := make([]*fileEntity.File, 0, len(filesMap))
+
+	for _, file := range filesMap {
+		result = append(result, file)
+	}
+
+	return result, nil
+}
 
 // CreateAccountByDTO TODO
 func (uc *UsecaseImpl) CreateAccountByDTO(
@@ -70,82 +113,124 @@ func (uc *UsecaseImpl) CreateAccountByDTO(
 	return nil, nil, nil
 }
 
-// PatchAccountByDTO TODO
 func (uc *UsecaseImpl) PatchAccountByDTO(
 	ctx context.Context,
 	id uuid.UUID,
 	in usecase.PatchAccountDataInput,
 	skipVersionCheck bool,
 ) error {
-	// const op = "PatchAccountByDTO"
+	const op = "PatchAccountByDTO"
 
-	/*
-		err := uc.dbMasterClient.Do(ctx, func(ctx context.Context) error {
-			account, err := uc.repoAccount.FindOneByID(ctx, id, &uctypes.QueryGetOneParams{
-				ForUpdate: true,
+	err := uc.dbMasterClient.Do(ctx, func(ctx context.Context) error {
+		account, err := uc.repoAccount.FindOneByID(ctx, id, &uctypes.QueryGetOneParams{
+			ForUpdate: true,
+		})
+		if err != nil {
+			return err
+		}
+
+		accountDTOEntities, err := uc.entitiesToDTO(ctx, []*entity.Account{account}, &usecase.AccountDTOOptions{
+			FetchTenant: true,
+		})
+		if err != nil {
+			return err
+		}
+
+		accountDTO := accountDTOEntities[0]
+
+		if !skipVersionCheck && account.Version() != in.Version {
+			return appErrors.ErrVersionConflict.
+				WithDetail("last_version", false, account.Version()).
+				WithDetail("last_updated_at", false, account.UpdatedAt)
+		}
+
+		if in.Email != nil {
+			err = account.SetEmail(*in.Email)
+			if err != nil {
+				return err
+			}
+
+			checkAccount, err := uc.repoAccount.FindOneByEmail(ctx, accountDTO.Tenant.ID, account.Email, nil)
+			if err == nil && checkAccount.ID != account.ID {
+				return appErrors.ErrUniqueViolation.WithDetail("field", false, "email")
+			} else if err != nil && !errors.Is(err, appErrors.ErrNotFound) {
+				return err
+			}
+		}
+
+		if in.Password != nil {
+			err = account.SetPassword(*in.Password)
+			if err != nil {
+				return err
+			}
+		}
+
+		if in.IsEmailVerified != nil {
+			account.IsEmailVerified = *in.IsEmailVerified
+		}
+
+		if in.IsBlocked != nil {
+			account.IsBlocked = *in.IsBlocked
+		}
+
+		if in.RoleID != nil {
+			if _, ok := constants.RolesMap[*in.RoleID]; !ok {
+				return usecase.ErrRoleNotFound
+			}
+
+			err := account.SetRoleID(*in.RoleID)
+			if err != nil {
+				return err
+			}
+		}
+
+		if in.ProfileName != nil {
+			err := account.SetProfileName(*in.ProfileName)
+			if err != nil {
+				return err
+			}
+		}
+
+		if in.ProfileSurname != nil {
+			err := account.SetProfileSurname(*in.ProfileSurname)
+			if err != nil {
+				return err
+			}
+		}
+
+		if in.ProfilePhotos != nil {
+			_, err = uc.fileUC.ProcessFilesToTarget(ctx, []fileUC.ProcessFileToTargetIn{
+				{
+					CurrentFileID: account.ProfilePhotoOriginalFileID,
+					NewFileID:     in.ProfilePhotos.PhotoOriginalFileID,
+					Target:        string(usecase.FileTargetProfilePhotoOriginal),
+					Group:         "profile_photo",
+				},
+				{
+					CurrentFileID: account.ProfilePhoto100x100FileID,
+					NewFileID:     in.ProfilePhotos.Photo100x100FileID,
+					Target:        string(usecase.FileTargetProfilePhoto100x100),
+					Group:         "profile_photo",
+				},
 			})
 			if err != nil {
 				return err
 			}
 
-			if !skipVersionCheck && account.Version() != in.Version {
-				return appErrors.ErrVersionConflict.
-					WithDetail("last_version", false, account.Version()).
-					WithDetail("last_updated_at", false, account.UpdatedAt)
-			}
-
-			if in.Email != nil {
-				err = account.SetEmail(*in.Email)
-				if err != nil {
-					return err
-				}
-
-				checkAccount, err := uc.repoAccount.FindOneByEmail(ctx, account.Email, nil)
-				if err == nil && checkAccount.ID != account.ID {
-					return appErrors.ErrUniqueViolation.WithDetail("field", false, "email")
-				} else if err != nil && !errors.Is(err, appErrors.ErrNotFound) {
-					return err
-				}
-			}
-
-			if in.Password != nil {
-				err = account.SetPassword(*in.Password)
-				if err != nil {
-					return err
-				}
-			}
-
-			if in.IsEmailVerified != nil {
-				account.IsEmailVerified = *in.IsEmailVerified
-			}
-
-			if in.IsBlocked != nil {
-				account.IsBlocked = *in.IsBlocked
-			}
-
-			if in.RoleID != nil {
-				_, err := uc.roleUC.GetRoleByID(ctx, *in.RoleID)
-				if err != nil {
-					if errors.Is(err, appErrors.ErrNotFound) {
-						return usecase.ErrRoleNotFound
-					}
-					return err
-				}
-
-				account.RoleID = *in.RoleID
-			}
-
-			err = uc.repoAccount.Update(ctx, account)
-			if err != nil {
-				return err
-			}
-
-			return nil
-		})
-		if err != nil {
-			return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+			account.ProfilePhotoOriginalFileID = in.ProfilePhotos.PhotoOriginalFileID
+			account.ProfilePhoto100x100FileID = in.ProfilePhotos.Photo100x100FileID
 		}
-	*/
+
+		err = uc.repoAccount.Update(ctx, account)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
 
 	return nil
 }
@@ -228,12 +313,21 @@ func (uc *UsecaseImpl) RequestPasswordRecoveryByEmail(
 			return err
 		}
 
+		accountDTOEntities, err := uc.entitiesToDTO(ctx, []*entity.Account{account}, &usecase.AccountDTOOptions{
+			FetchTenant: true,
+		})
+		if err != nil {
+			return err
+		}
+
+		accountDTO := accountDTOEntities[0]
+
 		code, err = uc.createAccountPasswordRecoveryCode(ctx, account, requestIP)
 		if err != nil {
 			return err
 		}
 
-		err = uc.sendRecoveryCodeEmailToUser(ctx, account, code, requestIP)
+		err = uc.sendRecoveryCodeEmailToUser(ctx, accountDTO, code, requestIP)
 		if err != nil {
 			return err
 		}

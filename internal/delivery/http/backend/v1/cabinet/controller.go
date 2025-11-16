@@ -1,8 +1,7 @@
-package auth
+package cabinet
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/neurochar/backend/internal/app/config"
@@ -34,7 +33,7 @@ func NewController(
 	tenantUserFacade *tenantUserUC.Facade,
 ) *Controller {
 	controller := &Controller{
-		pkg:              "httpController.Auth",
+		pkg:              "httpController.Cabinet",
 		vldtr:            validation.New(),
 		cfg:              cfg,
 		backoff:          backoff,
@@ -45,44 +44,16 @@ func NewController(
 	return controller
 }
 
-const backoffConfigAuthGroupID = "http.auth"
-
-const backoffConfigPasswordRecoveryGroupID = "http.password_recovery"
-
 func RegisterRoutes(groups *v1.Groups, ctrl *Controller, cpanelMdwr *middleware.Controller) {
-	ctrl.backoff.SetConfigForGroup(
-		backoffConfigAuthGroupID,
-		backoff.WithTtl(time.Minute*10),
-		backoff.WithInitialInterval(time.Second*5),
-		backoff.WithMultiplier(2),
-		backoff.WithMaxInterval(time.Minute*1),
-	)
+	accountLimiterMiddleware := groups.RateLimiter.Get(limiter.DefaultName).Create(false, true, "")
 
-	ctrl.backoff.SetConfigForGroup(
-		backoffConfigPasswordRecoveryGroupID,
-		backoff.WithTtl(time.Minute*30),
-		backoff.WithInitialInterval(time.Second*30),
-		backoff.WithMultiplier(2),
-		backoff.WithMaxInterval(time.Minute*10),
-	)
+	const url = "cabinet"
 
-	ipLimiterMiddleware := groups.RateLimiter.Get(limiter.DefaultName).Create(true, false, "")
+	routeGroup := groups.Default.Group(fmt.Sprintf("/%s", url), cpanelMdwr.MiddlewareAuthRequired)
 
-	const url = "auth"
+	routeGroup.Patch("/profile", ctrl.PatchMyProfileHandler)
 
-	routeGroup := groups.Default.Group(fmt.Sprintf("/%s", url))
+	routeGroup.Post("/photo_file", accountLimiterMiddleware, ctrl.UploadPhotoFileHandler)
 
-	routeGroup.Post("/login", ipLimiterMiddleware, ctrl.LoginHandler)
-
-	routeGroup.Post("/refresh", ctrl.RefreshHandler)
-
-	routeGroup.Get("/whoiam", cpanelMdwr.MiddlewareAuthRequired, ctrl.WhoIAmHandler)
-
-	routeGroup.Post("/logout", cpanelMdwr.MiddlewareAuthRequired, ctrl.LogoutHandler)
-
-	routeGroup.Post("/password-recovery", ipLimiterMiddleware, ctrl.RequestPasswordRecoveryHandler)
-
-	routeGroup.Post("/check-code", ctrl.CheckAccountCodeHandler)
-
-	routeGroup.Post("/password-by-code", ctrl.UpdatePasswordByCodeHandler)
+	routeGroup.Put("/password", ctrl.UpdateMyPasswordHandler)
 }

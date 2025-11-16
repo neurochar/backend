@@ -9,7 +9,6 @@ import (
 	"github.com/neurochar/backend/internal/domain/tenant_user/usecase"
 	"github.com/neurochar/backend/internal/infra/db"
 	"github.com/neurochar/backend/internal/infra/emailing"
-	"github.com/neurochar/backend/internal/infra/imageproc"
 )
 
 type UsecaseImpl struct {
@@ -18,10 +17,11 @@ type UsecaseImpl struct {
 	cfg             config.Config
 	dbMasterClient  db.MasterClient
 	emailing        emailing.Emailing
-	imageProc       imageproc.ImageProcessor
 	repoAccount     usecase.AccountRepository
 	repoAccountCode usecase.AccountCodeRepository
 	tenantUC        tenantUC.TenantUsecase
+	accountUC       usecase.AccountUsecase
+	authUC          usecase.AuthUsecase
 	fileUC          fileUC.Usecase
 }
 
@@ -30,22 +30,24 @@ func NewUsecaseImpl(
 	cfg config.Config,
 	dbMasterClient db.MasterClient,
 	emailing emailing.Emailing,
-	imageProc imageproc.ImageProcessor,
 	repoAccount usecase.AccountRepository,
 	repoAccountCode usecase.AccountCodeRepository,
 	tenantUC tenantUC.TenantUsecase,
+	accountUC usecase.AccountUsecase,
+	authUC usecase.AuthUsecase,
 	fileUC fileUC.Usecase,
 ) *UsecaseImpl {
 	uc := &UsecaseImpl{
-		pkg:             "TenantUser.Usecase.Account",
+		pkg:             "TenantUser.Usecase.Common",
 		logger:          logger,
 		cfg:             cfg,
 		emailing:        emailing,
-		imageProc:       imageProc,
 		dbMasterClient:  dbMasterClient,
 		repoAccount:     repoAccount,
 		repoAccountCode: repoAccountCode,
 		tenantUC:        tenantUC,
+		accountUC:       accountUC,
+		authUC:          authUC,
 		fileUC:          fileUC,
 	}
 	return uc

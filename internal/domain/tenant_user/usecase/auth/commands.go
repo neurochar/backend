@@ -42,7 +42,8 @@ func (uc *UsecaseImpl) LoginByEmail(
 		out.AccountDTO, err = uc.accountUC.FindOneByEmail(ctx, tenantID, email, &uctypes.QueryGetOneParams{
 			ForUpdate: true,
 		}, &usecase.AccountDTOOptions{
-			FetchTenant: true,
+			FetchTenant:     true,
+			FetchPhotoFiles: true,
 		})
 		if err != nil {
 			if errors.Is(err, appErrors.ErrNotFound) {

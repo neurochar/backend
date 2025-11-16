@@ -59,7 +59,7 @@ type Config struct {
 		} `yaml:"base"`
 		HTTP struct {
 			Port             int      `yaml:"port" env:"BACKEND_APP_HTTP_PORT" env-default:"8080"`
-			Prefix           string   `yaml:"prefix" env:"BACKEND_APP_HTTP_PREFIX" env-default:"/api"`
+			Prefix           string   `yaml:"prefix" env:"BACKEND_APP_HTTP_PREFIX" env-default:""`
 			UnderProxy       bool     `yaml:"under_proxy" env:"BACKEND_APP_HTTP_UNDER_PROXY" env-default:"false"`
 			StopTimeoutSec   int      `yaml:"stop_timeout_sec" env:"BACKEND_APP_HTTP_STOP_TIMEOUT_SEC" env-default:"3"`
 			CorsAllowOrigins []string `yaml:"cors_allow_origins" env:"BACKEND_APP_HTTP_CORS_ALLOW_ORIGINS" env-default:""`

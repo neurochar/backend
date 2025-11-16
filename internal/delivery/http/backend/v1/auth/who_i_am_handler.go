@@ -30,7 +30,8 @@ func (ctrl *Controller) WhoIAmHandler(c *fiber.Ctx) error {
 		auth.AccountID,
 		nil,
 		&tenantUserUC.AccountDTOOptions{
-			FetchTenant: true,
+			FetchTenant:     true,
+			FetchPhotoFiles: true,
 		},
 	)
 	if err != nil {

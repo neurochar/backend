@@ -45,16 +45,20 @@ type CreateAccountDataInput struct {
 type PatchAccountDataInput struct {
 	Version int64
 
-	Email                      *string
-	Password                   *string
-	RoleID                     *uint64
-	IsConfirmed                *bool
-	IsEmailVerified            *bool
-	IsBlocked                  *bool
-	ProfileName                *string
-	ProfileSurname             *string
-	ProfilePhoto100x100FileID  *uuid.UUID
-	ProfilePhotoOriginalFileID *uuid.UUID
+	Email           *string
+	Password        *string
+	RoleID          *uint64
+	IsConfirmed     *bool
+	IsEmailVerified *bool
+	IsBlocked       *bool
+	ProfileName     *string
+	ProfileSurname  *string
+	ProfilePhotos   *PatchAccountDataInputProfilePhotos
+}
+
+type PatchAccountDataInputProfilePhotos struct {
+	Photo100x100FileID  *uuid.UUID
+	PhotoOriginalFileID *uuid.UUID
 }
 
 type AccountCodeListOptions struct {
@@ -62,6 +66,13 @@ type AccountCodeListOptions struct {
 	FilterType      *entity.AccountCodeType
 	FilterIsActive  *bool
 }
+
+type ProfileFileTarget string
+
+const (
+	FileTargetProfilePhoto100x100  ProfileFileTarget = "profile:photo:100x100"
+	FileTargetProfilePhotoOriginal ProfileFileTarget = "profile:photo:original"
+)
 
 var ErrRoleNotFound = appErrors.ErrBadRequest.Extend("role not found").WithTextCode("ROLE_NOT_FOUND")
 
@@ -145,6 +156,12 @@ type AccountUsecase interface {
 		ctx context.Context,
 		code *entity.AccountCode,
 	) (resErr error)
+
+	UploadProfileImageFile(
+		ctx context.Context,
+		fileName string,
+		fileData []byte,
+	) (resMap []*fileEntity.File, resErr error)
 }
 
 type AccountRepository interface {

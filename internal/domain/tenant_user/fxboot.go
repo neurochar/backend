@@ -9,6 +9,7 @@ import (
 	"github.com/neurochar/backend/internal/domain/tenant_user/usecase"
 	accountUC "github.com/neurochar/backend/internal/domain/tenant_user/usecase/account"
 	authUC "github.com/neurochar/backend/internal/domain/tenant_user/usecase/auth"
+	commonUC "github.com/neurochar/backend/internal/domain/tenant_user/usecase/common"
 )
 
 // FxModule - fx module
@@ -35,6 +36,9 @@ var FxModule = fx.Module(
 	),
 	fx.Provide(
 		fx.Annotate(authUC.NewUsecaseImpl, fx.As(new(usecase.AuthUsecase))),
+	),
+	fx.Provide(
+		fx.Annotate(commonUC.NewUsecaseImpl, fx.As(new(usecase.CommonUsecase))),
 	),
 
 	// facade

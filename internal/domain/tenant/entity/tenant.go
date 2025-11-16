@@ -79,6 +79,10 @@ func (item *Tenant) GetDomain(mainDomain string) string {
 	return fmt.Sprintf("%s.%s", item.TextID, mainDomain)
 }
 
+func (item *Tenant) GetUrl(mainDomain string, scheme string) string {
+	return fmt.Sprintf("%s://%s.%s", scheme, item.TextID, mainDomain)
+}
+
 func NewTenant(textID string, name string, isDemo bool) (*Tenant, error) {
 	timeNow := time.Now().Truncate(time.Microsecond)
 

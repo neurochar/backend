@@ -16,12 +16,6 @@ import (
 )
 
 func (r *Repository) buildWhereForList(listOptions *usecase.AccountCodeListOptions, withDeleted bool) (where squirrel.And) {
-	defer func() {
-		if !withDeleted {
-			where = append(where, squirrel.Expr("deleted_at IS NULL"))
-		}
-	}()
-
 	if listOptions == nil {
 		return where
 	}
@@ -30,7 +24,7 @@ func (r *Repository) buildWhereForList(listOptions *usecase.AccountCodeListOptio
 }
 
 func (r *Repository) buildSortForList(_ *usecase.AccountCodeListOptions) []string {
-	return []string{"created_at DESC"}
+	return nil
 }
 
 func (r *Repository) FindList(
@@ -113,14 +107,8 @@ func (r *Repository) FindOneByID(
 ) (*entity.AccountCode, error) {
 	const op = "FindOneByID"
 
-	withDeleted := queryParams != nil && queryParams.WithDeleted
-
 	where := squirrel.And{
 		squirrel.Eq{"id": id},
-	}
-
-	if !withDeleted {
-		where = append(where, squirrel.Expr("deleted_at IS NULL"))
 	}
 
 	q := r.qb.Select(pg.AccountCodeTableFields...).From(pg.AccountCodeTable).Where(where)
