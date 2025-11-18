@@ -23,9 +23,9 @@ type AuthSessionDTO struct {
 
 var ErrPasswordIncorrect = appErrors.ErrUnauthorized.Extend("password incorrect")
 
-var ErrAccountNotConfirmed = appErrors.ErrUnauthorized.Extend("account not confirmed")
+var ErrAccountNotConfirmed = appErrors.ErrUnauthorized.Extend("account not confirmed").WithTextCode("ACCOUNT_NOT_CONFIRMED")
 
-var ErrAccountBlocked = appErrors.ErrUnauthorized.Extend("account blocked")
+var ErrAccountBlocked = appErrors.ErrUnauthorized.Extend("account blocked").WithTextCode("ACCOUNT_BLOCKED")
 
 var ErrAccessDenied = appErrors.ErrUnauthorized.Extend("access denied")
 

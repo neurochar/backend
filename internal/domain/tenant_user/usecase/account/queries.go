@@ -84,6 +84,27 @@ func (uc *UsecaseImpl) FindList(
 	return out, nil
 }
 
+func (uc *UsecaseImpl) FindPagedList(
+	ctx context.Context,
+	listOptions *usecase.AccountListOptions,
+	queryParams *uctypes.QueryGetListParams,
+	dtoOpts *usecase.AccountDTOOptions,
+) ([]*usecase.AccountDTO, uint64, error) {
+	const op = "FindPagedList"
+
+	items, total, err := uc.repoAccount.FindPagedList(ctx, listOptions, queryParams)
+	if err != nil {
+		return nil, 0, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	out, err := uc.entitiesToDTO(ctx, items, dtoOpts)
+	if err != nil {
+		return nil, 0, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	return out, total, nil
+}
+
 func (uc *UsecaseImpl) FindListInMap(
 	ctx context.Context,
 	listOptions *usecase.AccountListOptions,

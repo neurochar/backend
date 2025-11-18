@@ -85,4 +85,6 @@ func RegisterRoutes(groups *v1.Groups, ctrl *Controller, cpanelMdwr *middleware.
 	routeGroup.Post("/check-code", ctrl.CheckAccountCodeHandler)
 
 	routeGroup.Post("/password-by-code", ctrl.UpdatePasswordByCodeHandler)
+
+	routeGroup.Post("/verify-email", ipLimiterMiddleware, ctrl.AccountVerifyEmailHandler)
 }

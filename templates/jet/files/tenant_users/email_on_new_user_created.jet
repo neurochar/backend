@@ -1,12 +1,15 @@
-Здравствуйте, {{ data.ProfileDTO.Profile.Name }}!<br />
+Здравствуйте, {{ data.AccountDTO.Account.ProfileName }}!<br />
+<br />
+Вы зарегистрированы в рабочем пространстве <a href="{{ data.TenantURL }}" target="_blank">{{ data.Tenant.TextID }}</a>.<br />
 <br />
 Данные для входа:<br />
-Логин: {{ data.Account.Email }}<br />
+E-mail: {{ data.AccountDTO.Account.Email }}<br />
 {{ if data.IsSendPassword }}
 Пароль: {{ data.Password }}<br />
 {{ end }}
+Рабочее пространство: <a href="{{ data.TenantURL }}" target="_blank">{{ data.TenantURL }}</a><br />
 
 {{ if data.NeedActivate }}
 <br />
-Вам необходимо активировать аккаунт. Для этого необходимо перейти по ссылке: <a href="{{ data.ActivateUrl }}" target="_blank">{{ data.ActivateUrl }}</a>
+<b>Вам необходимо активировать аккаунт.</b> Для этого нужно перейти по ссылке: <a href="{{ data.ActivateUrl }}" target="_blank">{{ data.ActivateUrl }}</a>
 {{ end }}

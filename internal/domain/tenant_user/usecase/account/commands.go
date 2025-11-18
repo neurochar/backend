@@ -15,6 +15,7 @@ import (
 	entity "github.com/neurochar/backend/internal/domain/tenant_user/entity"
 	"github.com/neurochar/backend/internal/domain/tenant_user/usecase"
 	"github.com/neurochar/backend/internal/infra/imageproc"
+	"github.com/neurochar/backend/internal/infra/loghandler"
 	"github.com/neurochar/backend/pkg/emailnormalize"
 )
 
@@ -61,56 +62,95 @@ func (uc *UsecaseImpl) CreateAccountByDTO(
 	ctx context.Context,
 	tenantID uuid.UUID,
 	in usecase.CreateAccountDataInput,
+	author *usecase.AccountDTO,
 	requestIP net.IP,
-) (*entity.Account, *entity.AccountCode, error) {
-	// const op = "CreateAccountByDTO"
+) (*usecase.AccountDTO, *entity.AccountCode, error) {
+	const op = "CreateAccountByDTO"
 
-	/*
-		var code *entity.AccountCode
+	var code *entity.AccountCode
 
-		account, err := entity.NewAccount(in.Email, in.Password, in.RoleID, in.IsEmailVerified)
-		if err != nil {
-			return nil, nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	targetRole, ok := constants.RolesMap[in.RoleID]
+	if !ok {
+		return nil, nil, appErrors.Chainf(appErrors.ErrBadRequest.WithHints("roleID invalid"), "%s.%s", uc.pkg, op)
+	}
+
+	if targetRole.Rank <= author.Role.Rank {
+		return nil, nil, appErrors.Chainf(appErrors.ErrBadRequest.WithHints("roleID value forbidden"), "%s.%s", uc.pkg, op)
+	}
+
+	account, err := entity.NewAccount(tenantID, in.Email, in.Password, in.RoleID, in.IsConfirmed, in.IsEmailVerified)
+	if err != nil {
+		return nil, nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	err = account.SetProfileName(in.ProfileName)
+	if err != nil {
+		return nil, nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	err = account.SetProfileSurname(in.ProfileSurname)
+	if err != nil {
+		return nil, nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	err = uc.dbMasterClient.Do(ctx, func(ctx context.Context) error {
+		_, err := uc.repoAccount.FindOneByEmail(ctx, tenantID, account.Email, nil)
+		if err == nil {
+			return appErrors.ErrUniqueViolation.WithDetail("field", false, "email").WithHints("email is already in use")
+		} else if !errors.Is(err, appErrors.ErrNotFound) {
+			return err
 		}
 
-		err = uc.dbMasterClient.Do(ctx, func(ctx context.Context) error {
-			_, err := uc.repoAccount.FindOneByEmail(ctx, account.Email, nil)
-			if err == nil {
-				return appErrors.ErrUniqueViolation.WithDetail("field", false, "email")
-			} else if !errors.Is(err, appErrors.ErrNotFound) {
-				return err
-			}
-
-			_, err = uc.roleUC.GetRoleByID(ctx, account.RoleID)
-			if err != nil {
-				if errors.Is(err, appErrors.ErrNotFound) {
-					return usecase.ErrRoleNotFound
-				}
-				return err
-			}
-
-			err = uc.repoAccount.Create(ctx, account)
-			if err != nil {
-				return err
-			}
-
-			if !in.IsEmailVerified {
-				code, err = uc.createAccountEmailVerificationCode(ctx, account, requestIP)
-				if err != nil {
-					return err
-				}
-			}
-
-			return nil
+		_, err = uc.fileUC.ProcessFilesToTarget(ctx, []fileUC.ProcessFileToTargetIn{
+			{
+				CurrentFileID: account.ProfilePhotoOriginalFileID,
+				NewFileID:     in.ProfilePhotos.PhotoOriginalFileID,
+				Target:        string(usecase.FileTargetProfilePhotoOriginal),
+				Group:         "profile_photo",
+			},
+			{
+				CurrentFileID: account.ProfilePhoto100x100FileID,
+				NewFileID:     in.ProfilePhotos.Photo100x100FileID,
+				Target:        string(usecase.FileTargetProfilePhoto100x100),
+				Group:         "profile_photo",
+			},
 		})
 		if err != nil {
-			return nil, nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+			return err
 		}
 
-		return account, code, nil
-	*/
+		account.ProfilePhotoOriginalFileID = in.ProfilePhotos.PhotoOriginalFileID
+		account.ProfilePhoto100x100FileID = in.ProfilePhotos.Photo100x100FileID
 
-	return nil, nil, nil
+		err = uc.repoAccount.Create(ctx, account)
+		if err != nil {
+			return err
+		}
+
+		if !in.IsEmailVerified {
+			code, err = uc.createAccountEmailVerificationCode(ctx, account, requestIP)
+			if err != nil {
+				return err
+			}
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	accountDTO, err := uc.entitiesToDTO(ctx, []*entity.Account{account}, nil)
+	if err != nil {
+		return nil, nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	if len(accountDTO) == 0 {
+		uc.logger.ErrorContext(loghandler.WithSource(ctx), "unpredicted empty account dto")
+		return nil, nil, appErrors.Chainf(appErrors.ErrInternal, "%s.%s", uc.pkg, op)
+	}
+
+	return accountDTO[0], code, nil
 }
 
 func (uc *UsecaseImpl) PatchAccountByDTO(

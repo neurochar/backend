@@ -4,16 +4,19 @@ import "github.com/neurochar/backend/internal/domain/tenant_user/entity"
 
 var RoleCreator = entity.Role{
 	ID:     1,
+	Rank:   1,
 	TextID: "creator",
 }
 
 var RoleUser = entity.Role{
 	ID:     2,
+	Rank:   2,
 	TextID: "user",
 }
 
 var RoleAdmin = entity.Role{
 	ID:     3,
+	Rank:   3,
 	TextID: "admin",
 }
 

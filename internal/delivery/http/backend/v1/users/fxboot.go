@@ -1,4 +1,4 @@
-package cabinet
+package users
 
 import (
 	"go.uber.org/fx"

@@ -1,19 +1,22 @@
-package cabinet
+package users
 
 import (
+	"net"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
-	"github.com/neurochar/backend/internal/delivery/http/backend/middleware"
+	backendMiddleware "github.com/neurochar/backend/internal/delivery/http/backend/middleware"
 	"github.com/neurochar/backend/internal/delivery/http/httperrs"
-	"github.com/neurochar/backend/pkg/validation"
-
+	"github.com/neurochar/backend/internal/delivery/http/middleware"
 	tenantUserUC "github.com/neurochar/backend/internal/domain/tenant_user/usecase"
+	"github.com/neurochar/backend/pkg/validation"
 )
 
-type PatchMyProfileHandlerIn struct {
-	Version          int64 `json:"_version"`
-	SkipVersionCheck bool  `json:"_skipVersionCheck"`
+type CreateAccountHandlerIn struct {
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"min=0"`
+	RoleID   uint64 `json:"roleID" validate:"required"`
 
 	ProfileName                string `json:"profileName" validate:"required,min=1,max=150"`
 	ProfileSurname             string `json:"profileSurname" validate:"required,min=1,max=150"`
@@ -21,10 +24,10 @@ type PatchMyProfileHandlerIn struct {
 	ProfilePhoto100x100FileID  string `json:"profilePhoto100x100FileID" validate:"omitempty,uuid"`
 }
 
-func (ctrl *Controller) PatchMyProfileHandler(c *fiber.Ctx) error {
-	const op = "PatchMyProfileHandler"
+func (ctrl *Controller) CreateAccountHandler(c *fiber.Ctx) error {
+	const op = "CreateAccountHandler"
 
-	in := &PatchMyProfileHandlerIn{}
+	in := &CreateAccountHandlerIn{}
 
 	if err := c.BodyParser(in); err != nil {
 		return appErrors.Chainf(httperrs.ErrCantParseBody, "%s.%s", ctrl.pkg, op)
@@ -37,7 +40,7 @@ func (ctrl *Controller) PatchMyProfileHandler(c *fiber.Ctx) error {
 		)
 	}
 
-	auth := middleware.GetAuthData(c)
+	auth := backendMiddleware.GetAuthData(c)
 	if auth == nil {
 		return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
 	}
@@ -50,6 +53,14 @@ func (ctrl *Controller) PatchMyProfileHandler(c *fiber.Ctx) error {
 	if isRevoked {
 		return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
 	}
+
+	user, err := ctrl.tenantUserFacade.Account.FindOneByID(c.Context(), auth.AccountID, nil, nil)
+	if err != nil {
+		return appErrors.Chainf(appErrors.ErrInternal.WithParent(err), "%s.%s", ctrl.pkg, op)
+	}
+
+	ip := middleware.GetRealIP(c)
+	requestIP := net.ParseIP(ip)
 
 	var photoOriginalFileID *uuid.UUID
 	var photo100x100FileID *uuid.UUID
@@ -72,19 +83,30 @@ func (ctrl *Controller) PatchMyProfileHandler(c *fiber.Ctx) error {
 		photo100x100FileID = &parseID
 	}
 
-	err = ctrl.tenantUserFacade.Account.PatchAccountByDTO(c.Context(), auth.AccountID, tenantUserUC.PatchAccountDataInput{
-		Version: in.Version,
-
-		ProfileName:    &in.ProfileName,
-		ProfileSurname: &in.ProfileSurname,
-		ProfilePhotos: &tenantUserUC.PatchAccountDataInputProfilePhotos{
+	accountDTO, err := ctrl.tenantUserFacade.Common.CreateUser(c.Context(), auth.TenantID, tenantUserUC.CreateAccountDataInput{
+		Email:          in.Email,
+		Password:       in.Password,
+		RoleID:         in.RoleID,
+		ProfileName:    in.ProfileName,
+		ProfileSurname: in.ProfileSurname,
+		ProfilePhotos: &tenantUserUC.AccountDataInputProfilePhotos{
 			PhotoOriginalFileID: photoOriginalFileID,
 			Photo100x100FileID:  photo100x100FileID,
 		},
-	}, in.SkipVersionCheck)
+	}, user, requestIP)
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}
 
-	return nil
+	out, err := OutAccountDTO(
+		c,
+		true,
+		ctrl.fileUC,
+		accountDTO,
+	)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(out)
 }

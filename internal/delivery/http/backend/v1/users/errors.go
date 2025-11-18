@@ -1,4 +1,4 @@
-package cabinet
+package users
 
 import appErrors "github.com/neurochar/backend/internal/app/errors"
 

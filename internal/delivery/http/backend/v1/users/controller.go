@@ -1,4 +1,4 @@
-package cabinet
+package users
 
 import (
 	"fmt"
@@ -33,7 +33,7 @@ func NewController(
 	tenantUserFacade *tenantUserUC.Facade,
 ) *Controller {
 	controller := &Controller{
-		pkg:              "httpController.Cabinet",
+		pkg:              "httpController.Users",
 		vldtr:            validation.New(),
 		cfg:              cfg,
 		backoff:          backoff,
@@ -47,13 +47,17 @@ func NewController(
 func RegisterRoutes(groups *v1.Groups, ctrl *Controller, cpanelMdwr *middleware.Controller) {
 	accountLimiterMiddleware := groups.RateLimiter.Get(limiter.DefaultName).Create(false, true, "")
 
-	const url = "cabinet"
+	const url = "users"
 
 	routeGroup := groups.Default.Group(fmt.Sprintf("/%s", url), cpanelMdwr.MiddlewareAuthRequired)
 
-	routeGroup.Patch("/profile", ctrl.PatchMyProfileHandler)
-
 	routeGroup.Post("/photo_file", accountLimiterMiddleware, ctrl.UploadPhotoFileHandler)
 
-	routeGroup.Put("/password", ctrl.UpdateMyPasswordHandler)
+	routeGroup.Patch("/my_profile", ctrl.PatchMyProfileHandler)
+
+	routeGroup.Put("/my_password", ctrl.UpdateMyPasswordHandler)
+
+	routeGroup.Post("", ctrl.CreateAccountHandler)
+
+	routeGroup.Get("", ctrl.ListAccountsHandler)
 }

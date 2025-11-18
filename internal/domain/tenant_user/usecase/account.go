@@ -29,17 +29,21 @@ type AccountDTO struct {
 	ProfilePhotoOriginalFile *fileEntity.File
 }
 
+type AccountDataInputProfilePhotos struct {
+	Photo100x100FileID  *uuid.UUID
+	PhotoOriginalFileID *uuid.UUID
+}
+
 type CreateAccountDataInput struct {
-	Email                      string
-	Password                   string
-	RoleID                     uint64
-	IsConfirmed                bool
-	IsEmailVerified            bool
-	IsBlocked                  bool
-	ProfileName                string
-	ProfileSurname             string
-	ProfilePhoto100x100FileID  uuid.UUID
-	ProfilePhotoOriginalFileID uuid.UUID
+	Email           string
+	Password        string
+	RoleID          uint64
+	IsConfirmed     bool
+	IsEmailVerified bool
+	IsBlocked       bool
+	ProfileName     string
+	ProfileSurname  string
+	ProfilePhotos   *AccountDataInputProfilePhotos
 }
 
 type PatchAccountDataInput struct {
@@ -53,12 +57,7 @@ type PatchAccountDataInput struct {
 	IsBlocked       *bool
 	ProfileName     *string
 	ProfileSurname  *string
-	ProfilePhotos   *PatchAccountDataInputProfilePhotos
-}
-
-type PatchAccountDataInputProfilePhotos struct {
-	Photo100x100FileID  *uuid.UUID
-	PhotoOriginalFileID *uuid.UUID
+	ProfilePhotos   *AccountDataInputProfilePhotos
 }
 
 type AccountCodeListOptions struct {
@@ -103,6 +102,13 @@ type AccountUsecase interface {
 		dtoOpts *AccountDTOOptions,
 	) (resItems []*AccountDTO, resErr error)
 
+	FindPagedList(
+		ctx context.Context,
+		listOptions *AccountListOptions,
+		queryParams *uctypes.QueryGetListParams,
+		dtoOpts *AccountDTOOptions,
+	) (resItems []*AccountDTO, total uint64, resErr error)
+
 	FindListInMap(
 		ctx context.Context,
 		listOptions *AccountListOptions,
@@ -114,8 +120,9 @@ type AccountUsecase interface {
 		ctx context.Context,
 		tenantID uuid.UUID,
 		in CreateAccountDataInput,
+		author *AccountDTO,
 		requestIP net.IP,
-	) (resAccount *entity.Account, activationCode *entity.AccountCode, resErr error)
+	) (resAccountDTO *AccountDTO, activationCode *entity.AccountCode, resErr error)
 
 	PatchAccountByDTO(
 		ctx context.Context,

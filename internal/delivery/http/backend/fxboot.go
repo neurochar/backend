@@ -4,8 +4,8 @@ import (
 	"github.com/neurochar/backend/internal/delivery/http/backend/middleware"
 	v1 "github.com/neurochar/backend/internal/delivery/http/backend/v1"
 	"github.com/neurochar/backend/internal/delivery/http/backend/v1/auth"
-	"github.com/neurochar/backend/internal/delivery/http/backend/v1/cabinet"
 	"github.com/neurochar/backend/internal/delivery/http/backend/v1/tests"
+	"github.com/neurochar/backend/internal/delivery/http/backend/v1/users"
 	"github.com/neurochar/backend/pkg/validation"
 	"go.uber.org/fx"
 )
@@ -18,6 +18,6 @@ var FxModule = fx.Options(
 		fx.Provide(v1.ProvideGroups),
 		tests.FxModule,
 		auth.FxModule,
-		cabinet.FxModule,
+		users.FxModule,
 	),
 )

@@ -41,28 +41,26 @@ func (uc *UsecaseImpl) entitiesToDTO(
 		filesIDs = append(filesIDs, item.FilesIDs()...)
 	}
 
-	if dtoOpts != nil {
-		if dtoOpts.FetchTenant && len(tenantsIDs) > 0 {
-			tenantsList, err := uc.tenantUC.FindList(ctx, &tenantUC.TenantListOptions{
-				FilterIDs: &tenantsIDs,
-			}, nil)
-			if err != nil {
-				return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
-			}
-
-			tenantsMap = lo.SliceToMap(tenantsList, func(item *tenantEntity.Tenant) (uuid.UUID, *tenantEntity.Tenant) {
-				return item.ID, item
-			})
+	if (dtoOpts == nil || dtoOpts.FetchTenant) && len(tenantsIDs) > 0 {
+		tenantsList, err := uc.tenantUC.FindList(ctx, &tenantUC.TenantListOptions{
+			FilterIDs: &tenantsIDs,
+		}, nil)
+		if err != nil {
+			return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
 		}
 
-		if dtoOpts.FetchPhotoFiles && len(filesIDs) > 0 {
-			var err error
-			filesMap, err = uc.fileUC.FindListInMap(ctx, &fileUC.ListOptions{
-				IDs: &filesIDs,
-			}, nil)
-			if err != nil {
-				return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
-			}
+		tenantsMap = lo.SliceToMap(tenantsList, func(item *tenantEntity.Tenant) (uuid.UUID, *tenantEntity.Tenant) {
+			return item.ID, item
+		})
+	}
+
+	if (dtoOpts == nil || dtoOpts.FetchPhotoFiles) && len(filesIDs) > 0 {
+		var err error
+		filesMap, err = uc.fileUC.FindListInMap(ctx, &fileUC.ListOptions{
+			IDs: &filesIDs,
+		}, nil)
+		if err != nil {
+			return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
 		}
 	}
 
@@ -80,34 +78,32 @@ func (uc *UsecaseImpl) entitiesToDTO(
 
 		resItem.Role = role
 
-		if dtoOpts != nil {
-			if dtoOpts.FetchTenant {
-				tenant, ok := tenantsMap[item.TenantID]
-				if !ok {
-					return nil, appErrors.Chainf(appErrors.ErrInternal.Extend("tenant not fetched"), "%s.%s", uc.pkg, op)
-				}
-
-				resItem.Tenant = tenant
+		if dtoOpts == nil || dtoOpts.FetchTenant {
+			tenant, ok := tenantsMap[item.TenantID]
+			if !ok {
+				return nil, appErrors.Chainf(appErrors.ErrInternal.Extend("tenant not fetched"), "%s.%s", uc.pkg, op)
 			}
 
-			if dtoOpts.FetchPhotoFiles {
-				if item.ProfilePhoto100x100FileID != nil {
-					file, ok := filesMap[*item.ProfilePhoto100x100FileID]
-					if !ok {
-						return nil, appErrors.Chainf(appErrors.ErrInternal.Extend("file not fetched"), "%s.%s", uc.pkg, op)
-					}
+			resItem.Tenant = tenant
+		}
 
-					resItem.ProfilePhoto100x100File = file
+		if dtoOpts == nil || dtoOpts.FetchPhotoFiles {
+			if item.ProfilePhoto100x100FileID != nil {
+				file, ok := filesMap[*item.ProfilePhoto100x100FileID]
+				if !ok {
+					return nil, appErrors.Chainf(appErrors.ErrInternal.Extend("file not fetched"), "%s.%s", uc.pkg, op)
 				}
 
-				if item.ProfilePhotoOriginalFileID != nil {
-					file, ok := filesMap[*item.ProfilePhotoOriginalFileID]
-					if !ok {
-						return nil, appErrors.Chainf(appErrors.ErrInternal.Extend("file not fetched"), "%s.%s", uc.pkg, op)
-					}
+				resItem.ProfilePhoto100x100File = file
+			}
 
-					resItem.ProfilePhotoOriginalFile = file
+			if item.ProfilePhotoOriginalFileID != nil {
+				file, ok := filesMap[*item.ProfilePhotoOriginalFileID]
+				if !ok {
+					return nil, appErrors.Chainf(appErrors.ErrInternal.Extend("file not fetched"), "%s.%s", uc.pkg, op)
 				}
+
+				resItem.ProfilePhotoOriginalFile = file
 			}
 		}
 

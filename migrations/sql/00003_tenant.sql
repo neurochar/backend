@@ -8,7 +8,7 @@ CREATE TABLE "tenant" (
     text_id                 TEXT NOT NULL,
     is_demo                 BOOLEAN NOT NULL DEFAULT FALSE,
     is_active               BOOLEAN NOT NULL,
-    prepared                BOOLEAN NOT NULL DEFAULT FALSE,
+    preparing_status        INT NOT NULL DEFAULT 0,
     "name"                  TEXT NOT NULL,
     created_at              TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at              TIMESTAMPTZ NOT NULL DEFAULT now(),
