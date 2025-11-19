@@ -53,11 +53,15 @@ func RegisterRoutes(groups *v1.Groups, ctrl *Controller, cpanelMdwr *middleware.
 
 	routeGroup.Post("/photo_file", accountLimiterMiddleware, ctrl.UploadPhotoFileHandler)
 
-	routeGroup.Patch("/my_profile", ctrl.PatchMyProfileHandler)
+	routeGroup.Put("/my_profile", ctrl.UpdateMyProfileHandler)
 
 	routeGroup.Put("/my_password", ctrl.UpdateMyPasswordHandler)
 
+	routeGroup.Get("/:id<guid>", ctrl.GetAccountHandler)
+
 	routeGroup.Post("", ctrl.CreateAccountHandler)
+
+	routeGroup.Patch("/:id<guid>", ctrl.PatchProfileHandler)
 
 	routeGroup.Get("", ctrl.ListAccountsHandler)
 }

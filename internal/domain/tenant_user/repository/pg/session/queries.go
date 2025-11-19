@@ -26,6 +26,10 @@ func (r *Repository) buildWhereForList(listOptions *usecase.SessionListOptions, 
 		return where
 	}
 
+	if listOptions.FilterAccountID != nil {
+		where = append(where, squirrel.Eq{"account_id": *listOptions.FilterAccountID})
+	}
+
 	return where
 }
 

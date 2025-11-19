@@ -11,7 +11,7 @@ import (
 	tenantUserUC "github.com/neurochar/backend/internal/domain/tenant_user/usecase"
 )
 
-type PatchMyProfileHandlerIn struct {
+type UpdateMyProfileHandlerIn struct {
 	Version          int64 `json:"_version"`
 	SkipVersionCheck bool  `json:"_skipVersionCheck"`
 
@@ -21,10 +21,10 @@ type PatchMyProfileHandlerIn struct {
 	ProfilePhoto100x100FileID  string `json:"profilePhoto100x100FileID" validate:"omitempty,uuid"`
 }
 
-func (ctrl *Controller) PatchMyProfileHandler(c *fiber.Ctx) error {
-	const op = "PatchMyProfileHandler"
+func (ctrl *Controller) UpdateMyProfileHandler(c *fiber.Ctx) error {
+	const op = "UpdateMyProfileHandler"
 
-	in := &PatchMyProfileHandlerIn{}
+	in := &UpdateMyProfileHandlerIn{}
 
 	if err := c.BodyParser(in); err != nil {
 		return appErrors.Chainf(httperrs.ErrCantParseBody, "%s.%s", ctrl.pkg, op)
@@ -42,12 +42,12 @@ func (ctrl *Controller) PatchMyProfileHandler(c *fiber.Ctx) error {
 		return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
 	}
 
-	isRevoked, err := ctrl.tenantUserFacade.Auth.IsSessionRevoked(c.Context(), auth.SessionID)
+	isConfirmed, err := ctrl.tenantUserFacade.Auth.IsSessionConfirmed(c.Context(), auth.SessionID)
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}
 
-	if isRevoked {
+	if !isConfirmed {
 		return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
 	}
 

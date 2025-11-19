@@ -17,6 +17,7 @@ import (
 	"github.com/neurochar/backend/internal/infra/imageproc"
 	"github.com/neurochar/backend/internal/infra/loghandler"
 	"github.com/neurochar/backend/pkg/emailnormalize"
+	"github.com/samber/lo"
 )
 
 func (uc *UsecaseImpl) UploadProfileImageFile(
@@ -62,21 +63,11 @@ func (uc *UsecaseImpl) CreateAccountByDTO(
 	ctx context.Context,
 	tenantID uuid.UUID,
 	in usecase.CreateAccountDataInput,
-	author *usecase.AccountDTO,
 	requestIP net.IP,
 ) (*usecase.AccountDTO, *entity.AccountCode, error) {
 	const op = "CreateAccountByDTO"
 
 	var code *entity.AccountCode
-
-	targetRole, ok := constants.RolesMap[in.RoleID]
-	if !ok {
-		return nil, nil, appErrors.Chainf(appErrors.ErrBadRequest.WithHints("roleID invalid"), "%s.%s", uc.pkg, op)
-	}
-
-	if targetRole.Rank <= author.Role.Rank {
-		return nil, nil, appErrors.Chainf(appErrors.ErrBadRequest.WithHints("roleID value forbidden"), "%s.%s", uc.pkg, op)
-	}
 
 	account, err := entity.NewAccount(tenantID, in.Email, in.Password, in.RoleID, in.IsConfirmed, in.IsEmailVerified)
 	if err != nil {
@@ -239,6 +230,24 @@ func (uc *UsecaseImpl) PatchAccountByDTO(
 		}
 
 		if in.ProfilePhotos != nil {
+			allNil := lo.EveryBy([]*uuid.UUID{
+				in.ProfilePhotos.PhotoOriginalFileID,
+				in.ProfilePhotos.Photo100x100FileID,
+			}, func(v *uuid.UUID) bool {
+				return v == nil
+			})
+
+			allNotNil := lo.NoneBy([]*uuid.UUID{
+				in.ProfilePhotos.PhotoOriginalFileID,
+				in.ProfilePhotos.Photo100x100FileID,
+			}, func(v *uuid.UUID) bool {
+				return v == nil
+			})
+
+			if !allNil && !allNotNil {
+				return appErrors.ErrBadRequest
+			}
+
 			_, err = uc.fileUC.ProcessFilesToTarget(ctx, []fileUC.ProcessFileToTargetIn{
 				{
 					CurrentFileID: account.ProfilePhotoOriginalFileID,

@@ -48,7 +48,7 @@ type AuthUsecase interface {
 		queryParams *uctypes.QueryGetOneParams,
 	) (res *entity.Session, resErr error)
 
-	IsSessionRevoked(
+	IsSessionConfirmed(
 		ctx context.Context,
 		id uuid.UUID,
 	) (res bool, resErr error)

@@ -14,7 +14,14 @@ import (
 
 type AccountListOptions struct {
 	FilterTenantID *uuid.UUID
+	Sort           []uctypes.SortOption[AccountListOptionsSortField]
 }
+
+type AccountListOptionsSortField string
+
+const (
+	AccountListOptionsSortFieldCreatedAt AccountListOptionsSortField = "created_at"
+)
 
 type AccountDTOOptions struct {
 	FetchTenant     bool
@@ -120,7 +127,6 @@ type AccountUsecase interface {
 		ctx context.Context,
 		tenantID uuid.UUID,
 		in CreateAccountDataInput,
-		author *AccountDTO,
 		requestIP net.IP,
 	) (resAccountDTO *AccountDTO, activationCode *entity.AccountCode, resErr error)
 

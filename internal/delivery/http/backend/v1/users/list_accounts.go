@@ -42,6 +42,12 @@ func (ctrl *Controller) ListAccountsHandler(c *fiber.Ctx) error {
 
 	listOptions := &tenantUserUC.AccountListOptions{
 		FilterTenantID: &tenantID,
+		Sort: []uctypes.SortOption[tenantUserUC.AccountListOptionsSortField]{
+			{
+				Field:  tenantUserUC.AccountListOptionsSortFieldCreatedAt,
+				IsDesc: false,
+			},
+		},
 	}
 
 	listParams := &uctypes.QueryGetListParams{

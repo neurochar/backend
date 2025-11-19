@@ -12,9 +12,17 @@ type CommonUsecase interface {
 		ctx context.Context,
 		tenantID uuid.UUID,
 		in CreateAccountDataInput,
-		author *AccountDTO,
+		authorID uuid.UUID,
 		requestIP net.IP,
 	) (resAccountDTO *AccountDTO, resErr error)
+
+	PatchAccountByDTO(
+		ctx context.Context,
+		id uuid.UUID,
+		in PatchAccountDataInput,
+		authorID uuid.UUID,
+		skipVersionCheck bool,
+	) (resErr error)
 
 	UpdatePasswordByRecoveryCode(
 		ctx context.Context,

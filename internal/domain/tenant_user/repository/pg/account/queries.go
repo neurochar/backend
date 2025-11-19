@@ -33,8 +33,25 @@ func (r *Repository) buildWhereForList(listOptions *usecase.AccountListOptions, 
 	return where
 }
 
-func (r *Repository) buildSortForList(_ *usecase.AccountListOptions) []string {
-	return []string{"created_at DESC"}
+func (r *Repository) buildSortForList(listOptions *usecase.AccountListOptions) []string {
+	if listOptions == nil || len(listOptions.Sort) == 0 {
+		return []string{"created_at DESC"}
+	}
+
+	sort := make([]string, 0, len(listOptions.Sort))
+
+	for _, sortOption := range listOptions.Sort {
+		switch sortOption.Field {
+		case usecase.AccountListOptionsSortFieldCreatedAt:
+			if sortOption.IsDesc {
+				sort = append(sort, "created_at DESC")
+			} else {
+				sort = append(sort, "created_at ASC")
+			}
+		}
+	}
+
+	return sort
 }
 
 func (r *Repository) FindList(

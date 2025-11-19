@@ -45,18 +45,13 @@ func (ctrl *Controller) CreateAccountHandler(c *fiber.Ctx) error {
 		return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
 	}
 
-	isRevoked, err := ctrl.tenantUserFacade.Auth.IsSessionRevoked(c.Context(), auth.SessionID)
+	isConfirmed, err := ctrl.tenantUserFacade.Auth.IsSessionConfirmed(c.Context(), auth.SessionID)
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}
 
-	if isRevoked {
+	if !isConfirmed {
 		return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
-	}
-
-	user, err := ctrl.tenantUserFacade.Account.FindOneByID(c.Context(), auth.AccountID, nil, nil)
-	if err != nil {
-		return appErrors.Chainf(appErrors.ErrInternal.WithParent(err), "%s.%s", ctrl.pkg, op)
 	}
 
 	ip := middleware.GetRealIP(c)
@@ -93,7 +88,7 @@ func (ctrl *Controller) CreateAccountHandler(c *fiber.Ctx) error {
 			PhotoOriginalFileID: photoOriginalFileID,
 			Photo100x100FileID:  photo100x100FileID,
 		},
-	}, user, requestIP)
+	}, auth.AccountID, requestIP)
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}
