@@ -1,4 +1,4 @@
-package user
+package tenant
 
 import (
 	"log/slog"

@@ -4,6 +4,7 @@ go 1.24.3
 
 require (
 	github.com/CloudyKit/jet/v6 v6.3.1
+	github.com/LastPossum/kamino v0.0.2
 	github.com/Masterminds/squirrel v1.5.4
 	github.com/aws/aws-sdk-go-v2 v1.36.6
 	github.com/aws/aws-sdk-go-v2/config v1.29.18
@@ -25,6 +26,7 @@ require (
 	github.com/pashagolub/pgxmock/v4 v4.8.0
 	github.com/pressly/goose/v3 v3.24.3
 	github.com/samber/lo v1.51.0
+	github.com/sethvargo/go-password v0.3.1
 	github.com/stretchr/testify v1.10.0
 	github.com/ulule/limiter/v3 v3.11.2
 	go.uber.org/fx v1.24.0
@@ -32,6 +34,7 @@ require (
 	golang.org/x/net v0.40.0
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250528174236-200df99c418a
 	google.golang.org/grpc v1.73.0
+	google.golang.org/protobuf v1.36.6
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 )
 
@@ -82,7 +85,6 @@ require (
 	golang.org/x/sync v0.14.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/text v0.25.0 // indirect
-	google.golang.org/protobuf v1.36.6 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	olympos.io/encoding/edn v0.0.0-20201019073823-d3554ca0b0a3 // indirect

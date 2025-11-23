@@ -1,12 +1,12 @@
 package middleware
 
-import userUC "github.com/neurochar/backend/internal/domain/tenant_user/usecase"
+import tenantUC "github.com/neurochar/backend/internal/domain/tenant/usecase"
 
 type Controller struct {
-	authUC userUC.AuthUsecase
+	authUC tenantUC.AuthUsecase
 }
 
-func New(authUC userUC.AuthUsecase) *Controller {
+func New(authUC tenantUC.AuthUsecase) *Controller {
 	return &Controller{
 		authUC: authUC,
 	}

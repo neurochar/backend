@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/neurochar/backend/internal/common/dto"
 	fileUC "github.com/neurochar/backend/internal/domain/file/usecase"
-	tenantUserUC "github.com/neurochar/backend/internal/domain/tenant_user/usecase"
+	tenantUC "github.com/neurochar/backend/internal/domain/tenant/usecase"
 )
 
 type OutAccount struct {
@@ -32,7 +32,7 @@ func OutAccountDTO(
 	c *fiber.Ctx,
 	fullDTO bool,
 	fc fileUC.Usecase,
-	accountDTO *tenantUserUC.AccountDTO,
+	accountDTO *tenantUC.AccountDTO,
 ) (*OutAccount, error) {
 	_ = fullDTO
 

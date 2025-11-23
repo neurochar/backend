@@ -6,9 +6,10 @@ import (
 	appErrors "github.com/neurochar/backend/internal/app/errors"
 	"github.com/neurochar/backend/internal/delivery/http/backend/middleware"
 	"github.com/neurochar/backend/internal/delivery/http/httperrs"
+	"github.com/neurochar/backend/pkg/auth"
 	"github.com/neurochar/backend/pkg/validation"
 
-	tenantUserUC "github.com/neurochar/backend/internal/domain/tenant_user/usecase"
+	tenantUC "github.com/neurochar/backend/internal/domain/tenant/usecase"
 )
 
 type UpdateMyProfileHandlerIn struct {
@@ -37,17 +38,8 @@ func (ctrl *Controller) UpdateMyProfileHandler(c *fiber.Ctx) error {
 		)
 	}
 
-	auth := middleware.GetAuthData(c)
-	if auth == nil {
-		return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
-	}
-
-	isConfirmed, err := ctrl.tenantUserFacade.Auth.IsSessionConfirmed(c.Context(), auth.SessionID)
-	if err != nil {
-		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
-	}
-
-	if !isConfirmed {
+	authData := middleware.GetAuthData(c)
+	if authData == nil {
 		return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
 	}
 
@@ -72,16 +64,21 @@ func (ctrl *Controller) UpdateMyProfileHandler(c *fiber.Ctx) error {
 		photo100x100FileID = &parseID
 	}
 
-	err = ctrl.tenantUserFacade.Account.PatchAccountByDTO(c.Context(), auth.AccountID, tenantUserUC.PatchAccountDataInput{
-		Version: in.Version,
+	err := ctrl.tenantFacade.Account.PatchAccountByDTO(
+		auth.WithoutCheckRight(c.Context()),
+		authData.AccountID,
+		tenantUC.PatchAccountDataInput{
+			Version: in.Version,
 
-		ProfileName:    &in.ProfileName,
-		ProfileSurname: &in.ProfileSurname,
-		ProfilePhotos: &tenantUserUC.AccountDataInputProfilePhotos{
-			PhotoOriginalFileID: photoOriginalFileID,
-			Photo100x100FileID:  photo100x100FileID,
+			ProfileName:    &in.ProfileName,
+			ProfileSurname: &in.ProfileSurname,
+			ProfilePhotos: &tenantUC.AccountDataInputProfilePhotos{
+				PhotoOriginalFileID: photoOriginalFileID,
+				Photo100x100FileID:  photo100x100FileID,
+			},
 		},
-	}, in.SkipVersionCheck)
+		in.SkipVersionCheck,
+	)
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}

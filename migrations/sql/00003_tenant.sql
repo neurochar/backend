@@ -1,14 +1,11 @@
 -- +goose Up
 
-CREATE EXTENSION IF NOT EXISTS "pgcrypto";
-
 -- Таблица tenant
 CREATE TABLE "tenant" (
     id                      UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     text_id                 TEXT NOT NULL,
     is_demo                 BOOLEAN NOT NULL DEFAULT FALSE,
     is_active               BOOLEAN NOT NULL,
-    preparing_status        INT NOT NULL DEFAULT 0,
     "name"                  TEXT NOT NULL,
     created_at              TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at              TIMESTAMPTZ NOT NULL DEFAULT now(),

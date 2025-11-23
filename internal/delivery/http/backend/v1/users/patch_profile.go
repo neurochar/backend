@@ -4,11 +4,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
-	backendMiddleware "github.com/neurochar/backend/internal/delivery/http/backend/middleware"
 	"github.com/neurochar/backend/internal/delivery/http/httperrs"
 	"github.com/neurochar/backend/pkg/validation"
 
-	tenantUserUC "github.com/neurochar/backend/internal/domain/tenant_user/usecase"
+	tenantUC "github.com/neurochar/backend/internal/domain/tenant/usecase"
 )
 
 type PatchProfileHandlerIn struct {
@@ -50,24 +49,10 @@ func (ctrl *Controller) PatchProfileHandler(c *fiber.Ctx) error {
 		)
 	}
 
-	auth := backendMiddleware.GetAuthData(c)
-	if auth == nil {
-		return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
-	}
-
-	isConfirmed, err := ctrl.tenantUserFacade.Auth.IsSessionConfirmed(c.Context(), auth.SessionID)
-	if err != nil {
-		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
-	}
-
-	if !isConfirmed {
-		return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
-	}
-
-	var profilePhotos *tenantUserUC.AccountDataInputProfilePhotos
+	var profilePhotos *tenantUC.AccountDataInputProfilePhotos
 
 	if in.ProfilePhotos != nil {
-		profilePhotos = &tenantUserUC.AccountDataInputProfilePhotos{}
+		profilePhotos = &tenantUC.AccountDataInputProfilePhotos{}
 
 		if in.ProfilePhotos.PhotoOriginalFileID != "" {
 			parseID, err := uuid.Parse(in.ProfilePhotos.PhotoOriginalFileID)
@@ -88,7 +73,7 @@ func (ctrl *Controller) PatchProfileHandler(c *fiber.Ctx) error {
 		}
 	}
 
-	usecaseInput := tenantUserUC.PatchAccountDataInput{
+	usecaseInput := tenantUC.PatchAccountDataInput{
 		Version: in.Version,
 
 		IsBlocked:      in.IsBlocked,
@@ -99,11 +84,10 @@ func (ctrl *Controller) PatchProfileHandler(c *fiber.Ctx) error {
 		ProfilePhotos:  profilePhotos,
 	}
 
-	err = ctrl.tenantUserFacade.Common.PatchAccountByDTO(
+	err = ctrl.tenantFacade.Account.PatchAccountByDTO(
 		c.Context(),
 		id,
 		usecaseInput,
-		auth.AccountID,
 		in.SkipVersionCheck,
 	)
 	if err != nil {

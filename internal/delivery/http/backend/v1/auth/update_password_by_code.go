@@ -38,7 +38,7 @@ func (ctrl *Controller) UpdatePasswordByCodeHandler(c *fiber.Ctx) error {
 		return appErrors.Chainf(ErrPasswordsMismatch, "%s.%s", ctrl.pkg, op)
 	}
 
-	err = ctrl.tenantUserFacade.Common.UpdatePasswordByRecoveryCode(c.Context(), codeID, in.Code, in.Password, true)
+	err = ctrl.tenantFacade.Account.UpdatePasswordByRecoveryCode(c.Context(), codeID, in.Code, in.Password, true)
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}

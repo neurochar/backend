@@ -10,7 +10,7 @@ import (
 	"github.com/neurochar/backend/pkg/validation"
 
 	appErrors "github.com/neurochar/backend/internal/app/errors"
-	tenantUserUC "github.com/neurochar/backend/internal/domain/tenant_user/usecase"
+	tenantUC "github.com/neurochar/backend/internal/domain/tenant/usecase"
 )
 
 type RefreshHandlerIn struct {
@@ -34,28 +34,25 @@ func (ctrl *Controller) RefreshHandler(c *fiber.Ctx) error {
 
 	requestIP := net.ParseIP(ip)
 
-	claims, err := ctrl.tenantUserFacade.Auth.ParseRefreshToken(in.RefreshToken, true)
+	claims, err := ctrl.tenantFacade.Auth.ParseRefreshToken(in.RefreshToken, true)
 	if err != nil {
-		if errors.Is(err, tenantUserUC.ErrInvalidToken) {
-			return appErrors.Chainf(appErrors.ErrBadRequest, "%s.%s", ctrl.pkg, op)
+		if errors.Is(err, tenantUC.ErrInvalidToken) {
+			return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
 		}
 		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}
 
-	authDTO, err := ctrl.tenantUserFacade.Auth.GenerateNewClaims(c.Context(), claims, requestIP)
-	if err != nil {
-		if errors.Is(err, appErrors.ErrUnauthorized) {
-			return appErrors.Chainf(appErrors.ErrBadRequest, "%s.%s", ctrl.pkg, op)
-		}
-		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
-	}
-
-	accessJWT, err := ctrl.tenantUserFacade.Auth.IssueAccessJWT(authDTO.AccessClaims)
+	authDTO, err := ctrl.tenantFacade.Auth.GenerateNewClaims(c.Context(), claims, requestIP)
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}
 
-	refreshJWT, err := ctrl.tenantUserFacade.Auth.IssueRefreshJWT(authDTO.RefreshClaims)
+	accessJWT, err := ctrl.tenantFacade.Auth.IssueAccessJWT(authDTO.AccessClaims)
+	if err != nil {
+		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
+	}
+
+	refreshJWT, err := ctrl.tenantFacade.Auth.IssueRefreshJWT(authDTO.RefreshClaims)
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}

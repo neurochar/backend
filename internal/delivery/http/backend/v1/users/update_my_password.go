@@ -5,7 +5,8 @@ import (
 	appErrors "github.com/neurochar/backend/internal/app/errors"
 	"github.com/neurochar/backend/internal/delivery/http/backend/middleware"
 	"github.com/neurochar/backend/internal/delivery/http/httperrs"
-	tenantUserUC "github.com/neurochar/backend/internal/domain/tenant_user/usecase"
+	tenantUC "github.com/neurochar/backend/internal/domain/tenant/usecase"
+	"github.com/neurochar/backend/pkg/auth"
 	"github.com/neurochar/backend/pkg/validation"
 	"github.com/samber/lo"
 )
@@ -29,23 +30,14 @@ func (ctrl *Controller) UpdateMyPasswordHandler(c *fiber.Ctx) error {
 		return appErrors.Chainf(httperrs.ErrValidation.WithHints(validation.FormatErrors(err)...), "%s.%s", ctrl.pkg, op)
 	}
 
-	auth := middleware.GetAuthData(c)
-	if auth == nil {
+	authData := middleware.GetAuthData(c)
+	if authData == nil {
 		return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
 	}
 
-	isConfirmed, err := ctrl.tenantUserFacade.Auth.IsSessionConfirmed(c.Context(), auth.SessionID)
-	if err != nil {
-		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
-	}
-
-	if !isConfirmed {
-		return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
-	}
-
-	account, err := ctrl.tenantUserFacade.Account.FindOneByID(
+	account, err := ctrl.tenantFacade.Account.FindOneByID(
 		c.Context(),
-		auth.AccountID,
+		authData.AccountID,
 		nil,
 		nil,
 	)
@@ -63,9 +55,14 @@ func (ctrl *Controller) UpdateMyPasswordHandler(c *fiber.Ctx) error {
 		return appErrors.Chainf(ErrPasswordsMismatch, "%s.%s", ctrl.pkg, op)
 	}
 
-	err = ctrl.tenantUserFacade.Account.PatchAccountByDTO(c.Context(), auth.AccountID, tenantUserUC.PatchAccountDataInput{
-		Password: lo.ToPtr(in.NewPassword),
-	}, true)
+	err = ctrl.tenantFacade.Account.PatchAccountByDTO(
+		auth.WithoutCheckRight(c.Context()),
+		authData.AccountID,
+		tenantUC.PatchAccountDataInput{
+			Password: lo.ToPtr(in.NewPassword),
+		},
+		true,
+	)
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}

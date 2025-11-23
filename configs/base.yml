@@ -1,6 +1,7 @@
 global:
+    server_ip: 127.0.0.1
     project_name: Neurochar
-    project_frontend_url: http://localhost:3000
+    project_frontend_url: http://localhost:3010
     project_api_url: http://localhost:8080
     cpanel_frontend_url: http://localhost:3001
     cpanel_api_url: http://localhost:8081

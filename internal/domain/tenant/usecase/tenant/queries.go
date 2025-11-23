@@ -1,4 +1,4 @@
-package user
+package tenant
 
 import (
 	"context"
@@ -9,6 +9,7 @@ import (
 	"github.com/neurochar/backend/internal/common/uctypes"
 	"github.com/neurochar/backend/internal/domain/tenant/entity"
 	"github.com/neurochar/backend/internal/domain/tenant/usecase"
+	"github.com/neurochar/backend/pkg/auth"
 )
 
 func (uc *UsecaseImpl) FindOneByID(
@@ -21,6 +22,13 @@ func (uc *UsecaseImpl) FindOneByID(
 	item, err := uc.repo.FindOneByID(ctx, id, queryParams)
 	if err != nil {
 		return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	if auth.IsNeedToCheckRights(ctx) {
+		authData := auth.GetAuthData(ctx)
+		if authData == nil || authData.TenantID != item.ID {
+			return nil, appErrors.Chainf(appErrors.ErrForbidden, "%s.%s", uc.pkg, op)
+		}
 	}
 
 	return item, nil
@@ -36,6 +44,13 @@ func (uc *UsecaseImpl) FindOneByTextID(
 	item, err := uc.repo.FindOneByTextID(ctx, textID, queryParams)
 	if err != nil {
 		return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	if auth.IsNeedToCheckRights(ctx) {
+		authData := auth.GetAuthData(ctx)
+		if authData == nil || authData.TenantID != item.ID {
+			return nil, appErrors.Chainf(appErrors.ErrForbidden, "%s.%s", uc.pkg, op)
+		}
 	}
 
 	return item, nil

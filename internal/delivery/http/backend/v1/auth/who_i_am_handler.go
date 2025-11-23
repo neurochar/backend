@@ -5,7 +5,7 @@ import (
 
 	appErrors "github.com/neurochar/backend/internal/app/errors"
 	"github.com/neurochar/backend/internal/delivery/http/backend/middleware"
-	tenantUserUC "github.com/neurochar/backend/internal/domain/tenant_user/usecase"
+	tenantUC "github.com/neurochar/backend/internal/domain/tenant/usecase"
 )
 
 func (ctrl *Controller) WhoIAmHandler(c *fiber.Ctx) error {
@@ -16,20 +16,11 @@ func (ctrl *Controller) WhoIAmHandler(c *fiber.Ctx) error {
 		return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
 	}
 
-	isConfirmed, err := ctrl.tenantUserFacade.Auth.IsSessionConfirmed(c.Context(), auth.SessionID)
-	if err != nil {
-		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
-	}
-
-	if !isConfirmed {
-		return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
-	}
-
-	accountDTO, err := ctrl.tenantUserFacade.Account.FindOneByID(
+	accountDTO, err := ctrl.tenantFacade.Account.FindOneByID(
 		c.Context(),
 		auth.AccountID,
 		nil,
-		&tenantUserUC.AccountDTOOptions{
+		&tenantUC.AccountDTOOptions{
 			FetchTenant:     true,
 			FetchPhotoFiles: true,
 		},

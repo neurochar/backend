@@ -32,7 +32,7 @@ func (ctrl *Controller) CheckAccountCodeHandler(c *fiber.Ctx) error {
 		return appErrors.Chainf(appErrors.ErrBadRequest.WithWrap(err), "%s.%s", ctrl.pkg, op)
 	}
 
-	_, err = ctrl.tenantUserFacade.Account.CheckCode(c.Context(), codeID, in.Code)
+	_, err = ctrl.tenantFacade.Account.CheckCode(c.Context(), codeID, in.Code)
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}

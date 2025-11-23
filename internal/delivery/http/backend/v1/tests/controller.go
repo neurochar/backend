@@ -8,29 +8,25 @@ import (
 	"github.com/neurochar/backend/internal/delivery/http/backend/middleware"
 	v1 "github.com/neurochar/backend/internal/delivery/http/backend/v1"
 	tenantUC "github.com/neurochar/backend/internal/domain/tenant/usecase"
-	tenantUserUC "github.com/neurochar/backend/internal/domain/tenant_user/usecase"
 	"github.com/neurochar/backend/pkg/validation"
 )
 
 type Controller struct {
-	pkg              string
-	vldtr            *validator.Validate
-	cfg              config.Config
-	tenantFacade     *tenantUC.Facade
-	tenantUserFacade *tenantUserUC.Facade
+	pkg          string
+	vldtr        *validator.Validate
+	cfg          config.Config
+	tenantFacade *tenantUC.Facade
 }
 
 func NewController(
 	cfg config.Config,
 	tenantFacade *tenantUC.Facade,
-	tenantUserFacade *tenantUserUC.Facade,
 ) *Controller {
 	controller := &Controller{
-		pkg:              "httpController.Tests",
-		vldtr:            validation.New(),
-		cfg:              cfg,
-		tenantFacade:     tenantFacade,
-		tenantUserFacade: tenantUserFacade,
+		pkg:          "httpController.Tests",
+		vldtr:        validation.New(),
+		cfg:          cfg,
+		tenantFacade: tenantFacade,
 	}
 	return controller
 }

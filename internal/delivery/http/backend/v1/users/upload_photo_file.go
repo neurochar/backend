@@ -18,15 +18,6 @@ func (ctrl *Controller) UploadPhotoFileHandler(c *fiber.Ctx) error {
 		return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
 	}
 
-	isConfirmed, err := ctrl.tenantUserFacade.Auth.IsSessionConfirmed(c.Context(), auth.SessionID)
-	if err != nil {
-		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
-	}
-
-	if !isConfirmed {
-		return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
-	}
-
 	fileHeader, err := c.FormFile("file")
 	if err != nil {
 		return appErrors.Chainf(
@@ -53,7 +44,7 @@ func (ctrl *Controller) UploadPhotoFileHandler(c *fiber.Ctx) error {
 		)
 	}
 
-	files, err := ctrl.tenantUserFacade.Account.UploadProfileImageFile(c.Context(), fileHeader.Filename, fileData)
+	files, err := ctrl.tenantFacade.Account.UploadProfileImageFile(c.Context(), fileHeader.Filename, fileData)
 	if err != nil {
 		return err
 	}

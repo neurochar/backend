@@ -68,7 +68,7 @@ func (ctrl *Controller) RequestPasswordRecoveryHandler(c *fiber.Ctx) error {
 	_ = backoffSession.AddBackoff()
 	c.Set("Retry-After", fmt.Sprintf("%d", backoffSession.NextAllowedUntilSeconds()))
 
-	code, err := ctrl.tenantUserFacade.Account.RequestPasswordRecoveryByEmail(c.Context(), tenant.ID, in.Email, requestIP)
+	code, err := ctrl.tenantFacade.Account.RequestPasswordRecoveryByEmail(c.Context(), tenant.ID, in.Email, &requestIP)
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}

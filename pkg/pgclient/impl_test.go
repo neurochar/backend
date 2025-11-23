@@ -16,7 +16,7 @@ func setupClient(mockPool pgxmock.PgxPoolIface) *clientImpl {
 	return &clientImpl{
 		serverID:        "test-server",
 		pool:            mockPool,
-		defaultIsoLevel: pgx.ReadCommitted,
+		defaultIsoLevel: ReadCommitted,
 		logger:          slog.New(slog.NewTextHandler(io.Discard, nil)),
 	}
 }
@@ -43,7 +43,7 @@ func TestNewClient_Defaults(t *testing.T) {
 		t.Errorf("readOnly = %v, want false", client.readOnly)
 	}
 
-	if client.defaultIsoLevel != pgx.ReadCommitted {
+	if client.defaultIsoLevel != ReadCommitted {
 		t.Errorf("defaultIsoLevel = %v, want %v", client.defaultIsoLevel, pgx.ReadCommitted)
 	}
 
@@ -68,7 +68,7 @@ func TestNewClient_WithOptions(t *testing.T) {
 	opts := NewClientOpts{
 		ReadOnly:        true,
 		LogQueries:      true,
-		DefaultIsoLevel: pgx.Serializable,
+		DefaultIsoLevel: Serializable,
 		Logger:          logger,
 	}
 	dsn := "postgres://user:pass@localhost:5432/dbname?sslmode=disable"
@@ -81,8 +81,8 @@ func TestNewClient_WithOptions(t *testing.T) {
 		t.Errorf("readOnly = %v, want true", client.readOnly)
 	}
 
-	if client.defaultIsoLevel != pgx.Serializable {
-		t.Errorf("defaultIsoLevel = %v, want %v", client.defaultIsoLevel, pgx.Serializable)
+	if client.defaultIsoLevel != Serializable {
+		t.Errorf("defaultIsoLevel = %v, want %v", client.defaultIsoLevel, Serializable)
 	}
 
 	if client.logger != logger {
@@ -176,8 +176,8 @@ func TestDoWithIsoLvl_CustomIsolation(t *testing.T) {
 	defer mockPool.Close()
 
 	client := setupClient(mockPool)
-	iso := pgx.Serializable
-	mockPool.ExpectBeginTx(pgx.TxOptions{IsoLevel: iso})
+	iso := Serializable
+	mockPool.ExpectBeginTx(pgx.TxOptions{IsoLevel: pgx.TxIsoLevel(iso)})
 	mockPool.ExpectCommit()
 
 	err := client.DoWithIsoLvl(context.Background(), iso, func(ctx context.Context) error {
@@ -268,7 +268,7 @@ func TestDoWithIsoLvl_RollsBackToSavepointOnError(t *testing.T) {
 	mockPool.ExpectRollback()
 
 	err := client.Do(context.Background(), func(ctx context.Context) error {
-		return client.DoWithIsoLvl(ctx, pgx.ReadCommitted, func(ctx context.Context) error {
+		return client.DoWithIsoLvl(ctx, ReadCommitted, func(ctx context.Context) error {
 			return errors.New("inner fail")
 		})
 	})
@@ -291,7 +291,7 @@ func TestDoWithIsoLvl_NestedReleaseOnSuccess(t *testing.T) {
 	mockPool.ExpectCommit()
 
 	err := client.Do(context.Background(), func(ctx context.Context) error {
-		return client.DoWithIsoLvl(ctx, pgx.ReadCommitted, func(ctx context.Context) error {
+		return client.DoWithIsoLvl(ctx, ReadCommitted, func(ctx context.Context) error {
 			return nil
 		})
 	})
@@ -318,7 +318,7 @@ func TestDoWithIsoLvl_PanicRollsBack(t *testing.T) {
 				didPanic = true
 			}
 		}()
-		_ = client.DoWithIsoLvl(context.Background(), pgx.ReadCommitted, func(ctx context.Context) error {
+		_ = client.DoWithIsoLvl(context.Background(), ReadCommitted, func(ctx context.Context) error {
 			panic("oops")
 		})
 	}()
@@ -337,7 +337,7 @@ func TestDoWithIsoLvl_BeginTxError(t *testing.T) {
 	defer mockPool.Close()
 
 	client := setupClient(mockPool)
-	err := client.DoWithIsoLvl(context.Background(), pgx.ReadCommitted, func(ctx context.Context) error {
+	err := client.DoWithIsoLvl(context.Background(), ReadCommitted, func(ctx context.Context) error {
 		return nil
 	})
 	if err == nil {
@@ -357,8 +357,8 @@ func TestDoWithIsoLvl_SavepointExecError(t *testing.T) {
 	mockPool.ExpectExec("SAVEPOINT sp_1").WillReturnError(spErr)
 	mockPool.ExpectRollback()
 
-	err := client.DoWithIsoLvl(context.Background(), pgx.ReadCommitted, func(ctx context.Context) error {
-		return client.DoWithIsoLvl(ctx, pgx.ReadCommitted, func(ctx context.Context) error {
+	err := client.DoWithIsoLvl(context.Background(), ReadCommitted, func(ctx context.Context) error {
+		return client.DoWithIsoLvl(ctx, ReadCommitted, func(ctx context.Context) error {
 			return nil
 		})
 	})
@@ -382,8 +382,8 @@ func TestDoWithIsoLvl_ReleaseExecError(t *testing.T) {
 	mockPool.ExpectExec("RELEASE SAVEPOINT sp_1").WillReturnError(errors.New("release fail"))
 	mockPool.ExpectRollback()
 
-	err := client.DoWithIsoLvl(context.Background(), pgx.ReadCommitted, func(ctx context.Context) error {
-		return client.DoWithIsoLvl(ctx, pgx.ReadCommitted, func(ctx context.Context) error {
+	err := client.DoWithIsoLvl(context.Background(), ReadCommitted, func(ctx context.Context) error {
+		return client.DoWithIsoLvl(ctx, ReadCommitted, func(ctx context.Context) error {
 			return nil
 		})
 	})
@@ -407,8 +407,8 @@ func TestDoWithIsoLvl_RollbackSavepointErrorLogButOriginalReturned(t *testing.T)
 	mockPool.ExpectExec("ROLLBACK TO SAVEPOINT sp_1").WillReturnError(errors.New("rb fail"))
 	mockPool.ExpectRollback().WillReturnError(errors.New("rb fail"))
 
-	err := client.DoWithIsoLvl(context.Background(), pgx.ReadCommitted, func(ctx context.Context) error {
-		return client.DoWithIsoLvl(ctx, pgx.ReadCommitted, func(ctx context.Context) error {
+	err := client.DoWithIsoLvl(context.Background(), ReadCommitted, func(ctx context.Context) error {
+		return client.DoWithIsoLvl(ctx, ReadCommitted, func(ctx context.Context) error {
 			return errors.New("inner error")
 		})
 	})

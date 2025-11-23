@@ -6,7 +6,7 @@ import (
 	"github.com/neurochar/backend/internal/common/dto"
 
 	fileUC "github.com/neurochar/backend/internal/domain/file/usecase"
-	tenantUserUC "github.com/neurochar/backend/internal/domain/tenant_user/usecase"
+	tenantUC "github.com/neurochar/backend/internal/domain/tenant/usecase"
 )
 
 // Output
@@ -56,7 +56,7 @@ type OutWhoIAm struct {
 func OutAccountDTO(
 	c *fiber.Ctx,
 	fc fileUC.Usecase,
-	accountDTO *tenantUserUC.AccountDTO,
+	accountDTO *tenantUC.AccountDTO,
 ) (*OutAccount, error) {
 	out := &OutAccount{
 		Version: accountDTO.Account.Version(),
@@ -79,7 +79,7 @@ func OutAccountDTO(
 func OutTenantDTOByAccountDTO(
 	c *fiber.Ctx,
 	fc fileUC.Usecase,
-	accountDTO *tenantUserUC.AccountDTO,
+	accountDTO *tenantUC.AccountDTO,
 ) (*OutTenant, error) {
 	out := &OutTenant{
 		Version: accountDTO.Account.Version(),
@@ -110,7 +110,7 @@ func OutTokensDTO(
 func OutLoginDTO(
 	c *fiber.Ctx,
 	fc fileUC.Usecase,
-	accountDTO *tenantUserUC.AccountDTO,
+	accountDTO *tenantUC.AccountDTO,
 	refreshJWT string,
 	refreshLifeSec uint64,
 	accessJWT string,
@@ -141,7 +141,7 @@ func OutLoginDTO(
 func OutWhoIAmDTO(
 	c *fiber.Ctx,
 	fc fileUC.Usecase,
-	accountDTO *tenantUserUC.AccountDTO,
+	accountDTO *tenantUC.AccountDTO,
 ) (*OutWhoIAm, error) {
 	outAccount, err := OutAccountDTO(c, fc, accountDTO)
 	if err != nil {

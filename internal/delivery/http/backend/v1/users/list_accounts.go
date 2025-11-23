@@ -2,11 +2,10 @@ package users
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/google/uuid"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
 	"github.com/neurochar/backend/internal/common/uctypes"
 	"github.com/neurochar/backend/internal/delivery/http/backend/middleware"
-	tenantUserUC "github.com/neurochar/backend/internal/domain/tenant_user/usecase"
+	tenantUC "github.com/neurochar/backend/internal/domain/tenant/usecase"
 )
 
 type ListAccountsHandlerOut struct {
@@ -30,21 +29,16 @@ func (ctrl *Controller) ListAccountsHandler(c *fiber.Ctx) error {
 		offset = 0
 	}
 
-	auth := middleware.GetAuthData(c)
-	if auth == nil {
+	authData := middleware.GetAuthData(c)
+	if authData == nil {
 		return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
 	}
 
-	tenantID, err := uuid.Parse(auth.TenantID.String())
-	if err != nil {
-		return appErrors.Chainf(appErrors.ErrInternal.WithWrap(err), "%s.%s", ctrl.pkg, op)
-	}
-
-	listOptions := &tenantUserUC.AccountListOptions{
-		FilterTenantID: &tenantID,
-		Sort: []uctypes.SortOption[tenantUserUC.AccountListOptionsSortField]{
+	listOptions := &tenantUC.AccountListOptions{
+		FilterTenantID: &authData.TenantID,
+		Sort: []uctypes.SortOption[tenantUC.AccountListOptionsSortField]{
 			{
-				Field:  tenantUserUC.AccountListOptionsSortFieldCreatedAt,
+				Field:  tenantUC.AccountListOptionsSortFieldCreatedAt,
 				IsDesc: false,
 			},
 		},
@@ -55,11 +49,11 @@ func (ctrl *Controller) ListAccountsHandler(c *fiber.Ctx) error {
 		Offset: uint64(offset),
 	}
 
-	items, total, err := ctrl.tenantUserFacade.Account.FindPagedList(
+	items, total, err := ctrl.tenantFacade.Account.FindPagedList(
 		c.Context(),
 		listOptions,
 		listParams,
-		&tenantUserUC.AccountDTOOptions{
+		&tenantUC.AccountDTOOptions{
 			FetchPhotoFiles: true,
 		},
 	)

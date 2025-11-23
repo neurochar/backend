@@ -17,6 +17,7 @@ type HTTPConfig struct {
 	UseLogger        bool
 	BodyLimit        int
 	CorsAllowOrigins []string
+	ServerIPs        []string
 }
 
 // NewHTTPFiber provides fiber app
@@ -38,7 +39,7 @@ func NewHTTPFiber(httpCfg HTTPConfig, logger *slog.Logger, alertUsecase alertUC.
 
 	app.Use(middleware.Recovery(logger))
 	app.Use(middleware.RequestID())
-	app.Use(middleware.RequestIP())
+	app.Use(middleware.RequestIP(httpCfg.ServerIPs))
 
 	if len(httpCfg.CorsAllowOrigins) > 0 {
 		app.Use(middleware.Cors(httpCfg.CorsAllowOrigins))

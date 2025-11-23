@@ -57,7 +57,7 @@ func (ctrl *Controller) LoginHandler(c *fiber.Ctx) error {
 
 	requestIP := net.ParseIP(ip)
 
-	authDTO, err := ctrl.tenantUserFacade.Auth.LoginByEmail(c.Context(), tenant.ID, in.Email, in.Password, requestIP)
+	authDTO, err := ctrl.tenantFacade.Auth.LoginByEmail(c.Context(), tenant.ID, in.Email, in.Password, requestIP)
 	if err != nil {
 		if errors.Is(err, appErrors.ErrUnauthorized) {
 			backoffSession = ctrl.backoff.Get(ip, backoffConfigAuthGroupID)
@@ -72,12 +72,12 @@ func (ctrl *Controller) LoginHandler(c *fiber.Ctx) error {
 		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}
 
-	accessJWT, err := ctrl.tenantUserFacade.Auth.IssueAccessJWT(authDTO.AccessClaims)
+	accessJWT, err := ctrl.tenantFacade.Auth.IssueAccessJWT(authDTO.AccessClaims)
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}
 
-	refreshJWT, err := ctrl.tenantUserFacade.Auth.IssueRefreshJWT(authDTO.RefreshClaims)
+	refreshJWT, err := ctrl.tenantFacade.Auth.IssueRefreshJWT(authDTO.RefreshClaims)
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}

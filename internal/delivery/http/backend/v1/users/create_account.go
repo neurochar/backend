@@ -1,15 +1,12 @@
 package users
 
 import (
-	"net"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
 	backendMiddleware "github.com/neurochar/backend/internal/delivery/http/backend/middleware"
 	"github.com/neurochar/backend/internal/delivery/http/httperrs"
-	"github.com/neurochar/backend/internal/delivery/http/middleware"
-	tenantUserUC "github.com/neurochar/backend/internal/domain/tenant_user/usecase"
+	tenantUC "github.com/neurochar/backend/internal/domain/tenant/usecase"
 	"github.com/neurochar/backend/pkg/validation"
 )
 
@@ -45,18 +42,6 @@ func (ctrl *Controller) CreateAccountHandler(c *fiber.Ctx) error {
 		return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
 	}
 
-	isConfirmed, err := ctrl.tenantUserFacade.Auth.IsSessionConfirmed(c.Context(), auth.SessionID)
-	if err != nil {
-		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
-	}
-
-	if !isConfirmed {
-		return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
-	}
-
-	ip := middleware.GetRealIP(c)
-	requestIP := net.ParseIP(ip)
-
 	var photoOriginalFileID *uuid.UUID
 	var photo100x100FileID *uuid.UUID
 
@@ -78,17 +63,23 @@ func (ctrl *Controller) CreateAccountHandler(c *fiber.Ctx) error {
 		photo100x100FileID = &parseID
 	}
 
-	accountDTO, err := ctrl.tenantUserFacade.Common.CreateUser(c.Context(), auth.TenantID, tenantUserUC.CreateAccountDataInput{
-		Email:          in.Email,
-		Password:       in.Password,
-		RoleID:         in.RoleID,
-		ProfileName:    in.ProfileName,
-		ProfileSurname: in.ProfileSurname,
-		ProfilePhotos: &tenantUserUC.AccountDataInputProfilePhotos{
-			PhotoOriginalFileID: photoOriginalFileID,
-			Photo100x100FileID:  photo100x100FileID,
+	accountDTO, _, err := ctrl.tenantFacade.Account.CreateAccountByDTO(
+		c.Context(),
+		auth.TenantID,
+		tenantUC.CreateAccountDataInput{
+			Email:          in.Email,
+			Password:       in.Password,
+			RoleID:         in.RoleID,
+			ProfileName:    in.ProfileName,
+			ProfileSurname: in.ProfileSurname,
+			ProfilePhotos: &tenantUC.AccountDataInputProfilePhotos{
+				PhotoOriginalFileID: photoOriginalFileID,
+				Photo100x100FileID:  photo100x100FileID,
+			},
 		},
-	}, auth.AccountID, requestIP)
+		true,
+		nil,
+	)
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}

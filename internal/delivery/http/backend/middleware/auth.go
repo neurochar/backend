@@ -5,22 +5,12 @@ import (
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/google/uuid"
-	appErrors "github.com/neurochar/backend/internal/app/errors"
-	tenantUserUC "github.com/neurochar/backend/internal/domain/tenant_user/usecase"
+	tenantUC "github.com/neurochar/backend/internal/domain/tenant/usecase"
 	"github.com/neurochar/backend/internal/infra/loghandler"
+	"github.com/neurochar/backend/pkg/auth"
 )
 
-type AuthData struct {
-	TenantID  uuid.UUID
-	SessionID uuid.UUID
-	AccountID uuid.UUID
-	RoleID    uint64
-}
-
-const AuthDataKey = "auth_data"
-
-func (ctrl *Controller) MiddlewareAuth(c *fiber.Ctx) error {
+func (ctrl *Controller) Auth(c *fiber.Ctx) error {
 	authHeader := c.Get("Authorization")
 	accessToken := strings.TrimPrefix(authHeader, "Bearer ")
 
@@ -30,45 +20,28 @@ func (ctrl *Controller) MiddlewareAuth(c *fiber.Ctx) error {
 
 	claims, err := ctrl.authUC.ParseAccessToken(accessToken, true)
 	if err != nil {
-		if errors.Is(err, tenantUserUC.ErrInvalidToken) {
-			return appErrors.ErrUnauthorized
+		if errors.Is(err, tenantUC.ErrInvalidToken) {
+			return c.Next()
 		}
 		return err
 	}
 
-	tenantID, err := uuid.Parse(claims.TenantId)
+	authData, err := auth.ClaimsToAuthData(claims)
 	if err != nil {
 		return err
 	}
 
-	sessionID, err := uuid.Parse(claims.SessionId)
-	if err != nil {
-		return err
-	}
-
-	accountID, err := uuid.Parse(claims.AccountId)
-	if err != nil {
-		return err
-	}
-
-	c.Locals(AuthDataKey, &AuthData{
-		TenantID:  tenantID,
-		SessionID: sessionID,
-		AccountID: accountID,
-		RoleID:    uint64(claims.RoleId),
-	})
+	c.Locals(auth.ContextKeyAuthData, authData)
 
 	ctxData, ctxKey := loghandler.SetData(c.Context(), "request.account.id", claims.AccountId)
+	c.Locals(ctxKey, ctxData)
+
+	ctxData, ctxKey = loghandler.SetData(c.Context(), "request.tenant.id", claims.TenantId)
 	c.Locals(ctxKey, ctxData)
 
 	return c.Next()
 }
 
-func GetAuthData(c *fiber.Ctx) *AuthData {
-	data, ok := c.Locals(AuthDataKey).(*AuthData)
-	if !ok {
-		return nil
-	}
-
-	return data
+func GetAuthData(c *fiber.Ctx) *auth.AuthData {
+	return auth.GetAuthData(c.Context())
 }

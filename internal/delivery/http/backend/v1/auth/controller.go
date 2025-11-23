@@ -11,19 +11,17 @@ import (
 	v1 "github.com/neurochar/backend/internal/delivery/http/backend/v1"
 	fileUC "github.com/neurochar/backend/internal/domain/file/usecase"
 	tenantUC "github.com/neurochar/backend/internal/domain/tenant/usecase"
-	tenantUserUC "github.com/neurochar/backend/internal/domain/tenant_user/usecase"
 	"github.com/neurochar/backend/pkg/backoff"
 	"github.com/neurochar/backend/pkg/validation"
 )
 
 type Controller struct {
-	pkg              string
-	vldtr            *validator.Validate
-	cfg              config.Config
-	backoff          *backoff.Controller
-	fileUC           fileUC.Usecase
-	tenantFacade     *tenantUC.Facade
-	tenantUserFacade *tenantUserUC.Facade
+	pkg          string
+	vldtr        *validator.Validate
+	cfg          config.Config
+	backoff      *backoff.Controller
+	fileUC       fileUC.Usecase
+	tenantFacade *tenantUC.Facade
 }
 
 func NewController(
@@ -31,16 +29,14 @@ func NewController(
 	backoff *backoff.Controller,
 	fileUC fileUC.Usecase,
 	tenantFacade *tenantUC.Facade,
-	tenantUserFacade *tenantUserUC.Facade,
 ) *Controller {
 	controller := &Controller{
-		pkg:              "httpController.Auth",
-		vldtr:            validation.New(),
-		cfg:              cfg,
-		backoff:          backoff,
-		fileUC:           fileUC,
-		tenantFacade:     tenantFacade,
-		tenantUserFacade: tenantUserFacade,
+		pkg:          "httpController.Auth",
+		vldtr:        validation.New(),
+		cfg:          cfg,
+		backoff:      backoff,
+		fileUC:       fileUC,
+		tenantFacade: tenantFacade,
 	}
 	return controller
 }
@@ -76,15 +72,15 @@ func RegisterRoutes(groups *v1.Groups, ctrl *Controller, cpanelMdwr *middleware.
 
 	routeGroup.Post("/refresh", ctrl.RefreshHandler)
 
-	routeGroup.Get("/whoiam", cpanelMdwr.MiddlewareAuthRequired, ctrl.WhoIAmHandler)
+	routeGroup.Get("/whoiam", cpanelMdwr.AuthFullCheck, ctrl.WhoIAmHandler)
 
-	routeGroup.Post("/logout", cpanelMdwr.MiddlewareAuthRequired, ctrl.LogoutHandler)
+	routeGroup.Post("/logout", cpanelMdwr.AuthFullCheck, ctrl.LogoutHandler)
 
 	routeGroup.Post("/password-recovery", ipLimiterMiddleware, ctrl.RequestPasswordRecoveryHandler)
 
-	routeGroup.Post("/check-code", ctrl.CheckAccountCodeHandler)
+	routeGroup.Post("/check-code", ipLimiterMiddleware, ctrl.CheckAccountCodeHandler)
 
-	routeGroup.Post("/password-by-code", ctrl.UpdatePasswordByCodeHandler)
+	routeGroup.Post("/password-by-code", ipLimiterMiddleware, ctrl.UpdatePasswordByCodeHandler)
 
 	routeGroup.Post("/verify-email", ipLimiterMiddleware, ctrl.AccountVerifyEmailHandler)
 }

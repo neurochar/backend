@@ -11,6 +11,7 @@ import (
 // Config struct for app config
 type Config struct {
 	Global struct {
+		ServerIP           string `yaml:"server_ip" env:"GLOBAL_SERVER_IP"`
 		ProjectName        string `yaml:"project_name" env:"GLOBAL_PROJECT_NAME" env-default:""`
 		ProjectFrontendUrl string `yaml:"project_frontend_url" env:"GLOBAL_PROJECT_FRONTEND_URL" env-default:""`
 		ProjectApiUrl      string `yaml:"project_api_url" env:"GLOBAL_PROJECT_API_URL" env-default:""`

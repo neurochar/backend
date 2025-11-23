@@ -11,10 +11,10 @@ import (
 	"github.com/neurochar/backend/internal/app/fxboot/invoking"
 	"github.com/neurochar/backend/internal/app/fxboot/providing"
 	"github.com/neurochar/backend/internal/domain/alert"
+	"github.com/neurochar/backend/internal/domain/crm"
 	emailingModule "github.com/neurochar/backend/internal/domain/emailing"
 	"github.com/neurochar/backend/internal/domain/file"
 	"github.com/neurochar/backend/internal/domain/tenant"
-	tenantUser "github.com/neurochar/backend/internal/domain/tenant_user"
 	"github.com/neurochar/backend/internal/infra/db"
 	"github.com/neurochar/backend/internal/infra/storage"
 	"github.com/neurochar/backend/internal/infra/storage/s3d"
@@ -62,14 +62,14 @@ func CronjobAppGetOptionsMap(appID app.ID, cfg config.Config) OptionsMap {
 					)
 				},
 			),
-			ProvidingIDEmailing:         fx.Provide(providing.NewEmailing),
-			ProvidingIDJobsController:   fx.Provide(jobs.NewController),
-			ProvidingIDStorageClient:    fx.Provide(providing.NewStorageClient),
-			ProvidingIDFileModule:       file.FxModule,
-			ProvidingIDEmailingModule:   emailingModule.FxModule,
-			ProvidingIDAlertModule:      alert.FxModule,
-			ProvidingIDTenantModule:     tenant.FxModule,
-			ProvidingIDTenantUserModule: tenantUser.FxModule,
+			ProvidingIDEmailing:       fx.Provide(providing.NewEmailing),
+			ProvidingIDJobsController: fx.Provide(jobs.NewController),
+			ProvidingIDStorageClient:  fx.Provide(providing.NewStorageClient),
+			ProvidingIDFileModule:     file.FxModule,
+			ProvidingIDEmailingModule: emailingModule.FxModule,
+			ProvidingIDAlertModule:    alert.FxModule,
+			ProvidingIDTenantModule:   tenant.FxModule,
+			ProvidingIDCRMModule:      crm.FxModule,
 		},
 		Invokes: []fx.Option{
 			fx.Invoke(CronjobAppInitInvoke),

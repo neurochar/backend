@@ -17,7 +17,7 @@ func (ctrl *Controller) AccountVerifyEmailHandler(c *fiber.Ctx) error {
 
 	codeValue := c.Query("code")
 
-	err = ctrl.tenantUserFacade.Account.VerifyAccountEmailByCode(c.Context(), codeID, codeValue)
+	err = ctrl.tenantFacade.Account.VerifyAccountEmailByCode(c.Context(), codeID, codeValue)
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}

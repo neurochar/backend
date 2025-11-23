@@ -1,0 +1,3 @@
+Здравствуйте!<br />
+<br />
+Чтобы продолжить регистрацию рабочего пространства в Neurochar, вам необходимо перейти по ссылке: <a href="{{ data.ActivateUrl }}" target="_blank">{{ data.ActivateUrl }}</a>

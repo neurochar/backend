@@ -17,7 +17,7 @@ func (ctrl *Controller) LogoutHandler(c *fiber.Ctx) error {
 		return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
 	}
 
-	err := ctrl.tenantUserFacade.Auth.RevokeSessionByID(
+	err := ctrl.tenantFacade.Session.RevokeSessionByID(
 		c.Context(),
 		auth.SessionID,
 	)

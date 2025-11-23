@@ -18,7 +18,7 @@ type clientImpl struct {
 	serverID        string
 	pool            Pool
 	readOnly        bool
-	defaultIsoLevel pgx.TxIsoLevel
+	defaultIsoLevel TxIsoLevel
 	txKey           txKey
 	txDepthKey      txDepthKey
 	logger          *slog.Logger
@@ -27,7 +27,7 @@ type clientImpl struct {
 // NewClientOpts - options for constructing pg client
 type NewClientOpts struct {
 	ReadOnly        bool
-	DefaultIsoLevel pgx.TxIsoLevel
+	DefaultIsoLevel TxIsoLevel
 	Logger          *slog.Logger
 	LogQueries      bool
 }
@@ -56,7 +56,7 @@ func NewClient(ctx context.Context, serverID string, dsn string, opts NewClientO
 		serverID:        serverID,
 		pool:            dbpool,
 		readOnly:        opts.ReadOnly,
-		defaultIsoLevel: pgx.ReadCommitted,
+		defaultIsoLevel: ReadCommitted,
 	}
 
 	if opts.DefaultIsoLevel != "" {
@@ -98,7 +98,7 @@ func (c *clientImpl) Do(ctx context.Context, fn func(context.Context) error) err
 }
 
 // DoWithIsoLvl - execute tx with iso level
-func (c *clientImpl) DoWithIsoLvl(ctx context.Context, isoLvl pgx.TxIsoLevel, fn func(context.Context) error) error {
+func (c *clientImpl) DoWithIsoLvl(ctx context.Context, isoLvl TxIsoLevel, fn func(context.Context) error) error {
 	tx, ok := ctx.Value(c.txKey).(pgx.Tx)
 	if ok && tx != nil {
 		depth, ok := ctx.Value(c.txKey).(int)
@@ -133,7 +133,7 @@ func (c *clientImpl) DoWithIsoLvl(ctx context.Context, isoLvl pgx.TxIsoLevel, fn
 		return nil
 	}
 
-	tx, err := c.pool.BeginTx(ctx, pgx.TxOptions{IsoLevel: isoLvl})
+	tx, err := c.pool.BeginTx(ctx, pgx.TxOptions{IsoLevel: pgx.TxIsoLevel(isoLvl)})
 	if err != nil {
 		return err
 	}

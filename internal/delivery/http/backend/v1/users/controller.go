@@ -10,19 +10,17 @@ import (
 	v1 "github.com/neurochar/backend/internal/delivery/http/backend/v1"
 	fileUC "github.com/neurochar/backend/internal/domain/file/usecase"
 	tenantUC "github.com/neurochar/backend/internal/domain/tenant/usecase"
-	tenantUserUC "github.com/neurochar/backend/internal/domain/tenant_user/usecase"
 	"github.com/neurochar/backend/pkg/backoff"
 	"github.com/neurochar/backend/pkg/validation"
 )
 
 type Controller struct {
-	pkg              string
-	vldtr            *validator.Validate
-	cfg              config.Config
-	backoff          *backoff.Controller
-	fileUC           fileUC.Usecase
-	tenantFacade     *tenantUC.Facade
-	tenantUserFacade *tenantUserUC.Facade
+	pkg          string
+	vldtr        *validator.Validate
+	cfg          config.Config
+	backoff      *backoff.Controller
+	fileUC       fileUC.Usecase
+	tenantFacade *tenantUC.Facade
 }
 
 func NewController(
@@ -30,16 +28,14 @@ func NewController(
 	backoff *backoff.Controller,
 	fileUC fileUC.Usecase,
 	tenantFacade *tenantUC.Facade,
-	tenantUserFacade *tenantUserUC.Facade,
 ) *Controller {
 	controller := &Controller{
-		pkg:              "httpController.Users",
-		vldtr:            validation.New(),
-		cfg:              cfg,
-		backoff:          backoff,
-		fileUC:           fileUC,
-		tenantFacade:     tenantFacade,
-		tenantUserFacade: tenantUserFacade,
+		pkg:          "httpController.Users",
+		vldtr:        validation.New(),
+		cfg:          cfg,
+		backoff:      backoff,
+		fileUC:       fileUC,
+		tenantFacade: tenantFacade,
 	}
 	return controller
 }
@@ -49,19 +45,19 @@ func RegisterRoutes(groups *v1.Groups, ctrl *Controller, cpanelMdwr *middleware.
 
 	const url = "users"
 
-	routeGroup := groups.Default.Group(fmt.Sprintf("/%s", url), cpanelMdwr.MiddlewareAuthRequired)
+	routeGroup := groups.Default.Group(fmt.Sprintf("/%s", url), cpanelMdwr.AuthRequired)
 
-	routeGroup.Post("/photo_file", accountLimiterMiddleware, ctrl.UploadPhotoFileHandler)
+	routeGroup.Post("/photo_file", accountLimiterMiddleware, cpanelMdwr.AuthFullCheck, ctrl.UploadPhotoFileHandler)
 
-	routeGroup.Put("/my_profile", ctrl.UpdateMyProfileHandler)
+	routeGroup.Put("/my_profile", cpanelMdwr.AuthFullCheck, ctrl.UpdateMyProfileHandler)
 
-	routeGroup.Put("/my_password", ctrl.UpdateMyPasswordHandler)
+	routeGroup.Put("/my_password", cpanelMdwr.AuthFullCheck, ctrl.UpdateMyPasswordHandler)
 
 	routeGroup.Get("/:id<guid>", ctrl.GetAccountHandler)
 
-	routeGroup.Post("", ctrl.CreateAccountHandler)
+	routeGroup.Post("", cpanelMdwr.AuthFullCheck, ctrl.CreateAccountHandler)
 
-	routeGroup.Patch("/:id<guid>", ctrl.PatchProfileHandler)
+	routeGroup.Patch("/:id<guid>", cpanelMdwr.AuthFullCheck, ctrl.PatchProfileHandler)
 
 	routeGroup.Get("", ctrl.ListAccountsHandler)
 }

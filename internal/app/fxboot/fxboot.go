@@ -63,8 +63,8 @@ const (
 	// ProvidingIDTenantModule - tenant
 	ProvidingIDTenantModule
 
-	// ProvidingIDTenantUserModule - tenant user
-	ProvidingIDTenantUserModule
+	// ProvidingIDCRMModule - crm
+	ProvidingIDCRMModule
 )
 
 // OptionsMap - options map item with providing and invokes elements

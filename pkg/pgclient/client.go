@@ -9,13 +9,22 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
+type TxIsoLevel string
+
+const (
+	Serializable    TxIsoLevel = "serializable"
+	RepeatableRead  TxIsoLevel = "repeatable read"
+	ReadCommitted   TxIsoLevel = "read committed"
+	ReadUncommitted TxIsoLevel = "read uncommitted"
+)
+
 // Client - interface for pg client
 type Client interface {
 	ServerID() string
 	Pool() Pool
 	GetConn(ctx context.Context) Conn
 	Do(ctx context.Context, fn func(context.Context) error) error
-	DoWithIsoLvl(ctx context.Context, isoLvl pgx.TxIsoLevel, fn func(context.Context) error) error
+	DoWithIsoLvl(ctx context.Context, isoLvl TxIsoLevel, fn func(context.Context) error) error
 	Close()
 }
 

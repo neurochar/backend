@@ -6,12 +6,13 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/neurochar/backend/internal/infra/loghandler"
+	"github.com/samber/lo"
 )
 
 // RequestIP - middleware for request ip
-func RequestIP() func(*fiber.Ctx) error {
+func RequestIP(serverIPs []string) func(*fiber.Ctx) error {
 	return func(c *fiber.Ctx) error {
-		requestIP := GetRealIP(c)
+		requestIP := parseRealIP(c, serverIPs)
 
 		c.Locals("requestIP", requestIP)
 
@@ -22,13 +23,11 @@ func RequestIP() func(*fiber.Ctx) error {
 	}
 }
 
-func GetRealIP(c *fiber.Ctx) string {
+func parseRealIP(c *fiber.Ctx, serverIPs []string) string {
 	ips := strings.Split(c.IP(), ",")
 	for i := range ips {
 		ips[i] = strings.TrimSpace(ips[i])
 	}
-
-	forwardedBy := c.Get("X-Forwarded-By")
 
 	for i := len(ips) - 1; i >= 0; i-- {
 		ip := ips[i]
@@ -36,7 +35,7 @@ func GetRealIP(c *fiber.Ctx) string {
 		if parsed == nil {
 			continue
 		}
-		if !IsPrivateIP(parsed) && (forwardedBy == "" || !strings.Contains(forwardedBy, ip)) {
+		if !lo.Contains(serverIPs, ip) && !IsPrivateIP(parsed) {
 			return ip
 		}
 	}
@@ -48,15 +47,25 @@ func GetRealIP(c *fiber.Ctx) string {
 	return c.IP()
 }
 
-func IsPrivateIP(ip net.IP) bool {
-	privateBlocks := []string{
-		"10.0.0.0/8",
-		"172.16.0.0/12",
-		"192.168.0.0/16",
-		"127.0.0.0/8",
-		"::1/128",
+func GetRealIP(c *fiber.Ctx) string {
+	ip := c.Locals("requestIP")
+	ipStr, ok := ip.(string)
+	if ok {
+		return ipStr
 	}
 
+	return c.IP()
+}
+
+var privateBlocks = []string{
+	"10.0.0.0/8",
+	"172.16.0.0/12",
+	"192.168.0.0/16",
+	"127.0.0.0/8",
+	"::1/128",
+}
+
+func IsPrivateIP(ip net.IP) bool {
 	for _, block := range privateBlocks {
 		_, subnet, err := net.ParseCIDR(block)
 		if err != nil {

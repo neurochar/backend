@@ -15,10 +15,10 @@ import (
 	cpanelHTTP "github.com/neurochar/backend/internal/delivery/http/cpanel"
 	"github.com/neurochar/backend/internal/domain/alert"
 	alertUC "github.com/neurochar/backend/internal/domain/alert/usecase"
+	"github.com/neurochar/backend/internal/domain/crm"
 	emailingModule "github.com/neurochar/backend/internal/domain/emailing"
 	"github.com/neurochar/backend/internal/domain/file"
 	"github.com/neurochar/backend/internal/domain/tenant"
-	tenantUser "github.com/neurochar/backend/internal/domain/tenant_user"
 	"github.com/neurochar/backend/internal/domain/user"
 	"github.com/neurochar/backend/internal/infra/db"
 	"github.com/neurochar/backend/internal/infra/storage"
@@ -77,18 +77,19 @@ func CPanelAppGetOptionsMap(appID app.ID, cfg config.Config) OptionsMap {
 						UseLogger:        cfg.CPanelApp.Base.UseLogger && cfg.CPanelApp.Base.LogHTTP,
 						BodyLimit:        -1,
 						CorsAllowOrigins: cfg.CPanelApp.HTTP.CorsAllowOrigins,
+						ServerIPs:        []string{cfg.Global.ServerIP},
 					}
 
 					return cpanelHTTP.NewHTTPFiber(httpConfig, logger, alertUsecase)
 				},
 			),
-			ProvidingIDDeliveryHTTP:     cpanelHTTP.FxModule,
-			ProvidingIDFileModule:       file.FxModule,
-			ProvidingIDUserModule:       user.FxModule,
-			ProvidingIDEmailingModule:   emailingModule.FxModule,
-			ProvidingIDAlertModule:      alert.FxModule,
-			ProvidingIDTenantModule:     tenant.FxModule,
-			ProvidingIDTenantUserModule: tenantUser.FxModule,
+			ProvidingIDDeliveryHTTP:   cpanelHTTP.FxModule,
+			ProvidingIDFileModule:     file.FxModule,
+			ProvidingIDUserModule:     user.FxModule,
+			ProvidingIDEmailingModule: emailingModule.FxModule,
+			ProvidingIDAlertModule:    alert.FxModule,
+			ProvidingIDTenantModule:   tenant.FxModule,
+			ProvidingIDCRMModule:      crm.FxModule,
 		},
 		Invokes: []fx.Option{
 			fx.Invoke(CPanelAppInitInvoke),
