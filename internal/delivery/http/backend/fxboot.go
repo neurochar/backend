@@ -7,6 +7,7 @@ import (
 	"github.com/neurochar/backend/internal/delivery/http/backend/v1/crm"
 	"github.com/neurochar/backend/internal/delivery/http/backend/v1/registration"
 	"github.com/neurochar/backend/internal/delivery/http/backend/v1/tenants"
+	"github.com/neurochar/backend/internal/delivery/http/backend/v1/testing"
 	"github.com/neurochar/backend/internal/delivery/http/backend/v1/tests"
 	"github.com/neurochar/backend/internal/delivery/http/backend/v1/users"
 	"github.com/neurochar/backend/pkg/validation"
@@ -25,5 +26,6 @@ var FxModule = fx.Options(
 		registration.FxModule,
 		users.FxModule,
 		crm.FxModule,
+		testing.FxModule,
 	),
 )

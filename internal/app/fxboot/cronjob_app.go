@@ -15,6 +15,7 @@ import (
 	emailingModule "github.com/neurochar/backend/internal/domain/emailing"
 	"github.com/neurochar/backend/internal/domain/file"
 	"github.com/neurochar/backend/internal/domain/tenant"
+	"github.com/neurochar/backend/internal/domain/testing"
 	"github.com/neurochar/backend/internal/infra/db"
 	"github.com/neurochar/backend/internal/infra/storage"
 	"github.com/neurochar/backend/internal/infra/storage/s3d"
@@ -70,6 +71,7 @@ func CronjobAppGetOptionsMap(appID app.ID, cfg config.Config) OptionsMap {
 			ProvidingIDAlertModule:    alert.FxModule,
 			ProvidingIDTenantModule:   tenant.FxModule,
 			ProvidingIDCRMModule:      crm.FxModule,
+			ProvidingIDTestingModule:  testing.FxModule,
 		},
 		Invokes: []fx.Option{
 			fx.Invoke(CronjobAppInitInvoke),

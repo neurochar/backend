@@ -65,6 +65,9 @@ const (
 
 	// ProvidingIDCRMModule - crm
 	ProvidingIDCRMModule
+
+	// ProvidingIDTestingModule - testing
+	ProvidingIDTestingModule
 )
 
 // OptionsMap - options map item with providing and invokes elements

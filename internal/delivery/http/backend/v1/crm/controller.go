@@ -47,6 +47,6 @@ func RegisterRoutes(groups *v1.Groups, ctrl *Controller, cpanelMdwr *middleware.
 	routeGroup.Get("/candidates", ctrl.ListCandidatesHandler)
 	routeGroup.Post("/candidates", cpanelMdwr.AuthFullCheck, ctrl.CreateCandidateHandler)
 	routeGroup.Get("/candidates/:id<guid>", ctrl.GetCandidateHandler)
-	routeGroup.Patch("/candidates/:id<guid>", ctrl.PatchCandidateHandler)
-	routeGroup.Delete("/candidates/:id<guid>", ctrl.DeleteCandidateHandler)
+	routeGroup.Patch("/candidates/:id<guid>", cpanelMdwr.AuthFullCheck, ctrl.PatchCandidateHandler)
+	routeGroup.Delete("/candidates/:id<guid>", cpanelMdwr.AuthFullCheck, ctrl.DeleteCandidateHandler)
 }
