@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/neurochar/backend/internal/common/uctypes"
@@ -30,16 +31,20 @@ type CandidateDTO struct {
 }
 
 type CreateCandidateDataInput struct {
-	CandidateName    string
-	CandidateSurname string
-	CreatedBy        *uuid.UUID
+	CandidateName     string
+	CandidateSurname  string
+	CandidateGender   entity.CandidateGender
+	CandidateBirthday *time.Time
+	CreatedBy         *uuid.UUID
 }
 
 type PatchCandidateDataInput struct {
 	Version int64
 
-	CandidateName    *string
-	CandidateSurname *string
+	CandidateName     *string
+	CandidateSurname  *string
+	CandidateGender   *entity.CandidateGender
+	CandidateBirthday **time.Time
 }
 
 type CandidateUsecase interface {

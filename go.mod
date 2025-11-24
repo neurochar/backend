@@ -20,6 +20,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/google/uuid v1.6.0
 	github.com/govalues/decimal v0.1.36
+	github.com/guregu/null/v6 v6.0.0
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/jackc/pgx/v5 v5.7.5
 	github.com/k3a/html2text v1.2.1

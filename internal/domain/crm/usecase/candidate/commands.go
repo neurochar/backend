@@ -35,6 +35,16 @@ func (uc *UsecaseImpl) CreateByDTO(
 		return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
 	}
 
+	err = candidate.SetCandidateGender(in.CandidateGender)
+	if err != nil {
+		return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	err = candidate.SetCandidateBirthday(in.CandidateBirthday)
+	if err != nil {
+		return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
 	err = uc.repo.Create(ctx, candidate)
 	if err != nil {
 		return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
@@ -94,6 +104,17 @@ func (uc *UsecaseImpl) PatchByDTO(
 			if err != nil {
 				return err
 			}
+		}
+
+		if in.CandidateGender != nil {
+			err := candidate.SetCandidateGender(*in.CandidateGender)
+			if err != nil {
+				return err
+			}
+		}
+
+		if in.CandidateBirthday != nil {
+			candidate.SetCandidateBirthday(*in.CandidateBirthday)
 		}
 
 		err = uc.repo.Update(ctx, candidate)
