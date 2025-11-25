@@ -30,6 +30,10 @@ func (uc *UsecaseImpl) ValidatePersonalityTraitsMap(traitsMap entity.ProfilePers
 		if trait.Priority < 0 || trait.Priority > 3 {
 			return appErrors.Chainf(usecase.ErrPersonalityTraitsMapIncorrect, "%s.%s", uc.pkg, op)
 		}
+
+		if trait.Target < 0 || trait.Target > 10 {
+			return appErrors.Chainf(usecase.ErrPersonalityTraitsMapIncorrect, "%s.%s", uc.pkg, op)
+		}
 	}
 
 	return nil
