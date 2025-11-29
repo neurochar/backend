@@ -3,6 +3,7 @@ package traits
 import "github.com/neurochar/backend/internal/domain/testing/entity"
 
 var Traits = []entity.PersonalityTrait{
+	// A
 	&entity.PersonalityTraitBipolar{
 		ID:   10,
 		Name: "Теплота",
@@ -11,6 +12,7 @@ var Traits = []entity.PersonalityTrait{
 		LeftStateName:  "Холодный",
 		RightStateName: "Теплый",
 	},
+	// B
 	&entity.PersonalityTraitBipolar{
 		ID:   11,
 		Name: "Интеллект",
@@ -19,6 +21,7 @@ var Traits = []entity.PersonalityTrait{
 		LeftStateName:  "Конкретный",
 		RightStateName: "Абстрактный",
 	},
+	// C
 	&entity.PersonalityTraitBipolar{
 		ID:   12,
 		Name: "Эмоциональная устойчивость",
@@ -27,6 +30,7 @@ var Traits = []entity.PersonalityTrait{
 		LeftStateName:  "Неустойчивый",
 		RightStateName: "Устойчивый",
 	},
+	// E
 	&entity.PersonalityTraitBipolar{
 		ID:   13,
 		Name: "Доминирование",
@@ -35,6 +39,7 @@ var Traits = []entity.PersonalityTrait{
 		LeftStateName:  "Уступчивый",
 		RightStateName: "Властный",
 	},
+	// F
 	&entity.PersonalityTraitBipolar{
 		ID:   14,
 		Name: "Живость",
@@ -43,6 +48,7 @@ var Traits = []entity.PersonalityTrait{
 		LeftStateName:  "Сдержанный",
 		RightStateName: "Живой",
 	},
+	// G
 	&entity.PersonalityTraitBipolar{
 		ID:   15,
 		Name: "Нормативность",
@@ -51,6 +57,7 @@ var Traits = []entity.PersonalityTrait{
 		LeftStateName:  "Ненадёжный",
 		RightStateName: "Дисциплинированный",
 	},
+	// H
 	&entity.PersonalityTraitBipolar{
 		ID:   16,
 		Name: "Социальная смелость",
@@ -59,6 +66,7 @@ var Traits = []entity.PersonalityTrait{
 		LeftStateName:  "Застенчивый",
 		RightStateName: "Смелый",
 	},
+	// I
 	&entity.PersonalityTraitBipolar{
 		ID:   17,
 		Name: "Чувствительность",
@@ -67,6 +75,7 @@ var Traits = []entity.PersonalityTrait{
 		LeftStateName:  "Жесткий",
 		RightStateName: "Чувствительный",
 	},
+	// L
 	&entity.PersonalityTraitBipolar{
 		ID:   18,
 		Name: "Подозрительность",
@@ -75,6 +84,7 @@ var Traits = []entity.PersonalityTrait{
 		LeftStateName:  "Доверчивый",
 		RightStateName: "Подозрительный",
 	},
+	// M
 	&entity.PersonalityTraitBipolar{
 		ID:   19,
 		Name: "Мечтательность",
@@ -83,6 +93,7 @@ var Traits = []entity.PersonalityTrait{
 		LeftStateName:  "Практичный",
 		RightStateName: "Мечтательный",
 	},
+	// N
 	&entity.PersonalityTraitBipolar{
 		ID:   20,
 		Name: "Проницательность",
@@ -91,6 +102,7 @@ var Traits = []entity.PersonalityTrait{
 		LeftStateName:  "Прямой",
 		RightStateName: "Проницательный",
 	},
+	// O
 	&entity.PersonalityTraitBipolar{
 		ID:   21,
 		Name: "Тревожность",
@@ -99,6 +111,7 @@ var Traits = []entity.PersonalityTrait{
 		LeftStateName:  "Уверенный",
 		RightStateName: "Тревожный",
 	},
+	// Q1
 	&entity.PersonalityTraitBipolar{
 		ID:   22,
 		Name: "Открытость изменениям",
@@ -107,6 +120,7 @@ var Traits = []entity.PersonalityTrait{
 		LeftStateName:  "Консервативный",
 		RightStateName: "Новаторский",
 	},
+	// Q22
 	&entity.PersonalityTraitBipolar{
 		ID:   23,
 		Name: "Самостоятельность",
@@ -115,6 +129,7 @@ var Traits = []entity.PersonalityTrait{
 		LeftStateName:  "Зависимый",
 		RightStateName: "Независимый",
 	},
+	// Q3
 	&entity.PersonalityTraitBipolar{
 		ID:   24,
 		Name: "Самоконтроль",
@@ -123,6 +138,7 @@ var Traits = []entity.PersonalityTrait{
 		LeftStateName:  "Несобранный",
 		RightStateName: "Организованный",
 	},
+	// Q4
 	&entity.PersonalityTraitBipolar{
 		ID:   25,
 		Name: "Напряженность",
