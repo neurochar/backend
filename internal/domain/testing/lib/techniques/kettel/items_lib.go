@@ -15,6 +15,7 @@ func init() {
 			`нечто среднее`,
 			`одиноко в глухих лесах`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[4] = &KettelItemAnswerImpl{
@@ -27,6 +28,7 @@ func init() {
 			`обычно`,
 			`редко`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[5] = &KettelItemAnswerImpl{
@@ -39,6 +41,7 @@ func init() {
 			`не уверен`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[6] = &KettelItemAnswerImpl{
@@ -51,6 +54,7 @@ func init() {
 			`иногда`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[7] = &KettelItemAnswerImpl{
@@ -63,6 +67,7 @@ func init() {
 			`иногда`,
 			`никогда`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[8] = &KettelItemAnswerImpl{
@@ -75,6 +80,7 @@ func init() {
 			`не уверен`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[9] = &KettelItemAnswerImpl{
@@ -89,6 +95,7 @@ func init() {
 			`не уверен`,
 			`рассудил бы их`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[10] = &KettelItemAnswerImpl{
@@ -101,6 +108,7 @@ func init() {
 			`нечто среднее`,
 			`предпочитаю спокойно оставаться в стороне`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[11] = &KettelItemAnswerImpl{
@@ -113,6 +121,7 @@ func init() {
 			`не уверен`,
 			`журналистом`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[12] = &KettelItemAnswerImpl{
@@ -127,6 +136,7 @@ func init() {
 			`не уверен`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[13] = &KettelItemAnswerImpl{
@@ -139,6 +149,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[14] = &KettelItemAnswerImpl{
@@ -151,6 +162,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[15] = &KettelItemAnswerImpl{
@@ -163,6 +175,7 @@ func init() {
 			`не уверен`,
 			`не согласен`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[16] = &KettelItemAnswerImpl{
@@ -177,6 +190,7 @@ func init() {
 			`не уверен`,
 			`не согласен`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[17] = &KettelItemAnswerImpl{
@@ -189,6 +203,7 @@ func init() {
 			`нечто среднее`,
 			`охотно, когда представится возможность`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[18] = &KettelItemAnswerImpl{
@@ -201,6 +216,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[19] = &KettelItemAnswerImpl{
@@ -215,6 +231,7 @@ func init() {
 			`нечто среднее`,
 			`все же чувствую себя немного виноватым`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[20] = &KettelItemAnswerImpl{
@@ -227,6 +244,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[21] = &KettelItemAnswerImpl{
@@ -239,6 +257,7 @@ func init() {
 			`сердце и разум в равной степени`,
 			`разум`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[22] = &KettelItemAnswerImpl{
@@ -251,6 +270,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[23] = &KettelItemAnswerImpl{
@@ -263,6 +283,7 @@ func init() {
 			`не уверен`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[24] = &KettelItemAnswerImpl{
@@ -275,6 +296,7 @@ func init() {
 			`нечто среднее`,
 			`сначала сформулировать получше свои мысли`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[25] = &KettelItemAnswerImpl{
@@ -287,6 +309,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[26] = &KettelItemAnswerImpl{
@@ -299,6 +322,7 @@ func init() {
 			`не уверен`,
 			`официантом в хорошем ресторане`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[27] = &KettelItemAnswerImpl{
@@ -311,6 +335,7 @@ func init() {
 			`иногда`,
 			`много раз`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[28] = &KettelItemAnswerImpl{
@@ -323,6 +348,7 @@ func init() {
 			`«резать»`,
 			`«указывать»`,
 		},
+		RawVariantKeys: []int{0, 1, 0},
 	}
 
 	ItemsLib[29] = &KettelItemAnswerImpl{
@@ -335,6 +361,7 @@ func init() {
 			`не уверен`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[30] = &KettelItemAnswerImpl{
@@ -347,6 +374,7 @@ func init() {
 			`не уверен`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[31] = &KettelItemAnswerImpl{
@@ -359,6 +387,7 @@ func init() {
 			`не уверен`,
 			`как можно скорее`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[32] = &KettelItemAnswerImpl{
@@ -371,6 +400,7 @@ func init() {
 			`нечто среднее`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[33] = &KettelItemAnswerImpl{
@@ -385,6 +415,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[34] = &KettelItemAnswerImpl{
@@ -397,6 +428,7 @@ func init() {
 			`нечто среднее`,
 			`испытываю отвращение и возмущение`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[35] = &KettelItemAnswerImpl{
@@ -409,6 +441,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[36] = &KettelItemAnswerImpl{
@@ -423,6 +456,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[37] = &KettelItemAnswerImpl{
@@ -437,6 +471,7 @@ func init() {
 			`нечто среднее`,
 			`выпиливать и мастерить что-либо`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[38] = &KettelItemAnswerImpl{
@@ -449,6 +484,7 @@ func init() {
 			`иногда`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[39] = &KettelItemAnswerImpl{
@@ -461,6 +497,7 @@ func init() {
 			`нечто среднее`,
 			`обучали детей сдерживать свои чувства`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[40] = &KettelItemAnswerImpl{
@@ -475,6 +512,7 @@ func init() {
 			`нечто среднее`,
 			`следить за результатами и соблюдением правил`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[41] = &KettelItemAnswerImpl{
@@ -487,6 +525,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[42] = &KettelItemAnswerImpl{
@@ -501,6 +540,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[43] = &KettelItemAnswerImpl{
@@ -515,6 +555,7 @@ func init() {
 			`нечто среднее`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[44] = &KettelItemAnswerImpl{
@@ -527,6 +568,7 @@ func init() {
 			`нечто среднее`,
 			`боюсь, что это связано с какой-нибудь оплошностью в моей работе`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[45] = &KettelItemAnswerImpl{
@@ -539,6 +581,7 @@ func init() {
 			`не уверен`,
 			`больше «идеалистов», планирующих лучшее будущее`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[46] = &KettelItemAnswerImpl{
@@ -551,6 +594,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[47] = &KettelItemAnswerImpl{
@@ -565,6 +609,7 @@ func init() {
 			`довольно часто`,
 			`многократно`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[48] = &KettelItemAnswerImpl{
@@ -577,6 +622,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[49] = &KettelItemAnswerImpl{
@@ -589,6 +635,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[50] = &KettelItemAnswerImpl{
@@ -601,6 +648,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[51] = &KettelItemAnswerImpl{
@@ -615,6 +663,7 @@ func init() {
 			`не уверен`,
 			`учителем средней школы`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[52] = &KettelItemAnswerImpl{
@@ -627,6 +676,7 @@ func init() {
 			`неопределенно`,
 			`считаю, что делать подарки – довольно неприятная вещь`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[53] = &KettelItemAnswerImpl{
@@ -639,6 +689,7 @@ func init() {
 			`«успех»`,
 			`«счастливый»`,
 		},
+		RawVariantKeys: []int{0, 1, 0},
 	}
 
 	ItemsLib[54] = &KettelItemAnswerImpl{
@@ -651,6 +702,7 @@ func init() {
 			`луна`,
 			`электрический свет`,
 		},
+		RawVariantKeys: []int{0, 1, 0},
 	}
 
 	ItemsLib[55] = &KettelItemAnswerImpl{
@@ -663,6 +715,7 @@ func init() {
 			`иногда`,
 			`довольно часто`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[56] = &KettelItemAnswerImpl{
@@ -675,6 +728,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[57] = &KettelItemAnswerImpl{
@@ -689,20 +743,22 @@ func init() {
 			`нечто среднее`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[58] = &KettelItemAnswerImpl{
 		ID:      58,
 		TraitID: 14,
 		// nolint
-		MaleQuestion: `Я склонен посещать зрелищные мероприятия и развлечения:`,
+		MaleQuestion: `Я склонен посещать мероприятия и развлечения:`,
 		// nolint
-		FemaleQuestion: `Я склонна посещать зрелищные мероприятия и развлечения:`,
+		FemaleQuestion: `Я склонна посещать мероприятия и развлечения:`,
 		Variants: []string{
 			`чаще, чем раз в неделю (т.е. чаще, чем большинство)`,
 			`примерно раз в неделю (т.е. как большинство)`,
 			`реже, чем раз в неделю (т.е. реже, чем большинство)`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[59] = &KettelItemAnswerImpl{
@@ -715,6 +771,7 @@ func init() {
 			`не уверен`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[60] = &KettelItemAnswerImpl{
@@ -727,6 +784,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[61] = &KettelItemAnswerImpl{
@@ -739,6 +797,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[62] = &KettelItemAnswerImpl{
@@ -751,6 +810,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[63] = &KettelItemAnswerImpl{
@@ -763,6 +823,7 @@ func init() {
 			`нечто среднее`,
 			`раздражаюсь`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[64] = &KettelItemAnswerImpl{
@@ -777,6 +838,7 @@ func init() {
 			`не уверен`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[65] = &KettelItemAnswerImpl{
@@ -789,6 +851,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[66] = &KettelItemAnswerImpl{
@@ -801,6 +864,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[67] = &KettelItemAnswerImpl{
@@ -813,6 +877,7 @@ func init() {
 			`не уверен`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[68] = &KettelItemAnswerImpl{
@@ -825,6 +890,7 @@ func init() {
 			`нечто среднее`,
 			`довольно часто`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[69] = &KettelItemAnswerImpl{
@@ -837,6 +903,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[70] = &KettelItemAnswerImpl{
@@ -851,6 +918,7 @@ func init() {
 			`нечто среднее`,
 			`соглашался с их авторитетом`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[71] = &KettelItemAnswerImpl{
@@ -865,6 +933,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[72] = &KettelItemAnswerImpl{
@@ -877,6 +946,7 @@ func init() {
 			`не уверен`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[73] = &KettelItemAnswerImpl{
@@ -891,6 +961,7 @@ func init() {
 			`не уверен`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[74] = &KettelItemAnswerImpl{
@@ -903,6 +974,7 @@ func init() {
 			`иногда`,
 			`никогда`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[75] = &KettelItemAnswerImpl{
@@ -917,6 +989,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[76] = &KettelItemAnswerImpl{
@@ -931,6 +1004,7 @@ func init() {
 			`нечто среднее`,
 			`заниматься его практической реализацией`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[77] = &KettelItemAnswerImpl{
@@ -943,6 +1017,7 @@ func init() {
 			`«тревожный»`,
 			`«ужасный»`,
 		},
+		RawVariantKeys: []int{0, 0, 1},
 	}
 
 	ItemsLib[78] = &KettelItemAnswerImpl{
@@ -955,6 +1030,7 @@ func init() {
 			`3/9`,
 			`3/11`,
 		},
+		RawVariantKeys: []int{0, 1, 0},
 	}
 
 	ItemsLib[79] = &KettelItemAnswerImpl{
@@ -967,6 +1043,7 @@ func init() {
 			`не уверен`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[80] = &KettelItemAnswerImpl{
@@ -979,6 +1056,7 @@ func init() {
 			`иногда`,
 			`никогда`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[81] = &KettelItemAnswerImpl{
@@ -991,6 +1069,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[82] = &KettelItemAnswerImpl{
@@ -1003,6 +1082,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[83] = &KettelItemAnswerImpl{
@@ -1017,6 +1097,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[84] = &KettelItemAnswerImpl{
@@ -1031,6 +1112,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[85] = &KettelItemAnswerImpl{
@@ -1045,6 +1127,7 @@ func init() {
 			`иногда`,
 			`почти никогда`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[86] = &KettelItemAnswerImpl{
@@ -1057,18 +1140,20 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[87] = &KettelItemAnswerImpl{
 		ID:      87,
 		TraitID: 17,
 		// nolint
-		MaleQuestion: `Я предпочитаю читать:`,
+		MaleQuestion: `Я скорее предпочту почитать или посмотреть:`,
 		Variants: []string{
-			`реалистические описания военных и политических сражений`,
+			`реалистичные описания военных или политических сражений`,
 			`нечто среднее`,
-			`роман, где много чувств и воображения`,
+			`где много чувств и эмоций`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[88] = &KettelItemAnswerImpl{
@@ -1081,6 +1166,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[89] = &KettelItemAnswerImpl{
@@ -1093,6 +1179,7 @@ func init() {
 			`нечто среднее`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[90] = &KettelItemAnswerImpl{
@@ -1105,6 +1192,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[91] = &KettelItemAnswerImpl{
@@ -1119,6 +1207,7 @@ func init() {
 			`неопределенно`,
 			`провести время, беседуя с кем-нибудь из пассажиров`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[92] = &KettelItemAnswerImpl{
@@ -1131,6 +1220,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[93] = &KettelItemAnswerImpl{
@@ -1143,6 +1233,7 @@ func init() {
 			`нечто среднее`,
 			`я расстраиваюсь`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[94] = &KettelItemAnswerImpl{
@@ -1155,6 +1246,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[95] = &KettelItemAnswerImpl{
@@ -1169,6 +1261,7 @@ func init() {
 			`нечто среднее`,
 			`с большим окладом, который бы зависел от моей способности показать людям, чего я стою`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[96] = &KettelItemAnswerImpl{
@@ -1183,6 +1276,7 @@ func init() {
 			`нечто среднее`,
 			`из литературы`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[97] = &KettelItemAnswerImpl{
@@ -1195,6 +1289,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[98] = &KettelItemAnswerImpl{
@@ -1207,6 +1302,7 @@ func init() {
 			`не уверен`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[99] = &KettelItemAnswerImpl{
@@ -1219,6 +1315,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[100] = &KettelItemAnswerImpl{
@@ -1231,6 +1328,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[101] = &KettelItemAnswerImpl{
@@ -1243,6 +1341,7 @@ func init() {
 			`нечто среднее`,
 			`нужно заниматься счетами и записями`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[102] = &KettelItemAnswerImpl{
@@ -1255,6 +1354,7 @@ func init() {
 			`«нарушение»`,
 			`«кража»`,
 		},
+		RawVariantKeys: []int{0, 0, 1},
 	}
 
 	ItemsLib[103] = &KettelItemAnswerImpl{
@@ -1267,6 +1367,7 @@ func init() {
 			`«ОП»`,
 			`«ТУ»`,
 		},
+		RawVariantKeys: []int{0, 1, 0},
 	}
 
 	ItemsLib[104] = &KettelItemAnswerImpl{
@@ -1279,6 +1380,7 @@ func init() {
 			`не уверен`,
 			`высказываю свое презрение`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[105] = &KettelItemAnswerImpl{
@@ -1291,6 +1393,7 @@ func init() {
 			`нечто среднее`,
 			`чувствую, что это портит мне удовольствие и раздражает`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[106] = &KettelItemAnswerImpl{
@@ -1303,6 +1406,7 @@ func init() {
 			`нечто среднее`,
 			`энергичного`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[107] = &KettelItemAnswerImpl{
@@ -1315,6 +1419,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[108] = &KettelItemAnswerImpl{
@@ -1329,6 +1434,7 @@ func init() {
 			`не уверен`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[109] = &KettelItemAnswerImpl{
@@ -1341,6 +1447,7 @@ func init() {
 			`нечто среднее`,
 			`считаю, что справлюсь с трудностями по мере того, как они возникнут`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[110] = &KettelItemAnswerImpl{
@@ -1353,6 +1460,7 @@ func init() {
 			`не уверен`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[111] = &KettelItemAnswerImpl{
@@ -1365,6 +1473,7 @@ func init() {
 			`не уверен`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[112] = &KettelItemAnswerImpl{
@@ -1377,6 +1486,7 @@ func init() {
 			`нечто среднее`,
 			`руководителем технического предприятия`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[113] = &KettelItemAnswerImpl{
@@ -1391,6 +1501,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[114] = &KettelItemAnswerImpl{
@@ -1403,6 +1514,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[115] = &KettelItemAnswerImpl{
@@ -1415,6 +1527,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[116] = &KettelItemAnswerImpl{
@@ -1427,6 +1540,7 @@ func init() {
 			`не уверен`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[117] = &KettelItemAnswerImpl{
@@ -1439,6 +1553,7 @@ func init() {
 			`не уверен`,
 			`по-видимому, он плохо информирован`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[118] = &KettelItemAnswerImpl{
@@ -1453,6 +1568,7 @@ func init() {
 			`иногда`,
 			`никогда`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[119] = &KettelItemAnswerImpl{
@@ -1465,6 +1581,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[120] = &KettelItemAnswerImpl{
@@ -1477,6 +1594,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[121] = &KettelItemAnswerImpl{
@@ -1489,6 +1607,7 @@ func init() {
 			`немного`,
 			`совсем не беспокоит`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[122] = &KettelItemAnswerImpl{
@@ -1503,6 +1622,7 @@ func init() {
 			`не уверен`,
 			`самостоятельно`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[123] = &KettelItemAnswerImpl{
@@ -1515,6 +1635,7 @@ func init() {
 			`иногда`,
 			`никогда`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[124] = &KettelItemAnswerImpl{
@@ -1527,6 +1648,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[125] = &KettelItemAnswerImpl{
@@ -1539,6 +1661,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[126] = &KettelItemAnswerImpl{
@@ -1551,6 +1674,7 @@ func init() {
 			`не уверен`,
 			`пилотом или капитаном судна`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[127] = &KettelItemAnswerImpl{
@@ -1563,6 +1687,7 @@ func init() {
 			`«лучшее»`,
 			`«быстрейшее»`,
 		},
+		RawVariantKeys: []int{0, 0, 1},
 	}
 
 	ItemsLib[128] = &KettelItemAnswerImpl{
@@ -1575,6 +1700,7 @@ func init() {
 			`ООРР`,
 			`РООО`,
 		},
+		RawVariantKeys: []int{0, 1, 0},
 	}
 
 	ItemsLib[129] = &KettelItemAnswerImpl{
@@ -1589,6 +1715,7 @@ func init() {
 			`нечто среднее`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[130] = &KettelItemAnswerImpl{
@@ -1601,6 +1728,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[131] = &KettelItemAnswerImpl{
@@ -1613,6 +1741,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[132] = &KettelItemAnswerImpl{
@@ -1627,6 +1756,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[133] = &KettelItemAnswerImpl{
@@ -1639,6 +1769,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[134] = &KettelItemAnswerImpl{
@@ -1651,6 +1782,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[135] = &KettelItemAnswerImpl{
@@ -1663,6 +1795,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[136] = &KettelItemAnswerImpl{
@@ -1675,6 +1808,7 @@ func init() {
 			`нечто среднее`,
 			`держу свои переживания «при себе»`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[137] = &KettelItemAnswerImpl{
@@ -1687,6 +1821,7 @@ func init() {
 			`нечто среднее`,
 			`чувствительную`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[138] = &KettelItemAnswerImpl{
@@ -1699,6 +1834,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[139] = &KettelItemAnswerImpl{
@@ -1711,6 +1847,7 @@ func init() {
 			`нечто среднее`,
 			`даю людям возможность услышать его еще раз`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[140] = &KettelItemAnswerImpl{
@@ -1723,6 +1860,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[141] = &KettelItemAnswerImpl{
@@ -1737,6 +1875,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[142] = &KettelItemAnswerImpl{
@@ -1751,6 +1890,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[143] = &KettelItemAnswerImpl{
@@ -1765,6 +1905,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[144] = &KettelItemAnswerImpl{
@@ -1777,6 +1918,7 @@ func init() {
 			`нечто среднее`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[145] = &KettelItemAnswerImpl{
@@ -1789,6 +1931,7 @@ func init() {
 			`нечто среднее`,
 			`чтобы спор разрешился мирно`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[146] = &KettelItemAnswerImpl{
@@ -1801,6 +1944,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[147] = &KettelItemAnswerImpl{
@@ -1813,6 +1957,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[148] = &KettelItemAnswerImpl{
@@ -1825,6 +1970,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[149] = &KettelItemAnswerImpl{
@@ -1837,6 +1983,7 @@ func init() {
 			`иногда`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[150] = &KettelItemAnswerImpl{
@@ -1849,6 +1996,7 @@ func init() {
 			`нечто среднее`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[151] = &KettelItemAnswerImpl{
@@ -1861,6 +2009,7 @@ func init() {
 			`не уверен`,
 			`организатором культурных развлечений`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[152] = &KettelItemAnswerImpl{
@@ -1873,6 +2022,7 @@ func init() {
 			`некоторые`,
 			`большинство`,
 		},
+		RawVariantKeys: []int{1, 0, 0},
 	}
 
 	ItemsLib[153] = &KettelItemAnswerImpl{
@@ -1885,6 +2035,7 @@ func init() {
 			`«красивые лепестки»`,
 			`«аромат»`,
 		},
+		RawVariantKeys: []int{0, 0, 1},
 	}
 
 	ItemsLib[154] = &KettelItemAnswerImpl{
@@ -1897,6 +2048,7 @@ func init() {
 			`иногда`,
 			`практически никогда`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[155] = &KettelItemAnswerImpl{
@@ -1909,6 +2061,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[156] = &KettelItemAnswerImpl{
@@ -1921,6 +2074,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[157] = &KettelItemAnswerImpl{
@@ -1933,6 +2087,7 @@ func init() {
 			`не уверен`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[158] = &KettelItemAnswerImpl{
@@ -1945,6 +2100,7 @@ func init() {
 			`не уверен`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[159] = &KettelItemAnswerImpl{
@@ -1957,6 +2113,7 @@ func init() {
 			`почти никогда`,
 			`никогда`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[160] = &KettelItemAnswerImpl{
@@ -1969,6 +2126,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[161] = &KettelItemAnswerImpl{
@@ -1981,6 +2139,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[162] = &KettelItemAnswerImpl{
@@ -1993,6 +2152,7 @@ func init() {
 			`нечто среднее`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[163] = &KettelItemAnswerImpl{
@@ -2007,6 +2167,7 @@ func init() {
 			`не уверен`,
 			`математику или арифметику`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[164] = &KettelItemAnswerImpl{
@@ -2019,6 +2180,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[165] = &KettelItemAnswerImpl{
@@ -2031,6 +2193,7 @@ func init() {
 			`нечто среднее`,
 			`раздражает меня, потому что ограничивается мелочами`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[166] = &KettelItemAnswerImpl{
@@ -2043,6 +2206,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[167] = &KettelItemAnswerImpl{
@@ -2055,6 +2219,7 @@ func init() {
 			`нечто среднее`,
 			`выработать нужные привычки и отношение к жизни`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[168] = &KettelItemAnswerImpl{
@@ -2067,6 +2232,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[169] = &KettelItemAnswerImpl{
@@ -2079,6 +2245,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[170] = &KettelItemAnswerImpl{
@@ -2091,6 +2258,7 @@ func init() {
 			`не уверен`,
 			`разногласия между странами мира`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[171] = &KettelItemAnswerImpl{
@@ -2103,6 +2271,7 @@ func init() {
 			`нечто среднее`,
 			`участвуя в обсуждении вопроса`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[172] = &KettelItemAnswerImpl{
@@ -2115,6 +2284,7 @@ func init() {
 			`не уверен`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[173] = &KettelItemAnswerImpl{
@@ -2129,6 +2299,7 @@ func init() {
 			`обычно`,
 			`только если это целесообразно`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[174] = &KettelItemAnswerImpl{
@@ -2141,6 +2312,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[175] = &KettelItemAnswerImpl{
@@ -2153,6 +2325,7 @@ func init() {
 			`не уверен`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{0, 1, 2},
 	}
 
 	ItemsLib[176] = &KettelItemAnswerImpl{
@@ -2165,6 +2338,7 @@ func init() {
 			`не уверен`,
 			`вежливо сказал, что занят`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[177] = &KettelItemAnswerImpl{
@@ -2177,6 +2351,7 @@ func init() {
 			`зигзагообразный`,
 			`прямой`,
 		},
+		RawVariantKeys: []int{1, 0, 0},
 	}
 
 	ItemsLib[178] = &KettelItemAnswerImpl{
@@ -2189,6 +2364,7 @@ func init() {
 			`«далеко»`,
 			`«где-то»`,
 		},
+		RawVariantKeys: []int{1, 0, 0},
 	}
 
 	ItemsLib[179] = &KettelItemAnswerImpl{
@@ -2203,6 +2379,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[180] = &KettelItemAnswerImpl{
@@ -2215,6 +2392,7 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[181] = &KettelItemAnswerImpl{
@@ -2229,6 +2407,7 @@ func init() {
 			`не уверен`,
 			`когда требуется умение ладить с людьми`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[182] = &KettelItemAnswerImpl{
@@ -2241,6 +2420,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[183] = &KettelItemAnswerImpl{
@@ -2253,6 +2433,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[184] = &KettelItemAnswerImpl{
@@ -2267,6 +2448,7 @@ func init() {
 			`нечто среднее`,
 			`неверно`,
 		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[185] = &KettelItemAnswerImpl{
@@ -2279,6 +2461,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
+		RawVariantKeys: []int{},
 	}
 
 	ItemsLib[186] = &KettelItemAnswerImpl{
@@ -2291,19 +2474,6 @@ func init() {
 			`не уверен`,
 			`нет`,
 		},
-	}
-
-	ItemsLib[187] = &KettelItemAnswerImpl{
-		ID:      187,
-		TraitID: 0,
-		// nolint
-		MaleQuestion: `Я уверен в том, что не пропустил ни одного вопроса и на все ответил как следует:`,
-		// nolint
-		FemaleQuestion: `Я уверена в том, что не пропустила ни одного вопроса и на все ответила как следует:`,
-		Variants: []string{
-			`да`,
-			`не уверен`,
-			`нет`,
-		},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 }

@@ -2,6 +2,7 @@ package entity
 
 import (
 	"encoding/json"
+	"net"
 	"time"
 
 	"github.com/google/uuid"
@@ -36,10 +37,11 @@ type Room struct {
 	ProfileID            *uuid.UUID
 	PersonalityTraitsMap ProfilePersonalityTraitsMap
 	TechniqueData        []RoomTechniqueDataItem
+	RowAnswer            json.RawMessage
 	CandidateAnswerData  map[uint64]any
-	RowResult            json.RawMessage
 	Result               *RoomResult
 	CreatedBy            *uuid.UUID
+	FinishedIP           *net.IP
 	CreatedAt            time.Time
 	UpdatedAt            time.Time
 	DeletedAt            *time.Time
@@ -49,15 +51,47 @@ func (item *Room) Version() int64 {
 	return item.UpdatedAt.UnixMicro()
 }
 
+func (item *Room) SetCandidateID(value *uuid.UUID) error {
+	item.CandidateID = value
+
+	return nil
+}
+
+func (item *Room) SetProfileID(value *uuid.UUID) error {
+	item.ProfileID = value
+
+	return nil
+}
+
+func (item *Room) SetPersonalityTraitsMap(value ProfilePersonalityTraitsMap) error {
+	if value == nil {
+		value = make(ProfilePersonalityTraitsMap)
+	}
+
+	item.PersonalityTraitsMap = value
+
+	return nil
+}
+
+func (item *Room) SetTechniqueData(value []RoomTechniqueDataItem) error {
+	if value == nil {
+		value = make([]RoomTechniqueDataItem, 0)
+	}
+
+	item.TechniqueData = value
+
+	return nil
+}
+
 func NewRoom(
 	tenantID uuid.UUID,
 	createdBy *uuid.UUID,
-	name string,
-	personalityTraitsMap ProfilePersonalityTraitsMap,
-) (*Profile, error) {
+	candidateID uuid.UUID,
+	profileID uuid.UUID,
+) (*Room, error) {
 	timeNow := time.Now().Truncate(time.Microsecond)
 
-	profile := &Profile{
+	room := &Room{
 		ID:        uuid.New(),
 		TenantID:  tenantID,
 		CreatedBy: createdBy,
@@ -65,15 +99,15 @@ func NewRoom(
 		UpdatedAt: timeNow,
 	}
 
-	err := profile.SetName(name)
+	err := room.SetCandidateID(&candidateID)
 	if err != nil {
 		return nil, err
 	}
 
-	err = profile.SetPersonalityTraitsMap(personalityTraitsMap)
+	err = room.SetProfileID(&profileID)
 	if err != nil {
 		return nil, err
 	}
 
-	return profile, nil
+	return room, nil
 }

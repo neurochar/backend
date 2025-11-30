@@ -12,6 +12,7 @@ type KettelItemAnswerImpl struct {
 	MaleQuestion   string
 	FemaleQuestion string
 	Variants       []string
+	RawVariantKeys []int
 }
 
 var _ entity.TechniqueItemQuestionWithVariants = (*KettelItemAnswerImpl)(nil)
