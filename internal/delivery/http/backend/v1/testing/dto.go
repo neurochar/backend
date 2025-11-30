@@ -82,6 +82,17 @@ func OutListRoomDTO(
 	return out, nil
 }
 
+type OutRoomResultTrait struct {
+	Match float64 `json:"match"`
+	Tip   string  `json:"tip"`
+}
+
+type OutRoomResult struct {
+	TotalMatch    float64                       `json:"totalMatch"`
+	TotalMatchTip string                        `json:"totalMatchTip"`
+	Traits        map[uint64]OutRoomResultTrait `json:"traits"`
+}
+
 type OutRoom struct {
 	Version int64 `json:"_version,omitempty"`
 
@@ -91,6 +102,7 @@ type OutRoom struct {
 	Candidate            *OutRoomCandidate                         `json:"candidate"`
 	Profile              *OutRoomProfile                           `json:"profile"`
 	PersonalityTraitsMap testingEntity.ProfilePersonalityTraitsMap `json:"personalityTraitsMap"`
+	Result               *OutRoomResult                            `json:"result"`
 }
 
 func OutRoomDTO(
@@ -117,6 +129,24 @@ func OutRoomDTO(
 		out.Profile = &OutRoomProfile{
 			ID:   roomDTO.ProfileDTO.Profile.ID,
 			Name: roomDTO.ProfileDTO.Profile.Name,
+		}
+	}
+
+	if roomDTO.Room.Result != nil {
+		totalMatch, _ := roomDTO.Room.Result.TotalMatch.Float64()
+
+		out.Result = &OutRoomResult{
+			TotalMatch:    totalMatch,
+			TotalMatchTip: roomDTO.Room.Result.TotalMatchTip,
+			Traits:        make(map[uint64]OutRoomResultTrait, len(roomDTO.Room.Result.Traits)),
+		}
+
+		for k, v := range roomDTO.Room.Result.Traits {
+			match, _ := v.Match.Float64()
+			out.Result.Traits[k] = OutRoomResultTrait{
+				Match: match,
+				Tip:   v.Tip,
+			}
 		}
 	}
 
