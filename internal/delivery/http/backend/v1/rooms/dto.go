@@ -38,6 +38,7 @@ func OutRoomDTO(
 	out := &OutRoom{
 		ID:         roomDTO.Room.ID,
 		TenantName: tenant.Name,
+		Status:     roomDTO.Room.Status,
 	}
 
 	candidateGender := crmEntity.CandidateGenderUnknown

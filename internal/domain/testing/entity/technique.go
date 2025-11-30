@@ -15,6 +15,7 @@ type Technique interface {
 
 	CountResult(
 		traitsMap map[uint64]ProfilePersonalityTraitsMapItem,
+		techniqueData []RoomTechniqueDataItem,
 		answers map[uint64]any,
 		candidateGender crmEntity.CandidateGender,
 		candidateBirthday *time.Time,

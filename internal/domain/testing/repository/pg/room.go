@@ -29,7 +29,6 @@ type RoomDBModel struct {
 	ProfileID            *uuid.UUID      `db:"profile_id"`
 	PersonalityTraitsMap json.RawMessage `db:"personality_traits_map"`
 	TechniqueData        json.RawMessage `db:"technique_data"`
-	RawAnswer            json.RawMessage `db:"raw_answer"`
 	CandidateAnswerData  json.RawMessage `db:"candidate_answer_data"`
 	Result               json.RawMessage `db:"result"`
 	CreatedBy            *uuid.UUID      `db:"created_by"`
@@ -78,16 +77,22 @@ func (db *RoomDBModel) ToEntity() *entity.Room {
 		techniqueData = append(techniqueData, dataItem)
 	}
 
-	candidateAnswerData := make(map[uint64]any)
-	err = json.Unmarshal(db.CandidateAnswerData, &candidateAnswerData)
-	if err != nil {
-		panic(err)
+	var candidateAnswerData map[uint64]any
+	if db.CandidateAnswerData != nil {
+		candidateAnswerData = make(map[uint64]any)
+		err = json.Unmarshal(db.CandidateAnswerData, &candidateAnswerData)
+		if err != nil {
+			panic(err)
+		}
 	}
 
-	result := &entity.RoomResult{}
-	err = json.Unmarshal(db.Result, result)
-	if err != nil {
-		panic(err)
+	var result *entity.RoomResult
+	if db.Result != nil {
+		result = &entity.RoomResult{}
+		err = json.Unmarshal(db.Result, result)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	return &entity.Room{
@@ -98,7 +103,6 @@ func (db *RoomDBModel) ToEntity() *entity.Room {
 		ProfileID:            db.ProfileID,
 		PersonalityTraitsMap: traitsMap,
 		TechniqueData:        techniqueData,
-		RowAnswer:            db.RawAnswer,
 		CandidateAnswerData:  candidateAnswerData,
 		Result:               result,
 		CreatedBy:            db.CreatedBy,
@@ -120,14 +124,20 @@ func MapRoomEntityToDBModel(entity *entity.Room) *RoomDBModel {
 		panic(err)
 	}
 
-	candidateAnswerData, err := json.Marshal(entity.CandidateAnswerData)
-	if err != nil {
-		panic(err)
+	var candidateAnswerData json.RawMessage
+	if entity.CandidateAnswerData != nil {
+		candidateAnswerData, err = json.Marshal(entity.CandidateAnswerData)
+		if err != nil {
+			panic(err)
+		}
 	}
 
-	result, err := json.Marshal(entity.Result)
-	if err != nil {
-		panic(err)
+	var result json.RawMessage
+	if entity.Result != nil {
+		result, err = json.Marshal(entity.Result)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	return &RoomDBModel{
@@ -139,7 +149,6 @@ func MapRoomEntityToDBModel(entity *entity.Room) *RoomDBModel {
 		PersonalityTraitsMap: traitsMap,
 		TechniqueData:        techniqueData,
 		CandidateAnswerData:  candidateAnswerData,
-		RawAnswer:            entity.RowAnswer,
 		Result:               result,
 		CreatedBy:            entity.CreatedBy,
 

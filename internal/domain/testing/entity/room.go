@@ -1,11 +1,12 @@
 package entity
 
 import (
-	"encoding/json"
 	"net"
 	"time"
 
 	"github.com/google/uuid"
+	appErrors "github.com/neurochar/backend/internal/app/errors"
+	"github.com/neurochar/backend/pkg/convert"
 )
 
 type RoomStatusType uint8
@@ -37,7 +38,6 @@ type Room struct {
 	ProfileID            *uuid.UUID
 	PersonalityTraitsMap ProfilePersonalityTraitsMap
 	TechniqueData        []RoomTechniqueDataItem
-	RowAnswer            json.RawMessage
 	CandidateAnswerData  map[uint64]any
 	Result               *RoomResult
 	CreatedBy            *uuid.UUID
@@ -79,6 +79,43 @@ func (item *Room) SetTechniqueData(value []RoomTechniqueDataItem) error {
 	}
 
 	item.TechniqueData = value
+
+	return nil
+}
+
+func (item *Room) SetCandidateAnswerData(value map[uint64]any) error {
+	answerData := make(map[uint64]any, len(value))
+
+	if item.TechniqueData == nil {
+		return nil
+	}
+
+	for i, v := range value {
+		if int(i) >= 0 && int(i) < len(item.TechniqueData) {
+			techniqueDataItem := item.TechniqueData[i]
+
+			techniqueItem, err := techniqueDataItem.ItemData.GetItem()
+			if err != nil {
+				return err
+			}
+
+			switch techniqueItem.GetType() {
+			case TechniqueItemTypeQuestionWithVariantsSignleAnswer:
+				valueInt, ok := convert.ToInt(v)
+				if !ok {
+					return appErrors.ErrBadRequest
+				}
+
+				answerData[i] = valueInt
+			}
+		}
+	}
+
+	if len(answerData) != len(item.TechniqueData) {
+		return appErrors.ErrBadRequest
+	}
+
+	item.CandidateAnswerData = answerData
 
 	return nil
 }

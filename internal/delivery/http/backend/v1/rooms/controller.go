@@ -49,4 +49,5 @@ func RegisterRoutes(groups *v1.Groups, ctrl *Controller, cpanelMdwr *middleware.
 	routeGroup := groups.Default.Group(fmt.Sprintf("/%s", url))
 
 	routeGroup.Get("/:id<guid>", ctrl.GetRoomHandler)
+	routeGroup.Post("/:id<guid>", ctrl.FinishRoomHandler)
 }

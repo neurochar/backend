@@ -4,11 +4,14 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	appErrors "github.com/neurochar/backend/internal/app/errors"
 	"github.com/neurochar/backend/internal/common/uctypes"
 	crmUsecase "github.com/neurochar/backend/internal/domain/crm/usecase"
 	tenantUC "github.com/neurochar/backend/internal/domain/tenant/usecase"
 	"github.com/neurochar/backend/internal/domain/testing/entity"
 )
+
+var ErrRoomAlreadyFinished = appErrors.ErrBadRequest.WithTextCode("ROOM_ALREADY_FINISHED").WithHints("room already finished")
 
 type RoomListOptions struct {
 	FilterTenantID *uuid.UUID
@@ -87,6 +90,12 @@ type RoomUsecase interface {
 	) (resErr error)
 
 	Update(ctx context.Context, item *entity.Room) (resErr error)
+
+	Finish(
+		ctx context.Context,
+		id uuid.UUID,
+		answerData map[uint64]any,
+	) (resErr error)
 }
 
 type RoomRepository interface {

@@ -3,6 +3,7 @@ package room
 import (
 	"context"
 	"errors"
+	"log/slog"
 
 	"github.com/google/uuid"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
@@ -120,7 +121,7 @@ func (uc *UsecaseImpl) PatchByDTO(
 	const op = "PatchByDTO"
 
 	err := uc.dbMasterClient.Do(ctx, func(ctx context.Context) error {
-		candidate, err := uc.repo.FindOneByID(ctx, id, &uctypes.QueryGetOneParams{
+		room, err := uc.repo.FindOneByID(ctx, id, &uctypes.QueryGetOneParams{
 			ForUpdate: true,
 		})
 		if err != nil {
@@ -129,18 +130,18 @@ func (uc *UsecaseImpl) PatchByDTO(
 
 		if auth.IsNeedToCheckRights(ctx) {
 			authData := auth.GetAuthData(ctx)
-			if authData == nil || authData.TenantID != candidate.TenantID {
+			if authData == nil || authData.TenantID != room.TenantID {
 				return appErrors.ErrForbidden
 			}
 		}
 
-		if !skipVersionCheck && candidate.Version() != in.Version {
+		if !skipVersionCheck && room.Version() != in.Version {
 			return appErrors.ErrVersionConflict.
-				WithDetail("last_version", false, candidate.Version()).
-				WithDetail("last_updated_at", false, candidate.UpdatedAt)
+				WithDetail("last_version", false, room.Version()).
+				WithDetail("last_updated_at", false, room.UpdatedAt)
 		}
 
-		err = uc.repo.Update(ctx, candidate)
+		err = uc.repo.Update(ctx, room)
 		if err != nil {
 			return err
 		}
@@ -161,6 +162,66 @@ func (uc *UsecaseImpl) Update(ctx context.Context, item *entity.Room) error {
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
 	}
+
+	return nil
+}
+
+func (uc *UsecaseImpl) Finish(
+	ctx context.Context,
+	id uuid.UUID,
+	answerData map[uint64]any,
+) error {
+	const op = "Finish"
+
+	err := uc.dbMasterClient.Do(ctx, func(ctx context.Context) error {
+		room, err := uc.repo.FindOneByID(ctx, id, &uctypes.QueryGetOneParams{
+			ForUpdate: true,
+		})
+		if err != nil {
+			return err
+		}
+
+		if room.Status == entity.RoomStatusTypeFinished {
+			return usecase.ErrRoomAlreadyFinished
+		}
+
+		if auth.IsNeedToCheckRights(ctx) {
+			authData := auth.GetAuthData(ctx)
+			if authData == nil || authData.TenantID != room.TenantID {
+				return appErrors.ErrForbidden
+			}
+		}
+
+		room.Status = entity.RoomStatusTypeFinished
+
+		err = room.SetCandidateAnswerData(answerData)
+		if err != nil {
+			return err
+		}
+
+		err = uc.repo.Update(ctx, room)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	go func(ctx context.Context) {
+		defer func() {
+			if err := recover(); err != nil {
+				uc.logger.ErrorContext(ctx, "failed to process room", slog.Any("err", err))
+			}
+		}()
+
+		err := uc.processRoom(ctx, id)
+		if err != nil {
+			uc.logger.ErrorContext(ctx, "failed to process room", slog.Any("room_id", id), slog.Any("err", err))
+		}
+	}(context.Background())
 
 	return nil
 }

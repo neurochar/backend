@@ -61,6 +61,7 @@ func OutListRoomDTO(
 		Version:  roomDTO.Room.Version(),
 		ID:       roomDTO.Room.ID,
 		TenantID: roomDTO.Room.TenantID,
+		Status:   roomDTO.Room.Status,
 	}
 
 	if roomDTO.CandidateDTO != nil {
@@ -100,6 +101,7 @@ func OutRoomDTO(
 		Version:              roomDTO.Room.Version(),
 		ID:                   roomDTO.Room.ID,
 		TenantID:             roomDTO.Room.TenantID,
+		Status:               roomDTO.Room.Status,
 		PersonalityTraitsMap: roomDTO.Room.PersonalityTraitsMap,
 	}
 

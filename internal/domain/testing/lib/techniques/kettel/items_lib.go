@@ -2461,7 +2461,7 @@ func init() {
 			`нечто среднее`,
 			`нет`,
 		},
-		RawVariantKeys: []int{},
+		RawVariantKeys: []int{2, 1, 0},
 	}
 
 	ItemsLib[186] = &KettelItemAnswerImpl{

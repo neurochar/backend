@@ -9,7 +9,6 @@ CREATE TABLE "testing_room" (
     profile_id                      UUID REFERENCES "testing_profile"(id) ON DELETE SET NULL,
     personality_traits_map          JSONB NOT NULL,
     technique_data                  JSONB NOT NULL,
-    raw_answer                      JSONB,
     candidate_answer_data           JSONB,
     result                          JSONB,
     created_by                      UUID NULL REFERENCES "tenant_account"(id) ON DELETE SET NULL,
