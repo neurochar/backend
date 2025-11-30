@@ -10,7 +10,9 @@ import (
 )
 
 type ProfileListOptions struct {
+	FilterIDs      *[]uuid.UUID
 	FilterTenantID *uuid.UUID
+	SearchQuery    *string
 	Sort           []uctypes.SortOption[ProfileListOptionsSortField]
 }
 

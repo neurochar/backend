@@ -1,9 +1,10 @@
-package profile
+package room
 
 import (
 	"log/slog"
 
 	"github.com/neurochar/backend/internal/app/config"
+	candidateUC "github.com/neurochar/backend/internal/domain/crm/usecase"
 	tenantUC "github.com/neurochar/backend/internal/domain/tenant/usecase"
 	"github.com/neurochar/backend/internal/domain/testing/usecase"
 	"github.com/neurochar/backend/internal/infra/db"
@@ -16,9 +17,11 @@ type UsecaseImpl struct {
 	cfg                config.Config
 	dbMasterClient     db.MasterClient
 	emailing           emailing.Emailing
-	repo               usecase.ProfileRepository
+	repo               usecase.RoomRepository
+	candidateUC        candidateUC.CandidateUsecase
 	tenantAccountUC    tenantUC.AccountUsecase
 	personalityTraitUC usecase.PersonalityTraitUsecase
+	profileUC          usecase.ProfileUsecase
 }
 
 func NewUsecaseImpl(
@@ -26,19 +29,23 @@ func NewUsecaseImpl(
 	cfg config.Config,
 	dbMasterClient db.MasterClient,
 	emailing emailing.Emailing,
-	repo usecase.ProfileRepository,
+	repo usecase.RoomRepository,
+	candidateUC candidateUC.CandidateUsecase,
 	tenantAccountUC tenantUC.AccountUsecase,
 	personalityTraitUC usecase.PersonalityTraitUsecase,
+	profileUC usecase.ProfileUsecase,
 ) *UsecaseImpl {
 	uc := &UsecaseImpl{
-		pkg:                "Testing.Usecase.Profile",
+		pkg:                "Testing.Usecase.Room",
 		logger:             logger,
 		cfg:                cfg,
 		emailing:           emailing,
 		dbMasterClient:     dbMasterClient,
 		repo:               repo,
+		candidateUC:        candidateUC,
 		tenantAccountUC:    tenantAccountUC,
 		personalityTraitUC: personalityTraitUC,
+		profileUC:          profileUC,
 	}
 	return uc
 }

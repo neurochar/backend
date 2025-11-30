@@ -17,7 +17,7 @@ func NewUsecaseImpl(
 	cfg config.Config,
 ) *UsecaseImpl {
 	uc := &UsecaseImpl{
-		pkg:    "Tesing.Usecase.PersonalityTrait",
+		pkg:    "Testing.Usecase.PersonalityTrait",
 		logger: logger,
 		cfg:    cfg,
 	}

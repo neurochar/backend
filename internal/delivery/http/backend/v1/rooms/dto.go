@@ -1,4 +1,4 @@
-package testing
+package rooms
 
 import (
 	"github.com/gofiber/fiber/v2"

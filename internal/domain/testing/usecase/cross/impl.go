@@ -15,7 +15,8 @@ type UsecaseImpl struct {
 	cfg            config.Config
 	dbMasterClient db.MasterClient
 	emailing       emailing.Emailing
-	candidateRepo  usecase.ProfileRepository
+	profileRepo    usecase.ProfileRepository
+	roomRepo       usecase.RoomRepository
 }
 
 func NewUsecaseImpl(
@@ -23,15 +24,17 @@ func NewUsecaseImpl(
 	cfg config.Config,
 	dbMasterClient db.MasterClient,
 	emailing emailing.Emailing,
-	candidateRepo usecase.ProfileRepository,
+	profileRepo usecase.ProfileRepository,
+	roomRepo usecase.RoomRepository,
 ) *UsecaseImpl {
 	uc := &UsecaseImpl{
-		pkg:            "CRM.Usecase.Cross",
+		pkg:            "Testing.Usecase.Cross",
 		logger:         logger,
 		cfg:            cfg,
 		emailing:       emailing,
 		dbMasterClient: dbMasterClient,
-		candidateRepo:  candidateRepo,
+		profileRepo:    profileRepo,
+		roomRepo:       roomRepo,
 	}
 	return uc
 }

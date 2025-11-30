@@ -1,4 +1,4 @@
-package testing
+package rooms
 
 import (
 	"fmt"
@@ -29,7 +29,7 @@ func NewController(
 	testingFacade *testingUC.Facade,
 ) *Controller {
 	controller := &Controller{
-		pkg:           "httpController.Testing",
+		pkg:           "httpController.Rooms",
 		vldtr:         validation.New(),
 		cfg:           cfg,
 		backoff:       backoff,
@@ -42,18 +42,7 @@ func NewController(
 func RegisterRoutes(groups *v1.Groups, ctrl *Controller, cpanelMdwr *middleware.Controller) {
 	const url = "testing"
 
-	routeGroup := groups.Default.Group(fmt.Sprintf("/%s", url), cpanelMdwr.AuthRequired)
+	routeGroup := groups.Default.Group(fmt.Sprintf("/%s", url))
 
-	routeGroup.Get("/personality_traits", ctrl.ListPersonalityTraitsHandler)
-
-	routeGroup.Get("/profiles", ctrl.ListProfilesHandler)
-	routeGroup.Post("/profiles", cpanelMdwr.AuthFullCheck, ctrl.CreateProfileHandler)
-	routeGroup.Get("/profiles/:id<guid>", ctrl.GetProfileHandler)
-	routeGroup.Patch("/profiles/:id<guid>", cpanelMdwr.AuthFullCheck, ctrl.PatchProfileHandler)
-	routeGroup.Delete("/profiles/:id<guid>", cpanelMdwr.AuthFullCheck, ctrl.DeleteProfileHandler)
-
-	routeGroup.Get("/rooms", ctrl.ListRoomsHandler)
-	routeGroup.Post("/rooms", cpanelMdwr.AuthFullCheck, ctrl.CreateRoomHandler)
-	routeGroup.Get("/rooms/:id<guid>", ctrl.GetRoomHandler)
-	routeGroup.Delete("/rooms/:id<guid>", cpanelMdwr.AuthFullCheck, ctrl.DeleteRoomHandler)
+	routeGroup.Get("/:id<guid>", ctrl.GetRoomHandler)
 }

@@ -1,6 +1,8 @@
 package entity
 
 import (
+	"time"
+
 	crmEntity "github.com/neurochar/backend/internal/domain/crm/entity"
 )
 
@@ -28,6 +30,6 @@ type TechniqueItem interface {
 
 type TechniqueItemQuestionWithVariants interface {
 	TechniqueItem
-	GetQuestion(candidate *crmEntity.Candidate) string
-	GetVariants(candidate *crmEntity.Candidate) []string
+	GetQuestion(candidateGender crmEntity.CandidateGender, candidateBirthday *time.Time) string
+	GetVariants(candidateGender crmEntity.CandidateGender, candidateBirthday *time.Time) []string
 }

@@ -29,6 +29,8 @@ func (ctrl *Controller) ListCandidatesHandler(c *fiber.Ctx) error {
 		offset = 0
 	}
 
+	search := c.Query("search")
+
 	authData := middleware.GetAuthData(c)
 	if authData == nil {
 		return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
@@ -42,6 +44,10 @@ func (ctrl *Controller) ListCandidatesHandler(c *fiber.Ctx) error {
 				IsDesc: false,
 			},
 		},
+	}
+
+	if search != "" {
+		listOptions.SearchQuery = &search
 	}
 
 	listParams := &uctypes.QueryGetListParams{

@@ -6,8 +6,8 @@ import (
 	appErrors "github.com/neurochar/backend/internal/app/errors"
 )
 
-func (ctrl *Controller) DeleteProfileHandler(c *fiber.Ctx) error {
-	const op = "DeleteProfileHandler"
+func (ctrl *Controller) DeleteRoomHandler(c *fiber.Ctx) error {
+	const op = "DeleteRoomHandler"
 
 	idStr := c.Params("id")
 	id, err := uuid.Parse(idStr)
@@ -15,7 +15,7 @@ func (ctrl *Controller) DeleteProfileHandler(c *fiber.Ctx) error {
 		return appErrors.Chainf(appErrors.ErrBadRequest.WithWrap(err), "%s.%s", ctrl.pkg, op)
 	}
 
-	err = ctrl.testingFacade.Cross.DeleteProfile(
+	err = ctrl.testingFacade.Cross.DeleteRoom(
 		c.Context(),
 		id,
 	)

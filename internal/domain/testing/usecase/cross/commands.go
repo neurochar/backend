@@ -11,11 +11,11 @@ import (
 	"github.com/samber/lo"
 )
 
-func (uc *UsecaseImpl) Delete(ctx context.Context, id uuid.UUID) error {
-	const op = "Delete"
+func (uc *UsecaseImpl) DeleteProfile(ctx context.Context, id uuid.UUID) error {
+	const op = "DeleteProfile"
 
 	err := uc.dbMasterClient.Do(ctx, func(ctx context.Context) error {
-		candidate, err := uc.candidateRepo.FindOneByID(ctx, id, &uctypes.QueryGetOneParams{
+		candidate, err := uc.profileRepo.FindOneByID(ctx, id, &uctypes.QueryGetOneParams{
 			ForUpdate: true,
 		})
 		if err != nil {
@@ -31,7 +31,41 @@ func (uc *UsecaseImpl) Delete(ctx context.Context, id uuid.UUID) error {
 
 		candidate.DeletedAt = lo.ToPtr(time.Now())
 
-		err = uc.candidateRepo.Update(ctx, candidate)
+		err = uc.profileRepo.Update(ctx, candidate)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	return nil
+}
+
+func (uc *UsecaseImpl) DeleteRoom(ctx context.Context, id uuid.UUID) error {
+	const op = "DeleteRoom"
+
+	err := uc.dbMasterClient.Do(ctx, func(ctx context.Context) error {
+		room, err := uc.roomRepo.FindOneByID(ctx, id, &uctypes.QueryGetOneParams{
+			ForUpdate: true,
+		})
+		if err != nil {
+			return err
+		}
+
+		if auth.IsNeedToCheckRights(ctx) {
+			authData := auth.GetAuthData(ctx)
+			if authData == nil || authData.TenantID != room.TenantID {
+				return appErrors.ErrForbidden
+			}
+		}
+
+		room.DeletedAt = lo.ToPtr(time.Now())
+
+		err = uc.roomRepo.Update(ctx, room)
 		if err != nil {
 			return err
 		}

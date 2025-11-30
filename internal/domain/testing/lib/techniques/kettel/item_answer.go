@@ -1,6 +1,8 @@
 package kettel
 
 import (
+	"time"
+
 	appErrors "github.com/neurochar/backend/internal/app/errors"
 	crmEntity "github.com/neurochar/backend/internal/domain/crm/entity"
 	"github.com/neurochar/backend/internal/domain/testing/entity"
@@ -33,15 +35,15 @@ func (i *KettelItemAnswerImpl) GetType() entity.TechniqueItemType {
 	return entity.TechniqueItemTypeQuestionWithVariantsSignleAnswer
 }
 
-func (i *KettelItemAnswerImpl) GetQuestion(candidate *crmEntity.Candidate) string {
-	if candidate.CandidateGender == crmEntity.CandidateGenderFemale && i.FemaleQuestion != "" {
+func (i *KettelItemAnswerImpl) GetQuestion(candidateGender crmEntity.CandidateGender, candidateBirthday *time.Time) string {
+	if candidateGender == crmEntity.CandidateGenderFemale && i.FemaleQuestion != "" {
 		return i.FemaleQuestion
 	}
 
 	return i.MaleQuestion
 }
 
-func (i *KettelItemAnswerImpl) GetVariants(_ *crmEntity.Candidate) []string {
+func (i *KettelItemAnswerImpl) GetVariants(_ crmEntity.CandidateGender, _ *time.Time) []string {
 	return i.Variants
 }
 

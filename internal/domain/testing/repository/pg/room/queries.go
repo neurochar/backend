@@ -1,23 +1,21 @@
-package candidate
+package room
 
 import (
 	"context"
 	"log/slog"
-	"regexp"
-	"strings"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/georgysavva/scany/v2/pgxscan"
 	"github.com/google/uuid"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
 	"github.com/neurochar/backend/internal/common/uctypes"
-	"github.com/neurochar/backend/internal/domain/crm/entity"
-	"github.com/neurochar/backend/internal/domain/crm/repository/pg"
-	"github.com/neurochar/backend/internal/domain/crm/usecase"
+	"github.com/neurochar/backend/internal/domain/testing/entity"
+	"github.com/neurochar/backend/internal/domain/testing/repository/pg"
+	"github.com/neurochar/backend/internal/domain/testing/usecase"
 	"github.com/neurochar/backend/internal/infra/loghandler"
 )
 
-func (r *Repository) buildWhereForList(listOptions *usecase.CandidateListOptions, withDeleted bool) (where squirrel.And) {
+func (r *Repository) buildWhereForList(listOptions *usecase.RoomListOptions, withDeleted bool) (where squirrel.And) {
 	defer func() {
 		if !withDeleted {
 			where = append(where, squirrel.Expr("deleted_at IS NULL"))
@@ -32,30 +30,10 @@ func (r *Repository) buildWhereForList(listOptions *usecase.CandidateListOptions
 		where = append(where, squirrel.Eq{"tenant_id": *listOptions.FilterTenantID})
 	}
 
-	if listOptions.FilterIDs != nil {
-		where = append(where, squirrel.Eq{"id": *listOptions.FilterIDs})
-	}
-
-	if listOptions.SearchQuery != nil {
-		q := strings.TrimSpace(*listOptions.SearchQuery)
-		if q != "" {
-			words := strings.Fields(q)
-
-			for _, w := range words {
-				safe := regexp.QuoteMeta(w)
-				pattern := "(^| )" + safe + ".*"
-				where = append(where, squirrel.Or{
-					squirrel.Expr("candidate_name ~* ?", pattern),
-					squirrel.Expr("candidate_surname ~* ?", pattern),
-				})
-			}
-		}
-	}
-
 	return where
 }
 
-func (r *Repository) buildSortForList(listOptions *usecase.CandidateListOptions) []string {
+func (r *Repository) buildSortForList(listOptions *usecase.RoomListOptions) []string {
 	if listOptions == nil || len(listOptions.Sort) == 0 {
 		return []string{"created_at DESC"}
 	}
@@ -64,7 +42,7 @@ func (r *Repository) buildSortForList(listOptions *usecase.CandidateListOptions)
 
 	for _, sortOption := range listOptions.Sort {
 		switch sortOption.Field {
-		case usecase.CandidateListOptionsSortFieldCreatedAt:
+		case usecase.RoomListOptionsSortFieldCreatedAt:
 			if sortOption.IsDesc {
 				sort = append(sort, "created_at DESC")
 			} else {
@@ -78,18 +56,18 @@ func (r *Repository) buildSortForList(listOptions *usecase.CandidateListOptions)
 
 func (r *Repository) FindList(
 	ctx context.Context,
-	listOptions *usecase.CandidateListOptions,
+	listOptions *usecase.RoomListOptions,
 	queryParams *uctypes.QueryGetListParams,
-) ([]*entity.Candidate, error) {
+) ([]*entity.Room, error) {
 	const op = "FindList"
 
 	withDeleted := queryParams != nil && queryParams.WithDeleted
 
 	where := r.buildWhereForList(listOptions, withDeleted)
 
-	fields := pg.CandidateTableFields
+	fields := pg.RoomTableFields
 
-	q := r.qb.Select(fields...).From(pg.CandidateTable).Where(where)
+	q := r.qb.Select(fields...).From(pg.RoomTable).Where(where)
 
 	sort := r.buildSortForList(listOptions)
 	if len(sort) > 0 {
@@ -131,7 +109,7 @@ func (r *Repository) FindList(
 
 	defer rows.Close()
 
-	dbData := []*pg.CandidateDBModel{}
+	dbData := []*pg.RoomDBModel{}
 
 	if err := pgxscan.ScanAll(&dbData, rows); err != nil {
 		convErr, ok := appErrors.ConvertPgxToAppErr(err)
@@ -141,7 +119,7 @@ func (r *Repository) FindList(
 		return nil, appErrors.Chainf(convErr, "%s.%s", r.pkg, op)
 	}
 
-	result := make([]*entity.Candidate, 0, len(dbData))
+	result := make([]*entity.Room, 0, len(dbData))
 	for _, dbItem := range dbData {
 		result = append(result, dbItem.ToEntity())
 	}
@@ -151,18 +129,18 @@ func (r *Repository) FindList(
 
 func (r *Repository) FindPagedList(
 	ctx context.Context,
-	listOptions *usecase.CandidateListOptions,
+	listOptions *usecase.RoomListOptions,
 	queryParams *uctypes.QueryGetListParams,
-) ([]*entity.Candidate, uint64, error) {
+) ([]*entity.Room, uint64, error) {
 	const op = "FindPagedList"
 
 	withDeleted := queryParams != nil && queryParams.WithDeleted
 
 	where := r.buildWhereForList(listOptions, withDeleted)
 
-	fields := pg.CandidateTableFields
+	fields := pg.RoomTableFields
 
-	q := r.qb.Select(fields...).From(pg.CandidateTable).Where(where)
+	q := r.qb.Select(fields...).From(pg.RoomTable).Where(where)
 
 	sort := r.buildSortForList(listOptions)
 	if len(sort) > 0 {
@@ -193,7 +171,7 @@ func (r *Repository) FindPagedList(
 		return nil, 0, appErrors.Chainf(appErrors.ErrInternal.WithWrap(err), "%s.%s", r.pkg, op)
 	}
 
-	totalQ := r.qb.Select("COUNT(*) as total").From(pg.CandidateTable).Where(where)
+	totalQ := r.qb.Select("COUNT(*) as total").From(pg.RoomTable).Where(where)
 	totalQuery, totalArgs, err := totalQ.ToSql()
 	if err != nil {
 		r.logger.ErrorContext(loghandler.WithSource(ctx), "building query for total", slog.Any("error", err))
@@ -201,7 +179,7 @@ func (r *Repository) FindPagedList(
 	}
 
 	var total uint64
-	var result []*entity.Candidate
+	var result []*entity.Room
 
 	err = r.pgClient.Do(ctx, func(ctx context.Context) error {
 		rows, err := r.pgClient.GetConn(ctx).Query(ctx, query, args...)
@@ -215,7 +193,7 @@ func (r *Repository) FindPagedList(
 
 		defer rows.Close()
 
-		dbData := []*pg.CandidateDBModel{}
+		dbData := []*pg.RoomDBModel{}
 
 		if err := pgxscan.ScanAll(&dbData, rows); err != nil {
 			convErr, ok := appErrors.ConvertPgxToAppErr(err)
@@ -225,7 +203,7 @@ func (r *Repository) FindPagedList(
 			return appErrors.Chainf(convErr, "%s.%s", r.pkg, op)
 		}
 
-		result = make([]*entity.Candidate, 0, len(dbData))
+		result = make([]*entity.Room, 0, len(dbData))
 		for _, dbItem := range dbData {
 			result = append(result, dbItem.ToEntity())
 		}
@@ -252,7 +230,7 @@ func (r *Repository) FindOneByID(
 	ctx context.Context,
 	id uuid.UUID,
 	queryParams *uctypes.QueryGetOneParams,
-) (*entity.Candidate, error) {
+) (*entity.Room, error) {
 	const op = "FindOneByID"
 
 	withDeleted := queryParams != nil && queryParams.WithDeleted
@@ -265,7 +243,7 @@ func (r *Repository) FindOneByID(
 		where = append(where, squirrel.Expr("deleted_at IS NULL"))
 	}
 
-	q := r.qb.Select(pg.CandidateTableFields...).From(pg.CandidateTable).Where(where)
+	q := r.qb.Select(pg.RoomTableFields...).From(pg.RoomTable).Where(where)
 
 	if queryParams != nil {
 		if queryParams.ForUpdateSkipLocked {
@@ -294,7 +272,7 @@ func (r *Repository) FindOneByID(
 
 	defer rows.Close()
 
-	dbData := &pg.CandidateDBModel{}
+	dbData := &pg.RoomDBModel{}
 
 	if err := pgxscan.ScanOne(dbData, rows); err != nil {
 		convErr, ok := appErrors.ConvertPgxToAppErr(err)

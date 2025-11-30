@@ -3,6 +3,8 @@ package profile
 import (
 	"context"
 	"log/slog"
+	"regexp"
+	"strings"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/georgysavva/scany/v2/pgxscan"
@@ -28,6 +30,23 @@ func (r *Repository) buildWhereForList(listOptions *usecase.ProfileListOptions, 
 
 	if listOptions.FilterTenantID != nil {
 		where = append(where, squirrel.Eq{"tenant_id": *listOptions.FilterTenantID})
+	}
+
+	if listOptions.FilterIDs != nil {
+		where = append(where, squirrel.Eq{"id": *listOptions.FilterIDs})
+	}
+
+	if listOptions.SearchQuery != nil {
+		q := strings.TrimSpace(*listOptions.SearchQuery)
+		if q != "" {
+			words := strings.Fields(q)
+
+			for _, w := range words {
+				safe := regexp.QuoteMeta(w)
+				pattern := "(^| )" + safe + ".*"
+				where = append(where, squirrel.Expr("name ~* ?", pattern))
+			}
+		}
 	}
 
 	return where

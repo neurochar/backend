@@ -7,5 +7,7 @@ import (
 )
 
 type CrossUsecase interface {
-	Delete(ctx context.Context, id uuid.UUID) (resErr error)
+	DeleteProfile(ctx context.Context, id uuid.UUID) (resErr error)
+
+	DeleteRoom(ctx context.Context, id uuid.UUID) (resErr error)
 }

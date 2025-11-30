@@ -8,13 +8,13 @@ import (
 	testingUC "github.com/neurochar/backend/internal/domain/testing/usecase"
 )
 
-type ListProfilesHandlerOut struct {
-	Items []OutProfile `json:"items"`
-	Total uint64       `json:"total"`
+type ListRoomsHandlerOut struct {
+	Items []OutListRoom `json:"items"`
+	Total uint64        `json:"total"`
 }
 
-func (ctrl *Controller) ListProfilesHandler(c *fiber.Ctx) error {
-	const op = "ListProfilesHandler"
+func (ctrl *Controller) ListRoomsHandler(c *fiber.Ctx) error {
+	const op = "ListRoomsHandler"
 
 	limit := c.QueryInt("limit", 20)
 	if limit > 100 {
@@ -29,25 +29,19 @@ func (ctrl *Controller) ListProfilesHandler(c *fiber.Ctx) error {
 		offset = 0
 	}
 
-	search := c.Query("search")
-
 	authData := middleware.GetAuthData(c)
 	if authData == nil {
 		return appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
 	}
 
-	listOptions := &testingUC.ProfileListOptions{
+	listOptions := &testingUC.RoomListOptions{
 		FilterTenantID: &authData.TenantID,
-		Sort: []uctypes.SortOption[testingUC.ProfileListOptionsSortField]{
+		Sort: []uctypes.SortOption[testingUC.RoomListOptionsSortField]{
 			{
-				Field:  testingUC.ProfileListOptionsSortFieldCreatedAt,
+				Field:  testingUC.RoomListOptionsSortFieldCreatedAt,
 				IsDesc: false,
 			},
 		},
-	}
-
-	if search != "" {
-		listOptions.SearchQuery = &search
 	}
 
 	listParams := &uctypes.QueryGetListParams{
@@ -55,23 +49,23 @@ func (ctrl *Controller) ListProfilesHandler(c *fiber.Ctx) error {
 		Offset: uint64(offset),
 	}
 
-	items, total, err := ctrl.testingFacade.Profile.FindPagedList(
+	items, total, err := ctrl.testingFacade.Room.FindPagedList(
 		c.Context(),
 		listOptions,
 		listParams,
-		&testingUC.ProfileDTOOptions{},
+		&testingUC.RoomDTOOptions{},
 	)
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}
 
-	out := ListProfilesHandlerOut{
-		Items: make([]OutProfile, 0, len(items)),
+	out := ListRoomsHandlerOut{
+		Items: make([]OutListRoom, 0, len(items)),
 		Total: total,
 	}
 
 	for _, item := range items {
-		outItem, err := OutProfileDTO(c, item)
+		outItem, err := OutListRoomDTO(c, item)
 		if err != nil {
 			return err
 		}
