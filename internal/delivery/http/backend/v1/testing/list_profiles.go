@@ -41,7 +41,7 @@ func (ctrl *Controller) ListProfilesHandler(c *fiber.Ctx) error {
 		Sort: []uctypes.SortOption[testingUC.ProfileListOptionsSortField]{
 			{
 				Field:  testingUC.ProfileListOptionsSortFieldCreatedAt,
-				IsDesc: false,
+				IsDesc: true,
 			},
 		},
 	}

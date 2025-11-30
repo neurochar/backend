@@ -39,7 +39,7 @@ func (ctrl *Controller) ListRoomsHandler(c *fiber.Ctx) error {
 		Sort: []uctypes.SortOption[testingUC.RoomListOptionsSortField]{
 			{
 				Field:  testingUC.RoomListOptionsSortFieldCreatedAt,
-				IsDesc: false,
+				IsDesc: true,
 			},
 		},
 	}
@@ -53,7 +53,10 @@ func (ctrl *Controller) ListRoomsHandler(c *fiber.Ctx) error {
 		c.Context(),
 		listOptions,
 		listParams,
-		&testingUC.RoomDTOOptions{},
+		&testingUC.RoomDTOOptions{
+			FetchCandidate: true,
+			FetchProfile:   true,
+		},
 	)
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)

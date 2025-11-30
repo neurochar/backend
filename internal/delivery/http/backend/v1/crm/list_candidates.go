@@ -41,7 +41,7 @@ func (ctrl *Controller) ListCandidatesHandler(c *fiber.Ctx) error {
 		Sort: []uctypes.SortOption[crmUC.CandidateListOptionsSortField]{
 			{
 				Field:  crmUC.CandidateListOptionsSortFieldCreatedAt,
-				IsDesc: false,
+				IsDesc: true,
 			},
 		},
 	}

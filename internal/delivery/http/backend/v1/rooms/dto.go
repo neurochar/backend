@@ -1,120 +1,79 @@
 package rooms
 
 import (
+	"time"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
+	appErrors "github.com/neurochar/backend/internal/app/errors"
+	crmEntity "github.com/neurochar/backend/internal/domain/crm/entity"
+	tenantEntity "github.com/neurochar/backend/internal/domain/tenant/entity"
 	testingEntity "github.com/neurochar/backend/internal/domain/testing/entity"
 	testingUC "github.com/neurochar/backend/internal/domain/testing/usecase"
 )
 
-type OutProfile struct {
-	Version int64 `json:"_version,omitempty"`
-
-	ID                   uuid.UUID                                 `json:"id"`
-	TenantID             uuid.UUID                                 `json:"tenantID"`
-	Name                 string                                    `json:"name"`
-	PersonalityTraitsMap testingEntity.ProfilePersonalityTraitsMap `json:"personalityTraitsMap"`
-}
-
-func OutProfileDTO(
-	c *fiber.Ctx,
-	profileDTO *testingUC.ProfileDTO,
-) (*OutProfile, error) {
-	out := &OutProfile{
-		Version:  profileDTO.Profile.Version(),
-		ID:       profileDTO.Profile.ID,
-		TenantID: profileDTO.Profile.TenantID,
-
-		Name:                 profileDTO.Profile.Name,
-		PersonalityTraitsMap: profileDTO.Profile.PersonalityTraitsMap,
-	}
-
-	return out, nil
-}
-
 type OutRoomCandidate struct {
-	ID               uuid.UUID `json:"id"`
-	CandidateName    string    `json:"candidateName"`
-	CandidateSurname string    `json:"candidateSurname"`
+	CandidateName string `json:"candidateName"`
 }
 
-type OutRoomProfile struct {
-	ID   uuid.UUID `json:"id"`
-	Name string    `json:"name"`
-}
-
-type OutListRoom struct {
-	Version int64 `json:"_version,omitempty"`
-
-	ID        uuid.UUID                    `json:"id"`
-	Status    testingEntity.RoomStatusType `json:"status"`
-	TenantID  uuid.UUID                    `json:"tenantID"`
-	Candidate *OutRoomCandidate            `json:"candidate"`
-	Profile   *OutRoomProfile              `json:"profile"`
-}
-
-func OutListRoomDTO(
-	c *fiber.Ctx,
-	roomDTO *testingUC.RoomDTO,
-) (*OutListRoom, error) {
-	out := &OutListRoom{
-		Version:  roomDTO.Room.Version(),
-		ID:       roomDTO.Room.ID,
-		TenantID: roomDTO.Room.TenantID,
-	}
-
-	if roomDTO.CandidateDTO != nil {
-		out.Candidate = &OutRoomCandidate{
-			ID:               roomDTO.CandidateDTO.Candidate.ID,
-			CandidateName:    roomDTO.CandidateDTO.Candidate.CandidateName,
-			CandidateSurname: roomDTO.CandidateDTO.Candidate.CandidateSurname,
-		}
-	}
-
-	if roomDTO.ProfileDTO != nil {
-		out.Profile = &OutRoomProfile{
-			ID:   roomDTO.ProfileDTO.Profile.ID,
-			Name: roomDTO.ProfileDTO.Profile.Name,
-		}
-	}
-
-	return out, nil
+type OutRoomTechniqueItem struct {
+	Type     testingEntity.TechniqueItemType `json:"type"`
+	Question string                          `json:"question,omitempty"`
+	Variants []string                        `json:"variants,omitempty"`
 }
 
 type OutRoom struct {
-	Version int64 `json:"_version,omitempty"`
-
-	ID                   uuid.UUID                                 `json:"id"`
-	Status               testingEntity.RoomStatusType              `json:"status"`
-	TenantID             uuid.UUID                                 `json:"tenantID"`
-	Candidate            *OutRoomCandidate                         `json:"candidate"`
-	Profile              *OutRoomProfile                           `json:"profile"`
-	PersonalityTraitsMap testingEntity.ProfilePersonalityTraitsMap `json:"personalityTraitsMap"`
+	ID            uuid.UUID                    `json:"id"`
+	Status        testingEntity.RoomStatusType `json:"status"`
+	TenantName    string                       `json:"tenantName"`
+	Candidate     *OutRoomCandidate            `json:"candidate"`
+	TechniqueData []OutRoomTechniqueItem       `json:"techniqueData"`
 }
 
 func OutRoomDTO(
 	c *fiber.Ctx,
 	roomDTO *testingUC.RoomDTO,
+	tenant *tenantEntity.Tenant,
 ) (*OutRoom, error) {
 	out := &OutRoom{
-		Version:              roomDTO.Room.Version(),
-		ID:                   roomDTO.Room.ID,
-		TenantID:             roomDTO.Room.TenantID,
-		PersonalityTraitsMap: roomDTO.Room.PersonalityTraitsMap,
+		ID:         roomDTO.Room.ID,
+		TenantName: tenant.Name,
 	}
+
+	candidateGender := crmEntity.CandidateGenderUnknown
+	var candidateBirthday *time.Time
 
 	if roomDTO.CandidateDTO != nil {
 		out.Candidate = &OutRoomCandidate{
-			ID:               roomDTO.CandidateDTO.Candidate.ID,
-			CandidateName:    roomDTO.CandidateDTO.Candidate.CandidateName,
-			CandidateSurname: roomDTO.CandidateDTO.Candidate.CandidateSurname,
+			CandidateName: roomDTO.CandidateDTO.Candidate.CandidateName,
 		}
+
+		candidateGender = roomDTO.CandidateDTO.Candidate.CandidateGender
+		candidateBirthday = roomDTO.CandidateDTO.Candidate.CandidateBirthday
 	}
 
-	if roomDTO.ProfileDTO != nil {
-		out.Profile = &OutRoomProfile{
-			ID:   roomDTO.ProfileDTO.Profile.ID,
-			Name: roomDTO.ProfileDTO.Profile.Name,
+	if roomDTO.Room.Status != testingEntity.RoomStatusTypeFinished {
+		for _, techniqueDataItem := range roomDTO.Room.TechniqueData {
+			techniqueItem, err := techniqueDataItem.ItemData.GetItem()
+			if err != nil {
+				return nil, err
+			}
+
+			item := OutRoomTechniqueItem{
+				Type: techniqueItem.GetType(),
+			}
+
+			if techniqueItem.GetType() == testingEntity.TechniqueItemTypeQuestionWithVariantsSignleAnswer {
+				itemQuestionWithVariantsSignleAnswer, ok := techniqueItem.(testingEntity.TechniqueItemQuestionWithVariants)
+				if !ok {
+					return nil, appErrors.ErrInternal
+				}
+
+				item.Question = itemQuestionWithVariantsSignleAnswer.GetQuestion(candidateGender, candidateBirthday)
+				item.Variants = itemQuestionWithVariantsSignleAnswer.GetVariants(candidateGender, candidateBirthday)
+			}
+
+			out.TechniqueData = append(out.TechniqueData, item)
 		}
 	}
 

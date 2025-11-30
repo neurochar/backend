@@ -1,11 +1,10 @@
 package rooms
 
 import (
-	"errors"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
+	"github.com/neurochar/backend/pkg/auth"
 )
 
 func (ctrl *Controller) GetRoomHandler(c *fiber.Ctx) error {
@@ -17,17 +16,20 @@ func (ctrl *Controller) GetRoomHandler(c *fiber.Ctx) error {
 		return appErrors.Chainf(appErrors.ErrBadRequest.WithWrap(err), "%s.%s", ctrl.pkg, op)
 	}
 
-	profileDTO, err := ctrl.testingFacade.Room.FindOneByID(c.Context(), id, nil, nil)
+	roomDTO, err := ctrl.testingFacade.Room.FindOneByID(auth.WithoutCheckRight(c.Context()), id, nil, nil)
 	if err != nil {
-		if errors.Is(err, appErrors.ErrForbidden) {
-			return appErrors.Chainf(appErrors.ErrNotFound, "%s.%s", ctrl.pkg, op)
-		}
+		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
+	}
+
+	tenant, err := ctrl.tenantFacade.Tenant.FindOneByID(auth.WithoutCheckRight(c.Context()), roomDTO.Room.TenantID, nil)
+	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}
 
 	out, err := OutRoomDTO(
 		c,
-		profileDTO,
+		roomDTO,
+		tenant,
 	)
 	if err != nil {
 		return err

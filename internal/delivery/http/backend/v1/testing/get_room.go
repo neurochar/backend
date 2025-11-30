@@ -17,7 +17,7 @@ func (ctrl *Controller) GetRoomHandler(c *fiber.Ctx) error {
 		return appErrors.Chainf(appErrors.ErrBadRequest.WithWrap(err), "%s.%s", ctrl.pkg, op)
 	}
 
-	profileDTO, err := ctrl.testingFacade.Room.FindOneByID(c.Context(), id, nil, nil)
+	roomDTO, err := ctrl.testingFacade.Room.FindOneByID(c.Context(), id, nil, nil)
 	if err != nil {
 		if errors.Is(err, appErrors.ErrForbidden) {
 			return appErrors.Chainf(appErrors.ErrNotFound, "%s.%s", ctrl.pkg, op)
@@ -27,7 +27,7 @@ func (ctrl *Controller) GetRoomHandler(c *fiber.Ctx) error {
 
 	out, err := OutRoomDTO(
 		c,
-		profileDTO,
+		roomDTO,
 	)
 	if err != nil {
 		return err
