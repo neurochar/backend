@@ -60,7 +60,7 @@ spec:
 
                   envFrom:
                       - configMapRef:
-                            name: backend-config
+                        name: backend-config
 
                   envFrom:
                       - secretRef:
