@@ -1,0 +1,106 @@
+# ------------------------------------------------------------
+# ConfigMap приложения backend-app
+# ------------------------------------------------------------
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: backend-config
+    namespace: neurochar
+
+data:
+    SERVER_IP: "79.174.83.151"
+    PROJECT_FRONTEND_URL: https://neurochar.ru
+    PROJECT_API_URL: https://neurochar.ru
+    CPANEL_FRONTEND_URL: https://letit.ru/cpanel-app
+    CPANEL_API_URL: https://neurochar.ru
+    TENANT_MAIN_DOMAIN: neurochar.ru
+    TENANT_URL_SCHEME: https
+    STORAGE_S3_ENDPOINT: https://s3.regru.cloud
+    STORAGE_S3_REGION: us-east-1
+    STORAGE_S3_URL: https://s3.regru.cloud
+    STORAGE_S3_URL_IS_HOST: true
+    STORAGE_S3_URL_HOST_PREFIX: https://
+    STORAGE_S3_URL_HOST_POSTFIX: .s3.regru.cloud
+    EMAILING_SMTP_HOST: mail.neurochar.ru
+    EMAILING_SMTP_PORT: 587
+    EMAILING_SMTP_USER: no-reply@neurochar.ru
+    EMAILING_DEFAULT_FROM_EMAIL: no-reply@neurochar.ru
+    EMAILING_DEFAULT_FROM_TITLE: Neurochar
+    ALERTS_TARGET_CHANNEL: "-1002702081888"
+---
+# ------------------------------------------------------------
+# Deployment приложения backend-app
+# ------------------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: backend-app-deployment
+    namespace: neurochar
+
+spec:
+    replicas: 1
+
+    selector:
+        matchLabels:
+            app: backend-app
+
+    template:
+        metadata:
+            labels:
+                app: backend-app
+
+        spec:
+            containers:
+                - name: backend-app
+                  image: __BACKEND_APP_VERSION__
+                  imagePullPolicy: Always
+
+                  ports:
+                      - containerPort: 8080
+
+                  envFrom:
+                      - configMapRef:
+                            name: backend-config
+
+                  envFrom:
+                      - secretRef:
+                        name: backend-app-secret
+
+                #   livenessProbe:
+                #       httpGet:
+                #           path: /health/live
+                #           port: 80
+                #       initialDelaySeconds: 3
+                #       periodSeconds: 5
+
+                #   readinessProbe:
+                #       httpGet:
+                #           path: /health/ready
+                #           port: 80
+                #       initialDelaySeconds: 1
+                #       periodSeconds: 3
+
+---
+# ------------------------------------------------------------
+# Service для приложения backend-app
+# ------------------------------------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+    name: backend-app-service
+    namespace: neurochar
+    labels:
+        app: backend-app
+
+spec:
+    type: NodePort
+
+    selector:
+        app: backend-app
+
+    ports:
+        - name: http
+          port: 8080
+          targetPort: 8080
+          nodePort: 30080
+          protocol: TCP
