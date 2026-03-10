@@ -22,7 +22,7 @@ data:
     STORAGE_S3_URL_HOST_PREFIX: https://
     STORAGE_S3_URL_HOST_POSTFIX: .s3.regru.cloud
     EMAILING_SMTP_HOST: mail.neurochar.ru
-    EMAILING_SMTP_PORT: 587
+    EMAILING_SMTP_PORT: "587"
     EMAILING_SMTP_USER: no-reply@neurochar.ru
     EMAILING_DEFAULT_FROM_EMAIL: no-reply@neurochar.ru
     EMAILING_DEFAULT_FROM_TITLE: Neurochar
