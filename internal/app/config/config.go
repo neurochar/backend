@@ -158,10 +158,10 @@ func LoadConfig(files ...string) Config {
 		if _, err := os.Stat(file); err == nil {
 			err := cleanenv.ReadConfig(file, &Config)
 			if err != nil {
-				log.Fatal("config file error", err)
+				log.Println("config file error", err)
 			}
 		} else {
-			log.Fatal("config file not found", file)
+			log.Println("config file not found", file)
 		}
 	}
 
