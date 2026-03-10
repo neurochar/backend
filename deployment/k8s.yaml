@@ -60,11 +60,11 @@ spec:
 
                   envFrom:
                       - configMapRef:
-                        name: backend-config
+                            name: backend-config
 
                   envFrom:
                       - secretRef:
-                        name: backend-app-secret
+                            name: backend-app-secret
 
                 #   livenessProbe:
                 #       httpGet:
