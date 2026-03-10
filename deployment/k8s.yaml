@@ -8,13 +8,20 @@ metadata:
     namespace: neurochar
 
 data:
-    SERVER_IP: "79.174.83.151"
-    PROJECT_FRONTEND_URL: "https://neurochar.ru"
-    PROJECT_API_URL: "https://neurochar.ru"
-    CPANEL_FRONTEND_URL: "https://letit.ru/cpanel-app"
-    CPANEL_API_URL: "https://neurochar.ru"
-    TENANT_MAIN_DOMAIN: "neurochar.ru"
-    TENANT_URL_SCHEME: "https"
+    GLOBAL_SERVER_IP: "79.174.83.151"
+    GLOBAL_PROJECT_FRONTEND_URL: "https://neurochar.ru"
+    GLOBAL_PROJECT_API_URL: "https://neurochar.ru"
+    GLOBAL_CPANEL_FRONTEND_URL: "https://letit.ru/cpanel-app"
+    GLOBAL_CPANEL_API_URL: "https://neurochar.ru"
+    GLOBAL_TENANT_MAIN_DOMAIN: "neurochar.ru"
+    GLOBAL_TENANT_URL_SCHEME: "https"
+    BACKEND_APP_BASE_IS_PROD: "true"
+    BACKEND_APP_BASE_USE_FX_LOGGER: "false"
+    BACKEND_APP_BASE_USE_LOGGER: "true"
+    BACKEND_APP_BASE_LOG_SQL_QUERIES: "false"
+    BACKEND_APP_BASE_LOG_HTTP: "true"
+    BACKEND_APP_HTTP_UNDER_PROXY: "true"
+    BACKEND_APP_HTTP_CORS_ALLOW_ORIGINS: "neurochar.ru"
     STORAGE_S3_ENDPOINT: "https://s3.regru.cloud"
     STORAGE_S3_REGION: "us-east-1"
     STORAGE_S3_URL: "https://s3.regru.cloud"
@@ -66,19 +73,19 @@ spec:
                       - secretRef:
                             name: backend-app-secret
 
-                #   livenessProbe:
-                #       httpGet:
-                #           path: /health/live
-                #           port: 80
-                #       initialDelaySeconds: 3
-                #       periodSeconds: 5
+                  livenessProbe:
+                      httpGet:
+                          path: /
+                          port: 8080
+                      initialDelaySeconds: 3
+                      periodSeconds: 5
 
-                #   readinessProbe:
-                #       httpGet:
-                #           path: /health/ready
-                #           port: 80
-                #       initialDelaySeconds: 1
-                #       periodSeconds: 3
+                  readinessProbe:
+                      httpGet:
+                          path: /
+                          port: 8080
+                      initialDelaySeconds: 1
+                      periodSeconds: 3
 
 ---
 # ------------------------------------------------------------
