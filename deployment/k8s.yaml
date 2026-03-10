@@ -8,6 +8,7 @@ metadata:
     namespace: neurochar
 
 data:
+    TZ: Europe/Moscow
     GLOBAL_SERVER_IP: "79.174.83.151"
     GLOBAL_PROJECT_FRONTEND_URL: "https://neurochar.ru"
     GLOBAL_PROJECT_API_URL: "https://neurochar.ru"
@@ -22,6 +23,18 @@ data:
     BACKEND_APP_BASE_LOG_HTTP: "true"
     BACKEND_APP_HTTP_UNDER_PROXY: "true"
     BACKEND_APP_HTTP_CORS_ALLOW_ORIGINS: "neurochar.ru"
+    CRONJOB_APP_BASE_IS_PROD: "true"
+    CRONJOB_APP_BASE_USE_FX_LOGGER: "false"
+    CRONJOB_APP_BASE_USE_LOGGER: "true"
+    CRONJOB_APP_BASE_LOG_SQL_QUERIES: "false"
+    CRONJOB_APP_BASE_LOG_JOB: "false"
+    CPANEL_APP_BASE_IS_PROD: "true"
+    CPANEL_APP_BASE_USE_FX_LOGGER: "false"
+    CPANEL_APP_BASE_USE_LOGGER: "true"
+    CPANEL_APP_BASE_LOG_SQL_QUERIES: "false"
+    CPANEL_APP_BASE_LOG_HTTP: "true"
+    CPANEL_APP_HTTP_UNDER_PROXY: "true"
+    CPANEL_APP_HTTP_CORS_ALLOW_ORIGINS: "neurochar.ru"
     STORAGE_S3_ENDPOINT: "https://s3.regru.cloud"
     STORAGE_S3_REGION: "us-east-1"
     STORAGE_S3_URL: "https://s3.regru.cloud"
@@ -68,8 +81,6 @@ spec:
                   envFrom:
                       - configMapRef:
                             name: backend-config
-
-                  envFrom:
                       - secretRef:
                             name: backend-app-secret
 
