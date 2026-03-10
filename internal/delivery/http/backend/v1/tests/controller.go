@@ -36,6 +36,10 @@ func RegisterRoutes(groups *v1.Groups, ctrl *Controller, cpanelMdwr *middleware.
 
 	routeGroup := groups.Default.Group(fmt.Sprintf("/%s", url))
 
+	routeGroup.Get("/readiness", ctrl.ReadinessHandler)
+
+	routeGroup.Get("/liveness", ctrl.LivenessHandler)
+
 	routeGroup.All("/internal-error", ctrl.InternalErrorHandler)
 
 	routeGroup.Post("/panic-error", ctrl.PanicErrorHandler)
