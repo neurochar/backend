@@ -86,17 +86,17 @@ spec:
 
                   livenessProbe:
                       httpGet:
-                          path: /tests/liveness
+                          path: /v1/tests/liveness
                           port: 8080
-                      initialDelaySeconds: 3
-                      periodSeconds: 5
+                      initialDelaySeconds: 10
+                      periodSeconds: 30
 
                   readinessProbe:
                       httpGet:
-                          path: /tests/readiness
+                          path: /v1/tests/readiness
                           port: 8080
-                      initialDelaySeconds: 1
-                      periodSeconds: 3
+                      initialDelaySeconds: 5
+                      periodSeconds: 60
 
 ---
 # ------------------------------------------------------------
