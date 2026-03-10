@@ -100,4 +100,4 @@ jobs:
               run: |
                   sed \
                     -e "s|__BACKEND_APP_VERSION__|${{ vars.CI_REGISTRY }}/backend/backend-app:${{ github.sha }}|g" \
-                    k8s.yaml | kubectl --kubeconfig "$HOME/.kube/config" apply -f -
+                    deployment/k8s.yaml | kubectl --kubeconfig "$HOME/.kube/config" apply -f -
