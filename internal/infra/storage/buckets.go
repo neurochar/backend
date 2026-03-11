@@ -9,7 +9,7 @@ import (
 type BucketName string
 
 const (
-	BucketCommonFiles BucketName = "neurochar-files"
+	BucketCommonFiles BucketName = "neurochar"
 )
 
 func GetBucketURL(bucket BucketName, cfg *config.Config) string {
