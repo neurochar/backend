@@ -12,7 +12,7 @@ data:
     GLOBAL_SERVER_IP: "79.174.83.151"
     GLOBAL_PROJECT_FRONTEND_URL: "https://neurochar.ru"
     GLOBAL_PROJECT_API_URL: "https://neurochar.ru"
-    GLOBAL_CPANEL_FRONTEND_URL: "https://letit.ru/cpanel-app"
+    GLOBAL_CPANEL_FRONTEND_URL: ""
     GLOBAL_CPANEL_API_URL: "https://neurochar.ru"
     GLOBAL_TENANT_MAIN_DOMAIN: "neurochar.ru"
     GLOBAL_TENANT_URL_SCHEME: "https"
@@ -41,11 +41,11 @@ data:
     STORAGE_S3_URL_IS_HOST: "true"
     STORAGE_S3_URL_HOST_PREFIX: "https://"
     STORAGE_S3_URL_HOST_POSTFIX: ".storage.yandexcloud.net"
-    EMAILING_SMTP_HOST: mail.neurochar.ru"
+    EMAILING_SMTP_HOST: "smtp.yandex.ru"
     EMAILING_SMTP_PORT: "587"
     EMAILING_SMTP_USER: "no-reply@neurochar.ru"
     EMAILING_DEFAULT_FROM_EMAIL: "no-reply@neurochar.ru"
-    EMAILING_DEFAULT_FROM_TITLE: "Neurochar"
+    EMAILING_DEFAULT_FROM_TITLE: "Нейрочар"
     ALERTS_TARGET_CHANNEL: "-1002702081888"
 ---
 # ------------------------------------------------------------
