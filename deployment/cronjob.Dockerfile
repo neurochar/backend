@@ -1,34 +1,37 @@
-# syntax=docker/dockerfile:1.7
-
 ARG GO_VERSION=1.24
 
-FROM --platform=$BUILDPLATFORM golang:${GO_VERSION}-alpine AS build
+FROM golang:${GO_VERSION}-alpine AS build
 WORKDIR /src
+
 RUN apk add --no-cache git ca-certificates && update-ca-certificates
 
 COPY go.mod go.sum ./
-RUN --mount=type=cache,target=/go/pkg/mod \
-    go mod download
-
+RUN go mod download
 
 COPY . .
-ARG TARGETOS TARGETARCH
+
+ARG TARGETOS=linux
+ARG TARGETARCH=amd64
 ARG VERSION="dev"
-RUN --mount=type=cache,target=/root/.cache/go-build \
-    --mount=type=cache,target=/go/pkg/mod \
-    CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH \
+
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH \
     go build -trimpath -tags timetzdata -buildvcs=false \
-    -ldflags="-s -w -X 'main.version=${VERSION}'" \
+    -ldflags="-s -w -X main.version=${VERSION}" \
     -o /out/app ./cmd/cronjob
 
-FROM gcr.io/distroless/static-debian12:nonroot AS release
+FROM alpine:3.20 AS release
 WORKDIR /app
 
-COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+RUN addgroup -S app && adduser -S -G app app \
+    && apk add --no-cache ca-certificates \
+    && update-ca-certificates
 
 COPY --from=build /out/app ./app
-COPY --from=build --chown=nonroot:nonroot --chmod=555 /src/configs ./configs
-COPY --from=build --chown=nonroot:nonroot --chmod=555 /src/migrations ./migrations
+COPY --from=build /src/configs ./configs
+COPY --from=build /src/migrations ./migrations
 
-USER nonroot:nonroot
+RUN chown -R app:app /app \
+    && chmod 555 ./app
+
+USER app
 ENTRYPOINT ["./app"]

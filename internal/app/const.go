@@ -10,7 +10,4 @@ const (
 
 	// IDCPanel - cpanel app id
 	IDCPanel
-
-	// IDCronjob - cronjob app id
-	IDCronjob
 )

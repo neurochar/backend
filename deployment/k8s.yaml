@@ -84,6 +84,12 @@ spec:
                       - secretRef:
                             name: backend-app-secret
 
+                  resources:
+                      requests:
+                          ephemeral-storage: "100Mi"
+                      limits:
+                          ephemeral-storage: "250Mi"
+
                   livenessProbe:
                       httpGet:
                           path: /v1/tests/liveness
@@ -111,7 +117,7 @@ metadata:
         app: backend-app
 
 spec:
-    type: NodePort
+    type: ClusterIP
 
     selector:
         app: backend-app
@@ -120,5 +126,4 @@ spec:
         - name: http
           port: 8080
           targetPort: 8080
-          nodePort: 30080
           protocol: TCP

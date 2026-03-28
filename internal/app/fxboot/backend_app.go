@@ -24,6 +24,7 @@ import (
 	"github.com/neurochar/backend/internal/infra/db"
 	"github.com/neurochar/backend/internal/infra/storage"
 	"github.com/neurochar/backend/internal/infra/storage/s3d"
+	"github.com/neurochar/backend/internal/jobs"
 	"github.com/neurochar/backend/pkg/backoff"
 	"github.com/neurochar/backend/pkg/pgclient"
 	"go.uber.org/fx"
@@ -84,6 +85,7 @@ func BackendAppGetOptionsMap(appID app.ID, cfg config.Config) OptionsMap {
 					return backendHTTP.NewHTTPFiber(httpConfig, logger, alertUsecase)
 				},
 			),
+			ProvidingIDJobsController: fx.Provide(jobs.NewController),
 			ProvidingIDDeliveryHTTP:   backendHTTP.FxModule,
 			ProvidingIDFileModule:     file.FxModule,
 			ProvidingIDUserModule:     user.FxModule,
@@ -112,6 +114,7 @@ type BAckendInvokeInput struct {
 	S3Client        *s3.Client
 	StorageClient   storage.Client
 	HttpFiberServer *fiber.App
+	JobsController  *jobs.Controller
 }
 
 // BackendAppInitInvoke - app init
@@ -171,6 +174,29 @@ func BackendAppInitInvoke(
 				in.Logger.InfoContext(ctx, "storage migrations skipped")
 			}
 
+			// Регистрация кронов
+			in.JobsController.RegisterProcessFilesToDelete(
+				time.Duration(in.Cfg.CronjobApp.Jobs.ProcessFilesToDelete.TimeoutMillisec)*time.Millisecond,
+				time.Duration(in.Cfg.CronjobApp.Jobs.ProcessFilesToDelete.FailedTimeoutMillisec)*time.Millisecond,
+			)
+
+			in.JobsController.RegisterProcessUnusedFiles(
+				time.Duration(in.Cfg.CronjobApp.Jobs.ProcessUnusedFiles.TimeoutMillisec)*time.Millisecond,
+				time.Duration(in.Cfg.CronjobApp.Jobs.ProcessUnusedFiles.FailedTimeoutMillisec)*time.Millisecond,
+				time.Duration(in.Cfg.CronjobApp.Jobs.ProcessUnusedFiles.UnusedTtlMin)*time.Minute,
+			)
+
+			in.JobsController.RegisterProcessEmailsToSend(
+				time.Duration(in.Cfg.CronjobApp.Jobs.ProcessEmailsToSend.TimeoutMillisec)*time.Millisecond,
+				time.Duration(in.Cfg.CronjobApp.Jobs.ProcessEmailsToSend.FailedTimeoutMillisec)*time.Millisecond,
+			)
+
+			in.JobsController.RegisterProcessEmailsToDelete(
+				time.Duration(in.Cfg.CronjobApp.Jobs.ProcessEmailsToDelete.TimeoutMillisec)*time.Millisecond,
+				time.Duration(in.Cfg.CronjobApp.Jobs.ProcessEmailsToDelete.FailedTimeoutMillisec)*time.Millisecond,
+				time.Duration(in.Cfg.CronjobApp.Jobs.ProcessEmailsToDelete.TtlMin)*time.Minute,
+			)
+
 			// Запускаем invoke функции до открытия
 			for _, invokeItem := range in.Invokes {
 				if invokeItem.StartBeforeOpen != nil {
@@ -180,6 +206,13 @@ func BackendAppInitInvoke(
 						return err
 					}
 				}
+			}
+
+			if in.Cfg.CronjobApp.Jobs.Autostart {
+				in.JobsController.StartAll()
+				in.Logger.InfoContext(ctx, "jobs started")
+			} else {
+				in.Logger.InfoContext(ctx, "jobs autostart skipped")
 			}
 
 			// Запускаем http
@@ -215,9 +248,15 @@ func BackendAppInitInvoke(
 					err := invokeItem.Stop(ctx)
 					if err != nil {
 						in.Logger.ErrorContext(ctx, "failed to execute invoke fn stop", slog.Any("error", err))
-						return err
 					}
 				}
+			}
+
+			err := in.JobsController.StopAll(ctx)
+			if err != nil {
+				in.Logger.ErrorContext(ctx, "failed to stop jobs", slog.Any("error", err))
+			} else {
+				in.Logger.InfoContext(ctx, "jobs stopped")
 			}
 
 			// Останавливаем http
