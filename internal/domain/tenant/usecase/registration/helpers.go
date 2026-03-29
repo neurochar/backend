@@ -36,7 +36,7 @@ func (uc *UsecaseImpl) sendRegistrationEmailToUser(
 
 	err = uc.emailing.SendAsyc(emailing.Message{
 		To:            registration.Email,
-		Subject:       "Регистрация в Neurochar",
+		Subject:       "Регистрация в Нейрочар",
 		TextHtml:      msg,
 		AutoTextPlain: true,
 	}, func(sendErr error) {
