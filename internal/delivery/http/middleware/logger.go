@@ -11,11 +11,12 @@ import (
 
 // RequestData - request data
 type RequestData struct {
-	Method  string `json:"method"`
-	Path    string `json:"path"`
-	URI     string `json:"uri"`
-	Referer string `json:"referer,omitempty"`
-	IPChain string `json:"ip_chain"`
+	Method  string            `json:"method"`
+	Path    string            `json:"path"`
+	URI     string            `json:"uri"`
+	Referer string            `json:"referer,omitempty"`
+	IPChain string            `json:"ip_chain"`
+	Headers map[string]string `json:"headers"`
 }
 
 // ResponseData - response data
@@ -29,12 +30,18 @@ type ResponseData struct {
 // Logger - middleware for logging
 func Logger(logger *slog.Logger) func(*fiber.Ctx) error {
 	return func(c *fiber.Ctx) error {
+		headers := make(map[string]string)
+		c.Request().Header.VisitAll(func(key, value []byte) {
+			headers[string(key)] = string(value)
+		})
+
 		reqData := RequestData{
 			Method:  c.Method(),
 			Path:    c.Path(),
 			URI:     string(c.Context().URI().QueryString()),
 			Referer: c.Get("X-Referer"),
 			IPChain: c.IP(),
+			Headers: headers,
 		}
 
 		ctxData, ctxKey := loghandler.SetData(c.Context(), "http.request", reqData)
