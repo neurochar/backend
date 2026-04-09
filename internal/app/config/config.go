@@ -4,6 +4,7 @@ package config
 import (
 	"log"
 	"os"
+	"time"
 
 	"github.com/ilyakaznacheev/cleanenv"
 )
@@ -146,11 +147,10 @@ type Config struct {
 		TargetChannel int64  `yaml:"target_channel" env:"ALERTS_TARGET_CHANNEL"`
 	}
 	Auth struct {
-		AccessTokenLifetimeSec int `yaml:"access_token_lifetime_sec" env:"AUTH_ACCESS_TOKEN_LIFETIME_SEC" env-default:"300"`
-		// nolint
-		RefreshTokenLifetimeHrs int    `yaml:"refresh_token_lifetime_hours" env:"AUTH_REFRESH_TOKEN_LIFETIME_HRS" env-default:"720"`
-		JwtAccessSecret         string `yaml:"jwt_access_secret" env:"AUTH_JWT_ACCESS_SECRET"`
-		JwtRefreshSecret        string `yaml:"jwt_refresh_secret" env:"AUTH_JWT_REFRESH_SECRET"`
+		AccessTokenLifetime  time.Duration `yaml:"access_token_lifetime" env:"AUTH_ACCESS_TOKEN_LIFETIME"`
+		RefreshTokenLifetime time.Duration `yaml:"refresh_token_lifetime" env:"AUTH_REFRESH_TOKEN_LIFETIME"`
+		JwtAccessSecret      string        `yaml:"jwt_access_secret" env:"AUTH_JWT_ACCESS_SECRET"`
+		JwtRefreshSecret     string        `yaml:"jwt_refresh_secret" env:"AUTH_JWT_REFRESH_SECRET"`
 	}
 }
 

@@ -3,7 +3,7 @@ package auth
 import (
 	"context"
 	"errors"
-	"net"
+	"net/netip"
 	"strings"
 	"time"
 
@@ -22,7 +22,7 @@ func (uc *UsecaseImpl) LoginByEmail(
 	tenantID uuid.UUID,
 	email string,
 	password string,
-	ip net.IP,
+	ip *netip.Addr,
 ) (*usecase.AuthSessionDTO, error) {
 	const op = "LoginByEmail"
 
@@ -69,7 +69,7 @@ func (uc *UsecaseImpl) LoginByEmail(
 			out.AccountDTO.Account.ID,
 			ip,
 			timeNow,
-			time.Duration(uc.cfg.Auth.RefreshTokenLifetimeHrs)*time.Hour,
+			uc.cfg.Auth.RefreshTokenLifetime,
 		)
 		if err := uc.sessionUC.Create(ctx, out.Session); err != nil {
 			return err
@@ -77,7 +77,7 @@ func (uc *UsecaseImpl) LoginByEmail(
 
 		out.AccountDTO.Account.SetLastRequestAt(&timeNow)
 		out.AccountDTO.Account.SetLastLoginAt(&timeNow)
-		out.AccountDTO.Account.SetLastRequestIP(&ip)
+		out.AccountDTO.Account.SetLastRequestIP(ip)
 
 		err = uc.accountUC.UpdateAccount(ctx, out.AccountDTO.Account)
 		if err != nil {
@@ -98,7 +98,7 @@ func (uc *UsecaseImpl) LoginByEmail(
 		out.AccountDTO.Account.RoleID,
 		nil,
 		timeNow,
-		time.Duration(uc.cfg.Auth.AccessTokenLifetimeSec)*time.Second,
+		uc.cfg.Auth.AccessTokenLifetime,
 	)
 
 	return out, nil
@@ -171,7 +171,7 @@ func (uc *UsecaseImpl) ParseRefreshToken(tokenStr string, validate bool) (*entit
 func (uc *UsecaseImpl) GenerateNewClaims(
 	ctx context.Context,
 	refreshClaims *entity.SessionRefreshClaims,
-	ip net.IP,
+	ip *netip.Addr,
 ) (*usecase.AuthSessionDTO, error) {
 	const op = "GenerateNewClaims"
 
@@ -224,7 +224,7 @@ func (uc *UsecaseImpl) GenerateNewClaims(
 			return usecase.ErrAccountBlocked
 		}
 
-		out.Session.GenerateNewRefresh(timeNow, time.Duration(uc.cfg.Auth.RefreshTokenLifetimeHrs)*time.Hour, ip)
+		out.Session.GenerateNewRefresh(timeNow, uc.cfg.Auth.RefreshTokenLifetime, ip)
 
 		err = uc.sessionUC.Update(ctx, out.Session)
 		if err != nil {
@@ -233,7 +233,7 @@ func (uc *UsecaseImpl) GenerateNewClaims(
 
 		out.AccountDTO.Account.SetLastRequestAt(&timeNow)
 		out.AccountDTO.Account.SetLastLoginAt(&timeNow)
-		out.AccountDTO.Account.SetLastRequestIP(&ip)
+		out.AccountDTO.Account.SetLastRequestIP(ip)
 
 		err = uc.accountUC.UpdateAccount(ctx, out.AccountDTO.Account)
 		if err != nil {
@@ -254,7 +254,7 @@ func (uc *UsecaseImpl) GenerateNewClaims(
 		out.AccountDTO.Account.RoleID,
 		nil,
 		timeNow,
-		time.Duration(uc.cfg.Auth.AccessTokenLifetimeSec)*time.Second,
+		uc.cfg.Auth.AccessTokenLifetime,
 	)
 
 	return out, nil

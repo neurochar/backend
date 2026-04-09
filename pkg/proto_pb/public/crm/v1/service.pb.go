@@ -26,14 +26,32 @@ var File_public_crm_v1_service_proto protoreflect.FileDescriptor
 
 const file_public_crm_v1_service_proto_rawDesc = "" +
 	"\n" +
-	"\x1bpublic/crm/v1/service.proto\x12\x06crm.v1\x1a\x17public/crm/v1/dto.proto\x1a\x1cgoogle/api/annotations.proto\x1a.protoc-gen-openapiv2/options/annotations.proto2\xa9\x06\n" +
-	"\x16CrmTenantPublicService\x12r\n" +
-	"\x0eListCandidates\x12\x1d.crm.v1.ListCandidatesRequest\x1a\x1e.crm.v1.ListCandidatesResponse\"!\x82\xd3\xe4\x93\x02\x1b\x12\x19/v1/tenant/crm/candidates\x12q\n" +
-	"\fGetCandidate\x12\x1b.crm.v1.GetCandidateRequest\x1a\x1c.crm.v1.GetCandidateResponse\"&\x82\xd3\xe4\x93\x02 \x12\x1e/v1/tenant/crm/candidates/{id}\x12x\n" +
-	"\x0fCreateCandidate\x12\x1e.crm.v1.CreateCandidateRequest\x1a\x1f.crm.v1.CreateCandidateResponse\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/v1/tenant/crm/candidates\x12z\n" +
-	"\x0ePatchCandidate\x12\x1d.crm.v1.PatchCandidateRequest\x1a\x1e.crm.v1.PatchCandidateResponse\")\x82\xd3\xe4\x93\x02#:\x01*2\x1e/v1/tenant/crm/candidates/{id}\x12z\n" +
-	"\x0fDeleteCandidate\x12\x1e.crm.v1.DeleteCandidateRequest\x1a\x1f.crm.v1.DeleteCandidateResponse\"&\x82\xd3\xe4\x93\x02 *\x1e/v1/tenant/crm/candidates/{id}\x12\xb5\x01\n" +
-	"\x19UploadCandidateResumeFile\x12(.crm.v1.UploadCandidateResumeFileRequest\x1a).crm.v1.UploadCandidateResumeFileResponse\"C\x92A\x152\x13multipart/form-data\x82\xd3\xe4\x93\x02%:\x01*\" /v1/tenant/crm/candidates-resumeB\x92\x01\n" +
+	"\x1bpublic/crm/v1/service.proto\x12\x06crm.v1\x1a\x17public/crm/v1/dto.proto\x1a\x1cgoogle/api/annotations.proto\x1a.protoc-gen-openapiv2/options/annotations.proto2\xf8\x06\n" +
+	"\x10CrmPublicService\x12\x80\x01\n" +
+	"\x0eListCandidates\x12\x1d.crm.v1.ListCandidatesRequest\x1a\x1e.crm.v1.ListCandidatesResponse\"/\x92A\x12b\x10\n" +
+	"\x0e\n" +
+	"\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x14\x12\x12/v1/crm/candidates\x12\x7f\n" +
+	"\fGetCandidate\x12\x1b.crm.v1.GetCandidateRequest\x1a\x1c.crm.v1.GetCandidateResponse\"4\x92A\x12b\x10\n" +
+	"\x0e\n" +
+	"\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x19\x12\x17/v1/crm/candidates/{id}\x12\x86\x01\n" +
+	"\x0fCreateCandidate\x12\x1e.crm.v1.CreateCandidateRequest\x1a\x1f.crm.v1.CreateCandidateResponse\"2\x92A\x12b\x10\n" +
+	"\x0e\n" +
+	"\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x17:\x01*\"\x12/v1/crm/candidates\x12\x88\x01\n" +
+	"\x0ePatchCandidate\x12\x1d.crm.v1.PatchCandidateRequest\x1a\x1e.crm.v1.PatchCandidateResponse\"7\x92A\x12b\x10\n" +
+	"\x0e\n" +
+	"\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x1c:\x01*2\x17/v1/crm/candidates/{id}\x12\x88\x01\n" +
+	"\x0fDeleteCandidate\x12\x1e.crm.v1.DeleteCandidateRequest\x1a\x1f.crm.v1.DeleteCandidateResponse\"4\x92A\x12b\x10\n" +
+	"\x0e\n" +
+	"\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x19*\x17/v1/crm/candidates/{id}\x12\xc0\x01\n" +
+	"\x19UploadCandidateResumeFile\x12(.crm.v1.UploadCandidateResumeFileRequest\x1a).crm.v1.UploadCandidateResumeFileResponse\"N\x92A'2\x13multipart/form-datab\x10\n" +
+	"\x0e\n" +
+	"\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/v1/crm/candidates-resumeB\x92\x01\n" +
 	"\n" +
 	"com.crm.v1B\fServiceProtoP\x01Z=github.com/neurochar/backend/pkg/proto_pb/public/crm/v1;crmv1\xa2\x02\x03CXX\xaa\x02\x06Crm.V1\xca\x02\x06Crm\\V1\xe2\x02\x12Crm\\V1\\GPBMetadata\xea\x02\aCrm::V1b\x06proto3"
 
@@ -52,18 +70,18 @@ var file_public_crm_v1_service_proto_goTypes = []any{
 	(*UploadCandidateResumeFileResponse)(nil), // 11: crm.v1.UploadCandidateResumeFileResponse
 }
 var file_public_crm_v1_service_proto_depIdxs = []int32{
-	0,  // 0: crm.v1.CrmTenantPublicService.ListCandidates:input_type -> crm.v1.ListCandidatesRequest
-	1,  // 1: crm.v1.CrmTenantPublicService.GetCandidate:input_type -> crm.v1.GetCandidateRequest
-	2,  // 2: crm.v1.CrmTenantPublicService.CreateCandidate:input_type -> crm.v1.CreateCandidateRequest
-	3,  // 3: crm.v1.CrmTenantPublicService.PatchCandidate:input_type -> crm.v1.PatchCandidateRequest
-	4,  // 4: crm.v1.CrmTenantPublicService.DeleteCandidate:input_type -> crm.v1.DeleteCandidateRequest
-	5,  // 5: crm.v1.CrmTenantPublicService.UploadCandidateResumeFile:input_type -> crm.v1.UploadCandidateResumeFileRequest
-	6,  // 6: crm.v1.CrmTenantPublicService.ListCandidates:output_type -> crm.v1.ListCandidatesResponse
-	7,  // 7: crm.v1.CrmTenantPublicService.GetCandidate:output_type -> crm.v1.GetCandidateResponse
-	8,  // 8: crm.v1.CrmTenantPublicService.CreateCandidate:output_type -> crm.v1.CreateCandidateResponse
-	9,  // 9: crm.v1.CrmTenantPublicService.PatchCandidate:output_type -> crm.v1.PatchCandidateResponse
-	10, // 10: crm.v1.CrmTenantPublicService.DeleteCandidate:output_type -> crm.v1.DeleteCandidateResponse
-	11, // 11: crm.v1.CrmTenantPublicService.UploadCandidateResumeFile:output_type -> crm.v1.UploadCandidateResumeFileResponse
+	0,  // 0: crm.v1.CrmPublicService.ListCandidates:input_type -> crm.v1.ListCandidatesRequest
+	1,  // 1: crm.v1.CrmPublicService.GetCandidate:input_type -> crm.v1.GetCandidateRequest
+	2,  // 2: crm.v1.CrmPublicService.CreateCandidate:input_type -> crm.v1.CreateCandidateRequest
+	3,  // 3: crm.v1.CrmPublicService.PatchCandidate:input_type -> crm.v1.PatchCandidateRequest
+	4,  // 4: crm.v1.CrmPublicService.DeleteCandidate:input_type -> crm.v1.DeleteCandidateRequest
+	5,  // 5: crm.v1.CrmPublicService.UploadCandidateResumeFile:input_type -> crm.v1.UploadCandidateResumeFileRequest
+	6,  // 6: crm.v1.CrmPublicService.ListCandidates:output_type -> crm.v1.ListCandidatesResponse
+	7,  // 7: crm.v1.CrmPublicService.GetCandidate:output_type -> crm.v1.GetCandidateResponse
+	8,  // 8: crm.v1.CrmPublicService.CreateCandidate:output_type -> crm.v1.CreateCandidateResponse
+	9,  // 9: crm.v1.CrmPublicService.PatchCandidate:output_type -> crm.v1.PatchCandidateResponse
+	10, // 10: crm.v1.CrmPublicService.DeleteCandidate:output_type -> crm.v1.DeleteCandidateResponse
+	11, // 11: crm.v1.CrmPublicService.UploadCandidateResumeFile:output_type -> crm.v1.UploadCandidateResumeFileResponse
 	6,  // [6:12] is the sub-list for method output_type
 	0,  // [0:6] is the sub-list for method input_type
 	0,  // [0:0] is the sub-list for extension type_name

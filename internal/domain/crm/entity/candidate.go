@@ -17,7 +17,7 @@ var ErrCandidateGenderUnknown = appErrors.ErrBadRequest.Extend("gender unknown")
 type CandidateGender uint8
 
 const (
-	CandidateGenderUnknown CandidateGender = 0
+	CandidateGenderUnspecified CandidateGender = 0
 	CandidateGenderMale    CandidateGender = 1
 	CandidateGenderFemale  CandidateGender = 2
 )
@@ -25,13 +25,13 @@ const (
 func CandidateGenderFromUint8(value uint8) (CandidateGender, error) {
 	switch value {
 	case 0:
-		return CandidateGenderUnknown, nil
+		return CandidateGenderUnspecified, nil
 	case 1:
 		return CandidateGenderMale, nil
 	case 2:
 		return CandidateGenderFemale, nil
 	default:
-		return CandidateGenderUnknown, ErrCandidateGenderUnknown
+		return CandidateGenderUnspecified, ErrCandidateGenderUnknown
 	}
 }
 

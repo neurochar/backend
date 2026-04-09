@@ -35,9 +35,9 @@ var (
 	_ = metadata.Join
 )
 
-var filter_CrmTenantPublicService_ListCandidates_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+var filter_CrmPublicService_ListCandidates_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 
-func request_CrmTenantPublicService_ListCandidates_0(ctx context.Context, marshaler runtime.Marshaler, client CrmTenantPublicServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_CrmPublicService_ListCandidates_0(ctx context.Context, marshaler runtime.Marshaler, client CrmPublicServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq ListCandidatesRequest
 		metadata runtime.ServerMetadata
@@ -48,14 +48,14 @@ func request_CrmTenantPublicService_ListCandidates_0(ctx context.Context, marsha
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_CrmTenantPublicService_ListCandidates_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_CrmPublicService_ListCandidates_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	msg, err := client.ListCandidates(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 }
 
-func local_request_CrmTenantPublicService_ListCandidates_0(ctx context.Context, marshaler runtime.Marshaler, server CrmTenantPublicServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_CrmPublicService_ListCandidates_0(ctx context.Context, marshaler runtime.Marshaler, server CrmPublicServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq ListCandidatesRequest
 		metadata runtime.ServerMetadata
@@ -63,14 +63,14 @@ func local_request_CrmTenantPublicService_ListCandidates_0(ctx context.Context, 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_CrmTenantPublicService_ListCandidates_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_CrmPublicService_ListCandidates_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	msg, err := server.ListCandidates(ctx, &protoReq)
 	return msg, metadata, err
 }
 
-func request_CrmTenantPublicService_GetCandidate_0(ctx context.Context, marshaler runtime.Marshaler, client CrmTenantPublicServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_CrmPublicService_GetCandidate_0(ctx context.Context, marshaler runtime.Marshaler, client CrmPublicServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq GetCandidateRequest
 		metadata runtime.ServerMetadata
@@ -91,7 +91,7 @@ func request_CrmTenantPublicService_GetCandidate_0(ctx context.Context, marshale
 	return msg, metadata, err
 }
 
-func local_request_CrmTenantPublicService_GetCandidate_0(ctx context.Context, marshaler runtime.Marshaler, server CrmTenantPublicServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_CrmPublicService_GetCandidate_0(ctx context.Context, marshaler runtime.Marshaler, server CrmPublicServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq GetCandidateRequest
 		metadata runtime.ServerMetadata
@@ -109,7 +109,7 @@ func local_request_CrmTenantPublicService_GetCandidate_0(ctx context.Context, ma
 	return msg, metadata, err
 }
 
-func request_CrmTenantPublicService_CreateCandidate_0(ctx context.Context, marshaler runtime.Marshaler, client CrmTenantPublicServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_CrmPublicService_CreateCandidate_0(ctx context.Context, marshaler runtime.Marshaler, client CrmPublicServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq CreateCandidateRequest
 		metadata runtime.ServerMetadata
@@ -124,7 +124,7 @@ func request_CrmTenantPublicService_CreateCandidate_0(ctx context.Context, marsh
 	return msg, metadata, err
 }
 
-func local_request_CrmTenantPublicService_CreateCandidate_0(ctx context.Context, marshaler runtime.Marshaler, server CrmTenantPublicServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_CrmPublicService_CreateCandidate_0(ctx context.Context, marshaler runtime.Marshaler, server CrmPublicServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq CreateCandidateRequest
 		metadata runtime.ServerMetadata
@@ -136,7 +136,7 @@ func local_request_CrmTenantPublicService_CreateCandidate_0(ctx context.Context,
 	return msg, metadata, err
 }
 
-func request_CrmTenantPublicService_PatchCandidate_0(ctx context.Context, marshaler runtime.Marshaler, client CrmTenantPublicServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_CrmPublicService_PatchCandidate_0(ctx context.Context, marshaler runtime.Marshaler, client CrmPublicServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq PatchCandidateRequest
 		metadata runtime.ServerMetadata
@@ -160,7 +160,7 @@ func request_CrmTenantPublicService_PatchCandidate_0(ctx context.Context, marsha
 	return msg, metadata, err
 }
 
-func local_request_CrmTenantPublicService_PatchCandidate_0(ctx context.Context, marshaler runtime.Marshaler, server CrmTenantPublicServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_CrmPublicService_PatchCandidate_0(ctx context.Context, marshaler runtime.Marshaler, server CrmPublicServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq PatchCandidateRequest
 		metadata runtime.ServerMetadata
@@ -181,7 +181,7 @@ func local_request_CrmTenantPublicService_PatchCandidate_0(ctx context.Context, 
 	return msg, metadata, err
 }
 
-func request_CrmTenantPublicService_DeleteCandidate_0(ctx context.Context, marshaler runtime.Marshaler, client CrmTenantPublicServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_CrmPublicService_DeleteCandidate_0(ctx context.Context, marshaler runtime.Marshaler, client CrmPublicServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq DeleteCandidateRequest
 		metadata runtime.ServerMetadata
@@ -202,7 +202,7 @@ func request_CrmTenantPublicService_DeleteCandidate_0(ctx context.Context, marsh
 	return msg, metadata, err
 }
 
-func local_request_CrmTenantPublicService_DeleteCandidate_0(ctx context.Context, marshaler runtime.Marshaler, server CrmTenantPublicServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_CrmPublicService_DeleteCandidate_0(ctx context.Context, marshaler runtime.Marshaler, server CrmPublicServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq DeleteCandidateRequest
 		metadata runtime.ServerMetadata
@@ -220,7 +220,7 @@ func local_request_CrmTenantPublicService_DeleteCandidate_0(ctx context.Context,
 	return msg, metadata, err
 }
 
-func request_CrmTenantPublicService_UploadCandidateResumeFile_0(ctx context.Context, marshaler runtime.Marshaler, client CrmTenantPublicServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_CrmPublicService_UploadCandidateResumeFile_0(ctx context.Context, marshaler runtime.Marshaler, client CrmPublicServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq UploadCandidateResumeFileRequest
 		metadata runtime.ServerMetadata
@@ -235,7 +235,7 @@ func request_CrmTenantPublicService_UploadCandidateResumeFile_0(ctx context.Cont
 	return msg, metadata, err
 }
 
-func local_request_CrmTenantPublicService_UploadCandidateResumeFile_0(ctx context.Context, marshaler runtime.Marshaler, server CrmTenantPublicServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_CrmPublicService_UploadCandidateResumeFile_0(ctx context.Context, marshaler runtime.Marshaler, server CrmPublicServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq UploadCandidateResumeFileRequest
 		metadata runtime.ServerMetadata
@@ -247,139 +247,139 @@ func local_request_CrmTenantPublicService_UploadCandidateResumeFile_0(ctx contex
 	return msg, metadata, err
 }
 
-// RegisterCrmTenantPublicServiceHandlerServer registers the http handlers for service CrmTenantPublicService to "mux".
-// UnaryRPC     :call CrmTenantPublicServiceServer directly.
+// RegisterCrmPublicServiceHandlerServer registers the http handlers for service CrmPublicService to "mux".
+// UnaryRPC     :call CrmPublicServiceServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
-// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterCrmTenantPublicServiceHandlerFromEndpoint instead.
+// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterCrmPublicServiceHandlerFromEndpoint instead.
 // GRPC interceptors will not work for this type of registration. To use interceptors, you must use the "runtime.WithMiddlewares" option in the "runtime.NewServeMux" call.
-func RegisterCrmTenantPublicServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server CrmTenantPublicServiceServer) error {
-	mux.Handle(http.MethodGet, pattern_CrmTenantPublicService_ListCandidates_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+func RegisterCrmPublicServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server CrmPublicServiceServer) error {
+	mux.Handle(http.MethodGet, pattern_CrmPublicService_ListCandidates_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/crm.v1.CrmTenantPublicService/ListCandidates", runtime.WithHTTPPathPattern("/v1/tenant/crm/candidates"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/crm.v1.CrmPublicService/ListCandidates", runtime.WithHTTPPathPattern("/v1/crm/candidates"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_CrmTenantPublicService_ListCandidates_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_CrmPublicService_ListCandidates_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CrmTenantPublicService_ListCandidates_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CrmPublicService_ListCandidates_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodGet, pattern_CrmTenantPublicService_GetCandidate_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_CrmPublicService_GetCandidate_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/crm.v1.CrmTenantPublicService/GetCandidate", runtime.WithHTTPPathPattern("/v1/tenant/crm/candidates/{id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/crm.v1.CrmPublicService/GetCandidate", runtime.WithHTTPPathPattern("/v1/crm/candidates/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_CrmTenantPublicService_GetCandidate_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_CrmPublicService_GetCandidate_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CrmTenantPublicService_GetCandidate_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CrmPublicService_GetCandidate_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_CrmTenantPublicService_CreateCandidate_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_CrmPublicService_CreateCandidate_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/crm.v1.CrmTenantPublicService/CreateCandidate", runtime.WithHTTPPathPattern("/v1/tenant/crm/candidates"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/crm.v1.CrmPublicService/CreateCandidate", runtime.WithHTTPPathPattern("/v1/crm/candidates"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_CrmTenantPublicService_CreateCandidate_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_CrmPublicService_CreateCandidate_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CrmTenantPublicService_CreateCandidate_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CrmPublicService_CreateCandidate_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPatch, pattern_CrmTenantPublicService_PatchCandidate_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPatch, pattern_CrmPublicService_PatchCandidate_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/crm.v1.CrmTenantPublicService/PatchCandidate", runtime.WithHTTPPathPattern("/v1/tenant/crm/candidates/{id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/crm.v1.CrmPublicService/PatchCandidate", runtime.WithHTTPPathPattern("/v1/crm/candidates/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_CrmTenantPublicService_PatchCandidate_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_CrmPublicService_PatchCandidate_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CrmTenantPublicService_PatchCandidate_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CrmPublicService_PatchCandidate_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodDelete, pattern_CrmTenantPublicService_DeleteCandidate_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodDelete, pattern_CrmPublicService_DeleteCandidate_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/crm.v1.CrmTenantPublicService/DeleteCandidate", runtime.WithHTTPPathPattern("/v1/tenant/crm/candidates/{id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/crm.v1.CrmPublicService/DeleteCandidate", runtime.WithHTTPPathPattern("/v1/crm/candidates/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_CrmTenantPublicService_DeleteCandidate_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_CrmPublicService_DeleteCandidate_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CrmTenantPublicService_DeleteCandidate_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CrmPublicService_DeleteCandidate_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_CrmTenantPublicService_UploadCandidateResumeFile_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_CrmPublicService_UploadCandidateResumeFile_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/crm.v1.CrmTenantPublicService/UploadCandidateResumeFile", runtime.WithHTTPPathPattern("/v1/tenant/crm/candidates-resume"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/crm.v1.CrmPublicService/UploadCandidateResumeFile", runtime.WithHTTPPathPattern("/v1/crm/candidates-resume"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_CrmTenantPublicService_UploadCandidateResumeFile_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_CrmPublicService_UploadCandidateResumeFile_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CrmTenantPublicService_UploadCandidateResumeFile_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CrmPublicService_UploadCandidateResumeFile_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 
 	return nil
 }
 
-// RegisterCrmTenantPublicServiceHandlerFromEndpoint is same as RegisterCrmTenantPublicServiceHandler but
+// RegisterCrmPublicServiceHandlerFromEndpoint is same as RegisterCrmPublicServiceHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
-func RegisterCrmTenantPublicServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+func RegisterCrmPublicServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.NewClient(endpoint, opts...)
 	if err != nil {
 		return err
@@ -398,140 +398,140 @@ func RegisterCrmTenantPublicServiceHandlerFromEndpoint(ctx context.Context, mux 
 			}
 		}()
 	}()
-	return RegisterCrmTenantPublicServiceHandler(ctx, mux, conn)
+	return RegisterCrmPublicServiceHandler(ctx, mux, conn)
 }
 
-// RegisterCrmTenantPublicServiceHandler registers the http handlers for service CrmTenantPublicService to "mux".
+// RegisterCrmPublicServiceHandler registers the http handlers for service CrmPublicService to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterCrmTenantPublicServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterCrmTenantPublicServiceHandlerClient(ctx, mux, NewCrmTenantPublicServiceClient(conn))
+func RegisterCrmPublicServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterCrmPublicServiceHandlerClient(ctx, mux, NewCrmPublicServiceClient(conn))
 }
 
-// RegisterCrmTenantPublicServiceHandlerClient registers the http handlers for service CrmTenantPublicService
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "CrmTenantPublicServiceClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "CrmTenantPublicServiceClient"
+// RegisterCrmPublicServiceHandlerClient registers the http handlers for service CrmPublicService
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "CrmPublicServiceClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "CrmPublicServiceClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "CrmTenantPublicServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
-func RegisterCrmTenantPublicServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client CrmTenantPublicServiceClient) error {
-	mux.Handle(http.MethodGet, pattern_CrmTenantPublicService_ListCandidates_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+// "CrmPublicServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
+func RegisterCrmPublicServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client CrmPublicServiceClient) error {
+	mux.Handle(http.MethodGet, pattern_CrmPublicService_ListCandidates_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/crm.v1.CrmTenantPublicService/ListCandidates", runtime.WithHTTPPathPattern("/v1/tenant/crm/candidates"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/crm.v1.CrmPublicService/ListCandidates", runtime.WithHTTPPathPattern("/v1/crm/candidates"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_CrmTenantPublicService_ListCandidates_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_CrmPublicService_ListCandidates_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CrmTenantPublicService_ListCandidates_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CrmPublicService_ListCandidates_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodGet, pattern_CrmTenantPublicService_GetCandidate_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_CrmPublicService_GetCandidate_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/crm.v1.CrmTenantPublicService/GetCandidate", runtime.WithHTTPPathPattern("/v1/tenant/crm/candidates/{id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/crm.v1.CrmPublicService/GetCandidate", runtime.WithHTTPPathPattern("/v1/crm/candidates/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_CrmTenantPublicService_GetCandidate_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_CrmPublicService_GetCandidate_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CrmTenantPublicService_GetCandidate_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CrmPublicService_GetCandidate_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_CrmTenantPublicService_CreateCandidate_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_CrmPublicService_CreateCandidate_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/crm.v1.CrmTenantPublicService/CreateCandidate", runtime.WithHTTPPathPattern("/v1/tenant/crm/candidates"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/crm.v1.CrmPublicService/CreateCandidate", runtime.WithHTTPPathPattern("/v1/crm/candidates"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_CrmTenantPublicService_CreateCandidate_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_CrmPublicService_CreateCandidate_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CrmTenantPublicService_CreateCandidate_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CrmPublicService_CreateCandidate_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPatch, pattern_CrmTenantPublicService_PatchCandidate_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPatch, pattern_CrmPublicService_PatchCandidate_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/crm.v1.CrmTenantPublicService/PatchCandidate", runtime.WithHTTPPathPattern("/v1/tenant/crm/candidates/{id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/crm.v1.CrmPublicService/PatchCandidate", runtime.WithHTTPPathPattern("/v1/crm/candidates/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_CrmTenantPublicService_PatchCandidate_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_CrmPublicService_PatchCandidate_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CrmTenantPublicService_PatchCandidate_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CrmPublicService_PatchCandidate_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodDelete, pattern_CrmTenantPublicService_DeleteCandidate_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodDelete, pattern_CrmPublicService_DeleteCandidate_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/crm.v1.CrmTenantPublicService/DeleteCandidate", runtime.WithHTTPPathPattern("/v1/tenant/crm/candidates/{id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/crm.v1.CrmPublicService/DeleteCandidate", runtime.WithHTTPPathPattern("/v1/crm/candidates/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_CrmTenantPublicService_DeleteCandidate_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_CrmPublicService_DeleteCandidate_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CrmTenantPublicService_DeleteCandidate_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CrmPublicService_DeleteCandidate_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_CrmTenantPublicService_UploadCandidateResumeFile_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_CrmPublicService_UploadCandidateResumeFile_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/crm.v1.CrmTenantPublicService/UploadCandidateResumeFile", runtime.WithHTTPPathPattern("/v1/tenant/crm/candidates-resume"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/crm.v1.CrmPublicService/UploadCandidateResumeFile", runtime.WithHTTPPathPattern("/v1/crm/candidates-resume"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_CrmTenantPublicService_UploadCandidateResumeFile_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_CrmPublicService_UploadCandidateResumeFile_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_CrmTenantPublicService_UploadCandidateResumeFile_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CrmPublicService_UploadCandidateResumeFile_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 	return nil
 }
 
 var (
-	pattern_CrmTenantPublicService_ListCandidates_0            = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v1", "tenant", "crm", "candidates"}, ""))
-	pattern_CrmTenantPublicService_GetCandidate_0              = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"v1", "tenant", "crm", "candidates", "id"}, ""))
-	pattern_CrmTenantPublicService_CreateCandidate_0           = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v1", "tenant", "crm", "candidates"}, ""))
-	pattern_CrmTenantPublicService_PatchCandidate_0            = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"v1", "tenant", "crm", "candidates", "id"}, ""))
-	pattern_CrmTenantPublicService_DeleteCandidate_0           = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"v1", "tenant", "crm", "candidates", "id"}, ""))
-	pattern_CrmTenantPublicService_UploadCandidateResumeFile_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v1", "tenant", "crm", "candidates-resume"}, ""))
+	pattern_CrmPublicService_ListCandidates_0            = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "crm", "candidates"}, ""))
+	pattern_CrmPublicService_GetCandidate_0              = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "crm", "candidates", "id"}, ""))
+	pattern_CrmPublicService_CreateCandidate_0           = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "crm", "candidates"}, ""))
+	pattern_CrmPublicService_PatchCandidate_0            = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "crm", "candidates", "id"}, ""))
+	pattern_CrmPublicService_DeleteCandidate_0           = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "crm", "candidates", "id"}, ""))
+	pattern_CrmPublicService_UploadCandidateResumeFile_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "crm", "candidates-resume"}, ""))
 )
 
 var (
-	forward_CrmTenantPublicService_ListCandidates_0            = runtime.ForwardResponseMessage
-	forward_CrmTenantPublicService_GetCandidate_0              = runtime.ForwardResponseMessage
-	forward_CrmTenantPublicService_CreateCandidate_0           = runtime.ForwardResponseMessage
-	forward_CrmTenantPublicService_PatchCandidate_0            = runtime.ForwardResponseMessage
-	forward_CrmTenantPublicService_DeleteCandidate_0           = runtime.ForwardResponseMessage
-	forward_CrmTenantPublicService_UploadCandidateResumeFile_0 = runtime.ForwardResponseMessage
+	forward_CrmPublicService_ListCandidates_0            = runtime.ForwardResponseMessage
+	forward_CrmPublicService_GetCandidate_0              = runtime.ForwardResponseMessage
+	forward_CrmPublicService_CreateCandidate_0           = runtime.ForwardResponseMessage
+	forward_CrmPublicService_PatchCandidate_0            = runtime.ForwardResponseMessage
+	forward_CrmPublicService_DeleteCandidate_0           = runtime.ForwardResponseMessage
+	forward_CrmPublicService_UploadCandidateResumeFile_0 = runtime.ForwardResponseMessage
 )

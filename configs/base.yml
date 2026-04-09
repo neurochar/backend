@@ -89,7 +89,7 @@ postgres:
         dsn:
 
 storage:
-    up_migrations: true
+    up_migrations: false
     s3_endpoint: "http://127.0.0.1:9000"
     s3_access_key: "minioadmin"
     s3_secret_key: "minioadmin"
@@ -106,14 +106,14 @@ emailing:
     smtp_user:
     smtp_password:
     default_from_email: no-reply@neurochar.ru
-    default_from_title: Neurochar
+    default_from_title: Нейрочар
 
 alerts:
     bot_token:
     target_channel:
 
 auth:
-    access_token_lifetime_sec: 900
-    refresh_token_lifetime_hours: 720
+    access_token_lifetime: 900s
+    refresh_token_lifetime: 720h
     jwt_access_secret:
     jwt_refresh_secret:

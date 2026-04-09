@@ -14,8 +14,9 @@ import (
 var ErrRoomAlreadyFinished = appErrors.ErrBadRequest.WithTextCode("ROOM_ALREADY_FINISHED").WithHints("room already finished")
 
 type RoomListOptions struct {
-	FilterTenantID *uuid.UUID
-	Sort           []uctypes.SortOption[RoomListOptionsSortField]
+	FilterTenantID    *uuid.UUID
+	FilterCandidateID *uuid.UUID
+	Sort              []uctypes.SortOption[RoomListOptionsSortField]
 }
 
 type RoomListOptionsSortField string

@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"context"
-	"net"
+	"net/netip"
 
 	"github.com/google/uuid"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
@@ -35,7 +35,7 @@ type AuthUsecase interface {
 		tenantID uuid.UUID,
 		email string,
 		password string,
-		ip net.IP,
+		ip *netip.Addr,
 	) (res *AuthSessionDTO, resErr error)
 
 	IsSessionConfirmed(
@@ -51,5 +51,9 @@ type AuthUsecase interface {
 
 	ParseRefreshToken(token string, validate bool) (res *entity.SessionRefreshClaims, resErr error)
 
-	GenerateNewClaims(ctx context.Context, refresh *entity.SessionRefreshClaims, ip net.IP) (res *AuthSessionDTO, resErr error)
+	GenerateNewClaims(
+		ctx context.Context,
+		refresh *entity.SessionRefreshClaims,
+		ip *netip.Addr,
+	) (res *AuthSessionDTO, resErr error)
 }

@@ -24,30 +24,27 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type Tenant struct {
+type IsExistsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Version       int64                  `protobuf:"varint,2,opt,name=version,proto3" json:"version,omitempty"`
-	TextId        string                 `protobuf:"bytes,3,opt,name=text_id,json=textId,proto3" json:"text_id,omitempty"`
-	Name          string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	TextId        string                 `protobuf:"bytes,1,opt,name=text_id,json=textId,proto3" json:"text_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Tenant) Reset() {
-	*x = Tenant{}
+func (x *IsExistsRequest) Reset() {
+	*x = IsExistsRequest{}
 	mi := &file_public_tenant_v1_dto_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *Tenant) String() string {
+func (x *IsExistsRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Tenant) ProtoMessage() {}
+func (*IsExistsRequest) ProtoMessage() {}
 
-func (x *Tenant) ProtoReflect() protoreflect.Message {
+func (x *IsExistsRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_public_tenant_v1_dto_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -59,49 +56,220 @@ func (x *Tenant) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Tenant.ProtoReflect.Descriptor instead.
-func (*Tenant) Descriptor() ([]byte, []int) {
+// Deprecated: Use IsExistsRequest.ProtoReflect.Descriptor instead.
+func (*IsExistsRequest) Descriptor() ([]byte, []int) {
 	return file_public_tenant_v1_dto_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Tenant) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-func (x *Tenant) GetVersion() int64 {
-	if x != nil {
-		return x.Version
-	}
-	return 0
-}
-
-func (x *Tenant) GetTextId() string {
+func (x *IsExistsRequest) GetTextId() string {
 	if x != nil {
 		return x.TextId
 	}
 	return ""
 }
 
-func (x *Tenant) GetName() string {
+type IsExistsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *IsExistsResponse) Reset() {
+	*x = IsExistsResponse{}
+	mi := &file_public_tenant_v1_dto_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *IsExistsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*IsExistsResponse) ProtoMessage() {}
+
+func (x *IsExistsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_public_tenant_v1_dto_proto_msgTypes[1]
 	if x != nil {
-		return x.Name
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use IsExistsResponse.ProtoReflect.Descriptor instead.
+func (*IsExistsResponse) Descriptor() ([]byte, []int) {
+	return file_public_tenant_v1_dto_proto_rawDescGZIP(), []int{1}
+}
+
+type PatchTenantRequestPayload struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          *string                `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PatchTenantRequestPayload) Reset() {
+	*x = PatchTenantRequestPayload{}
+	mi := &file_public_tenant_v1_dto_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PatchTenantRequestPayload) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PatchTenantRequestPayload) ProtoMessage() {}
+
+func (x *PatchTenantRequestPayload) ProtoReflect() protoreflect.Message {
+	mi := &file_public_tenant_v1_dto_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PatchTenantRequestPayload.ProtoReflect.Descriptor instead.
+func (*PatchTenantRequestPayload) Descriptor() ([]byte, []int) {
+	return file_public_tenant_v1_dto_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *PatchTenantRequestPayload) GetName() string {
+	if x != nil && x.Name != nil {
+		return *x.Name
 	}
 	return ""
+}
+
+type PatchTenantRequest struct {
+	state            protoimpl.MessageState     `protogen:"open.v1"`
+	Id               string                     `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Payload          *PatchTenantRequestPayload `protobuf:"bytes,2,opt,name=payload,proto3" json:"payload,omitempty"`
+	Version          int64                      `protobuf:"varint,3,opt,name=version,proto3" json:"version,omitempty"`
+	SkipVersionCheck bool                       `protobuf:"varint,4,opt,name=skip_version_check,json=skipVersionCheck,proto3" json:"skip_version_check,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *PatchTenantRequest) Reset() {
+	*x = PatchTenantRequest{}
+	mi := &file_public_tenant_v1_dto_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PatchTenantRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PatchTenantRequest) ProtoMessage() {}
+
+func (x *PatchTenantRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_public_tenant_v1_dto_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PatchTenantRequest.ProtoReflect.Descriptor instead.
+func (*PatchTenantRequest) Descriptor() ([]byte, []int) {
+	return file_public_tenant_v1_dto_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *PatchTenantRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *PatchTenantRequest) GetPayload() *PatchTenantRequestPayload {
+	if x != nil {
+		return x.Payload
+	}
+	return nil
+}
+
+func (x *PatchTenantRequest) GetVersion() int64 {
+	if x != nil {
+		return x.Version
+	}
+	return 0
+}
+
+func (x *PatchTenantRequest) GetSkipVersionCheck() bool {
+	if x != nil {
+		return x.SkipVersionCheck
+	}
+	return false
+}
+
+type PatchTenantResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PatchTenantResponse) Reset() {
+	*x = PatchTenantResponse{}
+	mi := &file_public_tenant_v1_dto_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PatchTenantResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PatchTenantResponse) ProtoMessage() {}
+
+func (x *PatchTenantResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_public_tenant_v1_dto_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PatchTenantResponse.ProtoReflect.Descriptor instead.
+func (*PatchTenantResponse) Descriptor() ([]byte, []int) {
+	return file_public_tenant_v1_dto_proto_rawDescGZIP(), []int{4}
 }
 
 var File_public_tenant_v1_dto_proto protoreflect.FileDescriptor
 
 const file_public_tenant_v1_dto_proto_rawDesc = "" +
 	"\n" +
-	"\x1apublic/tenant/v1/dto.proto\x12\ttenant.v1\x1a\x18common/types/types.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bbuf/validate/validate.proto\"_\n" +
-	"\x06Tenant\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
-	"\aversion\x18\x02 \x01(\x03R\aversion\x12\x17\n" +
-	"\atext_id\x18\x03 \x01(\tR\x06textId\x12\x12\n" +
-	"\x04name\x18\x04 \x01(\tR\x04nameB\xa3\x01\n" +
+	"\x1apublic/tenant/v1/dto.proto\x12\ttenant.v1\x1a\x18common/types/types.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bbuf/validate/validate.proto\"*\n" +
+	"\x0fIsExistsRequest\x12\x17\n" +
+	"\atext_id\x18\x01 \x01(\tR\x06textId\"\x12\n" +
+	"\x10IsExistsResponse\"I\n" +
+	"\x19PatchTenantRequestPayload\x12#\n" +
+	"\x04name\x18\x01 \x01(\tB\n" +
+	"\xbaH\ar\x05\x10\x01\x18\x96\x01H\x00R\x04name\x88\x01\x01B\a\n" +
+	"\x05_name\"\xbe\x01\n" +
+	"\x12PatchTenantRequest\x12\x18\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\x12F\n" +
+	"\apayload\x18\x02 \x01(\v2$.tenant.v1.PatchTenantRequestPayloadB\x06\xbaH\x03\xc8\x01\x01R\apayload\x12\x18\n" +
+	"\aversion\x18\x03 \x01(\x03R\aversion\x12,\n" +
+	"\x12skip_version_check\x18\x04 \x01(\bR\x10skipVersionCheck\"\x15\n" +
+	"\x13PatchTenantResponseB\xa3\x01\n" +
 	"\rcom.tenant.v1B\bDtoProtoP\x01ZCgithub.com/neurochar/backend/pkg/proto_pb/public/tenant/v1;tenantv1\xa2\x02\x03TXX\xaa\x02\tTenant.V1\xca\x02\tTenant\\V1\xe2\x02\x15Tenant\\V1\\GPBMetadata\xea\x02\n" +
 	"Tenant::V1b\x06proto3"
 
@@ -117,16 +285,21 @@ func file_public_tenant_v1_dto_proto_rawDescGZIP() []byte {
 	return file_public_tenant_v1_dto_proto_rawDescData
 }
 
-var file_public_tenant_v1_dto_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_public_tenant_v1_dto_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_public_tenant_v1_dto_proto_goTypes = []any{
-	(*Tenant)(nil), // 0: tenant.v1.Tenant
+	(*IsExistsRequest)(nil),           // 0: tenant.v1.IsExistsRequest
+	(*IsExistsResponse)(nil),          // 1: tenant.v1.IsExistsResponse
+	(*PatchTenantRequestPayload)(nil), // 2: tenant.v1.PatchTenantRequestPayload
+	(*PatchTenantRequest)(nil),        // 3: tenant.v1.PatchTenantRequest
+	(*PatchTenantResponse)(nil),       // 4: tenant.v1.PatchTenantResponse
 }
 var file_public_tenant_v1_dto_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	2, // 0: tenant.v1.PatchTenantRequest.payload:type_name -> tenant.v1.PatchTenantRequestPayload
+	1, // [1:1] is the sub-list for method output_type
+	1, // [1:1] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_public_tenant_v1_dto_proto_init() }
@@ -134,13 +307,14 @@ func file_public_tenant_v1_dto_proto_init() {
 	if File_public_tenant_v1_dto_proto != nil {
 		return
 	}
+	file_public_tenant_v1_dto_proto_msgTypes[2].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_public_tenant_v1_dto_proto_rawDesc), len(file_public_tenant_v1_dto_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   1,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

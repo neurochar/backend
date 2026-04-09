@@ -1,7 +1,7 @@
 package pg
 
 import (
-	"net"
+	"net/netip"
 	"time"
 
 	"github.com/google/uuid"
@@ -20,14 +20,14 @@ func init() {
 }
 
 type SessionDBModel struct {
-	ID                    uuid.UUID `db:"id"`
-	AccountID             uuid.UUID `db:"account_id"`
-	RefreshToken          uuid.UUID `db:"refresh_token"`
-	RefreshVersion        uint64    `db:"refresh_version"`
-	RefreshTokenIssuedAt  time.Time `db:"refresh_token_issued_at"`
-	RefreshTokenExpiresAt time.Time `db:"refresh_token_expires_at"`
-	RefreshTokenRequestIP net.IP    `db:"refresh_token_request_ip"`
-	CreateRequestIP       net.IP    `db:"create_request_ip"`
+	ID                    uuid.UUID   `db:"id"`
+	AccountID             uuid.UUID   `db:"account_id"`
+	RefreshToken          uuid.UUID   `db:"refresh_token"`
+	RefreshVersion        uint64      `db:"refresh_version"`
+	RefreshTokenIssuedAt  time.Time   `db:"refresh_token_issued_at"`
+	RefreshTokenExpiresAt time.Time   `db:"refresh_token_expires_at"`
+	RefreshTokenRequestIP *netip.Addr `db:"refresh_token_request_ip"`
+	CreateRequestIP       *netip.Addr `db:"create_request_ip"`
 
 	CreatedAt time.Time  `db:"created_at"`
 	UpdatedAt time.Time  `db:"updated_at"`

@@ -76,14 +76,41 @@ generate-swagger: bin-deps
 ifeq ($(OS),Windows_NT)
 	@echo "== Windows: generating swagger"
 	@cd $(CURDIR) && set "PATH=$(WIN_LOCAL_BIN);%PATH%" && "$(BUF)" generate --template buf.gen.swagger.yaml --path api/public
-	@echo == Patching swagger ==
-	@cd $(CURDIR) && go run ./tools/patch_swagger -in "$(CURDIR)/swagger/public.swagger.json" -out "$(CURDIR)/swagger/public.swagger.json"
+
+	@echo == Patching swagger (multipart) ==
+	@cd $(CURDIR) && go run ./tools/patch_swagger_files_upload \
+		-in "$(CURDIR)/swagger/public.swagger.json" \
+		-out "$(CURDIR)/swagger/public.swagger.json"
+
+	@echo == Building proto descriptor ==
+	@cd $(CURDIR) && set "PATH=$(WIN_LOCAL_BIN);%PATH%" && "$(BUF)" build -o "$(CURDIR)/swagger/proto.pb"
+
+	@echo == Patching swagger (required fields) ==
+	@cd $(CURDIR) && go run ./tools/patch_swagger_required \
+		-in "$(CURDIR)/swagger/public.swagger.json" \
+		-descriptor "$(CURDIR)/swagger/proto.pb" \
+		-out "$(CURDIR)/swagger/public.swagger.json"
+
 	@echo "== Swagger generation complete =="
+
 else
 	@echo "== Unix: generating swagger"
 	cd $(CURDIR) && PATH="$(LOCAL_BIN):$$PATH" "$(BUF)" generate --template buf.gen.swagger.yaml --path api/public
-	@echo "== Patching swagger =="
-	cd $(CURDIR) && go run ./tools/patch_swagger -in "$(CURDIR)/swagger/public.swagger.json" -out "$(CURDIR)/swagger/public.swagger.json"
+
+	@echo "== Patching swagger (multipart) =="
+	cd $(CURDIR) && go run ./tools/patch_swagger_files_upload \
+		-in "$(CURDIR)/swagger/public.swagger.json" \
+		-out "$(CURDIR)/swagger/public.swagger.json"
+
+	@echo "== Building proto descriptor =="
+	cd $(CURDIR) && PATH="$(LOCAL_BIN):$$PATH" "$(BUF)" build -o "$(CURDIR)/swagger/proto.pb"
+
+	@echo "== Patching swagger (required fields) =="
+	cd $(CURDIR) && go run ./tools/patch_swagger_required \
+		-in "$(CURDIR)/swagger/public.swagger.json" \
+		-descriptor "$(CURDIR)/swagger/proto.pb" \
+		-out "$(CURDIR)/swagger/public.swagger.json"
+
 	@echo "== Swagger generation complete =="
 endif
 

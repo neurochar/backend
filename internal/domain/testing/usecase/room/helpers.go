@@ -148,7 +148,7 @@ var MetricTextMap = map[decimal.Decimal]string{
 
 type MetricMatch struct {
 	Match    decimal.Decimal
-	Priority int
+	Priority entity.TraitPriority
 }
 
 func (uc *UsecaseImpl) сalcOverallMatch(metrics []MetricMatch) (decimal.Decimal, error) {
@@ -258,7 +258,7 @@ func (uc *UsecaseImpl) processRoom(
 			return err
 		}
 
-		candidateGender := crmEntity.CandidateGenderUnknown
+		candidateGender := crmEntity.CandidateGenderUnspecified
 		var candidateBirthday *time.Time
 
 		if roomDTO.CandidateDTO != nil {

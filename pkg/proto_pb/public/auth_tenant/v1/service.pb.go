@@ -26,13 +26,19 @@ var File_public_auth_tenant_v1_service_proto protoreflect.FileDescriptor
 
 const file_public_auth_tenant_v1_service_proto_rawDesc = "" +
 	"\n" +
-	"#public/auth_tenant/v1/service.proto\x12\x0eauth_tenant.v1\x1a\x1fpublic/auth_tenant/v1/dto.proto\x1a\x1cgoogle/api/annotations.proto\x1a.protoc-gen-openapiv2/options/annotations.proto2\xb8\b\n" +
-	"\x17AuthTenantPublicService\x12g\n" +
-	"\x06WhoIAm\x12\x1d.auth_tenant.v1.WhoIAmRequest\x1a\x1e.auth_tenant.v1.WhoIAmResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/v1/tenant/auth/whoiam\x12\x94\x01\n" +
+	"#public/auth_tenant/v1/service.proto\x12\x0eauth_tenant.v1\x1a\x1fpublic/auth_tenant/v1/dto.proto\x1a\x1cgoogle/api/annotations.proto\x1a.protoc-gen-openapiv2/options/annotations.proto2\xe2\b\n" +
+	"\x17AuthTenantPublicService\x12|\n" +
+	"\x06WhoIAm\x12\x1d.auth_tenant.v1.WhoIAmRequest\x1a\x1e.auth_tenant.v1.WhoIAmResponse\"3\x92A\x12b\x10\n" +
+	"\x0e\n" +
+	"\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x18\x12\x16/v1/tenant/auth/whoiam\x12\x94\x01\n" +
 	"\x12AccountVerifyEmail\x12).auth_tenant.v1.AccountVerifyEmailRequest\x1a*.auth_tenant.v1.AccountVerifyEmailResponse\"'\x82\xd3\xe4\x93\x02!:\x01*\"\x1c/v1/tenant/auth/verify-email\x12\x8c\x01\n" +
 	"\x10CheckAccountCode\x12'.auth_tenant.v1.CheckAccountCodeRequest\x1a(.auth_tenant.v1.CheckAccountCodeResponse\"%\x82\xd3\xe4\x93\x02\x1f:\x01*\"\x1a/v1/tenant/auth/check-code\x12f\n" +
-	"\x05Login\x12\x1c.auth_tenant.v1.LoginRequest\x1a\x1d.auth_tenant.v1.LoginResponse\" \x82\xd3\xe4\x93\x02\x1a:\x01*\"\x15/v1/tenant/auth/login\x12j\n" +
-	"\x06Logout\x12\x1d.auth_tenant.v1.LogoutRequest\x1a\x1e.auth_tenant.v1.LogoutResponse\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/v1/tenant/auth/logout\x12n\n" +
+	"\x05Login\x12\x1c.auth_tenant.v1.LoginRequest\x1a\x1d.auth_tenant.v1.LoginResponse\" \x82\xd3\xe4\x93\x02\x1a:\x01*\"\x15/v1/tenant/auth/login\x12\x7f\n" +
+	"\x06Logout\x12\x1d.auth_tenant.v1.LogoutRequest\x1a\x1e.auth_tenant.v1.LogoutResponse\"6\x92A\x12b\x10\n" +
+	"\x0e\n" +
+	"\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/v1/tenant/auth/logout\x12n\n" +
 	"\aRefresh\x12\x1e.auth_tenant.v1.RefreshRequest\x1a\x1f.auth_tenant.v1.RefreshResponse\"\"\x82\xd3\xe4\x93\x02\x1c:\x01*\"\x17/v1/tenant/auth/refresh\x12\xa8\x01\n" +
 	"\x17RequestPasswordRecovery\x12..auth_tenant.v1.RequestPasswordRecoveryRequest\x1a/.auth_tenant.v1.RequestPasswordRecoveryResponse\",\x82\xd3\xe4\x93\x02&:\x01*\"!/v1/tenant/auth/password-recovery\x12\x9e\x01\n" +
 	"\x14UpdatePasswordByCode\x12+.auth_tenant.v1.UpdatePasswordByCodeRequest\x1a,.auth_tenant.v1.UpdatePasswordByCodeResponse\"+\x82\xd3\xe4\x93\x02%:\x01*\" /v1/tenant/auth/password-by-codeB\xc6\x01\n" +

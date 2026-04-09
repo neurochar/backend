@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package registration.v1;
+
+import "public/registration/v1/dto.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+service RegistrationPublicService {
+  // Начать регистрацию
+  rpc StartRegistration(StartRegistrationRequest) returns (StartRegistrationResponse) {
+    option (google.api.http) = {
+      post: "/v1/registration/start"
+      body: "*"
+    };
+  }
+
+  // Закончить регистрацию
+  rpc FinishRegistration(FinishRegistrationRequest) returns (FinishRegistrationResponse) {
+    option (google.api.http) = {
+      post: "/v1/registration/finish"
+      body: "*"
+    };
+  }
+
+  // Проверить регистрацию
+  rpc CheckRegistration(CheckRegistrationRequest) returns (CheckRegistrationResponse) {
+    option (google.api.http) = {
+      get: "/v1/registration/{id}"
+    };
+  }
+}

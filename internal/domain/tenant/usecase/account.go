@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"context"
-	"net"
+	"net/netip"
 
 	"github.com/google/uuid"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
@@ -130,7 +130,7 @@ type AccountUsecase interface {
 		tenantID uuid.UUID,
 		in CreateAccountDataInput,
 		sendStartEmail bool,
-		requestIP *net.IP,
+		requestIP *netip.Addr,
 	) (resAccountDTO *AccountDTO, activationCode *entity.AccountCode, resErr error)
 
 	PatchAccountByDTO(
@@ -160,7 +160,7 @@ type AccountUsecase interface {
 		ctx context.Context,
 		tenantID uuid.UUID,
 		email string,
-		requestIP *net.IP,
+		requestIP *netip.Addr,
 	) (resCode *entity.AccountCode, resErr error)
 
 	UpdatePasswordByRecoveryCode(

@@ -1,0 +1,120 @@
+syntax = "proto3";
+
+package users_tenant.v1;
+
+import "common/types/types.proto";
+import "common/types/users_tenant_types.proto";
+import "google/protobuf/timestamp.proto";
+import "buf/validate/validate.proto";
+
+message ListAccountsRequest {
+  optional uint64 limit = 1;
+  optional uint64 offset = 2; 
+}
+
+message ListAccountsResponse {
+  repeated types.v1.AccountTenant items = 1;
+  int32 total = 2;
+}
+
+message GetAccountRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+}
+
+message GetAccountResponse {
+  types.v1.AccountTenant item = 1;
+}
+
+message CreateAccountRequestPayload {
+  message PhotoFiles {
+    string original_file_id = 1 [(buf.validate.field).string = {uuid: true}];
+    string s100x100_file_id = 2 [(buf.validate.field).string = {uuid: true}];
+  }
+
+  string email = 1 [(buf.validate.field).string = {min_len: 1, max_len: 150}];
+  string password = 2;
+  uint64 role_id = 3;
+  string profile_name = 4 [(buf.validate.field).string = {min_len: 1, max_len: 150}];
+  string profile_surname = 5 [(buf.validate.field).string = {min_len: 1, max_len: 150}];
+  optional PhotoFiles profile_photos = 6;
+}
+
+message CreateAccountRequest {
+  CreateAccountRequestPayload payload = 1 [(buf.validate.field).required = true];
+}
+
+message CreateAccountResponse {
+  types.v1.AccountTenant item = 1;
+}
+
+message PatchAccountRequestPayload {
+  message PhotoFiles {
+    string original_file_id = 1 [(buf.validate.field).string = {uuid: true}];
+    string s100x100_file_id = 2 [(buf.validate.field).string = {uuid: true}];
+  }
+
+  optional bool is_blocked = 1;
+  optional string password = 2;
+  optional uint64 role_id = 3;
+  optional string profile_name = 4 [(buf.validate.field).string = {min_len: 1, max_len: 150}];
+  optional string profile_surname = 5 [(buf.validate.field).string = {min_len: 1, max_len: 150}];
+
+  oneof profile_photos_action {
+    PhotoFiles profile_photos = 6;
+    bool profile_photos_clear = 7;
+  }
+}
+
+message PatchAccountRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+  PatchAccountRequestPayload payload = 2 [(buf.validate.field).required = true];
+  int64 version = 3;
+  bool skip_version_check = 4;
+}
+
+message PatchAccountResponse {}
+
+
+message UpdateMyProfileRequestPayload {
+  message PhotoFiles {
+    string original_file_id = 1 [(buf.validate.field).string = {uuid: true}];
+    string s100x100_file_id = 2 [(buf.validate.field).string = {uuid: true}];
+  }
+
+  string profile_name = 1 [(buf.validate.field).string = {min_len: 1, max_len: 150}];
+  string profile_surname = 2 [(buf.validate.field).string = {min_len: 1, max_len: 150}];
+  
+  oneof profile_photos_action {
+    PhotoFiles profile_photos = 6;
+    bool profile_photos_clear = 7;
+  }
+}
+
+message UpdateMyProfileRequest {
+  UpdateMyProfileRequestPayload payload = 1 [(buf.validate.field).required = true];
+  int64 version = 2;
+  bool skip_version_check = 3;
+}
+
+message UpdateMyProfileResponse {}
+
+message UpdateMyPasswordRequestPayload {
+  string current_password = 1;
+  string new_password = 2;
+  string new_password2 = 3;
+}
+
+message UpdateMyPasswordRequest {
+  UpdateMyPasswordRequestPayload payload = 1 [(buf.validate.field).required = true];
+}
+
+message UpdateMyPasswordResponse {}
+
+message UploadProfilePhotoFileRequest {
+  bytes file = 1;
+  string filename = 2;
+}
+
+message UploadProfilePhotoFileResponse {
+  types.v1.FilesMap data = 1;
+}

@@ -42,14 +42,17 @@ const (
 	// ProvidingIDJobsController - jobs controller
 	ProvidingIDJobsController
 
-	// ProvidingGRPCServer - grpc
-	ProvidingGRPCServer
+	// ProvidingPublicGRPCServer - grpc
+	ProvidingPublicGRPCServer
 
-	// ProvidingHTTPFiberServer - http fiber server
-	ProvidingHTTPFiberServer
+	// ProvidingPublicHTTPGateway - http fiber server
+	ProvidingPublicHTTPGateway
 
 	// ProvidingIDDeliveryHTTP - delivery http
 	ProvidingIDDeliveryHTTP
+
+	// ProvidingIDDeliveryCommon - delivery common
+	ProvidingIDDeliveryCommon
 
 	// ProvidingIDFileModule - file module
 	ProvidingIDFileModule

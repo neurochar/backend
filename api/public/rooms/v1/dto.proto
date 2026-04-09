@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package rooms.v1;
+
+import "common/types/types.proto";
+import "common/types/testing_types.proto";
+import "google/protobuf/timestamp.proto";
+import "buf/validate/validate.proto";
+import "google/protobuf/any.proto";
+
+message RoomCandidate {
+  string candidate_name = 1;
+}
+
+message RoomTechniqueItem {
+  types.v1.TechniqueItemType type = 1;
+  string question = 2;
+  repeated string variants = 3;
+}
+
+message Room {
+  string id = 1;
+  types.v1.RoomStatus status = 2;
+  string tenant_name = 3;
+  RoomCandidate candidate = 4;
+  repeated RoomTechniqueItem technique_data = 5;
+}
+
+message AnswerValue {
+  oneof value {
+    string string_value = 1;
+    int64 int_value = 2;
+    double double_value = 3;
+    bool bool_value = 4;
+  }
+}
+
+message Answers {
+  map<uint64, AnswerValue> data = 1;
+}
+
+message GetRoomRequest {
+  string id = 1;
+}
+
+message GetRoomResponse {
+  Room room = 1;
+}
+
+message FinishRoomRequestPayload {
+  Answers answers = 1;
+}
+
+message FinishRoomRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+  FinishRoomRequestPayload payload = 2 [(buf.validate.field).required = true];
+}
+
+message FinishRoomResponse {}

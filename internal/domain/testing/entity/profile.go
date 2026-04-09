@@ -10,9 +10,18 @@ import (
 
 var ErrProfileInvalidName = appErrors.ErrBadRequest.Extend("invalid name").WithTextCode("INVALID_NAME")
 
+type TraitPriority int
+
+const (
+	TraitPriorityNone   TraitPriority = 0
+	TraitPriorityLow    TraitPriority = 1
+	TraitPriorityMedium TraitPriority = 2
+	TraitPriorityHigh   TraitPriority = 3
+)
+
 type ProfilePersonalityTraitsMapItem struct {
-	Priority int `json:"priority"`
-	Target   int `json:"target"`
+	Priority TraitPriority `json:"priority"`
+	Target   int           `json:"target"`
 }
 
 type ProfilePersonalityTraitsMap map[uint64]ProfilePersonalityTraitsMapItem

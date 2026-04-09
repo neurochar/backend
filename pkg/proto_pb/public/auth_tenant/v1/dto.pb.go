@@ -9,7 +9,6 @@ package auth_tenantv1
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	types "github.com/neurochar/backend/pkg/proto_pb/common/types"
-	v1 "github.com/neurochar/backend/pkg/proto_pb/public/tenant/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	_ "google.golang.org/protobuf/types/known/timestamppb"
@@ -25,134 +24,18 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type Account struct {
-	state                    protoimpl.MessageState `protogen:"open.v1"`
-	Id                       string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Version                  int64                  `protobuf:"varint,2,opt,name=version,proto3" json:"version,omitempty"`
-	RoleId                   uint64                 `protobuf:"varint,3,opt,name=role_id,json=roleId,proto3" json:"role_id,omitempty"`
-	Email                    string                 `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`
-	IsConfirmed              bool                   `protobuf:"varint,5,opt,name=is_confirmed,json=isConfirmed,proto3" json:"is_confirmed,omitempty"`
-	IsEmailVerified          bool                   `protobuf:"varint,6,opt,name=is_email_verified,json=isEmailVerified,proto3" json:"is_email_verified,omitempty"`
-	ProfileName              string                 `protobuf:"bytes,7,opt,name=profile_name,json=profileName,proto3" json:"profile_name,omitempty"`
-	ProfileSurname           string                 `protobuf:"bytes,8,opt,name=profile_surname,json=profileSurname,proto3" json:"profile_surname,omitempty"`
-	ProfilePhotoOriginalFile *types.File            `protobuf:"bytes,9,opt,name=profile_photo_original_file,json=profilePhotoOriginalFile,proto3" json:"profile_photo_original_file,omitempty"`
-	ProfilePhoto_100X100File *types.File            `protobuf:"bytes,10,opt,name=profile_photo_100x100_file,json=profilePhoto100x100File,proto3" json:"profile_photo_100x100_file,omitempty"`
-	unknownFields            protoimpl.UnknownFields
-	sizeCache                protoimpl.SizeCache
-}
-
-func (x *Account) Reset() {
-	*x = Account{}
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Account) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Account) ProtoMessage() {}
-
-func (x *Account) ProtoReflect() protoreflect.Message {
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Account.ProtoReflect.Descriptor instead.
-func (*Account) Descriptor() ([]byte, []int) {
-	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *Account) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-func (x *Account) GetVersion() int64 {
-	if x != nil {
-		return x.Version
-	}
-	return 0
-}
-
-func (x *Account) GetRoleId() uint64 {
-	if x != nil {
-		return x.RoleId
-	}
-	return 0
-}
-
-func (x *Account) GetEmail() string {
-	if x != nil {
-		return x.Email
-	}
-	return ""
-}
-
-func (x *Account) GetIsConfirmed() bool {
-	if x != nil {
-		return x.IsConfirmed
-	}
-	return false
-}
-
-func (x *Account) GetIsEmailVerified() bool {
-	if x != nil {
-		return x.IsEmailVerified
-	}
-	return false
-}
-
-func (x *Account) GetProfileName() string {
-	if x != nil {
-		return x.ProfileName
-	}
-	return ""
-}
-
-func (x *Account) GetProfileSurname() string {
-	if x != nil {
-		return x.ProfileSurname
-	}
-	return ""
-}
-
-func (x *Account) GetProfilePhotoOriginalFile() *types.File {
-	if x != nil {
-		return x.ProfilePhotoOriginalFile
-	}
-	return nil
-}
-
-func (x *Account) GetProfilePhoto_100X100File() *types.File {
-	if x != nil {
-		return x.ProfilePhoto_100X100File
-	}
-	return nil
-}
-
 type Tokens struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	RefreshJwt     string                 `protobuf:"bytes,1,opt,name=refresh_jwt,json=refreshJwt,proto3" json:"refresh_jwt,omitempty"`
 	RefreshLifeSec int32                  `protobuf:"varint,2,opt,name=refresh_life_sec,json=refreshLifeSec,proto3" json:"refresh_life_sec,omitempty"`
-	AccessJwt      int32                  `protobuf:"varint,3,opt,name=access_jwt,json=accessJwt,proto3" json:"access_jwt,omitempty"`
+	AccessJwt      string                 `protobuf:"bytes,3,opt,name=access_jwt,json=accessJwt,proto3" json:"access_jwt,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
 
 func (x *Tokens) Reset() {
 	*x = Tokens{}
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[1]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -164,7 +47,7 @@ func (x *Tokens) String() string {
 func (*Tokens) ProtoMessage() {}
 
 func (x *Tokens) ProtoReflect() protoreflect.Message {
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[1]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -177,7 +60,7 @@ func (x *Tokens) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Tokens.ProtoReflect.Descriptor instead.
 func (*Tokens) Descriptor() ([]byte, []int) {
-	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{1}
+	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Tokens) GetRefreshJwt() string {
@@ -194,11 +77,11 @@ func (x *Tokens) GetRefreshLifeSec() int32 {
 	return 0
 }
 
-func (x *Tokens) GetAccessJwt() int32 {
+func (x *Tokens) GetAccessJwt() string {
 	if x != nil {
 		return x.AccessJwt
 	}
-	return 0
+	return ""
 }
 
 type WhoIAmRequest struct {
@@ -209,7 +92,7 @@ type WhoIAmRequest struct {
 
 func (x *WhoIAmRequest) Reset() {
 	*x = WhoIAmRequest{}
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[2]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -221,7 +104,7 @@ func (x *WhoIAmRequest) String() string {
 func (*WhoIAmRequest) ProtoMessage() {}
 
 func (x *WhoIAmRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[2]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -234,20 +117,20 @@ func (x *WhoIAmRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WhoIAmRequest.ProtoReflect.Descriptor instead.
 func (*WhoIAmRequest) Descriptor() ([]byte, []int) {
-	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{2}
+	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{1}
 }
 
 type WhoIAmResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Account       *Account               `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty"`
-	Tenant        *v1.Tenant             `protobuf:"bytes,2,opt,name=tenant,proto3" json:"tenant,omitempty"`
+	Account       *types.AccountTenant   `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty"`
+	Tenant        *types.Tenant          `protobuf:"bytes,2,opt,name=tenant,proto3" json:"tenant,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *WhoIAmResponse) Reset() {
 	*x = WhoIAmResponse{}
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[3]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -259,7 +142,7 @@ func (x *WhoIAmResponse) String() string {
 func (*WhoIAmResponse) ProtoMessage() {}
 
 func (x *WhoIAmResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[3]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -272,17 +155,17 @@ func (x *WhoIAmResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WhoIAmResponse.ProtoReflect.Descriptor instead.
 func (*WhoIAmResponse) Descriptor() ([]byte, []int) {
-	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{3}
+	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *WhoIAmResponse) GetAccount() *Account {
+func (x *WhoIAmResponse) GetAccount() *types.AccountTenant {
 	if x != nil {
 		return x.Account
 	}
 	return nil
 }
 
-func (x *WhoIAmResponse) GetTenant() *v1.Tenant {
+func (x *WhoIAmResponse) GetTenant() *types.Tenant {
 	if x != nil {
 		return x.Tenant
 	}
@@ -299,7 +182,7 @@ type AccountVerifyEmailRequest struct {
 
 func (x *AccountVerifyEmailRequest) Reset() {
 	*x = AccountVerifyEmailRequest{}
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[4]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -311,7 +194,7 @@ func (x *AccountVerifyEmailRequest) String() string {
 func (*AccountVerifyEmailRequest) ProtoMessage() {}
 
 func (x *AccountVerifyEmailRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[4]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -324,7 +207,7 @@ func (x *AccountVerifyEmailRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AccountVerifyEmailRequest.ProtoReflect.Descriptor instead.
 func (*AccountVerifyEmailRequest) Descriptor() ([]byte, []int) {
-	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{4}
+	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *AccountVerifyEmailRequest) GetCodeId() string {
@@ -349,7 +232,7 @@ type AccountVerifyEmailResponse struct {
 
 func (x *AccountVerifyEmailResponse) Reset() {
 	*x = AccountVerifyEmailResponse{}
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[5]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -361,7 +244,7 @@ func (x *AccountVerifyEmailResponse) String() string {
 func (*AccountVerifyEmailResponse) ProtoMessage() {}
 
 func (x *AccountVerifyEmailResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[5]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -374,7 +257,7 @@ func (x *AccountVerifyEmailResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AccountVerifyEmailResponse.ProtoReflect.Descriptor instead.
 func (*AccountVerifyEmailResponse) Descriptor() ([]byte, []int) {
-	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{5}
+	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{4}
 }
 
 type CheckAccountCodeRequest struct {
@@ -387,7 +270,7 @@ type CheckAccountCodeRequest struct {
 
 func (x *CheckAccountCodeRequest) Reset() {
 	*x = CheckAccountCodeRequest{}
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[6]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -399,7 +282,7 @@ func (x *CheckAccountCodeRequest) String() string {
 func (*CheckAccountCodeRequest) ProtoMessage() {}
 
 func (x *CheckAccountCodeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[6]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -412,7 +295,7 @@ func (x *CheckAccountCodeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CheckAccountCodeRequest.ProtoReflect.Descriptor instead.
 func (*CheckAccountCodeRequest) Descriptor() ([]byte, []int) {
-	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{6}
+	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *CheckAccountCodeRequest) GetId() string {
@@ -437,7 +320,7 @@ type CheckAccountCodeResponse struct {
 
 func (x *CheckAccountCodeResponse) Reset() {
 	*x = CheckAccountCodeResponse{}
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[7]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -449,7 +332,7 @@ func (x *CheckAccountCodeResponse) String() string {
 func (*CheckAccountCodeResponse) ProtoMessage() {}
 
 func (x *CheckAccountCodeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[7]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -462,7 +345,7 @@ func (x *CheckAccountCodeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CheckAccountCodeResponse.ProtoReflect.Descriptor instead.
 func (*CheckAccountCodeResponse) Descriptor() ([]byte, []int) {
-	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{7}
+	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{6}
 }
 
 type LoginRequest struct {
@@ -476,7 +359,7 @@ type LoginRequest struct {
 
 func (x *LoginRequest) Reset() {
 	*x = LoginRequest{}
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[8]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -488,7 +371,7 @@ func (x *LoginRequest) String() string {
 func (*LoginRequest) ProtoMessage() {}
 
 func (x *LoginRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[8]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -501,7 +384,7 @@ func (x *LoginRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoginRequest.ProtoReflect.Descriptor instead.
 func (*LoginRequest) Descriptor() ([]byte, []int) {
-	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{8}
+	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *LoginRequest) GetEmail() string {
@@ -527,8 +410,8 @@ func (x *LoginRequest) GetTenantTextId() string {
 
 type LoginResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Account       *Account               `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty"`
-	Tenant        *v1.Tenant             `protobuf:"bytes,2,opt,name=tenant,proto3" json:"tenant,omitempty"`
+	Account       *types.AccountTenant   `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty"`
+	Tenant        *types.Tenant          `protobuf:"bytes,2,opt,name=tenant,proto3" json:"tenant,omitempty"`
 	Tokens        *Tokens                `protobuf:"bytes,3,opt,name=tokens,proto3" json:"tokens,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -536,7 +419,7 @@ type LoginResponse struct {
 
 func (x *LoginResponse) Reset() {
 	*x = LoginResponse{}
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[9]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -548,7 +431,7 @@ func (x *LoginResponse) String() string {
 func (*LoginResponse) ProtoMessage() {}
 
 func (x *LoginResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[9]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -561,17 +444,17 @@ func (x *LoginResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoginResponse.ProtoReflect.Descriptor instead.
 func (*LoginResponse) Descriptor() ([]byte, []int) {
-	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{9}
+	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *LoginResponse) GetAccount() *Account {
+func (x *LoginResponse) GetAccount() *types.AccountTenant {
 	if x != nil {
 		return x.Account
 	}
 	return nil
 }
 
-func (x *LoginResponse) GetTenant() *v1.Tenant {
+func (x *LoginResponse) GetTenant() *types.Tenant {
 	if x != nil {
 		return x.Tenant
 	}
@@ -593,7 +476,7 @@ type LogoutRequest struct {
 
 func (x *LogoutRequest) Reset() {
 	*x = LogoutRequest{}
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[10]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -605,7 +488,7 @@ func (x *LogoutRequest) String() string {
 func (*LogoutRequest) ProtoMessage() {}
 
 func (x *LogoutRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[10]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -618,7 +501,7 @@ func (x *LogoutRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogoutRequest.ProtoReflect.Descriptor instead.
 func (*LogoutRequest) Descriptor() ([]byte, []int) {
-	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{10}
+	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{9}
 }
 
 type LogoutResponse struct {
@@ -629,7 +512,7 @@ type LogoutResponse struct {
 
 func (x *LogoutResponse) Reset() {
 	*x = LogoutResponse{}
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[11]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -641,7 +524,7 @@ func (x *LogoutResponse) String() string {
 func (*LogoutResponse) ProtoMessage() {}
 
 func (x *LogoutResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[11]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -654,7 +537,7 @@ func (x *LogoutResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogoutResponse.ProtoReflect.Descriptor instead.
 func (*LogoutResponse) Descriptor() ([]byte, []int) {
-	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{11}
+	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{10}
 }
 
 type RefreshRequest struct {
@@ -666,7 +549,7 @@ type RefreshRequest struct {
 
 func (x *RefreshRequest) Reset() {
 	*x = RefreshRequest{}
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[12]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -678,7 +561,7 @@ func (x *RefreshRequest) String() string {
 func (*RefreshRequest) ProtoMessage() {}
 
 func (x *RefreshRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[12]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -691,7 +574,7 @@ func (x *RefreshRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RefreshRequest.ProtoReflect.Descriptor instead.
 func (*RefreshRequest) Descriptor() ([]byte, []int) {
-	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{12}
+	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *RefreshRequest) GetRefreshToken() string {
@@ -710,7 +593,7 @@ type RefreshResponse struct {
 
 func (x *RefreshResponse) Reset() {
 	*x = RefreshResponse{}
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[13]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -722,7 +605,7 @@ func (x *RefreshResponse) String() string {
 func (*RefreshResponse) ProtoMessage() {}
 
 func (x *RefreshResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[13]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -735,7 +618,7 @@ func (x *RefreshResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RefreshResponse.ProtoReflect.Descriptor instead.
 func (*RefreshResponse) Descriptor() ([]byte, []int) {
-	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{13}
+	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *RefreshResponse) GetTokens() *Tokens {
@@ -755,7 +638,7 @@ type RequestPasswordRecoveryRequest struct {
 
 func (x *RequestPasswordRecoveryRequest) Reset() {
 	*x = RequestPasswordRecoveryRequest{}
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[14]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -767,7 +650,7 @@ func (x *RequestPasswordRecoveryRequest) String() string {
 func (*RequestPasswordRecoveryRequest) ProtoMessage() {}
 
 func (x *RequestPasswordRecoveryRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[14]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -780,7 +663,7 @@ func (x *RequestPasswordRecoveryRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RequestPasswordRecoveryRequest.ProtoReflect.Descriptor instead.
 func (*RequestPasswordRecoveryRequest) Descriptor() ([]byte, []int) {
-	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{14}
+	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *RequestPasswordRecoveryRequest) GetEmail() string {
@@ -806,7 +689,7 @@ type RequestPasswordRecoveryResponse struct {
 
 func (x *RequestPasswordRecoveryResponse) Reset() {
 	*x = RequestPasswordRecoveryResponse{}
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[15]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -818,7 +701,7 @@ func (x *RequestPasswordRecoveryResponse) String() string {
 func (*RequestPasswordRecoveryResponse) ProtoMessage() {}
 
 func (x *RequestPasswordRecoveryResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[15]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -831,7 +714,7 @@ func (x *RequestPasswordRecoveryResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RequestPasswordRecoveryResponse.ProtoReflect.Descriptor instead.
 func (*RequestPasswordRecoveryResponse) Descriptor() ([]byte, []int) {
-	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{15}
+	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *RequestPasswordRecoveryResponse) GetCodeId() string {
@@ -853,7 +736,7 @@ type UpdatePasswordByCodeRequest struct {
 
 func (x *UpdatePasswordByCodeRequest) Reset() {
 	*x = UpdatePasswordByCodeRequest{}
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[16]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -865,7 +748,7 @@ func (x *UpdatePasswordByCodeRequest) String() string {
 func (*UpdatePasswordByCodeRequest) ProtoMessage() {}
 
 func (x *UpdatePasswordByCodeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[16]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -878,7 +761,7 @@ func (x *UpdatePasswordByCodeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdatePasswordByCodeRequest.ProtoReflect.Descriptor instead.
 func (*UpdatePasswordByCodeRequest) Descriptor() ([]byte, []int) {
-	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{16}
+	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *UpdatePasswordByCodeRequest) GetId() string {
@@ -917,7 +800,7 @@ type UpdatePasswordByCodeResponse struct {
 
 func (x *UpdatePasswordByCodeResponse) Reset() {
 	*x = UpdatePasswordByCodeResponse{}
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[17]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -929,7 +812,7 @@ func (x *UpdatePasswordByCodeResponse) String() string {
 func (*UpdatePasswordByCodeResponse) ProtoMessage() {}
 
 func (x *UpdatePasswordByCodeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[17]
+	mi := &file_public_auth_tenant_v1_dto_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -942,36 +825,24 @@ func (x *UpdatePasswordByCodeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdatePasswordByCodeResponse.ProtoReflect.Descriptor instead.
 func (*UpdatePasswordByCodeResponse) Descriptor() ([]byte, []int) {
-	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{17}
+	return file_public_auth_tenant_v1_dto_proto_rawDescGZIP(), []int{16}
 }
 
 var File_public_auth_tenant_v1_dto_proto protoreflect.FileDescriptor
 
 const file_public_auth_tenant_v1_dto_proto_rawDesc = "" +
 	"\n" +
-	"\x1fpublic/auth_tenant/v1/dto.proto\x12\x0eauth_tenant.v1\x1a\x18common/types/types.proto\x1a\x1apublic/tenant/v1/dto.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bbuf/validate/validate.proto\"\x99\x03\n" +
-	"\aAccount\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
-	"\aversion\x18\x02 \x01(\x03R\aversion\x12\x17\n" +
-	"\arole_id\x18\x03 \x01(\x04R\x06roleId\x12\x14\n" +
-	"\x05email\x18\x04 \x01(\tR\x05email\x12!\n" +
-	"\fis_confirmed\x18\x05 \x01(\bR\visConfirmed\x12*\n" +
-	"\x11is_email_verified\x18\x06 \x01(\bR\x0fisEmailVerified\x12!\n" +
-	"\fprofile_name\x18\a \x01(\tR\vprofileName\x12'\n" +
-	"\x0fprofile_surname\x18\b \x01(\tR\x0eprofileSurname\x12M\n" +
-	"\x1bprofile_photo_original_file\x18\t \x01(\v2\x0e.types.v1.FileR\x18profilePhotoOriginalFile\x12K\n" +
-	"\x1aprofile_photo_100x100_file\x18\n" +
-	" \x01(\v2\x0e.types.v1.FileR\x17profilePhoto100x100File\"r\n" +
+	"\x1fpublic/auth_tenant/v1/dto.proto\x12\x0eauth_tenant.v1\x1a\x18common/types/types.proto\x1a\x1fcommon/types/tenant_types.proto\x1a%common/types/users_tenant_types.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bbuf/validate/validate.proto\"r\n" +
 	"\x06Tokens\x12\x1f\n" +
 	"\vrefresh_jwt\x18\x01 \x01(\tR\n" +
 	"refreshJwt\x12(\n" +
 	"\x10refresh_life_sec\x18\x02 \x01(\x05R\x0erefreshLifeSec\x12\x1d\n" +
 	"\n" +
-	"access_jwt\x18\x03 \x01(\x05R\taccessJwt\"\x0f\n" +
-	"\rWhoIAmRequest\"n\n" +
+	"access_jwt\x18\x03 \x01(\tR\taccessJwt\"\x0f\n" +
+	"\rWhoIAmRequest\"m\n" +
 	"\x0eWhoIAmResponse\x121\n" +
-	"\aaccount\x18\x01 \x01(\v2\x17.auth_tenant.v1.AccountR\aaccount\x12)\n" +
-	"\x06tenant\x18\x02 \x01(\v2\x11.tenant.v1.TenantR\x06tenant\"Z\n" +
+	"\aaccount\x18\x01 \x01(\v2\x17.types.v1.AccountTenantR\aaccount\x12(\n" +
+	"\x06tenant\x18\x02 \x01(\v2\x10.types.v1.TenantR\x06tenant\"Z\n" +
 	"\x19AccountVerifyEmailRequest\x12!\n" +
 	"\acode_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06codeId\x12\x1a\n" +
 	"\x04code\x18\x02 \x01(\tB\x06\xbaH\x03\xc8\x01\x01R\x04code\"\x1c\n" +
@@ -984,10 +855,10 @@ const file_public_auth_tenant_v1_dto_proto_rawDesc = "" +
 	"\x05email\x18\x01 \x01(\tB\n" +
 	"\xbaH\a\xc8\x01\x01r\x02`\x01R\x05email\x12\x1a\n" +
 	"\bpassword\x18\x02 \x01(\tR\bpassword\x12,\n" +
-	"\x0etenant_text_id\x18\x03 \x01(\tB\x06\xbaH\x03\xc8\x01\x01R\ftenantTextId\"\x9d\x01\n" +
+	"\x0etenant_text_id\x18\x03 \x01(\tB\x06\xbaH\x03\xc8\x01\x01R\ftenantTextId\"\x9c\x01\n" +
 	"\rLoginResponse\x121\n" +
-	"\aaccount\x18\x01 \x01(\v2\x17.auth_tenant.v1.AccountR\aaccount\x12)\n" +
-	"\x06tenant\x18\x02 \x01(\v2\x11.tenant.v1.TenantR\x06tenant\x12.\n" +
+	"\aaccount\x18\x01 \x01(\v2\x17.types.v1.AccountTenantR\aaccount\x12(\n" +
+	"\x06tenant\x18\x02 \x01(\v2\x10.types.v1.TenantR\x06tenant\x12.\n" +
 	"\x06tokens\x18\x03 \x01(\v2\x16.auth_tenant.v1.TokensR\x06tokens\"\x0f\n" +
 	"\rLogoutRequest\"\x10\n" +
 	"\x0eLogoutResponse\"=\n" +
@@ -1021,43 +892,40 @@ func file_public_auth_tenant_v1_dto_proto_rawDescGZIP() []byte {
 	return file_public_auth_tenant_v1_dto_proto_rawDescData
 }
 
-var file_public_auth_tenant_v1_dto_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
+var file_public_auth_tenant_v1_dto_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
 var file_public_auth_tenant_v1_dto_proto_goTypes = []any{
-	(*Account)(nil),                         // 0: auth_tenant.v1.Account
-	(*Tokens)(nil),                          // 1: auth_tenant.v1.Tokens
-	(*WhoIAmRequest)(nil),                   // 2: auth_tenant.v1.WhoIAmRequest
-	(*WhoIAmResponse)(nil),                  // 3: auth_tenant.v1.WhoIAmResponse
-	(*AccountVerifyEmailRequest)(nil),       // 4: auth_tenant.v1.AccountVerifyEmailRequest
-	(*AccountVerifyEmailResponse)(nil),      // 5: auth_tenant.v1.AccountVerifyEmailResponse
-	(*CheckAccountCodeRequest)(nil),         // 6: auth_tenant.v1.CheckAccountCodeRequest
-	(*CheckAccountCodeResponse)(nil),        // 7: auth_tenant.v1.CheckAccountCodeResponse
-	(*LoginRequest)(nil),                    // 8: auth_tenant.v1.LoginRequest
-	(*LoginResponse)(nil),                   // 9: auth_tenant.v1.LoginResponse
-	(*LogoutRequest)(nil),                   // 10: auth_tenant.v1.LogoutRequest
-	(*LogoutResponse)(nil),                  // 11: auth_tenant.v1.LogoutResponse
-	(*RefreshRequest)(nil),                  // 12: auth_tenant.v1.RefreshRequest
-	(*RefreshResponse)(nil),                 // 13: auth_tenant.v1.RefreshResponse
-	(*RequestPasswordRecoveryRequest)(nil),  // 14: auth_tenant.v1.RequestPasswordRecoveryRequest
-	(*RequestPasswordRecoveryResponse)(nil), // 15: auth_tenant.v1.RequestPasswordRecoveryResponse
-	(*UpdatePasswordByCodeRequest)(nil),     // 16: auth_tenant.v1.UpdatePasswordByCodeRequest
-	(*UpdatePasswordByCodeResponse)(nil),    // 17: auth_tenant.v1.UpdatePasswordByCodeResponse
-	(*types.File)(nil),                      // 18: types.v1.File
-	(*v1.Tenant)(nil),                       // 19: tenant.v1.Tenant
+	(*Tokens)(nil),                          // 0: auth_tenant.v1.Tokens
+	(*WhoIAmRequest)(nil),                   // 1: auth_tenant.v1.WhoIAmRequest
+	(*WhoIAmResponse)(nil),                  // 2: auth_tenant.v1.WhoIAmResponse
+	(*AccountVerifyEmailRequest)(nil),       // 3: auth_tenant.v1.AccountVerifyEmailRequest
+	(*AccountVerifyEmailResponse)(nil),      // 4: auth_tenant.v1.AccountVerifyEmailResponse
+	(*CheckAccountCodeRequest)(nil),         // 5: auth_tenant.v1.CheckAccountCodeRequest
+	(*CheckAccountCodeResponse)(nil),        // 6: auth_tenant.v1.CheckAccountCodeResponse
+	(*LoginRequest)(nil),                    // 7: auth_tenant.v1.LoginRequest
+	(*LoginResponse)(nil),                   // 8: auth_tenant.v1.LoginResponse
+	(*LogoutRequest)(nil),                   // 9: auth_tenant.v1.LogoutRequest
+	(*LogoutResponse)(nil),                  // 10: auth_tenant.v1.LogoutResponse
+	(*RefreshRequest)(nil),                  // 11: auth_tenant.v1.RefreshRequest
+	(*RefreshResponse)(nil),                 // 12: auth_tenant.v1.RefreshResponse
+	(*RequestPasswordRecoveryRequest)(nil),  // 13: auth_tenant.v1.RequestPasswordRecoveryRequest
+	(*RequestPasswordRecoveryResponse)(nil), // 14: auth_tenant.v1.RequestPasswordRecoveryResponse
+	(*UpdatePasswordByCodeRequest)(nil),     // 15: auth_tenant.v1.UpdatePasswordByCodeRequest
+	(*UpdatePasswordByCodeResponse)(nil),    // 16: auth_tenant.v1.UpdatePasswordByCodeResponse
+	(*types.AccountTenant)(nil),             // 17: types.v1.AccountTenant
+	(*types.Tenant)(nil),                    // 18: types.v1.Tenant
 }
 var file_public_auth_tenant_v1_dto_proto_depIdxs = []int32{
-	18, // 0: auth_tenant.v1.Account.profile_photo_original_file:type_name -> types.v1.File
-	18, // 1: auth_tenant.v1.Account.profile_photo_100x100_file:type_name -> types.v1.File
-	0,  // 2: auth_tenant.v1.WhoIAmResponse.account:type_name -> auth_tenant.v1.Account
-	19, // 3: auth_tenant.v1.WhoIAmResponse.tenant:type_name -> tenant.v1.Tenant
-	0,  // 4: auth_tenant.v1.LoginResponse.account:type_name -> auth_tenant.v1.Account
-	19, // 5: auth_tenant.v1.LoginResponse.tenant:type_name -> tenant.v1.Tenant
-	1,  // 6: auth_tenant.v1.LoginResponse.tokens:type_name -> auth_tenant.v1.Tokens
-	1,  // 7: auth_tenant.v1.RefreshResponse.tokens:type_name -> auth_tenant.v1.Tokens
-	8,  // [8:8] is the sub-list for method output_type
-	8,  // [8:8] is the sub-list for method input_type
-	8,  // [8:8] is the sub-list for extension type_name
-	8,  // [8:8] is the sub-list for extension extendee
-	0,  // [0:8] is the sub-list for field type_name
+	17, // 0: auth_tenant.v1.WhoIAmResponse.account:type_name -> types.v1.AccountTenant
+	18, // 1: auth_tenant.v1.WhoIAmResponse.tenant:type_name -> types.v1.Tenant
+	17, // 2: auth_tenant.v1.LoginResponse.account:type_name -> types.v1.AccountTenant
+	18, // 3: auth_tenant.v1.LoginResponse.tenant:type_name -> types.v1.Tenant
+	0,  // 4: auth_tenant.v1.LoginResponse.tokens:type_name -> auth_tenant.v1.Tokens
+	0,  // 5: auth_tenant.v1.RefreshResponse.tokens:type_name -> auth_tenant.v1.Tokens
+	6,  // [6:6] is the sub-list for method output_type
+	6,  // [6:6] is the sub-list for method input_type
+	6,  // [6:6] is the sub-list for extension type_name
+	6,  // [6:6] is the sub-list for extension extendee
+	0,  // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_public_auth_tenant_v1_dto_proto_init() }
@@ -1071,7 +939,7 @@ func file_public_auth_tenant_v1_dto_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_public_auth_tenant_v1_dto_proto_rawDesc), len(file_public_auth_tenant_v1_dto_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   18,
+			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

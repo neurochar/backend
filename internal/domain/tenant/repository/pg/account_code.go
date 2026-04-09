@@ -1,7 +1,7 @@
 package pg
 
 import (
-	"net"
+	"net/netip"
 	"time"
 
 	"github.com/google/uuid"
@@ -20,13 +20,13 @@ func init() {
 }
 
 type AccountCodeDBModel struct {
-	ID        uuid.UUID `db:"id"`
-	AccountID uuid.UUID `db:"account_id"`
-	Type      uint8     `db:"code_type"`
-	IsActive  bool      `db:"is_active"`
-	Code      string    `db:"code"`
-	RequestIP *net.IP   `db:"request_ip"`
-	Attempts  int       `db:"attempts"`
+	ID        uuid.UUID   `db:"id"`
+	AccountID uuid.UUID   `db:"account_id"`
+	Type      uint8       `db:"code_type"`
+	IsActive  bool        `db:"is_active"`
+	Code      string      `db:"code"`
+	RequestIP *netip.Addr `db:"request_ip"`
+	Attempts  int         `db:"attempts"`
 
 	CreatedAt time.Time `db:"created_at"`
 	UpdatedAt time.Time `db:"updated_at"`

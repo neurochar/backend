@@ -3,7 +3,8 @@ package entity
 type PersonalityTraitType int
 
 const (
-	PersonalityTraitTypeBipolar PersonalityTraitType = 1
+	PersonalityTraitTypeUnspecified PersonalityTraitType = 0
+	PersonalityTraitTypeBipolar     PersonalityTraitType = 1
 )
 
 var PersonalityTraitTypeMap = map[PersonalityTraitType]string{
@@ -19,6 +20,8 @@ type PersonalityTrait interface {
 	GetType() PersonalityTraitType
 	GetName() string
 	GetDescription() string
+	GetLeftStateName() string
+	GetRightStateName() string
 }
 
 type PersonalityTraitBipolar struct {
@@ -43,4 +46,12 @@ func (t *PersonalityTraitBipolar) GetName() string {
 
 func (t *PersonalityTraitBipolar) GetDescription() string {
 	return t.Description
+}
+
+func (t *PersonalityTraitBipolar) GetLeftStateName() string {
+	return t.LeftStateName
+}
+
+func (t *PersonalityTraitBipolar) GetRightStateName() string {
+	return t.RightStateName
 }

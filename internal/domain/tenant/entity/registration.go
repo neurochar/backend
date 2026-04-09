@@ -1,7 +1,7 @@
 package entity
 
 import (
-	"net"
+	"net/netip"
 	"strings"
 	"time"
 
@@ -18,7 +18,7 @@ type Registration struct {
 	Tariff     uint64
 	IsFinished bool
 	TenantID   *uuid.UUID
-	RequestIP  *net.IP
+	RequestIP  *netip.Addr
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
@@ -47,7 +47,7 @@ func (item *Registration) SetEmail(email string) error {
 	return nil
 }
 
-func (item *Registration) SetRequestIP(ip *net.IP) error {
+func (item *Registration) SetRequestIP(ip *netip.Addr) error {
 	item.RequestIP = ip
 
 	return nil

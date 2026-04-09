@@ -7,7 +7,6 @@ import (
 	"github.com/neurochar/backend/internal/infra/storage/s3d"
 )
 
-// NewStorageClient - provide storage client
 func NewStorageClient(cfg config.Config) (storage.Client, *s3.Client) {
 	usePathStyle := !cfg.Storage.S3URLIsHost
 

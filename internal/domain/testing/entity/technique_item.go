@@ -9,6 +9,7 @@ import (
 type TechniqueItemType int
 
 const (
+	TechniqueItemTypeUnspecified                      TechniqueItemType = 0
 	TechniqueItemTypeQuestionWithVariantsSignleAnswer TechniqueItemType = 1
 )
 

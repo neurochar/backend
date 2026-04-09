@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
-	"net"
+	"net/netip"
 	"time"
 
 	"github.com/google/uuid"
@@ -176,7 +176,7 @@ func (uc *UsecaseImpl) sendStartEmailToUser(
 func (uc *UsecaseImpl) createAccountEmailVerificationCode(
 	ctx context.Context,
 	account *entity.Account,
-	requestIP *net.IP,
+	requestIP *netip.Addr,
 ) (*entity.AccountCode, error) {
 	const op = "createAccountEmailVerificationCode"
 
@@ -196,7 +196,7 @@ func (uc *UsecaseImpl) createAccountEmailVerificationCode(
 func (uc *UsecaseImpl) createAccountPasswordRecoveryCode(
 	ctx context.Context,
 	account *entity.Account,
-	requestIP *net.IP,
+	requestIP *netip.Addr,
 ) (*entity.AccountCode, error) {
 	const op = "createAccountPasswordRecoveryCode"
 
@@ -226,7 +226,7 @@ func (uc *UsecaseImpl) sendRecoveryCodeEmailToUser(
 	ctx context.Context,
 	accountDTO *usecase.AccountDTO,
 	recoveryCode *entity.AccountCode,
-	requestIP *net.IP,
+	requestIP *netip.Addr,
 ) error {
 	const op = "sendRecoveryCodeEmailToUser"
 

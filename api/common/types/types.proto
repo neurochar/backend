@@ -11,9 +11,13 @@ enum Gender {
 }
 
 message File {
-  string id = 1;
-  string url = 2;
-  string filename = 3;
+  string url = 1;
+  optional string id = 2;
+  optional string filename = 3;
+}
+
+message FilesMap {
+  map<string, File> map = 1;
 }
 
 message OptionalDate {

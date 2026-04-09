@@ -30,6 +30,10 @@ func (r *Repository) buildWhereForList(listOptions *usecase.RoomListOptions, wit
 		where = append(where, squirrel.Eq{"tenant_id": *listOptions.FilterTenantID})
 	}
 
+	if listOptions.FilterCandidateID != nil {
+		where = append(where, squirrel.Eq{"candidate_id": *listOptions.FilterCandidateID})
+	}
+
 	return where
 }
 

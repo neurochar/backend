@@ -79,7 +79,7 @@ func (c *Controller) GetIfExists(sessionKey string, groupID ...string) (*Session
 	return nil, false
 }
 
-func (c *Controller) Get(sessionKey string, groupIDs ...string) *Session {
+func (c *Controller) GetOrCreate(sessionKey string, groupIDs ...string) *Session {
 	useGroup := DefaultGroupID
 	if len(groupIDs) > 0 && groupIDs[0] != "" {
 		useGroup = groupIDs[0]

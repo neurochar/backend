@@ -6,9 +6,21 @@ import "common/types/types.proto";
 import "google/protobuf/timestamp.proto";
 import "buf/validate/validate.proto";
 
-message Tenant {
-  string id = 1;
-  int64 version = 2;
-  string text_id = 3;
-  string name = 4;
+message IsExistsRequest {
+  string text_id = 1;
 }
+
+message IsExistsResponse {}
+
+message PatchTenantRequestPayload {
+  optional string name = 1 [(buf.validate.field).string = {min_len: 1, max_len: 150}];
+}
+
+message PatchTenantRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+  PatchTenantRequestPayload payload = 2 [(buf.validate.field).required = true];
+  int64 version = 3;
+  bool skip_version_check = 4;
+}
+
+message PatchTenantResponse {}

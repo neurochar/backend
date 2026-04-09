@@ -3,7 +3,7 @@ package registration
 import (
 	"context"
 	"fmt"
-	"net"
+	"net/netip"
 
 	"github.com/google/uuid"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
@@ -19,7 +19,7 @@ import (
 func (uc *UsecaseImpl) CreateByDTO(
 	ctx context.Context,
 	in usecase.CreateRegistrationIn,
-	requestIP *net.IP,
+	requestIP *netip.Addr,
 ) (*entity.Registration, error) {
 	const op = "CreateByDTO"
 
@@ -39,7 +39,7 @@ func (uc *UsecaseImpl) CreateByDTO(
 	err = uc.dbMasterClient.DoWithIsoLvl(ctx, pgclient.Serializable, func(ctx context.Context) error {
 		if in.Tariff == 0 {
 			checkOps := &usecase.RegistrationListOptions{
-				FilterEmail:      &in.Email,
+				FilterEmail:      &registration.Email,
 				FilterIsFinished: lo.ToPtr(true),
 			}
 
@@ -89,7 +89,7 @@ func (uc *UsecaseImpl) FinishByDTO(
 	ctx context.Context,
 	id uuid.UUID,
 	in usecase.FinishRegistrationIn,
-	requestIP *net.IP,
+	requestIP *netip.Addr,
 ) (*entity.Tenant, error) {
 	const op = "FinishByDTO"
 

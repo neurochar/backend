@@ -33,7 +33,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthTenantPublicServiceClient interface {
-	// Обновить пароль по коду
+	// WhoIAm
 	WhoIAm(ctx context.Context, in *WhoIAmRequest, opts ...grpc.CallOption) (*WhoIAmResponse, error)
 	// Верификация аккаунта по емаил
 	AccountVerifyEmail(ctx context.Context, in *AccountVerifyEmailRequest, opts ...grpc.CallOption) (*AccountVerifyEmailResponse, error)
@@ -143,7 +143,7 @@ func (c *authTenantPublicServiceClient) UpdatePasswordByCode(ctx context.Context
 // All implementations must embed UnimplementedAuthTenantPublicServiceServer
 // for forward compatibility.
 type AuthTenantPublicServiceServer interface {
-	// Обновить пароль по коду
+	// WhoIAm
 	WhoIAm(context.Context, *WhoIAmRequest) (*WhoIAmResponse, error)
 	// Верификация аккаунта по емаил
 	AccountVerifyEmail(context.Context, *AccountVerifyEmailRequest) (*AccountVerifyEmailResponse, error)

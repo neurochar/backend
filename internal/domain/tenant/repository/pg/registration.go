@@ -1,7 +1,7 @@
 package pg
 
 import (
-	"net"
+	"net/netip"
 	"time"
 
 	"github.com/google/uuid"
@@ -20,12 +20,12 @@ func init() {
 }
 
 type RegistrationDBModel struct {
-	ID         uuid.UUID  `db:"id"`
-	Email      string     `db:"email"`
-	Tariff     uint64     `db:"tariff"`
-	IsFinished bool       `db:"is_finished"`
-	TenantID   *uuid.UUID `db:"tenant_id"`
-	RequestIP  *net.IP    `db:"request_ip"`
+	ID         uuid.UUID   `db:"id"`
+	Email      string      `db:"email"`
+	Tariff     uint64      `db:"tariff"`
+	IsFinished bool        `db:"is_finished"`
+	TenantID   *uuid.UUID  `db:"tenant_id"`
+	RequestIP  *netip.Addr `db:"request_ip"`
 
 	CreatedAt time.Time `db:"created_at"`
 	UpdatedAt time.Time `db:"updated_at"`

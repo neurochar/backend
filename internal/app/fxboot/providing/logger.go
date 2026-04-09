@@ -9,7 +9,6 @@ import (
 	"github.com/neurochar/backend/pkg/prettylog"
 )
 
-// NewLogger provides logger for app
 func NewLogger(appName string, appVersion string, useLogger bool, isProd bool) *slog.Logger {
 	var appLogger *slog.Logger
 

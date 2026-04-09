@@ -7,10 +7,18 @@ import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 service AuthTenantPublicService {
-  // Обновить пароль по коду
+  // WhoIAm
   rpc WhoIAm(WhoIAmRequest) returns (WhoIAmResponse) {
     option (google.api.http) = {
       get: "/v1/tenant/auth/whoiam"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: {
+        security_requirement: {
+          key: "BearerAuth";
+          value: {};
+        }
+      }
     };
   }
 
@@ -43,6 +51,14 @@ service AuthTenantPublicService {
     option (google.api.http) = {
       post: "/v1/tenant/auth/logout"
       body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: {
+        security_requirement: {
+          key: "BearerAuth";
+          value: {};
+        }
+      }
     };
   }
 

@@ -1,7 +1,7 @@
 package entity
 
 import (
-	"net"
+	"net/netip"
 	"strings"
 	"time"
 	"unicode"
@@ -32,7 +32,7 @@ type Account struct {
 	IsBlocked                  bool
 	LastLoginAt                *time.Time
 	LastRequestAt              *time.Time
-	LastRequestIP              *net.IP
+	LastRequestIP              *netip.Addr
 	ProfileName                string
 	ProfileSurname             string
 	ProfilePhoto100x100FileID  *uuid.UUID
@@ -151,7 +151,7 @@ func (item *Account) SetLastRequestAt(value *time.Time) {
 	item.LastRequestAt = value
 }
 
-func (item *Account) SetLastRequestIP(value *net.IP) {
+func (item *Account) SetLastRequestIP(value *netip.Addr) {
 	item.LastRequestIP = value
 }
 

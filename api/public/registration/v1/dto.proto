@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package registration.v1;
+
+import "common/types/types.proto";
+import "google/protobuf/timestamp.proto";
+import "buf/validate/validate.proto";
+
+message StartRegistrationRequest {
+  string email = 1;
+}
+
+message StartRegistrationResponse {}
+
+message FinishRegistrationRequestPayload {
+  string tenant_text_id = 1 [(buf.validate.field).string = {min_len: 1, max_len: 150}];
+  string profile_name = 2 [(buf.validate.field).string = {min_len: 1, max_len: 150}];
+  string profile_surname = 3 [(buf.validate.field).string = {min_len: 1, max_len: 150}];
+}
+
+message FinishRegistrationRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+  FinishRegistrationRequestPayload payload = 2 [(buf.validate.field).required = true];
+}
+
+message FinishRegistrationResponse {
+  string id = 1;
+  string text_id = 2;
+  string url = 3;
+}
+
+message CheckRegistrationRequest {
+  string id = 1;
+}
+
+message CheckRegistrationResponse {}

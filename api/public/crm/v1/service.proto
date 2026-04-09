@@ -6,52 +6,98 @@ import "public/crm/v1/dto.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
-service CrmTenantPublicService {
+service CrmPublicService {
   // Список кандидатов
   rpc ListCandidates(ListCandidatesRequest) returns (ListCandidatesResponse) {
     option (google.api.http) = {
-      get: "/v1/tenant/crm/candidates"
+      get: "/v1/crm/candidates"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: {
+        security_requirement: {
+          key: "BearerAuth";
+          value: {};
+        }
+      }
     };
   }
 
   // Получить кандидата
   rpc GetCandidate(GetCandidateRequest) returns (GetCandidateResponse) {
     option (google.api.http) = {
-      get: "/v1/tenant/crm/candidates/{id}"
+      get: "/v1/crm/candidates/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: {
+        security_requirement: {
+          key: "BearerAuth";
+          value: {};
+        }
+      }
     };
   }
 
   // Создать кандидата
   rpc CreateCandidate(CreateCandidateRequest) returns (CreateCandidateResponse) {
     option (google.api.http) = {
-      post: "/v1/tenant/crm/candidates"
+      post: "/v1/crm/candidates"
       body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: {
+        security_requirement: {
+          key: "BearerAuth";
+          value: {};
+        }
+      }
     };
   }
 
   // Обновить кандидата
   rpc PatchCandidate(PatchCandidateRequest) returns (PatchCandidateResponse) {
     option (google.api.http) = {
-      patch: "/v1/tenant/crm/candidates/{id}"
+      patch: "/v1/crm/candidates/{id}"
       body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: {
+        security_requirement: {
+          key: "BearerAuth";
+          value: {};
+        }
+      }
     };
   }
 
   // Удалить кандидата
   rpc DeleteCandidate(DeleteCandidateRequest) returns (DeleteCandidateResponse) {
     option (google.api.http) = {
-      delete: "/v1/tenant/crm/candidates/{id}"
+      delete: "/v1/crm/candidates/{id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: {
+        security_requirement: {
+          key: "BearerAuth";
+          value: {};
+        }
+      }
     };
   }
 
   // Загрузить файл-резюме кандидата
   rpc UploadCandidateResumeFile(UploadCandidateResumeFileRequest) returns (UploadCandidateResumeFileResponse) {
     option (google.api.http) = {
-      post: "/v1/tenant/crm/candidates-resume"
+      post: "/v1/crm/candidates-resume"
       body: "*"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       consumes: "multipart/form-data"
+      security: {
+        security_requirement: {
+          key: "BearerAuth";
+          value: {};
+        }
+      }
     };
   }
 }

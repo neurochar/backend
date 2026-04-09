@@ -1,7 +1,7 @@
 package pg
 
 import (
-	"net"
+	"net/netip"
 	"time"
 
 	"github.com/google/uuid"
@@ -20,21 +20,21 @@ func init() {
 }
 
 type AccountDBModel struct {
-	ID                         uuid.UUID  `db:"id"`
-	TenantID                   uuid.UUID  `db:"tenant_id"`
-	RoleID                     uint64     `db:"role_id"`
-	Email                      string     `db:"email"`
-	PasswordHash               string     `db:"password_hash"`
-	IsConfirmed                bool       `db:"is_confirmed"`
-	IsEmailVerified            bool       `db:"is_email_verified"`
-	IsBlocked                  bool       `db:"is_blocked"`
-	LastLoginAt                *time.Time `db:"last_login_at"`
-	LastRequestAt              *time.Time `db:"last_request_at"`
-	LastRequestIP              *net.IP    `db:"last_request_ip"`
-	ProfileName                string     `db:"profile_name"`
-	ProfileSurname             string     `db:"profile_surname"`
-	ProfilePhoto100x100FileID  *uuid.UUID `db:"profile_photo_100x100_file_id"`
-	ProfilePhotoOriginalFileID *uuid.UUID `db:"profile_photo_original_file_id"`
+	ID                         uuid.UUID   `db:"id"`
+	TenantID                   uuid.UUID   `db:"tenant_id"`
+	RoleID                     uint64      `db:"role_id"`
+	Email                      string      `db:"email"`
+	PasswordHash               string      `db:"password_hash"`
+	IsConfirmed                bool        `db:"is_confirmed"`
+	IsEmailVerified            bool        `db:"is_email_verified"`
+	IsBlocked                  bool        `db:"is_blocked"`
+	LastLoginAt                *time.Time  `db:"last_login_at"`
+	LastRequestAt              *time.Time  `db:"last_request_at"`
+	LastRequestIP              *netip.Addr `db:"last_request_ip"`
+	ProfileName                string      `db:"profile_name"`
+	ProfileSurname             string      `db:"profile_surname"`
+	ProfilePhoto100x100FileID  *uuid.UUID  `db:"profile_photo_100x100_file_id"`
+	ProfilePhotoOriginalFileID *uuid.UUID  `db:"profile_photo_original_file_id"`
 
 	CreatedAt time.Time  `db:"created_at"`
 	UpdatedAt time.Time  `db:"updated_at"`

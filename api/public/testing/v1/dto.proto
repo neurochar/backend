@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package testing.v1;
+
+import "common/types/types.proto";
+import "common/types/testing_types.proto";
+import "google/protobuf/timestamp.proto";
+import "buf/validate/validate.proto";
+
+message GetPersonalityTraitsRequest {}
+
+message GetPersonalityTraitsResponse {
+  repeated types.v1.PersonalityTrait items = 1;
+}
+
+message ListProfilesRequest {
+  optional uint64 limit = 1;
+  optional uint64 offset = 2; 
+  optional string search_query = 3;
+}
+
+message ListProfilesResponse {
+  repeated types.v1.TestingListProfile items = 1;
+  int32 total = 2;
+}
+
+message GetProfileRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+}
+
+message GetProfileResponse {
+  types.v1.TestingProfile item = 1;
+}
+
+message CreateProfileRequestPayload {
+  string name = 1;
+  types.v1.ProfilePersonalityTraitsMap personality_traits = 2;
+}
+
+message CreateProfileRequest {
+  CreateProfileRequestPayload payload = 1 [(buf.validate.field).required = true];
+}
+
+message CreateProfileResponse {
+  types.v1.TestingProfile item = 1;
+}
+
+message PatchProfileRequestPayload {
+  optional string name = 1;
+  optional types.v1.ProfilePersonalityTraitsMap personality_traits = 2;
+}
+
+message PatchProfileRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+  PatchProfileRequestPayload payload = 2 [(buf.validate.field).required = true];
+  int64 version = 3;
+  bool skip_version_check = 4;
+}
+
+message PatchProfileResponse {}
+
+message DeleteProfileRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+}
+
+message DeleteProfileResponse {}
+
+message ListRoomsRequest {
+  optional uint64 limit = 1;
+  optional uint64 offset = 2; 
+}
+
+message ListRoomsResponse {
+  repeated types.v1.TestingListRoom items = 1;
+  int32 total = 2;
+}
+
+message GetRoomRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+}
+
+message GetRoomResponse {
+  types.v1.TestingRoom item = 1;
+}
+
+message CreateRoomRequestPayload {
+  string candidate_id = 1 [(buf.validate.field).string = {uuid: true}];
+  string profile_id = 2 [(buf.validate.field).string = {uuid: true}];
+}
+
+message CreateRoomRequest {
+  CreateRoomRequestPayload payload = 1 [(buf.validate.field).required = true];
+}
+
+message CreateRoomResponse {
+  types.v1.TestingRoom item = 1;
+}
+
+message DeleteRoomRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+}
+
+message DeleteRoomResponse {}
+

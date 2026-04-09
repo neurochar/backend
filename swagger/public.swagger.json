@@ -3,7 +3,7 @@
     "application/json"
   ],
   "definitions": {
-    "CrmTenantPublicServicePatchCandidateBody": {
+    "CrmPublicServicePatchCandidateBody": {
       "properties": {
         "payload": {
           "$ref": "#/definitions/v1PatchCandidateRequestPayload"
@@ -16,13 +16,99 @@
           "type": "string"
         }
       },
+      "required": [
+        "payload",
+        "skipVersionCheck",
+        "version"
+      ],
+      "type": "object"
+    },
+    "RoomsPublicServiceFinishRoomBody": {
+      "properties": {
+        "payload": {
+          "$ref": "#/definitions/v1FinishRoomRequestPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "type": "object"
+    },
+    "TenantPublicServicePatchTenantBody": {
+      "properties": {
+        "payload": {
+          "$ref": "#/definitions/v1PatchTenantRequestPayload"
+        },
+        "skipVersionCheck": {
+          "type": "boolean"
+        },
+        "version": {
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "required": [
+        "payload",
+        "skipVersionCheck",
+        "version"
+      ],
+      "type": "object"
+    },
+    "TestingPublicServicePatchProfileBody": {
+      "properties": {
+        "payload": {
+          "$ref": "#/definitions/v1PatchProfileRequestPayload"
+        },
+        "skipVersionCheck": {
+          "type": "boolean"
+        },
+        "version": {
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "required": [
+        "payload",
+        "skipVersionCheck",
+        "version"
+      ],
+      "type": "object"
+    },
+    "UsersTenantPublicServicePatchAccountBody": {
+      "properties": {
+        "payload": {
+          "$ref": "#/definitions/v1PatchAccountRequestPayload"
+        },
+        "skipVersionCheck": {
+          "type": "boolean"
+        },
+        "version": {
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "required": [
+        "payload",
+        "skipVersionCheck",
+        "version"
+      ],
       "type": "object"
     },
     "protobufAny": {
       "additionalProperties": {},
+      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := \u0026pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
       "properties": {
         "@type": {
+          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com. As of May 2023, there are no widely used type server\nimplementations and no plans to implement one.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "roomsV1GetRoomResponse": {
+      "properties": {
+        "room": {
+          "$ref": "#/definitions/v1Room"
         }
       },
       "type": "object"
@@ -42,6 +128,17 @@
         },
         "message": {
           "type": "string"
+        }
+      },
+      "required": [
+        "code"
+      ],
+      "type": "object"
+    },
+    "testingV1GetRoomResponse": {
+      "properties": {
+        "item": {
+          "$ref": "#/definitions/v1TestingRoom"
         }
       },
       "type": "object"
@@ -65,10 +162,15 @@
           "type": "integer"
         }
       },
+      "required": [
+        "day",
+        "month",
+        "year"
+      ],
       "title": "Represents a whole or partial calendar date, such as a birthday. The time of\nday and time zone are either specified elsewhere or are insignificant. The\ndate is relative to the Gregorian Calendar. This can represent one of the\nfollowing:",
       "type": "object"
     },
-    "v1Account": {
+    "v1AccountTenant": {
       "properties": {
         "email": {
           "type": "string"
@@ -76,20 +178,28 @@
         "id": {
           "type": "string"
         },
+        "isBlocked": {
+          "type": "boolean"
+        },
         "isConfirmed": {
           "type": "boolean"
         },
         "isEmailVerified": {
           "type": "boolean"
         },
+        "lastLoginAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "lastRequestAt": {
+          "format": "date-time",
+          "type": "string"
+        },
         "profileName": {
           "type": "string"
         },
-        "profilePhoto100x100File": {
-          "$ref": "#/definitions/v1File"
-        },
-        "profilePhotoOriginalFile": {
-          "$ref": "#/definitions/v1File"
+        "profilePhotos": {
+          "$ref": "#/definitions/v1AccountTenantPhotoFiles"
         },
         "profileSurname": {
           "type": "string"
@@ -98,9 +208,35 @@
           "format": "uint64",
           "type": "string"
         },
+        "tenantId": {
+          "type": "string"
+        },
         "version": {
           "format": "int64",
           "type": "string"
+        }
+      },
+      "required": [
+        "email",
+        "id",
+        "isBlocked",
+        "isConfirmed",
+        "isEmailVerified",
+        "profileName",
+        "profileSurname",
+        "roleId",
+        "tenantId",
+        "version"
+      ],
+      "type": "object"
+    },
+    "v1AccountTenantPhotoFiles": {
+      "properties": {
+        "originalFile": {
+          "$ref": "#/definitions/v1File"
+        },
+        "s100x100File": {
+          "$ref": "#/definitions/v1File"
         }
       },
       "type": "object"
@@ -114,9 +250,43 @@
           "type": "string"
         }
       },
+      "required": [
+        "code",
+        "codeId"
+      ],
       "type": "object"
     },
     "v1AccountVerifyEmailResponse": {
+      "type": "object"
+    },
+    "v1AnswerValue": {
+      "properties": {
+        "boolValue": {
+          "type": "boolean"
+        },
+        "doubleValue": {
+          "format": "double",
+          "type": "number"
+        },
+        "intValue": {
+          "format": "int64",
+          "type": "string"
+        },
+        "stringValue": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "v1Answers": {
+      "properties": {
+        "data": {
+          "additionalProperties": {
+            "$ref": "#/definitions/v1AnswerValue"
+          },
+          "type": "object"
+        }
+      },
       "type": "object"
     },
     "v1Candidate": {
@@ -144,6 +314,14 @@
           "type": "string"
         }
       },
+      "required": [
+        "gender",
+        "id",
+        "name",
+        "surname",
+        "tenantId",
+        "version"
+      ],
       "type": "object"
     },
     "v1CheckAccountCodeRequest": {
@@ -155,9 +333,81 @@
           "type": "string"
         }
       },
+      "required": [
+        "code",
+        "id"
+      ],
       "type": "object"
     },
     "v1CheckAccountCodeResponse": {
+      "type": "object"
+    },
+    "v1CheckRegistrationResponse": {
+      "type": "object"
+    },
+    "v1CreateAccountRequest": {
+      "properties": {
+        "payload": {
+          "$ref": "#/definitions/v1CreateAccountRequestPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "type": "object"
+    },
+    "v1CreateAccountRequestPayload": {
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "profileName": {
+          "type": "string"
+        },
+        "profilePhotos": {
+          "$ref": "#/definitions/v1CreateAccountRequestPayloadPhotoFiles"
+        },
+        "profileSurname": {
+          "type": "string"
+        },
+        "roleId": {
+          "format": "uint64",
+          "type": "string"
+        }
+      },
+      "required": [
+        "email",
+        "password",
+        "profileName",
+        "profileSurname",
+        "roleId"
+      ],
+      "type": "object"
+    },
+    "v1CreateAccountRequestPayloadPhotoFiles": {
+      "properties": {
+        "originalFileId": {
+          "type": "string"
+        },
+        "s100x100FileId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "originalFileId",
+        "s100x100FileId"
+      ],
+      "type": "object"
+    },
+    "v1CreateAccountResponse": {
+      "properties": {
+        "item": {
+          "$ref": "#/definitions/v1AccountTenant"
+        }
+      },
       "type": "object"
     },
     "v1CreateCandidateRequest": {
@@ -166,6 +416,9 @@
           "$ref": "#/definitions/v1CreateCandidateRequestPayload"
         }
       },
+      "required": [
+        "payload"
+      ],
       "type": "object"
     },
     "v1CreateCandidateRequestPayload": {
@@ -183,6 +436,11 @@
           "type": "string"
         }
       },
+      "required": [
+        "gender",
+        "name",
+        "surname"
+      ],
       "type": "object"
     },
     "v1CreateCandidateResponse": {
@@ -193,7 +451,80 @@
       },
       "type": "object"
     },
+    "v1CreateProfileRequest": {
+      "properties": {
+        "payload": {
+          "$ref": "#/definitions/v1CreateProfileRequestPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "type": "object"
+    },
+    "v1CreateProfileRequestPayload": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "personalityTraits": {
+          "$ref": "#/definitions/v1ProfilePersonalityTraitsMap"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "v1CreateProfileResponse": {
+      "properties": {
+        "item": {
+          "$ref": "#/definitions/v1TestingProfile"
+        }
+      },
+      "type": "object"
+    },
+    "v1CreateRoomRequest": {
+      "properties": {
+        "payload": {
+          "$ref": "#/definitions/v1CreateRoomRequestPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "type": "object"
+    },
+    "v1CreateRoomRequestPayload": {
+      "properties": {
+        "candidateId": {
+          "type": "string"
+        },
+        "profileId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "candidateId",
+        "profileId"
+      ],
+      "type": "object"
+    },
+    "v1CreateRoomResponse": {
+      "properties": {
+        "item": {
+          "$ref": "#/definitions/v1TestingRoom"
+        }
+      },
+      "type": "object"
+    },
     "v1DeleteCandidateResponse": {
+      "type": "object"
+    },
+    "v1DeleteProfileResponse": {
+      "type": "object"
+    },
+    "v1DeleteRoomResponse": {
       "type": "object"
     },
     "v1File": {
@@ -208,6 +539,84 @@
           "type": "string"
         }
       },
+      "required": [
+        "url"
+      ],
+      "type": "object"
+    },
+    "v1FilesMap": {
+      "properties": {
+        "map": {
+          "additionalProperties": {
+            "$ref": "#/definitions/v1File"
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "v1FinishRegistrationRequest": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/definitions/v1FinishRegistrationRequestPayload"
+        }
+      },
+      "required": [
+        "id",
+        "payload"
+      ],
+      "type": "object"
+    },
+    "v1FinishRegistrationRequestPayload": {
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "profileSurname": {
+          "type": "string"
+        },
+        "tenantTextId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "profileName",
+        "profileSurname",
+        "tenantTextId"
+      ],
+      "type": "object"
+    },
+    "v1FinishRegistrationResponse": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "textId": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "textId",
+        "url"
+      ],
+      "type": "object"
+    },
+    "v1FinishRoomRequestPayload": {
+      "properties": {
+        "answers": {
+          "$ref": "#/definitions/v1Answers"
+        }
+      },
+      "type": "object"
+    },
+    "v1FinishRoomResponse": {
       "type": "object"
     },
     "v1Gender": {
@@ -219,6 +628,14 @@
       ],
       "type": "string"
     },
+    "v1GetAccountResponse": {
+      "properties": {
+        "item": {
+          "$ref": "#/definitions/v1AccountTenant"
+        }
+      },
+      "type": "object"
+    },
     "v1GetCandidateResponse": {
       "properties": {
         "item": {
@@ -227,20 +644,138 @@
       },
       "type": "object"
     },
-    "v1ListCandidatesResponse": {
+    "v1GetPersonalityTraitsResponse": {
       "properties": {
         "items": {
           "items": {
-            "$ref": "#/definitions/v1Candidate",
+            "$ref": "#/definitions/v1PersonalityTrait",
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "v1GetProfileResponse": {
+      "properties": {
+        "item": {
+          "$ref": "#/definitions/v1TestingProfile"
+        }
+      },
+      "type": "object"
+    },
+    "v1IsExistsResponse": {
+      "type": "object"
+    },
+    "v1ListAccountsResponse": {
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/definitions/v1AccountTenant",
             "type": "object"
           },
           "type": "array"
         },
         "total": {
-          "format": "uint64",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "total"
+      ],
+      "type": "object"
+    },
+    "v1ListCandidate": {
+      "properties": {
+        "birthday": {
+          "$ref": "#/definitions/typeDate"
+        },
+        "gender": {
+          "$ref": "#/definitions/v1Gender"
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "tenantId": {
+          "type": "string"
+        },
+        "version": {
+          "format": "int64",
           "type": "string"
         }
       },
+      "required": [
+        "gender",
+        "id",
+        "name",
+        "surname",
+        "tenantId",
+        "version"
+      ],
+      "type": "object"
+    },
+    "v1ListCandidatesResponse": {
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/definitions/v1ListCandidate",
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "total": {
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "total"
+      ],
+      "type": "object"
+    },
+    "v1ListProfilesResponse": {
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/definitions/v1TestingListProfile",
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "total": {
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "total"
+      ],
+      "type": "object"
+    },
+    "v1ListRoomsResponse": {
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/definitions/v1TestingListRoom",
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "total": {
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "total"
+      ],
       "type": "object"
     },
     "v1LoginRequest": {
@@ -255,12 +790,17 @@
           "type": "string"
         }
       },
+      "required": [
+        "email",
+        "password",
+        "tenantTextId"
+      ],
       "type": "object"
     },
     "v1LoginResponse": {
       "properties": {
         "account": {
-          "$ref": "#/definitions/v1Account"
+          "$ref": "#/definitions/v1AccountTenant"
         },
         "tenant": {
           "$ref": "#/definitions/v1Tenant"
@@ -285,6 +825,51 @@
       },
       "type": "object"
     },
+    "v1PatchAccountRequestPayload": {
+      "properties": {
+        "isBlocked": {
+          "type": "boolean"
+        },
+        "password": {
+          "type": "string"
+        },
+        "profileName": {
+          "type": "string"
+        },
+        "profilePhotos": {
+          "$ref": "#/definitions/v1PatchAccountRequestPayloadPhotoFiles"
+        },
+        "profilePhotosClear": {
+          "type": "boolean"
+        },
+        "profileSurname": {
+          "type": "string"
+        },
+        "roleId": {
+          "format": "uint64",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "v1PatchAccountRequestPayloadPhotoFiles": {
+      "properties": {
+        "originalFileId": {
+          "type": "string"
+        },
+        "s100x100FileId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "originalFileId",
+        "s100x100FileId"
+      ],
+      "type": "object"
+    },
+    "v1PatchAccountResponse": {
+      "type": "object"
+    },
     "v1PatchCandidateRequestPayload": {
       "properties": {
         "birthday": {
@@ -300,9 +885,119 @@
           "type": "string"
         }
       },
+      "required": [
+        "gender",
+        "name",
+        "surname"
+      ],
       "type": "object"
     },
     "v1PatchCandidateResponse": {
+      "type": "object"
+    },
+    "v1PatchProfileRequestPayload": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "personalityTraits": {
+          "$ref": "#/definitions/v1ProfilePersonalityTraitsMap"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "v1PatchProfileResponse": {
+      "type": "object"
+    },
+    "v1PatchTenantRequestPayload": {
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "v1PatchTenantResponse": {
+      "type": "object"
+    },
+    "v1PersonalityTrait": {
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "format": "uint64",
+          "type": "string"
+        },
+        "leftStateName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "rightStateName": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/v1PersonalityTraitType"
+        }
+      },
+      "required": [
+        "description",
+        "id",
+        "leftStateName",
+        "name",
+        "rightStateName",
+        "type"
+      ],
+      "type": "object"
+    },
+    "v1PersonalityTraitPriority": {
+      "default": "PRESONALITY_TRAIT_PRIORITY_NONE",
+      "enum": [
+        "PRESONALITY_TRAIT_PRIORITY_NONE",
+        "PRESONALITY_TRAIT_PRIORITY_LOW",
+        "PRESONALITY_TRAIT_PRIORITY_MEDIUM",
+        "PRESONALITY_TRAIT_PRIORITY_HIGH"
+      ],
+      "type": "string"
+    },
+    "v1PersonalityTraitType": {
+      "default": "PERSONALITY_TRAIT_TYPE_UNSPECIFIED",
+      "enum": [
+        "PERSONALITY_TRAIT_TYPE_UNSPECIFIED",
+        "PERSONALITY_TRAIT_TYPE_BIPOLAR"
+      ],
+      "type": "string"
+    },
+    "v1ProfilePersonalityTraitsMap": {
+      "properties": {
+        "map": {
+          "additionalProperties": {
+            "$ref": "#/definitions/v1ProfilePersonalityTraitsMapItem"
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "v1ProfilePersonalityTraitsMapItem": {
+      "properties": {
+        "priority": {
+          "$ref": "#/definitions/v1PersonalityTraitPriority"
+        },
+        "target": {
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "priority",
+        "target"
+      ],
       "type": "object"
     },
     "v1RefreshRequest": {
@@ -311,6 +1006,9 @@
           "type": "string"
         }
       },
+      "required": [
+        "refreshToken"
+      ],
       "type": "object"
     },
     "v1RefreshResponse": {
@@ -330,6 +1028,10 @@
           "type": "string"
         }
       },
+      "required": [
+        "email",
+        "tenantTextId"
+      ],
       "type": "object"
     },
     "v1RequestPasswordRecoveryResponse": {
@@ -338,7 +1040,102 @@
           "type": "string"
         }
       },
+      "required": [
+        "codeId"
+      ],
       "type": "object"
+    },
+    "v1Room": {
+      "properties": {
+        "candidate": {
+          "$ref": "#/definitions/v1RoomCandidate"
+        },
+        "id": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/v1RoomStatus"
+        },
+        "techniqueData": {
+          "items": {
+            "$ref": "#/definitions/v1RoomTechniqueItem",
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "tenantName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "status",
+        "tenantName"
+      ],
+      "type": "object"
+    },
+    "v1RoomCandidate": {
+      "properties": {
+        "candidateName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "candidateName"
+      ],
+      "type": "object"
+    },
+    "v1RoomStatus": {
+      "default": "ROOM_STATUS_UNSPECIFIED",
+      "enum": [
+        "ROOM_STATUS_UNSPECIFIED",
+        "ROOM_STATUS_NOT_STARTED",
+        "ROOM_STATUS_FINISHED"
+      ],
+      "type": "string"
+    },
+    "v1RoomTechniqueItem": {
+      "properties": {
+        "question": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/v1TechniqueItemType"
+        },
+        "variants": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "question",
+        "type"
+      ],
+      "type": "object"
+    },
+    "v1StartRegistrationRequest": {
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "email"
+      ],
+      "type": "object"
+    },
+    "v1StartRegistrationResponse": {
+      "type": "object"
+    },
+    "v1TechniqueItemType": {
+      "default": "TECHNIQUE_ITEM_TYPE_UNSPECIFIED",
+      "enum": [
+        "TECHNIQUE_ITEM_TYPE_UNSPECIFIED",
+        "TECHNIQUE_ITEM_TYPE_QUESTION_WITH_VARIANTS_SINGLE_ANSWER"
+      ],
+      "type": "string"
     },
     "v1Tenant": {
       "properties": {
@@ -356,13 +1153,210 @@
           "type": "string"
         }
       },
+      "required": [
+        "id",
+        "name",
+        "textId",
+        "version"
+      ],
+      "type": "object"
+    },
+    "v1TestingListProfile": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "tenantId": {
+          "type": "string"
+        },
+        "version": {
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "tenantId",
+        "version"
+      ],
+      "type": "object"
+    },
+    "v1TestingListRoom": {
+      "properties": {
+        "candidate": {
+          "$ref": "#/definitions/v1TestingRoomCandidate"
+        },
+        "id": {
+          "type": "string"
+        },
+        "profile": {
+          "$ref": "#/definitions/v1TestingRoomProfile"
+        },
+        "result": {
+          "$ref": "#/definitions/v1TestingRoomResult"
+        },
+        "status": {
+          "$ref": "#/definitions/v1RoomStatus"
+        },
+        "tenantId": {
+          "type": "string"
+        },
+        "version": {
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "status",
+        "tenantId",
+        "version"
+      ],
+      "type": "object"
+    },
+    "v1TestingProfile": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "personalityTraits": {
+          "$ref": "#/definitions/v1ProfilePersonalityTraitsMap"
+        },
+        "tenantId": {
+          "type": "string"
+        },
+        "version": {
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "tenantId",
+        "version"
+      ],
+      "type": "object"
+    },
+    "v1TestingRoom": {
+      "properties": {
+        "candidate": {
+          "$ref": "#/definitions/v1TestingRoomCandidate"
+        },
+        "id": {
+          "type": "string"
+        },
+        "personalityTraits": {
+          "$ref": "#/definitions/v1ProfilePersonalityTraitsMap"
+        },
+        "profile": {
+          "$ref": "#/definitions/v1TestingRoomProfile"
+        },
+        "result": {
+          "$ref": "#/definitions/v1TestingRoomResult"
+        },
+        "status": {
+          "$ref": "#/definitions/v1RoomStatus"
+        },
+        "tenantId": {
+          "type": "string"
+        },
+        "version": {
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "status",
+        "tenantId",
+        "version"
+      ],
+      "type": "object"
+    },
+    "v1TestingRoomCandidate": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "surname"
+      ],
+      "type": "object"
+    },
+    "v1TestingRoomProfile": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "type": "object"
+    },
+    "v1TestingRoomResult": {
+      "properties": {
+        "totalMatch": {
+          "format": "float",
+          "type": "number"
+        },
+        "totalMatchTip": {
+          "type": "string"
+        },
+        "traits": {
+          "additionalProperties": {
+            "$ref": "#/definitions/v1TestingRoomResultTrait"
+          },
+          "type": "object"
+        }
+      },
+      "required": [
+        "totalMatch",
+        "totalMatchTip"
+      ],
+      "type": "object"
+    },
+    "v1TestingRoomResultTrait": {
+      "properties": {
+        "match": {
+          "format": "float",
+          "type": "number"
+        },
+        "tip": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "match",
+        "tip"
+      ],
       "type": "object"
     },
     "v1Tokens": {
       "properties": {
         "accessJwt": {
-          "format": "int32",
-          "type": "integer"
+          "type": "string"
         },
         "refreshJwt": {
           "type": "string"
@@ -372,6 +1366,103 @@
           "type": "integer"
         }
       },
+      "required": [
+        "accessJwt",
+        "refreshJwt",
+        "refreshLifeSec"
+      ],
+      "type": "object"
+    },
+    "v1UpdateMyPasswordRequest": {
+      "properties": {
+        "payload": {
+          "$ref": "#/definitions/v1UpdateMyPasswordRequestPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "type": "object"
+    },
+    "v1UpdateMyPasswordRequestPayload": {
+      "properties": {
+        "currentPassword": {
+          "type": "string"
+        },
+        "newPassword": {
+          "type": "string"
+        },
+        "newPassword2": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "currentPassword",
+        "newPassword",
+        "newPassword2"
+      ],
+      "type": "object"
+    },
+    "v1UpdateMyPasswordResponse": {
+      "type": "object"
+    },
+    "v1UpdateMyProfileRequest": {
+      "properties": {
+        "payload": {
+          "$ref": "#/definitions/v1UpdateMyProfileRequestPayload"
+        },
+        "skipVersionCheck": {
+          "type": "boolean"
+        },
+        "version": {
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "required": [
+        "payload",
+        "skipVersionCheck",
+        "version"
+      ],
+      "type": "object"
+    },
+    "v1UpdateMyProfileRequestPayload": {
+      "properties": {
+        "profileName": {
+          "type": "string"
+        },
+        "profilePhotos": {
+          "$ref": "#/definitions/v1UpdateMyProfileRequestPayloadPhotoFiles"
+        },
+        "profilePhotosClear": {
+          "type": "boolean"
+        },
+        "profileSurname": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "profileName",
+        "profileSurname"
+      ],
+      "type": "object"
+    },
+    "v1UpdateMyProfileRequestPayloadPhotoFiles": {
+      "properties": {
+        "originalFileId": {
+          "type": "string"
+        },
+        "s100x100FileId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "originalFileId",
+        "s100x100FileId"
+      ],
+      "type": "object"
+    },
+    "v1UpdateMyProfileResponse": {
       "type": "object"
     },
     "v1UpdatePasswordByCodeRequest": {
@@ -389,6 +1480,12 @@
           "type": "string"
         }
       },
+      "required": [
+        "code",
+        "id",
+        "password",
+        "password2"
+      ],
       "type": "object"
     },
     "v1UpdatePasswordByCodeResponse": {
@@ -404,12 +1501,40 @@
           "type": "string"
         }
       },
+      "required": [
+        "file",
+        "filename"
+      ],
       "type": "object"
     },
     "v1UploadCandidateResumeFileResponse": {
       "properties": {
-        "fileId": {
+        "data": {
+          "$ref": "#/definitions/v1FilesMap"
+        }
+      },
+      "type": "object"
+    },
+    "v1UploadProfilePhotoFileRequest": {
+      "properties": {
+        "file": {
+          "format": "byte",
           "type": "string"
+        },
+        "filename": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "file",
+        "filename"
+      ],
+      "type": "object"
+    },
+    "v1UploadProfilePhotoFileResponse": {
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/v1FilesMap"
         }
       },
       "type": "object"
@@ -417,7 +1542,7 @@
     "v1WhoIAmResponse": {
       "properties": {
         "account": {
-          "$ref": "#/definitions/v1Account"
+          "$ref": "#/definitions/v1AccountTenant"
         },
         "tenant": {
           "$ref": "#/definitions/v1Tenant"
@@ -431,6 +1556,411 @@
     "version": "1.0"
   },
   "paths": {
+    "/v1/crm/candidates": {
+      "get": {
+        "operationId": "CrmPublicService_ListCandidates",
+        "parameters": [
+          {
+            "format": "uint64",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "format": "uint64",
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "searchQuery",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListCandidatesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Список кандидатов",
+        "tags": [
+          "CrmPublicService"
+        ]
+      },
+      "post": {
+        "operationId": "CrmPublicService_CreateCandidate",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateCandidateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateCandidateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Создать кандидата",
+        "tags": [
+          "CrmPublicService"
+        ]
+      }
+    },
+    "/v1/crm/candidates-resume": {
+      "post": {
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "operationId": "CrmPublicService_UploadCandidateResumeFile",
+        "parameters": [
+          {
+            "description": "File to upload",
+            "in": "formData",
+            "name": "file",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UploadCandidateResumeFileResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Загрузить файл-резюме кандидата",
+        "tags": [
+          "CrmPublicService"
+        ]
+      }
+    },
+    "/v1/crm/candidates/{id}": {
+      "delete": {
+        "operationId": "CrmPublicService_DeleteCandidate",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteCandidateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Удалить кандидата",
+        "tags": [
+          "CrmPublicService"
+        ]
+      },
+      "get": {
+        "operationId": "CrmPublicService_GetCandidate",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCandidateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Получить кандидата",
+        "tags": [
+          "CrmPublicService"
+        ]
+      },
+      "patch": {
+        "operationId": "CrmPublicService_PatchCandidate",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CrmPublicServicePatchCandidateBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1PatchCandidateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Обновить кандидата",
+        "tags": [
+          "CrmPublicService"
+        ]
+      }
+    },
+    "/v1/registration/finish": {
+      "post": {
+        "operationId": "RegistrationPublicService_FinishRegistration",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1FinishRegistrationRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1FinishRegistrationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "summary": "Закончить регистрацию",
+        "tags": [
+          "RegistrationPublicService"
+        ]
+      }
+    },
+    "/v1/registration/start": {
+      "post": {
+        "operationId": "RegistrationPublicService_StartRegistration",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1StartRegistrationRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1StartRegistrationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "summary": "Начать регистрацию",
+        "tags": [
+          "RegistrationPublicService"
+        ]
+      }
+    },
+    "/v1/registration/{id}": {
+      "get": {
+        "operationId": "RegistrationPublicService_CheckRegistration",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CheckRegistrationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "summary": "Проверить регистрацию",
+        "tags": [
+          "RegistrationPublicService"
+        ]
+      }
+    },
+    "/v1/rooms/{id}": {
+      "get": {
+        "operationId": "RoomsPublicService_GetRoom",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/roomsV1GetRoomResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "summary": "Получить комнату",
+        "tags": [
+          "RoomsPublicService"
+        ]
+      }
+    },
+    "/v1/rooms/{id}/finish": {
+      "post": {
+        "operationId": "RoomsPublicService_FinishRoom",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RoomsPublicServiceFinishRoomBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1FinishRoomResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "summary": "Завершить комнату",
+        "tags": [
+          "RoomsPublicService"
+        ]
+      }
+    },
     "/v1/tenant/auth/check-code": {
       "post": {
         "operationId": "AuthTenantPublicService_CheckAccountCode",
@@ -524,6 +2054,11 @@
             }
           }
         },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "summary": "Logout",
         "tags": [
           "AuthTenantPublicService"
@@ -679,15 +2214,397 @@
             }
           }
         },
-        "summary": "Обновить пароль по коду",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "WhoIAm",
         "tags": [
           "AuthTenantPublicService"
         ]
       }
     },
-    "/v1/tenant/crm/candidates": {
+    "/v1/tenant/is-exists/{textId}": {
       "get": {
-        "operationId": "CrmTenantPublicService_ListCandidates",
+        "operationId": "TenantPublicService_IsExists",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "textId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1IsExistsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "summary": "Проверка на существование",
+        "tags": [
+          "TenantPublicService"
+        ]
+      }
+    },
+    "/v1/tenant/users": {
+      "get": {
+        "operationId": "UsersTenantPublicService_ListAccounts",
+        "parameters": [
+          {
+            "format": "uint64",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "format": "uint64",
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListAccountsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Список аккаунтов",
+        "tags": [
+          "UsersTenantPublicService"
+        ]
+      },
+      "post": {
+        "operationId": "UsersTenantPublicService_CreateAccount",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateAccountRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateAccountResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Создать аккаунт",
+        "tags": [
+          "UsersTenantPublicService"
+        ]
+      }
+    },
+    "/v1/tenant/users/my-password": {
+      "put": {
+        "operationId": "UsersTenantPublicService_UpdateMyPassword",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateMyPasswordRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateMyPasswordResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Обновить мой пароль",
+        "tags": [
+          "UsersTenantPublicService"
+        ]
+      }
+    },
+    "/v1/tenant/users/my-profile": {
+      "put": {
+        "operationId": "UsersTenantPublicService_UpdateMyProfile",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateMyProfileRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateMyProfileResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Обновить мой профиль",
+        "tags": [
+          "UsersTenantPublicService"
+        ]
+      }
+    },
+    "/v1/tenant/users/profile-photo": {
+      "post": {
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "operationId": "UsersTenantPublicService_UploadProfilePhotoFile",
+        "parameters": [
+          {
+            "description": "File to upload",
+            "in": "formData",
+            "name": "file",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UploadProfilePhotoFileResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Загрузить фотографию профиля",
+        "tags": [
+          "UsersTenantPublicService"
+        ]
+      }
+    },
+    "/v1/tenant/users/{id}": {
+      "get": {
+        "operationId": "UsersTenantPublicService_GetAccount",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAccountResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Получить аккаунт",
+        "tags": [
+          "UsersTenantPublicService"
+        ]
+      },
+      "patch": {
+        "operationId": "UsersTenantPublicService_PatchAccount",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UsersTenantPublicServicePatchAccountBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1PatchAccountResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Обновить аккаунт",
+        "tags": [
+          "UsersTenantPublicService"
+        ]
+      }
+    },
+    "/v1/tenant/{id}": {
+      "patch": {
+        "operationId": "TenantPublicService_PatchTenant",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TenantPublicServicePatchTenantBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1PatchTenantResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Обновление тенанта",
+        "tags": [
+          "TenantPublicService"
+        ]
+      }
+    },
+    "/v1/testing/personality_traits": {
+      "get": {
+        "operationId": "TestingPublicService_GetPersonalityTraits",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetPersonalityTraitsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Получить список метрик",
+        "tags": [
+          "TestingPublicService"
+        ]
+      }
+    },
+    "/v1/testing/profiles": {
+      "get": {
+        "operationId": "TestingPublicService_ListProfiles",
         "parameters": [
           {
             "format": "uint64",
@@ -714,7 +2631,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ListCandidatesResponse"
+              "$ref": "#/definitions/v1ListProfilesResponse"
             }
           },
           "default": {
@@ -724,20 +2641,25 @@
             }
           }
         },
-        "summary": "Список кандидатов",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Список профилей профессий",
         "tags": [
-          "CrmTenantPublicService"
+          "TestingPublicService"
         ]
       },
       "post": {
-        "operationId": "CrmTenantPublicService_CreateCandidate",
+        "operationId": "TestingPublicService_CreateProfile",
         "parameters": [
           {
             "in": "body",
             "name": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1CreateCandidateRequest"
+              "$ref": "#/definitions/v1CreateProfileRequest"
             }
           }
         ],
@@ -745,7 +2667,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1CreateCandidateResponse"
+              "$ref": "#/definitions/v1CreateProfileResponse"
             }
           },
           "default": {
@@ -755,50 +2677,20 @@
             }
           }
         },
-        "summary": "Создать кандидата",
-        "tags": [
-          "CrmTenantPublicService"
-        ]
-      }
-    },
-    "/v1/tenant/crm/candidates-resume": {
-      "post": {
-        "consumes": [
-          "multipart/form-data"
-        ],
-        "operationId": "CrmTenantPublicService_UploadCandidateResumeFile",
-        "parameters": [
+        "security": [
           {
-            "description": "File to upload",
-            "in": "formData",
-            "name": "file",
-            "required": true,
-            "type": "file"
+            "BearerAuth": []
           }
         ],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1UploadCandidateResumeFileResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "summary": "Загрузить файл-резюме кандидата",
+        "summary": "Создать профиль профессии",
         "tags": [
-          "CrmTenantPublicService"
+          "TestingPublicService"
         ]
       }
     },
-    "/v1/tenant/crm/candidates/{id}": {
+    "/v1/testing/profiles/{id}": {
       "delete": {
-        "operationId": "CrmTenantPublicService_DeleteCandidate",
+        "operationId": "TestingPublicService_DeleteProfile",
         "parameters": [
           {
             "in": "path",
@@ -811,7 +2703,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1DeleteCandidateResponse"
+              "$ref": "#/definitions/v1DeleteProfileResponse"
             }
           },
           "default": {
@@ -821,13 +2713,18 @@
             }
           }
         },
-        "summary": "Удалить кандидата",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Удалить профиль профессии",
         "tags": [
-          "CrmTenantPublicService"
+          "TestingPublicService"
         ]
       },
       "get": {
-        "operationId": "CrmTenantPublicService_GetCandidate",
+        "operationId": "TestingPublicService_GetProfile",
         "parameters": [
           {
             "in": "path",
@@ -840,7 +2737,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetCandidateResponse"
+              "$ref": "#/definitions/v1GetProfileResponse"
             }
           },
           "default": {
@@ -850,13 +2747,18 @@
             }
           }
         },
-        "summary": "Получить кандидата",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Получить профиль профессии",
         "tags": [
-          "CrmTenantPublicService"
+          "TestingPublicService"
         ]
       },
       "patch": {
-        "operationId": "CrmTenantPublicService_PatchCandidate",
+        "operationId": "TestingPublicService_PatchProfile",
         "parameters": [
           {
             "in": "path",
@@ -869,7 +2771,7 @@
             "name": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/CrmTenantPublicServicePatchCandidateBody"
+              "$ref": "#/definitions/TestingPublicServicePatchProfileBody"
             }
           }
         ],
@@ -877,7 +2779,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1PatchCandidateResponse"
+              "$ref": "#/definitions/v1PatchProfileResponse"
             }
           },
           "default": {
@@ -887,9 +2789,164 @@
             }
           }
         },
-        "summary": "Обновить кандидата",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Обновить профиль профессии",
         "tags": [
-          "CrmTenantPublicService"
+          "TestingPublicService"
+        ]
+      }
+    },
+    "/v1/testing/rooms": {
+      "get": {
+        "operationId": "TestingPublicService_ListRooms",
+        "parameters": [
+          {
+            "format": "uint64",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "format": "uint64",
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListRoomsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Список комнат",
+        "tags": [
+          "TestingPublicService"
+        ]
+      },
+      "post": {
+        "operationId": "TestingPublicService_CreateRoom",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateRoomRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateRoomResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Создать комнату",
+        "tags": [
+          "TestingPublicService"
+        ]
+      }
+    },
+    "/v1/testing/rooms/{id}": {
+      "delete": {
+        "operationId": "TestingPublicService_DeleteRoom",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteRoomResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Удалить комнату",
+        "tags": [
+          "TestingPublicService"
+        ]
+      },
+      "get": {
+        "operationId": "TestingPublicService_GetRoom",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/testingV1GetRoomResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Получить комнату",
+        "tags": [
+          "TestingPublicService"
         ]
       }
     }
@@ -911,7 +2968,22 @@
       "name": "AuthTenantPublicService"
     },
     {
-      "name": "CrmTenantPublicService"
+      "name": "CrmPublicService"
+    },
+    {
+      "name": "RegistrationPublicService"
+    },
+    {
+      "name": "RoomsPublicService"
+    },
+    {
+      "name": "TenantPublicService"
+    },
+    {
+      "name": "TestingPublicService"
+    },
+    {
+      "name": "UsersTenantPublicService"
     }
   ]
 }

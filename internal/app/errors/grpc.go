@@ -239,6 +239,8 @@ func appErrorByGrpcCode(code codes.Code) *AppError {
 		return ErrUnprocessable
 	case codes.Internal:
 		return ErrInternal
+	case codes.Unimplemented:
+		return ErrUnimplemented
 	default:
 		return ErrInternal
 	}

@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package types.v1;
+
+enum TechniqueItemType {
+  TECHNIQUE_ITEM_TYPE_UNSPECIFIED = 0;
+  TECHNIQUE_ITEM_TYPE_QUESTION_WITH_VARIANTS_SINGLE_ANSWER = 1;
+}
+
+enum RoomStatus {
+  ROOM_STATUS_UNSPECIFIED = 0;
+  ROOM_STATUS_NOT_STARTED = 1;
+  ROOM_STATUS_FINISHED = 10;
+}
+
+enum PersonalityTraitType {
+  PERSONALITY_TRAIT_TYPE_UNSPECIFIED = 0;
+  PERSONALITY_TRAIT_TYPE_BIPOLAR = 1;
+}
+
+enum PersonalityTraitPriority {
+  PRESONALITY_TRAIT_PRIORITY_NONE = 0;
+  PRESONALITY_TRAIT_PRIORITY_LOW = 1;
+  PRESONALITY_TRAIT_PRIORITY_MEDIUM = 2;
+  PRESONALITY_TRAIT_PRIORITY_HIGH = 3;
+}
+
+message PersonalityTrait {
+  uint64 id = 1;
+  PersonalityTraitType type = 2;
+  string name = 3;
+  string description = 4;
+  string left_state_name = 5;
+  string right_state_name = 6;
+}
+
+message ProfilePersonalityTraitsMapItem {
+  PersonalityTraitPriority priority = 1;
+  int32 target = 2;
+}
+
+message ProfilePersonalityTraitsMap {
+  map<uint64, ProfilePersonalityTraitsMapItem> map = 1;
+}
+
+message TestingProfile {
+  string id = 1;
+  int64 version = 2;
+  string tenant_id = 3;
+  string name = 4;
+  ProfilePersonalityTraitsMap personality_traits = 5;
+}
+
+message TestingListProfile {
+  string id = 1;
+  int64 version = 2;
+  string tenant_id = 3;
+  string name = 4;
+}
+
+message TestingRoomCandidate {
+  string id = 1;
+  string name = 2;
+  string surname = 3;
+}
+
+message TestingRoomProfile {
+  string id = 1;
+  string name = 2;
+}
+
+message TestingRoomResultTrait {
+  float match = 1;
+  string tip = 2;
+}
+
+message TestingRoomResult {
+  float total_match = 1;
+  string total_match_tip = 2;
+  map<uint64, TestingRoomResultTrait> traits = 3;
+}
+
+message TestingRoom {
+  string id = 1;
+  int64 version = 2;
+  string tenant_id = 3;
+  RoomStatus status = 4;
+  optional TestingRoomCandidate candidate = 5;
+  optional TestingRoomProfile profile = 6;
+  optional TestingRoomResult result = 7;
+  ProfilePersonalityTraitsMap personality_traits = 8;
+}
+
+message TestingListRoom {
+  string id = 1;
+  int64 version = 2;
+  string tenant_id = 3;
+  RoomStatus status = 4;
+  optional TestingRoomCandidate candidate = 5;
+  optional TestingRoomProfile profile = 6;
+  optional TestingRoomResult result = 7;
+}
+
+

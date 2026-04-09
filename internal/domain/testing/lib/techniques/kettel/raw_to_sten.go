@@ -2057,7 +2057,7 @@ func convertRawToSten(
 		age = calcAge(time.Now(), *candidateBirthday)
 	}
 
-	if candidateGender == crmEntity.CandidateGenderUnknown {
+	if candidateGender == crmEntity.CandidateGenderUnspecified {
 		candidateGender = crmEntity.CandidateGenderMale
 	}
 

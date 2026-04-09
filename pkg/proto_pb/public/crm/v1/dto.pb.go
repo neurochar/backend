@@ -9,7 +9,7 @@ package crmv1
 import (
 	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	types "github.com/neurochar/backend/pkg/proto_pb/common/types"
-	date "google.golang.org/genproto/googleapis/type/date"
+	_ "google.golang.org/genproto/googleapis/type/date"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	_ "google.golang.org/protobuf/types/known/timestamppb"
@@ -25,98 +25,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type Candidate struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Version       int64                  `protobuf:"varint,2,opt,name=version,proto3" json:"version,omitempty"`
-	TenantId      string                 `protobuf:"bytes,3,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
-	Name          string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	Surname       string                 `protobuf:"bytes,5,opt,name=surname,proto3" json:"surname,omitempty"`
-	Gender        types.Gender           `protobuf:"varint,6,opt,name=gender,proto3,enum=types.v1.Gender" json:"gender,omitempty"`
-	Birthday      *date.Date             `protobuf:"bytes,7,opt,name=birthday,proto3,oneof" json:"birthday,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Candidate) Reset() {
-	*x = Candidate{}
-	mi := &file_public_crm_v1_dto_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Candidate) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Candidate) ProtoMessage() {}
-
-func (x *Candidate) ProtoReflect() protoreflect.Message {
-	mi := &file_public_crm_v1_dto_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Candidate.ProtoReflect.Descriptor instead.
-func (*Candidate) Descriptor() ([]byte, []int) {
-	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *Candidate) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-func (x *Candidate) GetVersion() int64 {
-	if x != nil {
-		return x.Version
-	}
-	return 0
-}
-
-func (x *Candidate) GetTenantId() string {
-	if x != nil {
-		return x.TenantId
-	}
-	return ""
-}
-
-func (x *Candidate) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *Candidate) GetSurname() string {
-	if x != nil {
-		return x.Surname
-	}
-	return ""
-}
-
-func (x *Candidate) GetGender() types.Gender {
-	if x != nil {
-		return x.Gender
-	}
-	return types.Gender(0)
-}
-
-func (x *Candidate) GetBirthday() *date.Date {
-	if x != nil {
-		return x.Birthday
-	}
-	return nil
-}
-
 type ListCandidatesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Limit         *uint64                `protobuf:"varint,1,opt,name=limit,proto3,oneof" json:"limit,omitempty"`
@@ -128,7 +36,7 @@ type ListCandidatesRequest struct {
 
 func (x *ListCandidatesRequest) Reset() {
 	*x = ListCandidatesRequest{}
-	mi := &file_public_crm_v1_dto_proto_msgTypes[1]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -140,7 +48,7 @@ func (x *ListCandidatesRequest) String() string {
 func (*ListCandidatesRequest) ProtoMessage() {}
 
 func (x *ListCandidatesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_public_crm_v1_dto_proto_msgTypes[1]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -153,7 +61,7 @@ func (x *ListCandidatesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCandidatesRequest.ProtoReflect.Descriptor instead.
 func (*ListCandidatesRequest) Descriptor() ([]byte, []int) {
-	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{1}
+	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *ListCandidatesRequest) GetLimit() uint64 {
@@ -179,15 +87,15 @@ func (x *ListCandidatesRequest) GetSearchQuery() string {
 
 type ListCandidatesResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Items         []*Candidate           `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
-	Total         uint64                 `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	Items         []*types.ListCandidate `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
+	Total         int32                  `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ListCandidatesResponse) Reset() {
 	*x = ListCandidatesResponse{}
-	mi := &file_public_crm_v1_dto_proto_msgTypes[2]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -199,7 +107,7 @@ func (x *ListCandidatesResponse) String() string {
 func (*ListCandidatesResponse) ProtoMessage() {}
 
 func (x *ListCandidatesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_public_crm_v1_dto_proto_msgTypes[2]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -212,17 +120,17 @@ func (x *ListCandidatesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCandidatesResponse.ProtoReflect.Descriptor instead.
 func (*ListCandidatesResponse) Descriptor() ([]byte, []int) {
-	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{2}
+	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *ListCandidatesResponse) GetItems() []*Candidate {
+func (x *ListCandidatesResponse) GetItems() []*types.ListCandidate {
 	if x != nil {
 		return x.Items
 	}
 	return nil
 }
 
-func (x *ListCandidatesResponse) GetTotal() uint64 {
+func (x *ListCandidatesResponse) GetTotal() int32 {
 	if x != nil {
 		return x.Total
 	}
@@ -238,7 +146,7 @@ type GetCandidateRequest struct {
 
 func (x *GetCandidateRequest) Reset() {
 	*x = GetCandidateRequest{}
-	mi := &file_public_crm_v1_dto_proto_msgTypes[3]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -250,7 +158,7 @@ func (x *GetCandidateRequest) String() string {
 func (*GetCandidateRequest) ProtoMessage() {}
 
 func (x *GetCandidateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_public_crm_v1_dto_proto_msgTypes[3]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -263,7 +171,7 @@ func (x *GetCandidateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCandidateRequest.ProtoReflect.Descriptor instead.
 func (*GetCandidateRequest) Descriptor() ([]byte, []int) {
-	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{3}
+	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetCandidateRequest) GetId() string {
@@ -275,14 +183,14 @@ func (x *GetCandidateRequest) GetId() string {
 
 type GetCandidateResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Item          *Candidate             `protobuf:"bytes,1,opt,name=item,proto3" json:"item,omitempty"`
+	Item          *types.Candidate       `protobuf:"bytes,1,opt,name=item,proto3" json:"item,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetCandidateResponse) Reset() {
 	*x = GetCandidateResponse{}
-	mi := &file_public_crm_v1_dto_proto_msgTypes[4]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -294,7 +202,7 @@ func (x *GetCandidateResponse) String() string {
 func (*GetCandidateResponse) ProtoMessage() {}
 
 func (x *GetCandidateResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_public_crm_v1_dto_proto_msgTypes[4]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -307,10 +215,10 @@ func (x *GetCandidateResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCandidateResponse.ProtoReflect.Descriptor instead.
 func (*GetCandidateResponse) Descriptor() ([]byte, []int) {
-	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{4}
+	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *GetCandidateResponse) GetItem() *Candidate {
+func (x *GetCandidateResponse) GetItem() *types.Candidate {
 	if x != nil {
 		return x.Item
 	}
@@ -329,7 +237,7 @@ type CreateCandidateRequestPayload struct {
 
 func (x *CreateCandidateRequestPayload) Reset() {
 	*x = CreateCandidateRequestPayload{}
-	mi := &file_public_crm_v1_dto_proto_msgTypes[5]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -341,7 +249,7 @@ func (x *CreateCandidateRequestPayload) String() string {
 func (*CreateCandidateRequestPayload) ProtoMessage() {}
 
 func (x *CreateCandidateRequestPayload) ProtoReflect() protoreflect.Message {
-	mi := &file_public_crm_v1_dto_proto_msgTypes[5]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -354,7 +262,7 @@ func (x *CreateCandidateRequestPayload) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCandidateRequestPayload.ProtoReflect.Descriptor instead.
 func (*CreateCandidateRequestPayload) Descriptor() ([]byte, []int) {
-	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{5}
+	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *CreateCandidateRequestPayload) GetName() string {
@@ -394,7 +302,7 @@ type CreateCandidateRequest struct {
 
 func (x *CreateCandidateRequest) Reset() {
 	*x = CreateCandidateRequest{}
-	mi := &file_public_crm_v1_dto_proto_msgTypes[6]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -406,7 +314,7 @@ func (x *CreateCandidateRequest) String() string {
 func (*CreateCandidateRequest) ProtoMessage() {}
 
 func (x *CreateCandidateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_public_crm_v1_dto_proto_msgTypes[6]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -419,7 +327,7 @@ func (x *CreateCandidateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCandidateRequest.ProtoReflect.Descriptor instead.
 func (*CreateCandidateRequest) Descriptor() ([]byte, []int) {
-	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{6}
+	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *CreateCandidateRequest) GetPayload() *CreateCandidateRequestPayload {
@@ -431,14 +339,14 @@ func (x *CreateCandidateRequest) GetPayload() *CreateCandidateRequestPayload {
 
 type CreateCandidateResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Item          *Candidate             `protobuf:"bytes,1,opt,name=item,proto3" json:"item,omitempty"`
+	Item          *types.Candidate       `protobuf:"bytes,1,opt,name=item,proto3" json:"item,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CreateCandidateResponse) Reset() {
 	*x = CreateCandidateResponse{}
-	mi := &file_public_crm_v1_dto_proto_msgTypes[7]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -450,7 +358,7 @@ func (x *CreateCandidateResponse) String() string {
 func (*CreateCandidateResponse) ProtoMessage() {}
 
 func (x *CreateCandidateResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_public_crm_v1_dto_proto_msgTypes[7]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -463,10 +371,10 @@ func (x *CreateCandidateResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCandidateResponse.ProtoReflect.Descriptor instead.
 func (*CreateCandidateResponse) Descriptor() ([]byte, []int) {
-	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{7}
+	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *CreateCandidateResponse) GetItem() *Candidate {
+func (x *CreateCandidateResponse) GetItem() *types.Candidate {
 	if x != nil {
 		return x.Item
 	}
@@ -485,7 +393,7 @@ type PatchCandidateRequestPayload struct {
 
 func (x *PatchCandidateRequestPayload) Reset() {
 	*x = PatchCandidateRequestPayload{}
-	mi := &file_public_crm_v1_dto_proto_msgTypes[8]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -497,7 +405,7 @@ func (x *PatchCandidateRequestPayload) String() string {
 func (*PatchCandidateRequestPayload) ProtoMessage() {}
 
 func (x *PatchCandidateRequestPayload) ProtoReflect() protoreflect.Message {
-	mi := &file_public_crm_v1_dto_proto_msgTypes[8]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -510,7 +418,7 @@ func (x *PatchCandidateRequestPayload) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PatchCandidateRequestPayload.ProtoReflect.Descriptor instead.
 func (*PatchCandidateRequestPayload) Descriptor() ([]byte, []int) {
-	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{8}
+	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *PatchCandidateRequestPayload) GetName() string {
@@ -553,7 +461,7 @@ type PatchCandidateRequest struct {
 
 func (x *PatchCandidateRequest) Reset() {
 	*x = PatchCandidateRequest{}
-	mi := &file_public_crm_v1_dto_proto_msgTypes[9]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -565,7 +473,7 @@ func (x *PatchCandidateRequest) String() string {
 func (*PatchCandidateRequest) ProtoMessage() {}
 
 func (x *PatchCandidateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_public_crm_v1_dto_proto_msgTypes[9]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -578,7 +486,7 @@ func (x *PatchCandidateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PatchCandidateRequest.ProtoReflect.Descriptor instead.
 func (*PatchCandidateRequest) Descriptor() ([]byte, []int) {
-	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{9}
+	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *PatchCandidateRequest) GetId() string {
@@ -617,7 +525,7 @@ type PatchCandidateResponse struct {
 
 func (x *PatchCandidateResponse) Reset() {
 	*x = PatchCandidateResponse{}
-	mi := &file_public_crm_v1_dto_proto_msgTypes[10]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -629,7 +537,7 @@ func (x *PatchCandidateResponse) String() string {
 func (*PatchCandidateResponse) ProtoMessage() {}
 
 func (x *PatchCandidateResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_public_crm_v1_dto_proto_msgTypes[10]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -642,7 +550,7 @@ func (x *PatchCandidateResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PatchCandidateResponse.ProtoReflect.Descriptor instead.
 func (*PatchCandidateResponse) Descriptor() ([]byte, []int) {
-	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{10}
+	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{9}
 }
 
 type DeleteCandidateRequest struct {
@@ -654,7 +562,7 @@ type DeleteCandidateRequest struct {
 
 func (x *DeleteCandidateRequest) Reset() {
 	*x = DeleteCandidateRequest{}
-	mi := &file_public_crm_v1_dto_proto_msgTypes[11]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -666,7 +574,7 @@ func (x *DeleteCandidateRequest) String() string {
 func (*DeleteCandidateRequest) ProtoMessage() {}
 
 func (x *DeleteCandidateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_public_crm_v1_dto_proto_msgTypes[11]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -679,7 +587,7 @@ func (x *DeleteCandidateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCandidateRequest.ProtoReflect.Descriptor instead.
 func (*DeleteCandidateRequest) Descriptor() ([]byte, []int) {
-	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{11}
+	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *DeleteCandidateRequest) GetId() string {
@@ -697,7 +605,7 @@ type DeleteCandidateResponse struct {
 
 func (x *DeleteCandidateResponse) Reset() {
 	*x = DeleteCandidateResponse{}
-	mi := &file_public_crm_v1_dto_proto_msgTypes[12]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -709,7 +617,7 @@ func (x *DeleteCandidateResponse) String() string {
 func (*DeleteCandidateResponse) ProtoMessage() {}
 
 func (x *DeleteCandidateResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_public_crm_v1_dto_proto_msgTypes[12]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -722,7 +630,7 @@ func (x *DeleteCandidateResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCandidateResponse.ProtoReflect.Descriptor instead.
 func (*DeleteCandidateResponse) Descriptor() ([]byte, []int) {
-	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{12}
+	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{11}
 }
 
 type UploadCandidateResumeFileRequest struct {
@@ -735,7 +643,7 @@ type UploadCandidateResumeFileRequest struct {
 
 func (x *UploadCandidateResumeFileRequest) Reset() {
 	*x = UploadCandidateResumeFileRequest{}
-	mi := &file_public_crm_v1_dto_proto_msgTypes[13]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -747,7 +655,7 @@ func (x *UploadCandidateResumeFileRequest) String() string {
 func (*UploadCandidateResumeFileRequest) ProtoMessage() {}
 
 func (x *UploadCandidateResumeFileRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_public_crm_v1_dto_proto_msgTypes[13]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -760,7 +668,7 @@ func (x *UploadCandidateResumeFileRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadCandidateResumeFileRequest.ProtoReflect.Descriptor instead.
 func (*UploadCandidateResumeFileRequest) Descriptor() ([]byte, []int) {
-	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{13}
+	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *UploadCandidateResumeFileRequest) GetFile() []byte {
@@ -779,14 +687,14 @@ func (x *UploadCandidateResumeFileRequest) GetFilename() string {
 
 type UploadCandidateResumeFileResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	FileId        string                 `protobuf:"bytes,1,opt,name=file_id,json=fileId,proto3" json:"file_id,omitempty"`
+	Data          *types.FilesMap        `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *UploadCandidateResumeFileResponse) Reset() {
 	*x = UploadCandidateResumeFileResponse{}
-	mi := &file_public_crm_v1_dto_proto_msgTypes[14]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -798,7 +706,7 @@ func (x *UploadCandidateResumeFileResponse) String() string {
 func (*UploadCandidateResumeFileResponse) ProtoMessage() {}
 
 func (x *UploadCandidateResumeFileResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_public_crm_v1_dto_proto_msgTypes[14]
+	mi := &file_public_crm_v1_dto_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -811,44 +719,35 @@ func (x *UploadCandidateResumeFileResponse) ProtoReflect() protoreflect.Message 
 
 // Deprecated: Use UploadCandidateResumeFileResponse.ProtoReflect.Descriptor instead.
 func (*UploadCandidateResumeFileResponse) Descriptor() ([]byte, []int) {
-	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{14}
+	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{13}
 }
 
-func (x *UploadCandidateResumeFileResponse) GetFileId() string {
+func (x *UploadCandidateResumeFileResponse) GetData() *types.FilesMap {
 	if x != nil {
-		return x.FileId
+		return x.Data
 	}
-	return ""
+	return nil
 }
 
 var File_public_crm_v1_dto_proto protoreflect.FileDescriptor
 
 const file_public_crm_v1_dto_proto_rawDesc = "" +
 	"\n" +
-	"\x17public/crm/v1/dto.proto\x12\x06crm.v1\x1a\x18common/types/types.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bbuf/validate/validate.proto\x1a\x16google/type/date.proto\"\xeb\x01\n" +
-	"\tCandidate\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
-	"\aversion\x18\x02 \x01(\x03R\aversion\x12\x1b\n" +
-	"\ttenant_id\x18\x03 \x01(\tR\btenantId\x12\x12\n" +
-	"\x04name\x18\x04 \x01(\tR\x04name\x12\x18\n" +
-	"\asurname\x18\x05 \x01(\tR\asurname\x12(\n" +
-	"\x06gender\x18\x06 \x01(\x0e2\x10.types.v1.GenderR\x06gender\x122\n" +
-	"\bbirthday\x18\a \x01(\v2\x11.google.type.DateH\x00R\bbirthday\x88\x01\x01B\v\n" +
-	"\t_birthday\"\x9d\x01\n" +
+	"\x17public/crm/v1/dto.proto\x12\x06crm.v1\x1a\x18common/types/types.proto\x1a\x1ccommon/types/crm_types.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bbuf/validate/validate.proto\x1a\x16google/type/date.proto\"\x9d\x01\n" +
 	"\x15ListCandidatesRequest\x12\x19\n" +
 	"\x05limit\x18\x01 \x01(\x04H\x00R\x05limit\x88\x01\x01\x12\x1b\n" +
 	"\x06offset\x18\x02 \x01(\x04H\x01R\x06offset\x88\x01\x01\x12&\n" +
 	"\fsearch_query\x18\x03 \x01(\tH\x02R\vsearchQuery\x88\x01\x01B\b\n" +
 	"\x06_limitB\t\n" +
 	"\a_offsetB\x0f\n" +
-	"\r_search_query\"W\n" +
-	"\x16ListCandidatesResponse\x12'\n" +
-	"\x05items\x18\x01 \x03(\v2\x11.crm.v1.CandidateR\x05items\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x04R\x05total\"/\n" +
+	"\r_search_query\"]\n" +
+	"\x16ListCandidatesResponse\x12-\n" +
+	"\x05items\x18\x01 \x03(\v2\x17.types.v1.ListCandidateR\x05items\x12\x14\n" +
+	"\x05total\x18\x02 \x01(\x05R\x05total\"/\n" +
 	"\x13GetCandidateRequest\x12\x18\n" +
-	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"=\n" +
-	"\x14GetCandidateResponse\x12%\n" +
-	"\x04item\x18\x01 \x01(\v2\x11.crm.v1.CandidateR\x04item\"\xc3\x01\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"?\n" +
+	"\x14GetCandidateResponse\x12'\n" +
+	"\x04item\x18\x01 \x01(\v2\x13.types.v1.CandidateR\x04item\"\xc3\x01\n" +
 	"\x1dCreateCandidateRequestPayload\x12\x1e\n" +
 	"\x04name\x18\x01 \x01(\tB\n" +
 	"\xbaH\ar\x05\x10\x01\x18\x96\x01R\x04name\x12$\n" +
@@ -857,9 +756,9 @@ const file_public_crm_v1_dto_proto_rawDesc = "" +
 	"\x06gender\x18\x03 \x01(\x0e2\x10.types.v1.GenderR\x06gender\x122\n" +
 	"\bbirthday\x18\x04 \x01(\v2\x16.types.v1.OptionalDateR\bbirthday\"a\n" +
 	"\x16CreateCandidateRequest\x12G\n" +
-	"\apayload\x18\x01 \x01(\v2%.crm.v1.CreateCandidateRequestPayloadB\x06\xbaH\x03\xc8\x01\x01R\apayload\"@\n" +
-	"\x17CreateCandidateResponse\x12%\n" +
-	"\x04item\x18\x01 \x01(\v2\x11.crm.v1.CandidateR\x04item\"\x83\x02\n" +
+	"\apayload\x18\x01 \x01(\v2%.crm.v1.CreateCandidateRequestPayloadB\x06\xbaH\x03\xc8\x01\x01R\apayload\"B\n" +
+	"\x17CreateCandidateResponse\x12'\n" +
+	"\x04item\x18\x01 \x01(\v2\x13.types.v1.CandidateR\x04item\"\x83\x02\n" +
 	"\x1cPatchCandidateRequestPayload\x12#\n" +
 	"\x04name\x18\x01 \x01(\tB\n" +
 	"\xbaH\ar\x05\x10\x01\x18\x96\x01H\x00R\x04name\x88\x01\x01\x12)\n" +
@@ -883,9 +782,9 @@ const file_public_crm_v1_dto_proto_rawDesc = "" +
 	"\x17DeleteCandidateResponse\"R\n" +
 	" UploadCandidateResumeFileRequest\x12\x12\n" +
 	"\x04file\x18\x01 \x01(\fR\x04file\x12\x1a\n" +
-	"\bfilename\x18\x02 \x01(\tR\bfilename\"<\n" +
-	"!UploadCandidateResumeFileResponse\x12\x17\n" +
-	"\afile_id\x18\x01 \x01(\tR\x06fileIdB\x8e\x01\n" +
+	"\bfilename\x18\x02 \x01(\tR\bfilename\"K\n" +
+	"!UploadCandidateResumeFileResponse\x12&\n" +
+	"\x04data\x18\x01 \x01(\v2\x12.types.v1.FilesMapR\x04dataB\x8e\x01\n" +
 	"\n" +
 	"com.crm.v1B\bDtoProtoP\x01Z=github.com/neurochar/backend/pkg/proto_pb/public/crm/v1;crmv1\xa2\x02\x03CXX\xaa\x02\x06Crm.V1\xca\x02\x06Crm\\V1\xe2\x02\x12Crm\\V1\\GPBMetadata\xea\x02\aCrm::V1b\x06proto3"
 
@@ -901,44 +800,44 @@ func file_public_crm_v1_dto_proto_rawDescGZIP() []byte {
 	return file_public_crm_v1_dto_proto_rawDescData
 }
 
-var file_public_crm_v1_dto_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_public_crm_v1_dto_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_public_crm_v1_dto_proto_goTypes = []any{
-	(*Candidate)(nil),                         // 0: crm.v1.Candidate
-	(*ListCandidatesRequest)(nil),             // 1: crm.v1.ListCandidatesRequest
-	(*ListCandidatesResponse)(nil),            // 2: crm.v1.ListCandidatesResponse
-	(*GetCandidateRequest)(nil),               // 3: crm.v1.GetCandidateRequest
-	(*GetCandidateResponse)(nil),              // 4: crm.v1.GetCandidateResponse
-	(*CreateCandidateRequestPayload)(nil),     // 5: crm.v1.CreateCandidateRequestPayload
-	(*CreateCandidateRequest)(nil),            // 6: crm.v1.CreateCandidateRequest
-	(*CreateCandidateResponse)(nil),           // 7: crm.v1.CreateCandidateResponse
-	(*PatchCandidateRequestPayload)(nil),      // 8: crm.v1.PatchCandidateRequestPayload
-	(*PatchCandidateRequest)(nil),             // 9: crm.v1.PatchCandidateRequest
-	(*PatchCandidateResponse)(nil),            // 10: crm.v1.PatchCandidateResponse
-	(*DeleteCandidateRequest)(nil),            // 11: crm.v1.DeleteCandidateRequest
-	(*DeleteCandidateResponse)(nil),           // 12: crm.v1.DeleteCandidateResponse
-	(*UploadCandidateResumeFileRequest)(nil),  // 13: crm.v1.UploadCandidateResumeFileRequest
-	(*UploadCandidateResumeFileResponse)(nil), // 14: crm.v1.UploadCandidateResumeFileResponse
-	(types.Gender)(0),                         // 15: types.v1.Gender
-	(*date.Date)(nil),                         // 16: google.type.Date
+	(*ListCandidatesRequest)(nil),             // 0: crm.v1.ListCandidatesRequest
+	(*ListCandidatesResponse)(nil),            // 1: crm.v1.ListCandidatesResponse
+	(*GetCandidateRequest)(nil),               // 2: crm.v1.GetCandidateRequest
+	(*GetCandidateResponse)(nil),              // 3: crm.v1.GetCandidateResponse
+	(*CreateCandidateRequestPayload)(nil),     // 4: crm.v1.CreateCandidateRequestPayload
+	(*CreateCandidateRequest)(nil),            // 5: crm.v1.CreateCandidateRequest
+	(*CreateCandidateResponse)(nil),           // 6: crm.v1.CreateCandidateResponse
+	(*PatchCandidateRequestPayload)(nil),      // 7: crm.v1.PatchCandidateRequestPayload
+	(*PatchCandidateRequest)(nil),             // 8: crm.v1.PatchCandidateRequest
+	(*PatchCandidateResponse)(nil),            // 9: crm.v1.PatchCandidateResponse
+	(*DeleteCandidateRequest)(nil),            // 10: crm.v1.DeleteCandidateRequest
+	(*DeleteCandidateResponse)(nil),           // 11: crm.v1.DeleteCandidateResponse
+	(*UploadCandidateResumeFileRequest)(nil),  // 12: crm.v1.UploadCandidateResumeFileRequest
+	(*UploadCandidateResumeFileResponse)(nil), // 13: crm.v1.UploadCandidateResumeFileResponse
+	(*types.ListCandidate)(nil),               // 14: types.v1.ListCandidate
+	(*types.Candidate)(nil),                   // 15: types.v1.Candidate
+	(types.Gender)(0),                         // 16: types.v1.Gender
 	(*types.OptionalDate)(nil),                // 17: types.v1.OptionalDate
+	(*types.FilesMap)(nil),                    // 18: types.v1.FilesMap
 }
 var file_public_crm_v1_dto_proto_depIdxs = []int32{
-	15, // 0: crm.v1.Candidate.gender:type_name -> types.v1.Gender
-	16, // 1: crm.v1.Candidate.birthday:type_name -> google.type.Date
-	0,  // 2: crm.v1.ListCandidatesResponse.items:type_name -> crm.v1.Candidate
-	0,  // 3: crm.v1.GetCandidateResponse.item:type_name -> crm.v1.Candidate
-	15, // 4: crm.v1.CreateCandidateRequestPayload.gender:type_name -> types.v1.Gender
-	17, // 5: crm.v1.CreateCandidateRequestPayload.birthday:type_name -> types.v1.OptionalDate
-	5,  // 6: crm.v1.CreateCandidateRequest.payload:type_name -> crm.v1.CreateCandidateRequestPayload
-	0,  // 7: crm.v1.CreateCandidateResponse.item:type_name -> crm.v1.Candidate
-	15, // 8: crm.v1.PatchCandidateRequestPayload.gender:type_name -> types.v1.Gender
-	17, // 9: crm.v1.PatchCandidateRequestPayload.birthday:type_name -> types.v1.OptionalDate
-	8,  // 10: crm.v1.PatchCandidateRequest.payload:type_name -> crm.v1.PatchCandidateRequestPayload
-	11, // [11:11] is the sub-list for method output_type
-	11, // [11:11] is the sub-list for method input_type
-	11, // [11:11] is the sub-list for extension type_name
-	11, // [11:11] is the sub-list for extension extendee
-	0,  // [0:11] is the sub-list for field type_name
+	14, // 0: crm.v1.ListCandidatesResponse.items:type_name -> types.v1.ListCandidate
+	15, // 1: crm.v1.GetCandidateResponse.item:type_name -> types.v1.Candidate
+	16, // 2: crm.v1.CreateCandidateRequestPayload.gender:type_name -> types.v1.Gender
+	17, // 3: crm.v1.CreateCandidateRequestPayload.birthday:type_name -> types.v1.OptionalDate
+	4,  // 4: crm.v1.CreateCandidateRequest.payload:type_name -> crm.v1.CreateCandidateRequestPayload
+	15, // 5: crm.v1.CreateCandidateResponse.item:type_name -> types.v1.Candidate
+	16, // 6: crm.v1.PatchCandidateRequestPayload.gender:type_name -> types.v1.Gender
+	17, // 7: crm.v1.PatchCandidateRequestPayload.birthday:type_name -> types.v1.OptionalDate
+	7,  // 8: crm.v1.PatchCandidateRequest.payload:type_name -> crm.v1.PatchCandidateRequestPayload
+	18, // 9: crm.v1.UploadCandidateResumeFileResponse.data:type_name -> types.v1.FilesMap
+	10, // [10:10] is the sub-list for method output_type
+	10, // [10:10] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_public_crm_v1_dto_proto_init() }
@@ -947,15 +846,14 @@ func file_public_crm_v1_dto_proto_init() {
 		return
 	}
 	file_public_crm_v1_dto_proto_msgTypes[0].OneofWrappers = []any{}
-	file_public_crm_v1_dto_proto_msgTypes[1].OneofWrappers = []any{}
-	file_public_crm_v1_dto_proto_msgTypes[8].OneofWrappers = []any{}
+	file_public_crm_v1_dto_proto_msgTypes[7].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_public_crm_v1_dto_proto_rawDesc), len(file_public_crm_v1_dto_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

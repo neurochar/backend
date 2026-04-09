@@ -3,19 +3,10 @@ syntax = "proto3";
 package crm.v1;
 
 import "common/types/types.proto";
+import "common/types/crm_types.proto";
 import "google/protobuf/timestamp.proto";
 import "buf/validate/validate.proto";
 import "google/type/date.proto";
-
-message Candidate {
-  string id = 1;
-  int64 version = 2;
-  string tenant_id = 3;
-  string name = 4;
-  string surname = 5;
-  types.v1.Gender gender = 6;
-  optional google.type.Date birthday = 7;
-}
 
 message ListCandidatesRequest {
   optional uint64 limit = 1;
@@ -24,8 +15,8 @@ message ListCandidatesRequest {
 }
 
 message ListCandidatesResponse {
-  repeated Candidate items = 1;
-  uint64 total = 2;
+  repeated types.v1.ListCandidate items = 1;
+  int32 total = 2;
 }
 
 message GetCandidateRequest {
@@ -33,7 +24,7 @@ message GetCandidateRequest {
 }
 
 message GetCandidateResponse {
-  Candidate item = 1;
+  types.v1.Candidate item = 1;
 }
 
 message CreateCandidateRequestPayload {
@@ -48,7 +39,7 @@ message CreateCandidateRequest {
 }
 
 message CreateCandidateResponse {
-  Candidate item = 1;
+  types.v1.Candidate item = 1;
 }
 
 message PatchCandidateRequestPayload {
@@ -79,5 +70,5 @@ message UploadCandidateResumeFileRequest {
 }
 
 message UploadCandidateResumeFileResponse {
-  string file_id = 1;
+  types.v1.FilesMap data = 1;
 }

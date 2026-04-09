@@ -6,15 +6,14 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"github.com/gofiber/fiber/v2"
 	"github.com/neurochar/backend/internal/app"
 	"github.com/neurochar/backend/internal/app/config"
 	"github.com/neurochar/backend/internal/app/fxboot/invoking"
 	"github.com/neurochar/backend/internal/app/fxboot/providing"
-	backendGRPC "github.com/neurochar/backend/internal/delivery/grpc/backend"
-	backendHTTP "github.com/neurochar/backend/internal/delivery/http/backend"
+	deliveryCommon "github.com/neurochar/backend/internal/delivery/common"
+	publicGRPC "github.com/neurochar/backend/internal/delivery/grpc/public"
+	publicHTTPServer "github.com/neurochar/backend/internal/delivery/httpgw/server"
 	"github.com/neurochar/backend/internal/domain/alert"
-	alertUC "github.com/neurochar/backend/internal/domain/alert/usecase"
 	"github.com/neurochar/backend/internal/domain/crm"
 	emailingModule "github.com/neurochar/backend/internal/domain/emailing"
 	"github.com/neurochar/backend/internal/domain/file"
@@ -29,7 +28,6 @@ import (
 	"github.com/neurochar/backend/pkg/pgclient"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxevent"
-	"google.golang.org/grpc"
 
 	storageMigrations "github.com/neurochar/backend/internal/infra/storage/migrations"
 )
@@ -69,32 +67,20 @@ func BackendAppGetOptionsMap(appID app.ID, cfg config.Config) OptionsMap {
 					)
 				},
 			),
-			ProvidingIDBackoff:       fx.Provide(providing.NewBackoff),
-			ProvidingIDStorageClient: fx.Provide(providing.NewStorageClient),
-			ProvidingIDEmailing:      fx.Provide(providing.NewEmailing),
-			ProvidingGRPCServer:      providing.BackendGRPCServer,
-			ProvidingHTTPFiberServer: fx.Provide(
-				func(logger *slog.Logger, cfg config.Config, alertUsecase alertUC.Usecase) *fiber.App {
-					httpConfig := backendHTTP.HTTPConfig{
-						AppTitle:         cfg.Global.ProjectName,
-						UseLogger:        cfg.BackendApp.Base.UseLogger && cfg.BackendApp.Base.LogHTTP,
-						BodyLimit:        -1,
-						CorsAllowOrigins: cfg.BackendApp.HTTP.CorsAllowOrigins,
-						ServerIPs:        []string{cfg.Global.ServerIP},
-					}
-
-					return backendHTTP.NewHTTPFiber(httpConfig, logger, alertUsecase)
-				},
-			),
-			ProvidingIDJobsController: fx.Provide(jobs.NewController),
-			ProvidingIDDeliveryHTTP:   backendHTTP.FxModule,
-			ProvidingIDFileModule:     file.FxModule,
-			ProvidingIDUserModule:     user.FxModule,
-			ProvidingIDEmailingModule: emailingModule.FxModule,
-			ProvidingIDAlertModule:    alert.FxModule,
-			ProvidingIDTenantModule:   tenant.FxModule,
-			ProvidingIDCRMModule:      crm.FxModule,
-			ProvidingIDTestingModule:  testing.FxModule,
+			ProvidingIDBackoff:         fx.Provide(providing.NewBackoff),
+			ProvidingIDStorageClient:   fx.Provide(providing.NewStorageClient),
+			ProvidingIDEmailing:        fx.Provide(providing.NewEmailing),
+			ProvidingIDDeliveryCommon:  deliveryCommon.FxModule,
+			ProvidingPublicGRPCServer:  providing.PublicGRPCServer,
+			ProvidingPublicHTTPGateway: providing.PublicHTTPGateway,
+			ProvidingIDJobsController:  fx.Provide(jobs.NewController),
+			ProvidingIDFileModule:      file.FxModule,
+			ProvidingIDUserModule:      user.FxModule,
+			ProvidingIDEmailingModule:  emailingModule.FxModule,
+			ProvidingIDAlertModule:     alert.FxModule,
+			ProvidingIDTenantModule:    tenant.FxModule,
+			ProvidingIDCRMModule:       crm.FxModule,
+			ProvidingIDTestingModule:   testing.FxModule,
 		},
 		Invokes: []fx.Option{
 			fx.Invoke(BackendAppInitInvoke),
@@ -105,18 +91,18 @@ func BackendAppGetOptionsMap(appID app.ID, cfg config.Config) OptionsMap {
 type BackendInvokeInput struct {
 	fx.In
 
-	LC              fx.Lifecycle
-	Shutdowner      fx.Shutdowner
-	Invokes         []invoking.InvokeInit `group:"InvokeInit"`
-	Logger          *slog.Logger
-	Cfg             config.Config
-	DBMasterClient  db.MasterClient
-	BackoffCtrl     *backoff.Controller
-	S3Client        *s3.Client
-	StorageClient   storage.Client
-	GRPCServer      *grpc.Server
-	HttpFiberServer *fiber.App
-	JobsController  *jobs.Controller
+	LC               fx.Lifecycle
+	Shutdowner       fx.Shutdowner
+	Invokes          []invoking.InvokeInit `group:"InvokeInit"`
+	Logger           *slog.Logger
+	Cfg              config.Config
+	DBMasterClient   db.MasterClient
+	BackoffCtrl      *backoff.Controller
+	S3Client         *s3.Client
+	StorageClient    storage.Client
+	PublicGRPCServer *publicGRPC.PublicServer
+	PublicHTTPServer *publicHTTPServer.Server
+	JobsController   *jobs.Controller
 }
 
 // BackendAppInitInvoke - app init
@@ -219,28 +205,31 @@ func BackendAppInitInvoke(
 				in.Logger.InfoContext(ctx, "jobs autostart skipped")
 			}
 
-			// Запускаем gRPC
-			in.Logger.InfoContext(ctx, "starting gRPC server", slog.Int("port", 50051))
+			// Запускаем public gRPC
+			servePublicGRPC, err := in.PublicGRPCServer.Server().Listen()
+			if err != nil {
+				in.Logger.ErrorContext(ctx, "failed to start gRPC public server", slog.Any("error", err))
+			}
+			in.Logger.InfoContext(ctx, "started gRPC public server", slog.Int("port", in.Cfg.BackendApp.GRPC.Port))
+
 			go func() {
-				err := backendGRPC.Start(in.GRPCServer, 50051)
-				if err != nil {
-					in.Logger.ErrorContext(ctx, "failed to start gRPC server", slog.Any("error", err.Error()))
+				if err := servePublicGRPC(); err != nil {
+					in.Logger.ErrorContext(ctx, "failed to serve gRPC public server", slog.Any("error", err))
 				}
 			}()
 
-			// Запускаем http
-			// if in.Cfg.BackendApp.HTTP.Port > 0 {
-			// 	in.Logger.InfoContext(ctx, "starting http server", slog.Int("port", in.Cfg.BackendApp.HTTP.Port))
-			// 	go func() {
-			// 		if err := in.HttpFiberServer.Listen(fmt.Sprintf(":%d", in.Cfg.BackendApp.HTTP.Port)); err != nil {
-			// 			in.Logger.ErrorContext(ctx, "failed to start fiber", slog.Any("error", err))
-			// 			err := in.Shutdowner.Shutdown()
-			// 			if err != nil {
-			// 				in.Logger.ErrorContext(ctx, "failed to shutdown", slog.Any("error", err))
-			// 			}
-			// 		}
-			// 	}()
-			// }
+			// Запускаем public HTTP gateway
+			servePublicHTTP, err := in.PublicHTTPServer.Listen()
+			if err != nil {
+				in.Logger.ErrorContext(ctx, "failed to start HTTP public server", slog.Any("error", err))
+			}
+			in.Logger.InfoContext(ctx, "started HTTP public server", slog.Int("port", in.Cfg.BackendApp.HTTP.Port))
+
+			go func() {
+				if err := servePublicHTTP(); err != nil {
+					in.Logger.ErrorContext(ctx, "failed to serve HTTP public server", slog.Any("error", err))
+				}
+			}()
 
 			// Запускаем invoke функции после открытия
 			for _, invokeItem := range in.Invokes {
@@ -256,6 +245,17 @@ func BackendAppInitInvoke(
 			return nil
 		},
 		OnStop: func(ctx context.Context) error {
+			// Останавливаем public HTTP gateway
+			in.Logger.InfoContext(ctx, "stopping public HTTP server")
+			err := in.PublicHTTPServer.Shutdown(ctx)
+			if err != nil {
+				in.Logger.ErrorContext(ctx, "failed to shutdown public HTTP gateway", slog.Any("error", err))
+			}
+
+			// Останавливаем public gRPC
+			in.Logger.InfoContext(ctx, "stopping public gRPC server")
+			in.PublicGRPCServer.Server().Shutdown()
+
 			for _, invokeItem := range in.Invokes {
 				if invokeItem.Stop != nil {
 					err := invokeItem.Stop(ctx)
@@ -267,34 +267,12 @@ func BackendAppInitInvoke(
 
 			cancel()
 
-			err := in.JobsController.StopAll(ctx)
+			// Останавливаем jobs
+			err = in.JobsController.StopAll(ctx)
 			if err != nil {
 				in.Logger.ErrorContext(ctx, "failed to stop jobs", slog.Any("error", err))
 			} else {
 				in.Logger.InfoContext(ctx, "jobs stopped")
-			}
-
-			// Останавливаем http
-			// if in.Cfg.BackendApp.HTTP.Port > 0 {
-			// 	in.Logger.Info("stopping http fiber")
-			// 	err := in.HttpFiberServer.ShutdownWithTimeout(time.Duration(in.Cfg.BackendApp.HTTP.StopTimeoutSec) * time.Second)
-			// 	if err != nil {
-			// 		in.Logger.ErrorContext(ctx, "failed to stop fiber", slog.Any("error", err))
-			// 	}
-			// }
-
-			// Останавливаем gRPC
-			in.Logger.InfoContext(ctx, "stopping gRPC server")
-			in.GRPCServer.GracefulStop()
-
-			for _, invokeItem := range in.Invokes {
-				if invokeItem.Stop != nil {
-					err := invokeItem.Stop(ctx)
-					if err != nil {
-						in.Logger.ErrorContext(ctx, "failed to execute invoke fn stop", slog.Any("error", err))
-						return err
-					}
-				}
 			}
 
 			// Закрываем postgress

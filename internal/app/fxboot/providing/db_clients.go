@@ -9,7 +9,6 @@ import (
 	"go.uber.org/fx"
 )
 
-// NewDBClients - fx module for db clients
 func NewDBClients(masterDSN string, logQueries bool, logger *slog.Logger, shutdown fx.Shutdowner) db.MasterClient {
 	master, err := pgclient.NewClient(
 		context.Background(),

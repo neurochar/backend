@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"context"
-	"net"
+	"net/netip"
 
 	"github.com/google/uuid"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
@@ -24,7 +24,7 @@ type RegistrationListOptions struct {
 type CreateRegistrationIn struct {
 	Email     string
 	Tariff    uint64
-	RequestIP net.IP
+	RequestIP *netip.Addr
 }
 
 type FinishRegistrationIn struct {
@@ -55,14 +55,14 @@ type RegistrationUsecase interface {
 	CreateByDTO(
 		ctx context.Context,
 		in CreateRegistrationIn,
-		requestIP *net.IP,
+		requestIP *netip.Addr,
 	) (resItem *entity.Registration, resErr error)
 
 	FinishByDTO(
 		ctx context.Context,
 		id uuid.UUID,
 		in FinishRegistrationIn,
-		requestIP *net.IP,
+		requestIP *netip.Addr,
 	) (resTenant *entity.Tenant, resErr error)
 }
 

@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package types.v1;
+
+import "common/types/types.proto";
+import "google/type/date.proto";
+
+message Candidate {
+  string id = 1;
+  int64 version = 2;
+  string tenant_id = 3;
+  string name = 4;
+  string surname = 5;
+  Gender gender = 6;
+  optional google.type.Date birthday = 7;
+}
+
+message ListCandidate {
+  string id = 1;
+  int64 version = 2;
+  string tenant_id = 3;
+  string name = 4;
+  string surname = 5;
+  Gender gender = 6;
+  optional google.type.Date birthday = 7;
+}

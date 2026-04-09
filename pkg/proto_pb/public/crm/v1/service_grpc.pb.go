@@ -19,18 +19,18 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CrmTenantPublicService_ListCandidates_FullMethodName            = "/crm.v1.CrmTenantPublicService/ListCandidates"
-	CrmTenantPublicService_GetCandidate_FullMethodName              = "/crm.v1.CrmTenantPublicService/GetCandidate"
-	CrmTenantPublicService_CreateCandidate_FullMethodName           = "/crm.v1.CrmTenantPublicService/CreateCandidate"
-	CrmTenantPublicService_PatchCandidate_FullMethodName            = "/crm.v1.CrmTenantPublicService/PatchCandidate"
-	CrmTenantPublicService_DeleteCandidate_FullMethodName           = "/crm.v1.CrmTenantPublicService/DeleteCandidate"
-	CrmTenantPublicService_UploadCandidateResumeFile_FullMethodName = "/crm.v1.CrmTenantPublicService/UploadCandidateResumeFile"
+	CrmPublicService_ListCandidates_FullMethodName            = "/crm.v1.CrmPublicService/ListCandidates"
+	CrmPublicService_GetCandidate_FullMethodName              = "/crm.v1.CrmPublicService/GetCandidate"
+	CrmPublicService_CreateCandidate_FullMethodName           = "/crm.v1.CrmPublicService/CreateCandidate"
+	CrmPublicService_PatchCandidate_FullMethodName            = "/crm.v1.CrmPublicService/PatchCandidate"
+	CrmPublicService_DeleteCandidate_FullMethodName           = "/crm.v1.CrmPublicService/DeleteCandidate"
+	CrmPublicService_UploadCandidateResumeFile_FullMethodName = "/crm.v1.CrmPublicService/UploadCandidateResumeFile"
 )
 
-// CrmTenantPublicServiceClient is the client API for CrmTenantPublicService service.
+// CrmPublicServiceClient is the client API for CrmPublicService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type CrmTenantPublicServiceClient interface {
+type CrmPublicServiceClient interface {
 	// Список кандидатов
 	ListCandidates(ctx context.Context, in *ListCandidatesRequest, opts ...grpc.CallOption) (*ListCandidatesResponse, error)
 	// Получить кандидата
@@ -45,78 +45,78 @@ type CrmTenantPublicServiceClient interface {
 	UploadCandidateResumeFile(ctx context.Context, in *UploadCandidateResumeFileRequest, opts ...grpc.CallOption) (*UploadCandidateResumeFileResponse, error)
 }
 
-type crmTenantPublicServiceClient struct {
+type crmPublicServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewCrmTenantPublicServiceClient(cc grpc.ClientConnInterface) CrmTenantPublicServiceClient {
-	return &crmTenantPublicServiceClient{cc}
+func NewCrmPublicServiceClient(cc grpc.ClientConnInterface) CrmPublicServiceClient {
+	return &crmPublicServiceClient{cc}
 }
 
-func (c *crmTenantPublicServiceClient) ListCandidates(ctx context.Context, in *ListCandidatesRequest, opts ...grpc.CallOption) (*ListCandidatesResponse, error) {
+func (c *crmPublicServiceClient) ListCandidates(ctx context.Context, in *ListCandidatesRequest, opts ...grpc.CallOption) (*ListCandidatesResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListCandidatesResponse)
-	err := c.cc.Invoke(ctx, CrmTenantPublicService_ListCandidates_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, CrmPublicService_ListCandidates_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *crmTenantPublicServiceClient) GetCandidate(ctx context.Context, in *GetCandidateRequest, opts ...grpc.CallOption) (*GetCandidateResponse, error) {
+func (c *crmPublicServiceClient) GetCandidate(ctx context.Context, in *GetCandidateRequest, opts ...grpc.CallOption) (*GetCandidateResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetCandidateResponse)
-	err := c.cc.Invoke(ctx, CrmTenantPublicService_GetCandidate_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, CrmPublicService_GetCandidate_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *crmTenantPublicServiceClient) CreateCandidate(ctx context.Context, in *CreateCandidateRequest, opts ...grpc.CallOption) (*CreateCandidateResponse, error) {
+func (c *crmPublicServiceClient) CreateCandidate(ctx context.Context, in *CreateCandidateRequest, opts ...grpc.CallOption) (*CreateCandidateResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CreateCandidateResponse)
-	err := c.cc.Invoke(ctx, CrmTenantPublicService_CreateCandidate_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, CrmPublicService_CreateCandidate_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *crmTenantPublicServiceClient) PatchCandidate(ctx context.Context, in *PatchCandidateRequest, opts ...grpc.CallOption) (*PatchCandidateResponse, error) {
+func (c *crmPublicServiceClient) PatchCandidate(ctx context.Context, in *PatchCandidateRequest, opts ...grpc.CallOption) (*PatchCandidateResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(PatchCandidateResponse)
-	err := c.cc.Invoke(ctx, CrmTenantPublicService_PatchCandidate_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, CrmPublicService_PatchCandidate_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *crmTenantPublicServiceClient) DeleteCandidate(ctx context.Context, in *DeleteCandidateRequest, opts ...grpc.CallOption) (*DeleteCandidateResponse, error) {
+func (c *crmPublicServiceClient) DeleteCandidate(ctx context.Context, in *DeleteCandidateRequest, opts ...grpc.CallOption) (*DeleteCandidateResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(DeleteCandidateResponse)
-	err := c.cc.Invoke(ctx, CrmTenantPublicService_DeleteCandidate_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, CrmPublicService_DeleteCandidate_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *crmTenantPublicServiceClient) UploadCandidateResumeFile(ctx context.Context, in *UploadCandidateResumeFileRequest, opts ...grpc.CallOption) (*UploadCandidateResumeFileResponse, error) {
+func (c *crmPublicServiceClient) UploadCandidateResumeFile(ctx context.Context, in *UploadCandidateResumeFileRequest, opts ...grpc.CallOption) (*UploadCandidateResumeFileResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UploadCandidateResumeFileResponse)
-	err := c.cc.Invoke(ctx, CrmTenantPublicService_UploadCandidateResumeFile_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, CrmPublicService_UploadCandidateResumeFile_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// CrmTenantPublicServiceServer is the server API for CrmTenantPublicService service.
-// All implementations must embed UnimplementedCrmTenantPublicServiceServer
+// CrmPublicServiceServer is the server API for CrmPublicService service.
+// All implementations must embed UnimplementedCrmPublicServiceServer
 // for forward compatibility.
-type CrmTenantPublicServiceServer interface {
+type CrmPublicServiceServer interface {
 	// Список кандидатов
 	ListCandidates(context.Context, *ListCandidatesRequest) (*ListCandidatesResponse, error)
 	// Получить кандидата
@@ -129,194 +129,193 @@ type CrmTenantPublicServiceServer interface {
 	DeleteCandidate(context.Context, *DeleteCandidateRequest) (*DeleteCandidateResponse, error)
 	// Загрузить файл-резюме кандидата
 	UploadCandidateResumeFile(context.Context, *UploadCandidateResumeFileRequest) (*UploadCandidateResumeFileResponse, error)
-	mustEmbedUnimplementedCrmTenantPublicServiceServer()
+	mustEmbedUnimplementedCrmPublicServiceServer()
 }
 
-// UnimplementedCrmTenantPublicServiceServer must be embedded to have
+// UnimplementedCrmPublicServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedCrmTenantPublicServiceServer struct{}
+type UnimplementedCrmPublicServiceServer struct{}
 
-func (UnimplementedCrmTenantPublicServiceServer) ListCandidates(context.Context, *ListCandidatesRequest) (*ListCandidatesResponse, error) {
+func (UnimplementedCrmPublicServiceServer) ListCandidates(context.Context, *ListCandidatesRequest) (*ListCandidatesResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListCandidates not implemented")
 }
-func (UnimplementedCrmTenantPublicServiceServer) GetCandidate(context.Context, *GetCandidateRequest) (*GetCandidateResponse, error) {
+func (UnimplementedCrmPublicServiceServer) GetCandidate(context.Context, *GetCandidateRequest) (*GetCandidateResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetCandidate not implemented")
 }
-func (UnimplementedCrmTenantPublicServiceServer) CreateCandidate(context.Context, *CreateCandidateRequest) (*CreateCandidateResponse, error) {
+func (UnimplementedCrmPublicServiceServer) CreateCandidate(context.Context, *CreateCandidateRequest) (*CreateCandidateResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateCandidate not implemented")
 }
-func (UnimplementedCrmTenantPublicServiceServer) PatchCandidate(context.Context, *PatchCandidateRequest) (*PatchCandidateResponse, error) {
+func (UnimplementedCrmPublicServiceServer) PatchCandidate(context.Context, *PatchCandidateRequest) (*PatchCandidateResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method PatchCandidate not implemented")
 }
-func (UnimplementedCrmTenantPublicServiceServer) DeleteCandidate(context.Context, *DeleteCandidateRequest) (*DeleteCandidateResponse, error) {
+func (UnimplementedCrmPublicServiceServer) DeleteCandidate(context.Context, *DeleteCandidateRequest) (*DeleteCandidateResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method DeleteCandidate not implemented")
 }
-func (UnimplementedCrmTenantPublicServiceServer) UploadCandidateResumeFile(context.Context, *UploadCandidateResumeFileRequest) (*UploadCandidateResumeFileResponse, error) {
+func (UnimplementedCrmPublicServiceServer) UploadCandidateResumeFile(context.Context, *UploadCandidateResumeFileRequest) (*UploadCandidateResumeFileResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method UploadCandidateResumeFile not implemented")
 }
-func (UnimplementedCrmTenantPublicServiceServer) mustEmbedUnimplementedCrmTenantPublicServiceServer() {
-}
-func (UnimplementedCrmTenantPublicServiceServer) testEmbeddedByValue() {}
+func (UnimplementedCrmPublicServiceServer) mustEmbedUnimplementedCrmPublicServiceServer() {}
+func (UnimplementedCrmPublicServiceServer) testEmbeddedByValue()                          {}
 
-// UnsafeCrmTenantPublicServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to CrmTenantPublicServiceServer will
+// UnsafeCrmPublicServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to CrmPublicServiceServer will
 // result in compilation errors.
-type UnsafeCrmTenantPublicServiceServer interface {
-	mustEmbedUnimplementedCrmTenantPublicServiceServer()
+type UnsafeCrmPublicServiceServer interface {
+	mustEmbedUnimplementedCrmPublicServiceServer()
 }
 
-func RegisterCrmTenantPublicServiceServer(s grpc.ServiceRegistrar, srv CrmTenantPublicServiceServer) {
-	// If the following call panics, it indicates UnimplementedCrmTenantPublicServiceServer was
+func RegisterCrmPublicServiceServer(s grpc.ServiceRegistrar, srv CrmPublicServiceServer) {
+	// If the following call panics, it indicates UnimplementedCrmPublicServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&CrmTenantPublicService_ServiceDesc, srv)
+	s.RegisterService(&CrmPublicService_ServiceDesc, srv)
 }
 
-func _CrmTenantPublicService_ListCandidates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CrmPublicService_ListCandidates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListCandidatesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CrmTenantPublicServiceServer).ListCandidates(ctx, in)
+		return srv.(CrmPublicServiceServer).ListCandidates(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CrmTenantPublicService_ListCandidates_FullMethodName,
+		FullMethod: CrmPublicService_ListCandidates_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CrmTenantPublicServiceServer).ListCandidates(ctx, req.(*ListCandidatesRequest))
+		return srv.(CrmPublicServiceServer).ListCandidates(ctx, req.(*ListCandidatesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CrmTenantPublicService_GetCandidate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CrmPublicService_GetCandidate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetCandidateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CrmTenantPublicServiceServer).GetCandidate(ctx, in)
+		return srv.(CrmPublicServiceServer).GetCandidate(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CrmTenantPublicService_GetCandidate_FullMethodName,
+		FullMethod: CrmPublicService_GetCandidate_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CrmTenantPublicServiceServer).GetCandidate(ctx, req.(*GetCandidateRequest))
+		return srv.(CrmPublicServiceServer).GetCandidate(ctx, req.(*GetCandidateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CrmTenantPublicService_CreateCandidate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CrmPublicService_CreateCandidate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateCandidateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CrmTenantPublicServiceServer).CreateCandidate(ctx, in)
+		return srv.(CrmPublicServiceServer).CreateCandidate(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CrmTenantPublicService_CreateCandidate_FullMethodName,
+		FullMethod: CrmPublicService_CreateCandidate_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CrmTenantPublicServiceServer).CreateCandidate(ctx, req.(*CreateCandidateRequest))
+		return srv.(CrmPublicServiceServer).CreateCandidate(ctx, req.(*CreateCandidateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CrmTenantPublicService_PatchCandidate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CrmPublicService_PatchCandidate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PatchCandidateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CrmTenantPublicServiceServer).PatchCandidate(ctx, in)
+		return srv.(CrmPublicServiceServer).PatchCandidate(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CrmTenantPublicService_PatchCandidate_FullMethodName,
+		FullMethod: CrmPublicService_PatchCandidate_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CrmTenantPublicServiceServer).PatchCandidate(ctx, req.(*PatchCandidateRequest))
+		return srv.(CrmPublicServiceServer).PatchCandidate(ctx, req.(*PatchCandidateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CrmTenantPublicService_DeleteCandidate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CrmPublicService_DeleteCandidate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteCandidateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CrmTenantPublicServiceServer).DeleteCandidate(ctx, in)
+		return srv.(CrmPublicServiceServer).DeleteCandidate(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CrmTenantPublicService_DeleteCandidate_FullMethodName,
+		FullMethod: CrmPublicService_DeleteCandidate_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CrmTenantPublicServiceServer).DeleteCandidate(ctx, req.(*DeleteCandidateRequest))
+		return srv.(CrmPublicServiceServer).DeleteCandidate(ctx, req.(*DeleteCandidateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CrmTenantPublicService_UploadCandidateResumeFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CrmPublicService_UploadCandidateResumeFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UploadCandidateResumeFileRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CrmTenantPublicServiceServer).UploadCandidateResumeFile(ctx, in)
+		return srv.(CrmPublicServiceServer).UploadCandidateResumeFile(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CrmTenantPublicService_UploadCandidateResumeFile_FullMethodName,
+		FullMethod: CrmPublicService_UploadCandidateResumeFile_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CrmTenantPublicServiceServer).UploadCandidateResumeFile(ctx, req.(*UploadCandidateResumeFileRequest))
+		return srv.(CrmPublicServiceServer).UploadCandidateResumeFile(ctx, req.(*UploadCandidateResumeFileRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// CrmTenantPublicService_ServiceDesc is the grpc.ServiceDesc for CrmTenantPublicService service.
+// CrmPublicService_ServiceDesc is the grpc.ServiceDesc for CrmPublicService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var CrmTenantPublicService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "crm.v1.CrmTenantPublicService",
-	HandlerType: (*CrmTenantPublicServiceServer)(nil),
+var CrmPublicService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "crm.v1.CrmPublicService",
+	HandlerType: (*CrmPublicServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "ListCandidates",
-			Handler:    _CrmTenantPublicService_ListCandidates_Handler,
+			Handler:    _CrmPublicService_ListCandidates_Handler,
 		},
 		{
 			MethodName: "GetCandidate",
-			Handler:    _CrmTenantPublicService_GetCandidate_Handler,
+			Handler:    _CrmPublicService_GetCandidate_Handler,
 		},
 		{
 			MethodName: "CreateCandidate",
-			Handler:    _CrmTenantPublicService_CreateCandidate_Handler,
+			Handler:    _CrmPublicService_CreateCandidate_Handler,
 		},
 		{
 			MethodName: "PatchCandidate",
-			Handler:    _CrmTenantPublicService_PatchCandidate_Handler,
+			Handler:    _CrmPublicService_PatchCandidate_Handler,
 		},
 		{
 			MethodName: "DeleteCandidate",
-			Handler:    _CrmTenantPublicService_DeleteCandidate_Handler,
+			Handler:    _CrmPublicService_DeleteCandidate_Handler,
 		},
 		{
 			MethodName: "UploadCandidateResumeFile",
-			Handler:    _CrmTenantPublicService_UploadCandidateResumeFile_Handler,
+			Handler:    _CrmPublicService_UploadCandidateResumeFile_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

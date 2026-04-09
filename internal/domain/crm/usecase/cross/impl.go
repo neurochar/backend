@@ -5,6 +5,7 @@ import (
 
 	"github.com/neurochar/backend/internal/app/config"
 	"github.com/neurochar/backend/internal/domain/crm/usecase"
+	testingUC "github.com/neurochar/backend/internal/domain/testing/usecase"
 	"github.com/neurochar/backend/internal/infra/db"
 	"github.com/neurochar/backend/internal/infra/emailing"
 )
@@ -16,6 +17,7 @@ type UsecaseImpl struct {
 	dbMasterClient db.MasterClient
 	emailing       emailing.Emailing
 	candidateRepo  usecase.CandidateRepository
+	roomUC         testingUC.RoomUsecase
 }
 
 func NewUsecaseImpl(
@@ -24,6 +26,7 @@ func NewUsecaseImpl(
 	dbMasterClient db.MasterClient,
 	emailing emailing.Emailing,
 	candidateRepo usecase.CandidateRepository,
+	roomUC testingUC.RoomUsecase,
 ) *UsecaseImpl {
 	uc := &UsecaseImpl{
 		pkg:            "CRM.Usecase.Cross",
@@ -32,6 +35,7 @@ func NewUsecaseImpl(
 		emailing:       emailing,
 		dbMasterClient: dbMasterClient,
 		candidateRepo:  candidateRepo,
+		roomUC:         roomUC,
 	}
 	return uc
 }

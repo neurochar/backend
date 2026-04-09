@@ -12,8 +12,9 @@ import (
 type RoomStatusType uint8
 
 const (
-	RoomStatusTypeNotStarted RoomStatusType = 0
-	RoomStatusTypeFinished   RoomStatusType = 10
+	RoomStatusTypeUnspecified RoomStatusType = 0
+	RoomStatusTypeNotStarted  RoomStatusType = 1
+	RoomStatusTypeFinished    RoomStatusType = 10
 )
 
 var RoomStatusTypeMap = map[RoomStatusType]string{
@@ -131,6 +132,7 @@ func NewRoom(
 	room := &Room{
 		ID:        uuid.New(),
 		TenantID:  tenantID,
+		Status:    RoomStatusTypeNotStarted,
 		CreatedBy: createdBy,
 		CreatedAt: timeNow,
 		UpdatedAt: timeNow,

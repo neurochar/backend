@@ -3,7 +3,7 @@ package account
 import (
 	"context"
 	"errors"
-	"net"
+	"net/netip"
 	"strings"
 
 	"github.com/google/uuid"
@@ -64,7 +64,7 @@ func (uc *UsecaseImpl) CreateAccountByDTO(
 	tenantID uuid.UUID,
 	in usecase.CreateAccountDataInput,
 	sendStartEmail bool,
-	requestIP *net.IP,
+	requestIP *netip.Addr,
 ) (*usecase.AccountDTO, *entity.AccountCode, error) {
 	const op = "CreateAccountByDTO"
 
@@ -405,7 +405,7 @@ func (uc *UsecaseImpl) RequestPasswordRecoveryByEmail(
 	ctx context.Context,
 	tenantID uuid.UUID,
 	email string,
-	requestIP *net.IP,
+	requestIP *netip.Addr,
 ) (*entity.AccountCode, error) {
 	const op = "RequestPasswordRecoveryByEmail"
 
@@ -414,7 +414,7 @@ func (uc *UsecaseImpl) RequestPasswordRecoveryByEmail(
 	err := uc.dbMasterClient.Do(ctx, func(ctx context.Context) error {
 		res, err := emailnormalize.Normalize(strings.TrimSpace(email))
 		if err != nil {
-			return appErrors.ErrBadRequest
+			return appErrors.ErrBadRequest.WithHints("invalid email")
 		}
 
 		email = res.NormalizedAddress

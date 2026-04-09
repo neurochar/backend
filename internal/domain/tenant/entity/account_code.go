@@ -4,7 +4,7 @@ import (
 	"crypto/rand"
 	"fmt"
 	"math/big"
-	"net"
+	"net/netip"
 	"time"
 
 	"github.com/google/uuid"
@@ -25,7 +25,7 @@ type AccountCode struct {
 	Type      AccountCodeType
 	IsActive  bool
 	Code      string
-	RequestIP *net.IP
+	RequestIP *netip.Addr
 	Attempts  int
 
 	CreatedAt time.Time
@@ -60,7 +60,7 @@ func (item *AccountCode) Deactivate() {
 	item.IsActive = false
 }
 
-func NewAccountCode(accountID uuid.UUID, codeType AccountCodeType, requestIP *net.IP) (*AccountCode, error) {
+func NewAccountCode(accountID uuid.UUID, codeType AccountCodeType, requestIP *netip.Addr) (*AccountCode, error) {
 	timeNow := time.Now().Truncate(time.Microsecond)
 
 	item := &AccountCode{

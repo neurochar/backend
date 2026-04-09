@@ -8,11 +8,17 @@ var (
 	// ErrUnauthorized - не авторизован
 	ErrUnauthorized = NewError("unauthorized", errorCodeUnauthorized, "UNAUTHORIZED", nil)
 
+	// ErrMethodNotAllowed - не разрешен
+	ErrMethodNotAllowed = NewError("method not allowed", errorMethodNotAllowed, "METHOD_NOT_ALLOWED", nil)
+
 	// ErrForbidden - нет доступа
 	ErrForbidden = NewError("forbidden", errorCodeForbidden, "FORBIDDEN", nil)
 
 	// ErrConflict - конфликт
 	ErrConflict = NewError("conflict", errorCodeConflict, "CONFLICT", nil)
+
+	// ErrRequestEntityTooLarge - слишком большой запрос
+	ErrRequestEntityTooLarge = NewError("request entity too large", errorCodeRequestEntityTooLarge, "REQUEST_ENTITY_TOO_LARGE", nil)
 
 	// ErrNotFound - не найден
 	ErrNotFound = NewError("not found", errorCodeNotFound, "NOT_FOUND", nil)
@@ -25,6 +31,9 @@ var (
 
 	// ErrInternal - внутренняя ошибка
 	ErrInternal = NewError("internal error", errorCodeInternal, "INTERNAL_ERROR", nil)
+
+	// ErrUnimplemented - не реализован
+	ErrUnimplemented = NewError("unimplemented ", errorCodeUnimplemented, "UNIMPLEMENTED", nil)
 )
 
 // Ошибки хранилища

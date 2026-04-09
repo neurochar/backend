@@ -1,7 +1,7 @@
 package entity
 
 import (
-	"net"
+	"net/netip"
 	"time"
 
 	"github.com/google/uuid"
@@ -14,8 +14,8 @@ type Session struct {
 	RefreshVersion        uint64
 	RefreshTokenIssuedAt  time.Time
 	RefreshTokenExpiresAt time.Time
-	RefreshTokenRequestIP net.IP
-	CreateRequestIP       net.IP
+	RefreshTokenRequestIP *netip.Addr
+	CreateRequestIP       *netip.Addr
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
@@ -26,7 +26,7 @@ func (item *Session) Version() int64 {
 	return item.UpdatedAt.UnixMicro()
 }
 
-func (item *Session) GenerateNewRefresh(timeIssuedAt time.Time, duration time.Duration, ip net.IP) {
+func (item *Session) GenerateNewRefresh(timeIssuedAt time.Time, duration time.Duration, ip *netip.Addr) {
 	item.RefreshTokenIssuedAt = timeIssuedAt.Truncate(time.Microsecond)
 	item.RefreshTokenExpiresAt = item.RefreshTokenIssuedAt.Add(duration)
 	item.RefreshTokenRequestIP = ip
@@ -38,7 +38,7 @@ func (item *Session) IsAlive(timeForCheck time.Time) bool {
 	return item.RefreshTokenExpiresAt.Before(timeForCheck)
 }
 
-func NewSession(accountID uuid.UUID, ip net.IP, timeIssuedAt time.Time, refreshDuration time.Duration) *Session {
+func NewSession(accountID uuid.UUID, ip *netip.Addr, timeIssuedAt time.Time, refreshDuration time.Duration) *Session {
 	timeNow := time.Now().Truncate(time.Microsecond)
 
 	item := &Session{
