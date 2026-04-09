@@ -73,6 +73,22 @@ func (gw *Gateway) RegisterHandlers(
 	}
 
 	mux.Handle(
+		"/v1/tests/liveness",
+		server.ChainMiddleware(
+			http.HandlerFunc(gw.ctrl.ProbeLiveness),
+			publicMdwlrs...,
+		),
+	)
+
+	mux.Handle(
+		"/v1/tests/readiness",
+		server.ChainMiddleware(
+			http.HandlerFunc(gw.ctrl.ProbeReadiness),
+			publicMdwlrs...,
+		),
+	)
+
+	mux.Handle(
 		"/v1/crm/candidates-resume",
 		server.ChainMiddleware(
 			http.HandlerFunc(gw.ctrl.UploadCandidateResumeFile),
