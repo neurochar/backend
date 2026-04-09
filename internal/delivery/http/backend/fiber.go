@@ -8,12 +8,9 @@ import (
 	alertUC "github.com/neurochar/backend/internal/domain/alert/usecase"
 )
 
-const defaultBodyLimit = 10 * 1024 * 1024
-
 // HTTPConfig - config for http server
 type HTTPConfig struct {
 	AppTitle         string
-	UnderProxy       bool
 	UseLogger        bool
 	BodyLimit        int
 	CorsAllowOrigins []string
@@ -22,18 +19,12 @@ type HTTPConfig struct {
 
 // NewHTTPFiber provides fiber app
 func NewHTTPFiber(httpCfg HTTPConfig, logger *slog.Logger, alertUsecase alertUC.Usecase) *fiber.App {
-	if httpCfg.BodyLimit == -1 {
-		httpCfg.BodyLimit = defaultBodyLimit
-	}
-
 	fiberCfg := fiber.Config{
 		ErrorHandler: middleware.ErrorHandler(httpCfg.AppTitle, logger, alertUsecase),
 		BodyLimit:    httpCfg.BodyLimit,
 	}
 
-	if httpCfg.UnderProxy {
-		fiberCfg.ProxyHeader = fiber.HeaderXForwardedFor
-	}
+	fiberCfg.ProxyHeader = fiber.HeaderXForwardedFor
 
 	app := fiber.New(fiberCfg)
 
@@ -45,6 +36,7 @@ func NewHTTPFiber(httpCfg HTTPConfig, logger *slog.Logger, alertUsecase alertUC.
 		app.Use(middleware.Cors(httpCfg.CorsAllowOrigins))
 	}
 
+	app.Use(middleware.Authorization())
 	app.Use(middleware.XCheck())
 
 	if httpCfg.UseLogger {

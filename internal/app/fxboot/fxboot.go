@@ -42,6 +42,9 @@ const (
 	// ProvidingIDJobsController - jobs controller
 	ProvidingIDJobsController
 
+	// ProvidingGRPCServer - grpc
+	ProvidingGRPCServer
+
 	// ProvidingHTTPFiberServer - http fiber server
 	ProvidingHTTPFiberServer
 

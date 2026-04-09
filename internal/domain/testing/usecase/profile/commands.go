@@ -21,8 +21,8 @@ func (uc *UsecaseImpl) CreateByDTO(
 
 	var authorAccountID *uuid.UUID
 	authData := auth.GetAuthData(ctx)
-	if authData != nil {
-		authorAccountID = &authData.AccountID
+	if authData != nil && authData.IsTenantUser() {
+		authorAccountID = &authData.TenantUserClaims().AccountID
 	}
 
 	err := uc.personalityTraitUC.ValidatePersonalityTraitsMap(in.PersonalityTraitsMap)
@@ -81,9 +81,9 @@ func (uc *UsecaseImpl) PatchByDTO(
 			return err
 		}
 
-		if auth.IsNeedToCheckRights(ctx) {
+		if auth.IsNeedToCheckTenantAccess(ctx) {
 			authData := auth.GetAuthData(ctx)
-			if authData == nil || authData.TenantID != candidate.TenantID {
+			if authData == nil || !authData.IsTenantUser() || authData.TenantUserClaims().TenantID != candidate.TenantID {
 				return appErrors.ErrForbidden
 			}
 		}

@@ -45,9 +45,9 @@ func (m *Middleware) Create(useIP bool, useAccountID bool, postfix string) func(
 
 		if useAccountID {
 			authData := middleware.GetAuthData(c)
-			if authData != nil {
+			if authData != nil && authData.IsTenantUser() {
 				key.WriteString(":")
-				key.WriteString(authData.AccountID.String())
+				key.WriteString(authData.TenantUserClaims().AccountID.String())
 			}
 		}
 

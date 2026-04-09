@@ -2,7 +2,6 @@ package fxboot
 
 import (
 	"context"
-	"fmt"
 	"log/slog"
 	"time"
 
@@ -12,6 +11,7 @@ import (
 	"github.com/neurochar/backend/internal/app/config"
 	"github.com/neurochar/backend/internal/app/fxboot/invoking"
 	"github.com/neurochar/backend/internal/app/fxboot/providing"
+	backendGRPC "github.com/neurochar/backend/internal/delivery/grpc/backend"
 	backendHTTP "github.com/neurochar/backend/internal/delivery/http/backend"
 	"github.com/neurochar/backend/internal/domain/alert"
 	alertUC "github.com/neurochar/backend/internal/domain/alert/usecase"
@@ -29,6 +29,7 @@ import (
 	"github.com/neurochar/backend/pkg/pgclient"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxevent"
+	"google.golang.org/grpc"
 
 	storageMigrations "github.com/neurochar/backend/internal/infra/storage/migrations"
 )
@@ -71,11 +72,11 @@ func BackendAppGetOptionsMap(appID app.ID, cfg config.Config) OptionsMap {
 			ProvidingIDBackoff:       fx.Provide(providing.NewBackoff),
 			ProvidingIDStorageClient: fx.Provide(providing.NewStorageClient),
 			ProvidingIDEmailing:      fx.Provide(providing.NewEmailing),
+			ProvidingGRPCServer:      providing.BackendGRPCServer,
 			ProvidingHTTPFiberServer: fx.Provide(
 				func(logger *slog.Logger, cfg config.Config, alertUsecase alertUC.Usecase) *fiber.App {
 					httpConfig := backendHTTP.HTTPConfig{
 						AppTitle:         cfg.Global.ProjectName,
-						UnderProxy:       cfg.BackendApp.HTTP.UnderProxy,
 						UseLogger:        cfg.BackendApp.Base.UseLogger && cfg.BackendApp.Base.LogHTTP,
 						BodyLimit:        -1,
 						CorsAllowOrigins: cfg.BackendApp.HTTP.CorsAllowOrigins,
@@ -101,7 +102,7 @@ func BackendAppGetOptionsMap(appID app.ID, cfg config.Config) OptionsMap {
 	}
 }
 
-type BAckendInvokeInput struct {
+type BackendInvokeInput struct {
 	fx.In
 
 	LC              fx.Lifecycle
@@ -113,14 +114,17 @@ type BAckendInvokeInput struct {
 	BackoffCtrl     *backoff.Controller
 	S3Client        *s3.Client
 	StorageClient   storage.Client
+	GRPCServer      *grpc.Server
 	HttpFiberServer *fiber.App
 	JobsController  *jobs.Controller
 }
 
 // BackendAppInitInvoke - app init
 func BackendAppInitInvoke(
-	in BAckendInvokeInput,
+	in BackendInvokeInput,
 ) {
+	ctxWork, cancel := context.WithCancel(context.Background())
+
 	in.LC.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
 			// Тестирование соединения с мастером postgress
@@ -149,16 +153,16 @@ func BackendAppInitInvoke(
 				return err
 			}
 
-			// Тестирование соединения с s3
-			err = s3d.PingS3Client(ctx, in.S3Client)
-			if err != nil {
-				in.Logger.ErrorContext(ctx, "failed to ping s3", slog.Any("error", err))
-				return err
-			}
-			in.Logger.InfoContext(ctx, "connected to s3")
-
 			// Миграции хранилища
 			if in.Cfg.Storage.UpMigrations {
+				// Тестирование соединения с s3
+				err = s3d.PingS3Client(ctx, in.S3Client)
+				if err != nil {
+					in.Logger.ErrorContext(ctx, "failed to ping s3", slog.Any("error", err))
+					return err
+				}
+				in.Logger.InfoContext(ctx, "connected to s3")
+
 				createdAny, err := storageMigrations.UpBuckets(ctx, in.StorageClient)
 				if err != nil {
 					in.Logger.ErrorContext(ctx, "failed to migrate storage", slog.Any("error", err))
@@ -200,7 +204,7 @@ func BackendAppInitInvoke(
 			// Запускаем invoke функции до открытия
 			for _, invokeItem := range in.Invokes {
 				if invokeItem.StartBeforeOpen != nil {
-					err := invokeItem.StartBeforeOpen(ctx)
+					err := invokeItem.StartBeforeOpen(ctxWork)
 					if err != nil {
 						in.Logger.ErrorContext(ctx, "failed to execute invoke fn start before open", slog.Any("error", err))
 						return err
@@ -215,24 +219,33 @@ func BackendAppInitInvoke(
 				in.Logger.InfoContext(ctx, "jobs autostart skipped")
 			}
 
+			// Запускаем gRPC
+			in.Logger.InfoContext(ctx, "starting gRPC server", slog.Int("port", 50051))
+			go func() {
+				err := backendGRPC.Start(in.GRPCServer, 50051)
+				if err != nil {
+					in.Logger.ErrorContext(ctx, "failed to start gRPC server", slog.Any("error", err.Error()))
+				}
+			}()
+
 			// Запускаем http
-			if in.Cfg.BackendApp.HTTP.Port > 0 {
-				in.Logger.InfoContext(ctx, "starting http server", slog.Int("port", in.Cfg.BackendApp.HTTP.Port))
-				go func() {
-					if err := in.HttpFiberServer.Listen(fmt.Sprintf(":%d", in.Cfg.BackendApp.HTTP.Port)); err != nil {
-						in.Logger.ErrorContext(ctx, "failed to start fiber", slog.Any("error", err))
-						err := in.Shutdowner.Shutdown()
-						if err != nil {
-							in.Logger.ErrorContext(ctx, "failed to shutdown", slog.Any("error", err))
-						}
-					}
-				}()
-			}
+			// if in.Cfg.BackendApp.HTTP.Port > 0 {
+			// 	in.Logger.InfoContext(ctx, "starting http server", slog.Int("port", in.Cfg.BackendApp.HTTP.Port))
+			// 	go func() {
+			// 		if err := in.HttpFiberServer.Listen(fmt.Sprintf(":%d", in.Cfg.BackendApp.HTTP.Port)); err != nil {
+			// 			in.Logger.ErrorContext(ctx, "failed to start fiber", slog.Any("error", err))
+			// 			err := in.Shutdowner.Shutdown()
+			// 			if err != nil {
+			// 				in.Logger.ErrorContext(ctx, "failed to shutdown", slog.Any("error", err))
+			// 			}
+			// 		}
+			// 	}()
+			// }
 
 			// Запускаем invoke функции после открытия
 			for _, invokeItem := range in.Invokes {
 				if invokeItem.StartAfterOpen != nil {
-					err := invokeItem.StartAfterOpen(ctx)
+					err := invokeItem.StartAfterOpen(ctxWork)
 					if err != nil {
 						in.Logger.ErrorContext(ctx, "failed to execute invoke fn start after open", slog.Any("error", err))
 						return err
@@ -252,6 +265,8 @@ func BackendAppInitInvoke(
 				}
 			}
 
+			cancel()
+
 			err := in.JobsController.StopAll(ctx)
 			if err != nil {
 				in.Logger.ErrorContext(ctx, "failed to stop jobs", slog.Any("error", err))
@@ -260,11 +275,25 @@ func BackendAppInitInvoke(
 			}
 
 			// Останавливаем http
-			if in.Cfg.BackendApp.HTTP.Port > 0 {
-				in.Logger.Info("stopping http fiber")
-				err := in.HttpFiberServer.ShutdownWithTimeout(time.Duration(in.Cfg.BackendApp.HTTP.StopTimeoutSec) * time.Second)
-				if err != nil {
-					in.Logger.ErrorContext(ctx, "failed to stop fiber", slog.Any("error", err))
+			// if in.Cfg.BackendApp.HTTP.Port > 0 {
+			// 	in.Logger.Info("stopping http fiber")
+			// 	err := in.HttpFiberServer.ShutdownWithTimeout(time.Duration(in.Cfg.BackendApp.HTTP.StopTimeoutSec) * time.Second)
+			// 	if err != nil {
+			// 		in.Logger.ErrorContext(ctx, "failed to stop fiber", slog.Any("error", err))
+			// 	}
+			// }
+
+			// Останавливаем gRPC
+			in.Logger.InfoContext(ctx, "stopping gRPC server")
+			in.GRPCServer.GracefulStop()
+
+			for _, invokeItem := range in.Invokes {
+				if invokeItem.Stop != nil {
+					err := invokeItem.Stop(ctx)
+					if err != nil {
+						in.Logger.ErrorContext(ctx, "failed to execute invoke fn stop", slog.Any("error", err))
+						return err
+					}
 				}
 			}
 

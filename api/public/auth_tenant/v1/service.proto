@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package auth_tenant.v1;
+
+import "public/auth_tenant/v1/dto.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+service AuthTenantPublicService {
+  // Обновить пароль по коду
+  rpc WhoIAm(WhoIAmRequest) returns (WhoIAmResponse) {
+    option (google.api.http) = {
+      get: "/v1/tenant/auth/whoiam"
+    };
+  }
+
+  // Верификация аккаунта по емаил
+  rpc AccountVerifyEmail(AccountVerifyEmailRequest) returns (AccountVerifyEmailResponse) {
+    option (google.api.http) = {
+      post: "/v1/tenant/auth/verify-email"
+      body: "*"
+    };
+  }
+
+  // Проверить код аккаунта
+  rpc CheckAccountCode(CheckAccountCodeRequest) returns (CheckAccountCodeResponse) {
+    option (google.api.http) = {
+      post: "/v1/tenant/auth/check-code"
+      body: "*"
+    };
+  }
+
+  // Login
+  rpc Login(LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = {
+      post: "/v1/tenant/auth/login"
+      body: "*"
+    };
+  }
+
+  // Logout
+  rpc Logout(LogoutRequest) returns (LogoutResponse) {
+    option (google.api.http) = {
+      post: "/v1/tenant/auth/logout"
+      body: "*"
+    };
+  }
+
+  // Refresh
+  rpc Refresh(RefreshRequest) returns (RefreshResponse) {
+    option (google.api.http) = {
+      post: "/v1/tenant/auth/refresh"
+      body: "*"
+    };
+  }
+
+  // Запрос на восстановление пароля
+  rpc RequestPasswordRecovery(RequestPasswordRecoveryRequest) returns (RequestPasswordRecoveryResponse) {
+    option (google.api.http) = {
+      post: "/v1/tenant/auth/password-recovery"
+      body: "*"
+    };
+  }
+
+  // Обновить пароль по коду
+  rpc UpdatePasswordByCode(UpdatePasswordByCodeRequest) returns (UpdatePasswordByCodeResponse) {
+    option (google.api.http) = {
+      post: "/v1/tenant/auth/password-by-code"
+      body: "*"
+    };
+  }
+}

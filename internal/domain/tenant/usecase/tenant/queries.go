@@ -24,9 +24,9 @@ func (uc *UsecaseImpl) FindOneByID(
 		return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
 	}
 
-	if auth.IsNeedToCheckRights(ctx) {
+	if auth.IsNeedToCheckTenantAccess(ctx) {
 		authData := auth.GetAuthData(ctx)
-		if authData == nil || authData.TenantID != item.ID {
+		if authData == nil || !authData.IsTenantUser() || authData.TenantUserClaims().TenantID != item.ID {
 			return nil, appErrors.Chainf(appErrors.ErrForbidden, "%s.%s", uc.pkg, op)
 		}
 	}
@@ -46,9 +46,9 @@ func (uc *UsecaseImpl) FindOneByTextID(
 		return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
 	}
 
-	if auth.IsNeedToCheckRights(ctx) {
+	if auth.IsNeedToCheckTenantAccess(ctx) {
 		authData := auth.GetAuthData(ctx)
-		if authData == nil || authData.TenantID != item.ID {
+		if authData == nil || !authData.IsTenantUser() || authData.TenantUserClaims().TenantID != item.ID {
 			return nil, appErrors.Chainf(appErrors.ErrForbidden, "%s.%s", uc.pkg, op)
 		}
 	}

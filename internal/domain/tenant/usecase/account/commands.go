@@ -73,13 +73,13 @@ func (uc *UsecaseImpl) CreateAccountByDTO(
 		return nil, nil, appErrors.Chainf(appErrors.ErrBadRequest.WithHints("roleID invalid"), "%s.%s", uc.pkg, op)
 	}
 
-	if auth.IsNeedToCheckRights(ctx) {
+	if auth.IsNeedToCheckTenantAccess(ctx) {
 		authData := auth.GetAuthData(ctx)
-		if authData == nil || authData.TenantID != tenantID {
+		if authData == nil || !authData.IsTenantUser() || authData.TenantUserClaims().TenantID != tenantID {
 			return nil, nil, appErrors.Chainf(appErrors.ErrForbidden, "%s.%s", uc.pkg, op)
 		}
 
-		authorAccount, err := uc.FindOneByID(ctx, authData.AccountID, nil, &usecase.AccountDTOOptions{})
+		authorAccount, err := uc.FindOneByID(ctx, authData.TenantUserClaims().AccountID, nil, &usecase.AccountDTOOptions{})
 		if err != nil {
 			return nil, nil, err
 		}
@@ -208,13 +208,13 @@ func (uc *UsecaseImpl) PatchAccountByDTO(
 
 		accountDTO := accountDTOEntities[0]
 
-		if auth.IsNeedToCheckRights(ctx) {
+		if auth.IsNeedToCheckTenantAccess(ctx) {
 			authData := auth.GetAuthData(ctx)
-			if authData == nil || authData.TenantID != account.TenantID {
+			if authData == nil || !authData.IsTenantUser() || authData.TenantUserClaims().TenantID != account.TenantID {
 				return appErrors.ErrForbidden
 			}
 
-			authorAccount, err := uc.FindOneByID(ctx, authData.AccountID, nil, &usecase.AccountDTOOptions{})
+			authorAccount, err := uc.FindOneByID(ctx, authData.TenantUserClaims().AccountID, nil, &usecase.AccountDTOOptions{})
 			if err != nil {
 				return err
 			}

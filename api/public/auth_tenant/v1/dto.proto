@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+package auth_tenant.v1;
+
+import "common/types/types.proto";
+import "public/tenant/v1/dto.proto";
+import "google/protobuf/timestamp.proto";
+import "buf/validate/validate.proto";
+
+message Account {
+  string id = 1;
+  int64 version = 2;
+  uint64 role_id = 3;
+  string email = 4;
+  bool is_confirmed = 5;
+  bool is_email_verified = 6;
+  string profile_name = 7;
+  string profile_surname = 8;
+  types.v1.File profile_photo_original_file = 9;
+  types.v1.File profile_photo_100x100_file = 10;
+}
+
+message Tokens {
+  string refresh_jwt = 1;
+  int32 refresh_life_sec = 2;
+  int32 access_jwt = 3;
+}
+
+message WhoIAmRequest {}
+
+message WhoIAmResponse {
+  Account account = 1;
+  tenant.v1.Tenant tenant = 2;
+}
+
+message AccountVerifyEmailRequest {
+  string code_id = 1 [(buf.validate.field).string = {uuid: true}];
+  string code = 2 [(buf.validate.field).required = true];
+}
+
+message AccountVerifyEmailResponse {}
+
+message CheckAccountCodeRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+  string code = 2 [(buf.validate.field).required = true];
+}
+
+message CheckAccountCodeResponse {}
+
+message LoginRequest {
+  string email = 1 [(buf.validate.field).required = true, (buf.validate.field).string = { email: true }];
+  string password = 2;
+  string tenant_text_id = 3 [(buf.validate.field).required = true];
+}
+
+message LoginResponse {
+  Account account = 1;
+  tenant.v1.Tenant tenant = 2;
+  Tokens tokens = 3;
+}
+
+message LogoutRequest {}
+
+message LogoutResponse {}
+
+message RefreshRequest {
+  string refresh_token = 1 [(buf.validate.field).required = true];
+}
+
+message RefreshResponse {
+  Tokens tokens = 1;
+}
+
+message RequestPasswordRecoveryRequest {
+  string email = 1 [(buf.validate.field).required = true, (buf.validate.field).string = { email: true }];
+  string tenant_text_id = 2 [(buf.validate.field).required = true];
+}
+
+message RequestPasswordRecoveryResponse {
+  string code_id = 1;
+}
+
+message UpdatePasswordByCodeRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+  string code = 2 [(buf.validate.field).required = true];
+  string password = 3 [(buf.validate.field).required = true];
+  string password2 = 4 [(buf.validate.field).required = true];
+}
+
+message UpdatePasswordByCodeResponse {}

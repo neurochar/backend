@@ -4,7 +4,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func ParseAccessToken(tokenStr string, validate bool, secret []byte) (*SessionAccessClaims, error) {
+func ParseAccessToken(tokenStr string, validate bool, secret []byte) (*UserTenantSessionAccessClaims, error) {
 	ops := []jwt.ParserOption{
 		jwt.WithValidMethods([]string{jwt.SigningMethodHS256.Name}),
 	}
@@ -13,14 +13,14 @@ func ParseAccessToken(tokenStr string, validate bool, secret []byte) (*SessionAc
 		ops = append(ops, jwt.WithoutClaimsValidation())
 	}
 
-	token, err := jwt.ParseWithClaims(tokenStr, &SessionAccessClaims{}, func(token *jwt.Token) (any, error) {
+	token, err := jwt.ParseWithClaims(tokenStr, &UserTenantSessionAccessClaims{}, func(token *jwt.Token) (any, error) {
 		return secret, nil
 	}, ops...)
 	if err != nil || !token.Valid {
 		return nil, ErrInvalidToken
 	}
 
-	claims, ok := token.Claims.(*SessionAccessClaims)
+	claims, ok := token.Claims.(*UserTenantSessionAccessClaims)
 	if !ok {
 		return nil, ErrInvalidToken
 	}
@@ -28,7 +28,7 @@ func ParseAccessToken(tokenStr string, validate bool, secret []byte) (*SessionAc
 	return claims, nil
 }
 
-func IssueAccessJWT(access *SessionAccessClaims, secret []byte) (string, error) {
+func IssueAccessJWT(access *UserTenantSessionAccessClaims, secret []byte) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, access)
 
 	return token.SignedString(secret)

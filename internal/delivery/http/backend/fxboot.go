@@ -1,16 +1,17 @@
 package backend
 
 import (
+	"github.com/neurochar/backend/internal/delivery/http/backend/controller"
+	"github.com/neurochar/backend/internal/delivery/http/backend/controller/auth"
+	"github.com/neurochar/backend/internal/delivery/http/backend/controller/crm_tenant"
+	"github.com/neurochar/backend/internal/delivery/http/backend/controller/registration"
+	"github.com/neurochar/backend/internal/delivery/http/backend/controller/rooms"
+	"github.com/neurochar/backend/internal/delivery/http/backend/controller/tenants"
+	"github.com/neurochar/backend/internal/delivery/http/backend/controller/testing"
+	"github.com/neurochar/backend/internal/delivery/http/backend/controller/tests"
+	"github.com/neurochar/backend/internal/delivery/http/backend/controller/users"
+	"github.com/neurochar/backend/internal/delivery/http/backend/gateway"
 	"github.com/neurochar/backend/internal/delivery/http/backend/middleware"
-	v1 "github.com/neurochar/backend/internal/delivery/http/backend/v1"
-	"github.com/neurochar/backend/internal/delivery/http/backend/v1/auth"
-	"github.com/neurochar/backend/internal/delivery/http/backend/v1/crm"
-	"github.com/neurochar/backend/internal/delivery/http/backend/v1/registration"
-	"github.com/neurochar/backend/internal/delivery/http/backend/v1/rooms"
-	"github.com/neurochar/backend/internal/delivery/http/backend/v1/tenants"
-	"github.com/neurochar/backend/internal/delivery/http/backend/v1/testing"
-	"github.com/neurochar/backend/internal/delivery/http/backend/v1/tests"
-	"github.com/neurochar/backend/internal/delivery/http/backend/v1/users"
 	"github.com/neurochar/backend/pkg/validation"
 	"go.uber.org/fx"
 )
@@ -19,15 +20,20 @@ import (
 var FxModule = fx.Options(
 	fx.Provide(validation.New),
 	fx.Options(
+		fx.Provide(gateway.NewGrpcClient),
 		fx.Provide(middleware.New),
-		fx.Provide(v1.ProvideGroups),
+		fx.Provide(controller.ProvideGroups),
 		tests.FxModule,
 		auth.FxModule,
 		tenants.FxModule,
 		registration.FxModule,
 		users.FxModule,
-		crm.FxModule,
+		crm_tenant.FxModule,
 		testing.FxModule,
 		rooms.FxModule,
+	),
+	fx.Provide(
+		fx.Annotate(gateway.InitGatewayHandler, fx.ResultTags(`group:"InvokeInit"`)),
+		fx.Annotate(gateway.InitGrpcClient, fx.ResultTags(`group:"InvokeInit"`)),
 	),
 )

@@ -26,7 +26,7 @@ func (ctrl *Controller) Auth(c *fiber.Ctx) error {
 		return err
 	}
 
-	authData, err := auth.ClaimsToAuthData(claims)
+	authData, err := auth.UserTenantClaimsToAuthData(claims)
 	if err != nil {
 		return err
 	}

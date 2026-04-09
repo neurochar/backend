@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package crm.v1;
+
+import "common/types/types.proto";
+import "google/protobuf/timestamp.proto";
+import "buf/validate/validate.proto";
+import "google/type/date.proto";
+
+message Candidate {
+  string id = 1;
+  int64 version = 2;
+  string tenant_id = 3;
+  string name = 4;
+  string surname = 5;
+  types.v1.Gender gender = 6;
+  optional google.type.Date birthday = 7;
+}
+
+message ListCandidatesRequest {
+  optional uint64 limit = 1;
+  optional uint64 offset = 2; 
+  optional string search_query = 3;
+}
+
+message ListCandidatesResponse {
+  repeated Candidate items = 1;
+  uint64 total = 2;
+}
+
+message GetCandidateRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+}
+
+message GetCandidateResponse {
+  Candidate item = 1;
+}
+
+message CreateCandidateRequestPayload {
+  string name = 1 [(buf.validate.field).string = {min_len: 1, max_len: 150}];
+  string surname = 2 [(buf.validate.field).string = {min_len: 1, max_len: 150}];
+  types.v1.Gender gender = 3;
+  types.v1.OptionalDate birthday = 4;
+}
+
+message CreateCandidateRequest {
+  CreateCandidateRequestPayload payload = 1 [(buf.validate.field).required = true];
+}
+
+message CreateCandidateResponse {
+  Candidate item = 1;
+}
+
+message PatchCandidateRequestPayload {
+  optional string name = 1 [(buf.validate.field).string = {min_len: 1, max_len: 150}];
+  optional string surname = 2 [(buf.validate.field).string = {min_len: 1, max_len: 150}];
+  optional types.v1.Gender gender = 3;
+  optional types.v1.OptionalDate birthday = 4;
+}
+
+message PatchCandidateRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+  PatchCandidateRequestPayload payload = 2 [(buf.validate.field).required = true];
+  int64 version = 3;
+  bool skip_version_check = 4;
+}
+
+message PatchCandidateResponse {}
+
+message DeleteCandidateRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+}
+
+message DeleteCandidateResponse {}
+
+message UploadCandidateResumeFileRequest {
+  bytes file = 1;
+  string filename = 2;
+}
+
+message UploadCandidateResumeFileResponse {
+  string file_id = 1;
+}

@@ -49,22 +49,45 @@ else
 	@GOBIN=$(LOCAL_BIN) go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest || exit 1
 endif
 
+.PHONY: buf-deps
 
-
-# Генерация всех .proto из ./api
-generate: bin-deps
+buf-deps:
 ifeq ($(OS),Windows_NT)
-	@echo == Windows: generating to $(OUT_PATH) ==
-	@if not exist "$(OUT_PATH)" mkdir "$(OUT_PATH)"
-	@set "PATH=$(WIN_LOCAL_BIN);%PATH%" && "$(BUF)" generate
-	@echo == Generation complete. Artifacts in $(OUT_PATH) ==
+	@echo == Updating buf dependencies ==
+	@cd $(CURDIR) && set "PATH=$(WIN_LOCAL_BIN);%PATH%" && "$(BUF)" dep update
 else
-	@echo "== Unix: generating to $(OUT_PATH) =="
-	$(MKDIR_P) $(OUT_PATH)
-	PATH="$(LOCAL_BIN):$$PATH" "$(BUF)" generate
-	@echo "== Generation complete. Artifacts in $(OUT_PATH) =="
+	@echo "== Updating buf dependencies =="
+	cd $(CURDIR) && PATH="$(LOCAL_BIN):$$PATH" "$(BUF)" dep update
 endif
 
+
+generate-api: bin-deps
+ifeq ($(OS),Windows_NT)
+	@echo == Windows: generating pb ==
+	@cd $(CURDIR) && set "PATH=$(WIN_LOCAL_BIN);%PATH%" && "$(BUF)" generate --template buf.gen.yaml
+	@echo == generation pb complete ==
+else
+	@echo == Unix: generating pb ==
+	cd $(CURDIR) && PATH="$(LOCAL_BIN):$$PATH" "$(BUF)" generate --template buf.gen.yaml
+	@echo == generation pb complete ==
+endif
+
+generate-swagger: bin-deps
+ifeq ($(OS),Windows_NT)
+	@echo "== Windows: generating swagger"
+	@cd $(CURDIR) && set "PATH=$(WIN_LOCAL_BIN);%PATH%" && "$(BUF)" generate --template buf.gen.swagger.yaml --path api/public
+	@echo == Patching swagger ==
+	@cd $(CURDIR) && go run ./tools/patch_swagger -in "$(CURDIR)/swagger/public.swagger.json" -out "$(CURDIR)/swagger/public.swagger.json"
+	@echo "== Swagger generation complete =="
+else
+	@echo "== Unix: generating swagger"
+	cd $(CURDIR) && PATH="$(LOCAL_BIN):$$PATH" "$(BUF)" generate --template buf.gen.swagger.yaml --path api/public
+	@echo "== Patching swagger =="
+	cd $(CURDIR) && go run ./tools/patch_swagger -in "$(CURDIR)/swagger/public.swagger.json" -out "$(CURDIR)/swagger/public.swagger.json"
+	@echo "== Swagger generation complete =="
+endif
+
+generate: generate-api generate-swagger
 
 # Обновить зависимости
 update:

@@ -60,9 +60,9 @@ func (uc *UsecaseImpl) PatchByDTO(
 ) error {
 	const op = "PatchByDTO"
 
-	if auth.IsNeedToCheckRights(ctx) {
+	if auth.IsNeedToCheckTenantAccess(ctx) {
 		authData := auth.GetAuthData(ctx)
-		if authData == nil || authData.TenantID != id {
+		if authData == nil || !authData.IsTenantUser() || authData.TenantUserClaims().TenantID != id {
 			return appErrors.Chainf(appErrors.ErrForbidden, "%s.%s", uc.pkg, op)
 		}
 	}

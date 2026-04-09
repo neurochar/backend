@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/neurochar/backend/internal/domain/tenant/entity"
 	"github.com/neurochar/backend/pkg/auth"
-	authpb "github.com/neurochar/backend/pkg/proto_pb/auth"
+	authpb "github.com/neurochar/backend/pkg/proto_pb/common/auth_tenant"
 )
 
 func (uc *UsecaseImpl) makeRefreshClaims(session *entity.Session) *entity.SessionRefreshClaims {
@@ -30,8 +30,8 @@ func (uc *UsecaseImpl) makeAccessClaims(
 	meta map[string]string,
 	issuedAt time.Time,
 	duration time.Duration,
-) *auth.SessionAccessClaims {
-	return &auth.SessionAccessClaims{
+) *auth.UserTenantSessionAccessClaims {
+	return &auth.UserTenantSessionAccessClaims{
 		AccessClaims: authpb.AccessClaims{
 			AccountId: accountID.String(),
 			SessionId: sessionID.String(),

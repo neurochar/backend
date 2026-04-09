@@ -25,8 +25,8 @@ func (uc *UsecaseImpl) CreateByDTO(
 
 	var authorAccountID *uuid.UUID
 	authData := auth.GetAuthData(ctx)
-	if authData != nil {
-		authorAccountID = &authData.AccountID
+	if authData != nil && authData.IsTenantUser() {
+		authorAccountID = &authData.TenantUserClaims().AccountID
 	}
 
 	var room *entity.Room
@@ -128,9 +128,9 @@ func (uc *UsecaseImpl) PatchByDTO(
 			return err
 		}
 
-		if auth.IsNeedToCheckRights(ctx) {
+		if auth.IsNeedToCheckTenantAccess(ctx) {
 			authData := auth.GetAuthData(ctx)
-			if authData == nil || authData.TenantID != room.TenantID {
+			if authData == nil || !authData.IsTenantUser() || authData.TenantUserClaims().TenantID != room.TenantID {
 				return appErrors.ErrForbidden
 			}
 		}
@@ -185,9 +185,9 @@ func (uc *UsecaseImpl) Finish(
 			return usecase.ErrRoomAlreadyFinished
 		}
 
-		if auth.IsNeedToCheckRights(ctx) {
+		if auth.IsNeedToCheckTenantAccess(ctx) {
 			authData := auth.GetAuthData(ctx)
-			if authData == nil || authData.TenantID != room.TenantID {
+			if authData == nil || !authData.IsTenantUser() || authData.TenantUserClaims().TenantID != room.TenantID {
 				return appErrors.ErrForbidden
 			}
 		}

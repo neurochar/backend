@@ -22,9 +22,9 @@ func (uc *UsecaseImpl) Delete(ctx context.Context, id uuid.UUID) error {
 			return err
 		}
 
-		if auth.IsNeedToCheckRights(ctx) {
+		if auth.IsNeedToCheckTenantAccess(ctx) {
 			authData := auth.GetAuthData(ctx)
-			if authData == nil || authData.TenantID != candidate.TenantID {
+			if authData == nil || !authData.IsTenantUser() || authData.TenantUserClaims().TenantID != candidate.TenantID {
 				return appErrors.ErrForbidden
 			}
 		}

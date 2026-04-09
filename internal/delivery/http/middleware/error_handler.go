@@ -1,4 +1,3 @@
-// Package middleware contains middleware for http handlers
 package middleware
 
 import (
@@ -9,46 +8,51 @@ import (
 	alertUC "github.com/neurochar/backend/internal/domain/alert/usecase"
 )
 
-type errorJSON struct {
+type ErrorJSON struct {
 	Code     int            `json:"code"`
 	TextCode string         `json:"textCode"`
 	Hints    []string       `json:"hints"`
 	Details  map[string]any `json:"details"`
 }
 
-// ErrorHandler - обработчик ошибок
+func ErrorToHTTP(err error) ErrorJSON {
+	code := 500
+	jsonRes := ErrorJSON{
+		TextCode: "INTERNAL_ERROR",
+		Hints:    []string{},
+		Details:  map[string]any{},
+	}
+
+	if appError, ok := appErrors.ExtractError(err); ok {
+		code = int(appError.Meta().Code)
+		jsonRes.TextCode = appError.Meta().TextCode
+		jsonRes.Hints = appError.Hints()
+		jsonRes.Details = appError.Details(false)
+	} else {
+		switch errTyped := err.(type) {
+		case *fiber.Error:
+			code = errTyped.Code
+			switch {
+			case code == 405:
+				jsonRes.TextCode = "METHOD_NOT_ALLOWED"
+			case code >= 400 && code < 500:
+				jsonRes.TextCode = "BAD_REQUEST"
+			}
+			jsonRes.Hints = []string{errTyped.Message}
+		default:
+		}
+	}
+
+	jsonRes.Code = code
+
+	return jsonRes
+}
+
 func ErrorHandler(appTitle string, logger *slog.Logger, alertUsecase alertUC.Usecase) func(*fiber.Ctx, error) error {
 	return func(c *fiber.Ctx, err error) error {
-		code := 500
-		jsonRes := errorJSON{
-			TextCode: "INTERNAL_ERROR",
-			Hints:    []string{},
-			Details:  map[string]any{},
-		}
+		jsonRes := ErrorToHTTP(err)
 
-		if appError, ok := appErrors.ExtractError(err); ok {
-			code = int(appError.Meta().Code)
-			jsonRes.TextCode = appError.Meta().TextCode
-			jsonRes.Hints = appError.Hints()
-			jsonRes.Details = appError.Details(false)
-		} else {
-			switch errTyped := err.(type) {
-			case *fiber.Error:
-				code = errTyped.Code
-				switch {
-				case code == 405:
-					jsonRes.TextCode = "METHOD_NOT_ALLOWED"
-				case code >= 400 && code < 500:
-					jsonRes.TextCode = "BAD_REQUEST"
-				}
-				jsonRes.Hints = []string{errTyped.Message}
-			default:
-			}
-		}
-
-		jsonRes.Code = code
-
-		if code >= 500 {
+		if jsonRes.Code >= 500 {
 			go func() {
 				/*
 					defer func() {
@@ -97,6 +101,6 @@ func ErrorHandler(appTitle string, logger *slog.Logger, alertUsecase alertUC.Use
 			}()
 		}
 
-		return c.Status(code).JSON(jsonRes)
+		return c.Status(jsonRes.Code).JSON(jsonRes)
 	}
 }

@@ -104,7 +104,7 @@ func (uc *UsecaseImpl) LoginByEmail(
 	return out, nil
 }
 
-func (uc *UsecaseImpl) IssueAccessJWT(access *auth.SessionAccessClaims) (string, error) {
+func (uc *UsecaseImpl) IssueAccessJWT(access *auth.UserTenantSessionAccessClaims) (string, error) {
 	const op = "IssueAccessJWT"
 
 	signed, err := auth.IssueAccessJWT(access, []byte(uc.cfg.Auth.JwtAccessSecret))
@@ -128,7 +128,7 @@ func (uc *UsecaseImpl) IssueRefreshJWT(refresh *entity.SessionRefreshClaims) (st
 	return signed, nil
 }
 
-func (uc *UsecaseImpl) ParseAccessToken(tokenStr string, validate bool) (*auth.SessionAccessClaims, error) {
+func (uc *UsecaseImpl) ParseAccessToken(tokenStr string, validate bool) (*auth.UserTenantSessionAccessClaims, error) {
 	const op = "ParseAccessToken"
 
 	claims, err := auth.ParseAccessToken(tokenStr, validate, []byte(uc.cfg.Auth.JwtAccessSecret))

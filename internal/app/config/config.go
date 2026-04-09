@@ -61,10 +61,14 @@ type Config struct {
 		HTTP struct {
 			Port             int      `yaml:"port" env:"BACKEND_APP_HTTP_PORT" env-default:"8080"`
 			Prefix           string   `yaml:"prefix" env:"BACKEND_APP_HTTP_PREFIX" env-default:""`
-			UnderProxy       bool     `yaml:"under_proxy" env:"BACKEND_APP_HTTP_UNDER_PROXY" env-default:"false"`
 			StopTimeoutSec   int      `yaml:"stop_timeout_sec" env:"BACKEND_APP_HTTP_STOP_TIMEOUT_SEC" env-default:"3"`
 			CorsAllowOrigins []string `yaml:"cors_allow_origins" env:"BACKEND_APP_HTTP_CORS_ALLOW_ORIGINS" env-default:""`
 		} `yaml:"http"`
+		GRPC struct {
+			Port               int  `yaml:"port" env:"BACKEND_APP_GRPC_PORT" env-default:"50051"`
+			LogResponseSent    bool `yaml:"log_response_sent" env:"BACKEND_APP_GRPC_LOG_RESPONSE_SENT" env-default:"false"`
+			LogPayloadReceived bool `yaml:"log_payload_received" env:"BACKEND_APP_GRPC_LOG_PAYLOAD_RECEIVED" env-default:"false"`
+		} `yaml:"grpc"`
 	} `yaml:"backend_app"`
 	CronjobApp struct {
 		Name    string `yaml:"name" env:"CRONJOB_APP_NAME" env-default:"cronjob"`

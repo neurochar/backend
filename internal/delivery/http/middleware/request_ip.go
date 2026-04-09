@@ -1,12 +1,11 @@
 package middleware
 
 import (
-	"net"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/neurochar/backend/internal/delivery/common"
 	"github.com/neurochar/backend/internal/infra/loghandler"
-	"github.com/samber/lo"
 )
 
 // RequestIP - middleware for request ip
@@ -25,26 +24,20 @@ func RequestIP(serverIPs []string) func(*fiber.Ctx) error {
 
 func parseRealIP(c *fiber.Ctx, serverIPs []string) string {
 	ips := strings.Split(c.IP(), ",")
+	clientIPs := make([]string, 0, len(ips))
 	for i := range ips {
-		ips[i] = strings.TrimSpace(ips[i])
-	}
-
-	for i := len(ips) - 1; i >= 0; i-- {
-		ip := ips[i]
-		parsed := net.ParseIP(ip)
-		if parsed == nil {
-			continue
-		}
-		if !lo.Contains(serverIPs, ip) && !IsPrivateIP(parsed) {
-			return ip
+		v := strings.TrimSpace(ips[i])
+		if v != "" {
+			clientIPs = append(clientIPs, v)
 		}
 	}
 
-	if len(ips) > 0 {
-		return ips[len(ips)-1]
+	realIP, err := common.ParseRealIP(clientIPs, serverIPs)
+	if err != nil {
+		return c.Context().RemoteIP().String()
 	}
 
-	return c.IP()
+	return realIP
 }
 
 func GetRealIP(c *fiber.Ctx) string {
@@ -55,26 +48,4 @@ func GetRealIP(c *fiber.Ctx) string {
 	}
 
 	return c.IP()
-}
-
-var privateBlocks = []string{
-	"10.0.0.0/8",
-	"172.16.0.0/12",
-	"192.168.0.0/16",
-	"127.0.0.0/8",
-	"::1/128",
-}
-
-func IsPrivateIP(ip net.IP) bool {
-	for _, block := range privateBlocks {
-		_, subnet, err := net.ParseCIDR(block)
-		if err != nil {
-			continue
-		}
-		if subnet.Contains(ip) {
-			return true
-		}
-	}
-
-	return false
 }

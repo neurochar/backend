@@ -40,7 +40,8 @@ cronjob_app:
         log_sql_queries: true
         log_jobs: true
     jobs:
-        autostart: true
+        #autostart: true
+        autostart: false
 
         process_files_to_delete:
             timeout_millisec: 5000
@@ -74,8 +75,11 @@ backend_app:
     http:
         port: 8080
         prefix: ""
-        under_proxy: false
         stop_timeout_sec: 3
+    grpc:
+        port: 50051
+        log_response_sent: false
+        log_payload_received: false
 
 postgres:
     max_attempts: 5

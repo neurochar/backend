@@ -17,13 +17,18 @@ func (uc *UsecaseImpl) PatchTenantByDTO(
 ) error {
 	const op = "PatchTenantByDTO"
 
-	if auth.IsNeedToCheckRights(ctx) {
+	if auth.IsNeedToCheckTenantAccess(ctx) {
 		authData := auth.GetAuthData(ctx)
-		if authData == nil || authData.TenantID != id {
+		if authData == nil || !authData.IsTenantUser() || authData.TenantUserClaims().TenantID != id {
 			return appErrors.Chainf(appErrors.ErrForbidden, "%s.%s", uc.pkg, op)
 		}
 
-		authorAccount, err := uc.accoutUC.FindOneByID(ctx, authData.AccountID, nil, &usecase.AccountDTOOptions{})
+		authorAccount, err := uc.accoutUC.FindOneByID(
+			ctx,
+			authData.TenantUserClaims().AccountID,
+			nil,
+			&usecase.AccountDTOOptions{},
+		)
 		if err != nil {
 			return err
 		}

@@ -8,13 +8,13 @@ import (
 
 func (ctrl *Controller) AuthFullCheck(c *fiber.Ctx) error {
 	authData := GetAuthData(c)
-	if authData == nil {
+	if authData == nil || !authData.IsTenantUser() {
 		return appErrors.ErrUnauthorized
 	}
 
-	c.Locals(auth.ContextKeyAuthCheckRight, true)
+	c.Locals(auth.ContextKeyAuthCheckTenantAccess, true)
 
-	isConfirmed, err := ctrl.authUC.IsSessionConfirmed(c.Context(), authData.SessionID)
+	isConfirmed, err := ctrl.authUC.IsSessionConfirmed(c.Context(), authData.TenantUserClaims().SessionID)
 	if err != nil {
 		return err
 	}

@@ -14,6 +14,8 @@ func RequestID() func(*fiber.Ctx) error {
 			requestID = uuid.New()
 		}
 
+		c.Request().Header.Set("X-Request-ID", requestID.String())
+
 		c.Locals("requestID", requestID)
 
 		ctxData, ctxKey := loghandler.SetData(c.Context(), "request.id", requestID)

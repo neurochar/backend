@@ -8,11 +8,11 @@ import (
 
 func (ctrl *Controller) AuthRequired(c *fiber.Ctx) error {
 	authData := GetAuthData(c)
-	if authData == nil {
+	if authData == nil || !authData.IsTenantUser() {
 		return appErrors.ErrUnauthorized
 	}
 
-	c.Locals(auth.ContextKeyAuthCheckRight, true)
+	c.Locals(auth.ContextKeyAuthCheckTenantAccess, true)
 
 	return c.Next()
 }

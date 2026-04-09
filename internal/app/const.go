@@ -7,7 +7,4 @@ type ID int
 const (
 	// IDBackend - backend app id
 	IDBackend ID = iota
-
-	// IDCPanel - cpanel app id
-	IDCPanel
 )

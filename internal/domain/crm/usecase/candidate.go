@@ -29,6 +29,7 @@ type CandidateDTOOptions struct {
 
 type CandidateDTO struct {
 	Candidate *entity.Candidate
+	Resume    *CandidateResumeDTO
 	CreatedBy *tenantUC.AccountDTO
 }
 
@@ -99,7 +100,7 @@ type CandidateRepository interface {
 		ctx context.Context,
 		id uuid.UUID,
 		queryParams *uctypes.QueryGetOneParams,
-	) (account *entity.Candidate, err error)
+	) (item *entity.Candidate, err error)
 
 	FindList(
 		ctx context.Context,

@@ -13,7 +13,7 @@ import (
 type AuthSessionDTO struct {
 	Session       *entity.Session
 	RefreshClaims *entity.SessionRefreshClaims
-	AccessClaims  *auth.SessionAccessClaims
+	AccessClaims  *auth.UserTenantSessionAccessClaims
 	AccountDTO    *AccountDTO
 }
 
@@ -43,11 +43,11 @@ type AuthUsecase interface {
 		sessionID uuid.UUID,
 	) (res bool, resErr error)
 
-	IssueAccessJWT(access *auth.SessionAccessClaims) (resToken string, resErr error)
+	IssueAccessJWT(access *auth.UserTenantSessionAccessClaims) (resToken string, resErr error)
 
 	IssueRefreshJWT(refresh *entity.SessionRefreshClaims) (resToken string, resErr error)
 
-	ParseAccessToken(token string, validate bool) (res *auth.SessionAccessClaims, resErr error)
+	ParseAccessToken(token string, validate bool) (res *auth.UserTenantSessionAccessClaims, resErr error)
 
 	ParseRefreshToken(token string, validate bool) (res *entity.SessionRefreshClaims, resErr error)
 

@@ -2,13 +2,9 @@ package errors
 
 import (
 	"errors"
-	"strings"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
-	"google.golang.org/genproto/googleapis/rpc/errdetails"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 // ExtractError - ищет ближайшую ошибку AppError
@@ -116,58 +112,6 @@ func WithHints(err error, hints ...string) *AppError {
 	cp.hints = hints
 
 	return cp
-}
-
-// ToGrpcStatus - преобразует error в GrpcStatus
-func ToGrpcStatus(err error) error {
-	if err == nil {
-		return nil
-	}
-
-	appErr, ok := ExtractError(err)
-	if !ok {
-		st, ok := status.FromError(err)
-		if !ok {
-			return status.Error(codes.Unknown, err.Error())
-		}
-
-		return st.Err()
-	}
-
-	hint := ""
-	hints, ok := NearestHints(err)
-	if ok {
-		hint = strings.Join(hints, "; ")
-	}
-
-	code := codes.Unknown
-	textCode := appErr.Meta().TextCode
-
-	switch appErr.Meta().Code {
-	case errorCodeBadRequest:
-		code = codes.InvalidArgument
-	case errorCodeForbidden:
-		code = codes.PermissionDenied
-	case errorCodeNotFound:
-		code = codes.NotFound
-	case errorCodeConflict:
-		code = codes.Aborted
-	case errorTooManyRequests:
-		code = codes.ResourceExhausted
-	case errorCodeInternal:
-		code = codes.Internal
-	}
-
-	detail := &errdetails.ErrorInfo{
-		Reason: textCode,
-	}
-
-	st, stErr := status.New(code, hint).WithDetails(detail)
-	if stErr != nil {
-		return status.Error(codes.Unknown, stErr.Error())
-	}
-
-	return st.Err()
 }
 
 // CheckIsTxСoncurrentExec - проверяет, является ли ошибка pgx о конкурентном выполнении транзакции
