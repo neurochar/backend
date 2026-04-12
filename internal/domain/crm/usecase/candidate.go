@@ -25,6 +25,7 @@ const (
 
 type CandidateDTOOptions struct {
 	FetchCreatedBy bool
+	FetchResume    bool
 }
 
 type CandidateDTO struct {
@@ -39,6 +40,7 @@ type CreateCandidateDataInput struct {
 	CandidateGender   entity.CandidateGender
 	CandidateBirthday *time.Time
 	CreatedBy         *uuid.UUID
+	ResumeFileID      *uuid.UUID
 }
 
 type PatchCandidateDataInput struct {
@@ -48,6 +50,7 @@ type PatchCandidateDataInput struct {
 	CandidateSurname  *string
 	CandidateGender   *entity.CandidateGender
 	CandidateBirthday **time.Time
+	ResumeFileID      **uuid.UUID
 }
 
 type CandidateUsecase interface {

@@ -15,6 +15,8 @@ type DBModel struct {
 	AssignedToTarget    bool      `db:"assigned_to_target"`
 	StorageFileKey      *string   `db:"storage_file_key"`
 	OriginalFileName    string    `db:"original_file_name"`
+	FileMimetype        *string   `db:"file_mimetype"`
+	FileHash            *string   `db:"file_hash"`
 	UploadedToStorage   bool      `db:"uploaded_to_storage"`
 	ToDeleteFromStorage bool      `db:"to_delete_from_storage"`
 
@@ -31,6 +33,8 @@ func (db *DBModel) ToEntity() *fileEntity.File {
 		AssignedToTarget:    db.AssignedToTarget,
 		StorageFileKey:      db.StorageFileKey,
 		OriginalFileName:    db.OriginalFileName,
+		FileMimetype:        db.FileMimetype,
+		FileHash:            db.FileHash,
 		UploadedToStorage:   db.UploadedToStorage,
 		ToDeleteFromStorage: db.ToDeleteFromStorage,
 
@@ -48,6 +52,8 @@ func mapEntityToDBModel(entity *fileEntity.File) *DBModel {
 		AssignedToTarget:    entity.AssignedToTarget,
 		StorageFileKey:      entity.StorageFileKey,
 		OriginalFileName:    entity.OriginalFileName,
+		FileMimetype:        entity.FileMimetype,
+		FileHash:            entity.FileHash,
 		UploadedToStorage:   entity.UploadedToStorage,
 		ToDeleteFromStorage: entity.ToDeleteFromStorage,
 

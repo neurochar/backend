@@ -61,6 +61,9 @@ func (uc *UsecaseImpl) UploadAndCreateFiles(
 		file := fileEntity.NewFile(groupID, item.Target, false, item.FileName)
 		file.StorageFileKey = &fileKey
 
+		file.SetFileMimetype(&fileMimeType)
+		file.SetFileHash(&fileHash)
+
 		err := uc.Create(ctx, file)
 		if err != nil {
 			return nil, resCancelFn, appErrors.Chainf(err, "%s.%s", uc.pkg, op)

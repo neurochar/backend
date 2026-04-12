@@ -2,7 +2,6 @@ package crm
 
 import (
 	"context"
-	"fmt"
 
 	appErrors "github.com/neurochar/backend/internal/app/errors"
 	"github.com/neurochar/backend/internal/delivery/common/limiter"
@@ -30,15 +29,19 @@ func (ctrl *Controller) UploadCandidateResumeFile(
 		return nil, appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}
 
-	userAuthData := auth.GetAuthData(ctx)
+	authData := auth.GetAuthData(ctx)
+	if authData == nil || !authData.IsTenantUser() {
+		return nil, appErrors.Chainf(appErrors.ErrUnauthorized, "%s.%s", ctrl.pkg, op)
+	}
 
-	fmt.Println(2, userAuthData)
-
-	fmt.Println(req.File, req.Filename)
+	files, err := ctrl.crmFacade.CandidateResume.UploadResumeFile(ctx, req.Filename, req.File)
+	if err != nil {
+		return nil, appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
+	}
 
 	return &desc.UploadCandidateResumeFileResponse{
 		Data: &typesv1.FilesMap{
-			Map: mapper.FilesToMapPb(nil, ctrl.fileUC, true),
+			Map: mapper.FilesToMapPb(files, ctrl.fileUC, true),
 		},
 	}, nil
 }

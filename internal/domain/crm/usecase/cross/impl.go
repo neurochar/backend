@@ -11,13 +11,14 @@ import (
 )
 
 type UsecaseImpl struct {
-	pkg            string
-	logger         *slog.Logger
-	cfg            config.Config
-	dbMasterClient db.MasterClient
-	emailing       emailing.Emailing
-	candidateRepo  usecase.CandidateRepository
-	roomUC         testingUC.RoomUsecase
+	pkg               string
+	logger            *slog.Logger
+	cfg               config.Config
+	dbMasterClient    db.MasterClient
+	emailing          emailing.Emailing
+	candidateRepo     usecase.CandidateRepository
+	candidateResumeUC usecase.CandidateResumeUsecase
+	roomUC            testingUC.RoomUsecase
 }
 
 func NewUsecaseImpl(
@@ -26,16 +27,18 @@ func NewUsecaseImpl(
 	dbMasterClient db.MasterClient,
 	emailing emailing.Emailing,
 	candidateRepo usecase.CandidateRepository,
+	candidateResumeUC usecase.CandidateResumeUsecase,
 	roomUC testingUC.RoomUsecase,
 ) *UsecaseImpl {
 	uc := &UsecaseImpl{
-		pkg:            "CRM.Usecase.Cross",
-		logger:         logger,
-		cfg:            cfg,
-		emailing:       emailing,
-		dbMasterClient: dbMasterClient,
-		candidateRepo:  candidateRepo,
-		roomUC:         roomUC,
+		pkg:               "CRM.Usecase.Cross",
+		logger:            logger,
+		cfg:               cfg,
+		emailing:          emailing,
+		dbMasterClient:    dbMasterClient,
+		candidateRepo:     candidateRepo,
+		candidateResumeUC: candidateResumeUC,
+		roomUC:            roomUC,
 	}
 	return uc
 }

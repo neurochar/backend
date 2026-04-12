@@ -56,7 +56,7 @@ func (ctrl *Controller) Register() {
 	ctrl.backoff.SetConfigForGroup(
 		backoffConfigLLMGroupID,
 		backoff.WithTtl(time.Minute*10),
-		backoff.WithInitialInterval(time.Second*5),
+		backoff.WithInitialInterval(time.Second),
 		backoff.WithMultiplier(2),
 		backoff.WithMaxInterval(time.Minute*1),
 	)

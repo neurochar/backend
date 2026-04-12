@@ -283,6 +283,9 @@
         "name": {
           "type": "string"
         },
+        "resumeFile": {
+          "$ref": "#/definitions/v1File"
+        },
         "surname": {
           "type": "string"
         },
@@ -411,6 +414,9 @@
         "name": {
           "type": "string"
         },
+        "resumeFiles": {
+          "$ref": "#/definitions/v1CreateCandidateRequestPayloadResumeFiles"
+        },
         "surname": {
           "type": "string"
         }
@@ -421,6 +427,14 @@
         "name",
         "surname"
       ],
+      "type": "object"
+    },
+    "v1CreateCandidateRequestPayloadResumeFiles": {
+      "properties": {
+        "fileId": {
+          "type": "string"
+        }
+      },
       "type": "object"
     },
     "v1CreateCandidateResponse": {
@@ -910,7 +924,21 @@
         "name": {
           "type": "string"
         },
+        "resumeFiles": {
+          "$ref": "#/definitions/v1PatchCandidateRequestPayloadResumeFiles"
+        },
+        "resumeFilesClear": {
+          "type": "boolean"
+        },
         "surname": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "v1PatchCandidateRequestPayloadResumeFiles": {
+      "properties": {
+        "fileId": {
           "type": "string"
         }
       },

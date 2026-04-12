@@ -45,7 +45,19 @@ func (uc *UsecaseImpl) CreateByDTO(
 		return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
 	}
 
-	err = uc.repo.Create(ctx, candidate)
+	err = uc.dbMasterClient.Do(ctx, func(ctx context.Context) error {
+		err := uc.repo.Create(ctx, candidate)
+		if err != nil {
+			return err
+		}
+
+		err = uc.processResumeFilesForCandidateInTx(ctx, candidate, in.ResumeFileID)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
 	if err != nil {
 		return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
 	}
@@ -120,6 +132,13 @@ func (uc *UsecaseImpl) PatchByDTO(
 		err = uc.repo.Update(ctx, candidate)
 		if err != nil {
 			return err
+		}
+
+		if in.ResumeFileID != nil {
+			err = uc.processResumeFilesForCandidateInTx(ctx, candidate, *in.ResumeFileID)
+			if err != nil {
+				return err
+			}
 		}
 
 		return nil

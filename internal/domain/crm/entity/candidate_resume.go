@@ -12,24 +12,47 @@ var CandidateResumeStatusUnknown = appErrors.ErrBadRequest.Extend("resume status
 type CandidateResumeStatus uint8
 
 const (
-	CandidateResumeStatusNew        CandidateResumeStatus = 0
-	CandidateResumeStatusToProcess  CandidateResumeStatus = 1
-	CandidateResumeStatusProcessing CandidateResumeStatus = 2
-	CandidateResumeStatusProcessed  CandidateResumeStatus = 10
+	CandidateResumeStatusUnspecified  CandidateResumeStatus = 0
+	CandidateResumeStatusNew          CandidateResumeStatus = 1
+	CandidateResumeStatusToProcess    CandidateResumeStatus = 2
+	CandidateResumeStatusProcessing   CandidateResumeStatus = 3
+	CandidateResumeStatusProcessed    CandidateResumeStatus = 10
+	CandidateResumeStatusProcessError CandidateResumeStatus = 99
 )
 
-func CandidateResumeStatusFromUint8(value uint8) (CandidateResumeStatus, error) {
+func CandidateResumeStatusFromUint8(value uint8) CandidateResumeStatus {
 	switch value {
-	case 0:
-		return CandidateResumeStatusNew, nil
 	case 1:
-		return CandidateResumeStatusToProcess, nil
+		return CandidateResumeStatusNew
 	case 2:
-		return CandidateResumeStatusProcessing, nil
+		return CandidateResumeStatusToProcess
+	case 3:
+		return CandidateResumeStatusProcessing
 	case 10:
-		return CandidateResumeStatusProcessed, nil
+		return CandidateResumeStatusProcessed
+	case 99:
+		return CandidateResumeStatusProcessError
 	default:
-		return 0, CandidateResumeStatusUnknown
+		return CandidateResumeStatusUnspecified
+	}
+}
+
+type CandidateResumeFileType uint8
+
+const (
+	CandidateResumeFileTypeUnspecified CandidateResumeFileType = 0
+	CandidateResumeFileTypePdf         CandidateResumeFileType = 1
+	CandidateResumeFileTypeWord        CandidateResumeFileType = 2
+)
+
+func CandidateResumeFileTypeFromUint8(value uint8) CandidateResumeFileType {
+	switch value {
+	case 1:
+		return CandidateResumeFileTypePdf
+	case 2:
+		return CandidateResumeFileTypeWord
+	default:
+		return CandidateResumeFileTypeUnspecified
 	}
 }
 
@@ -44,6 +67,7 @@ type CandidateResume struct {
 	CandidateID *uuid.UUID
 	FileID      uuid.UUID
 	FileHash    string
+	FileType    CandidateResumeFileType
 	AnalyzeData *CandidateResumeAnalyzeData
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
@@ -52,6 +76,12 @@ type CandidateResume struct {
 
 func (item *CandidateResume) Version() int64 {
 	return item.UpdatedAt.UnixMicro()
+}
+
+func (item *CandidateResume) FilesIDs() []uuid.UUID {
+	return []uuid.UUID{
+		item.FileID,
+	}
 }
 
 func (item *CandidateResume) SetStatus(value CandidateResumeStatus) error {
@@ -76,14 +106,17 @@ func NewCandidateResume(
 	tenantID uuid.UUID,
 	fileID uuid.UUID,
 	fileHash string,
+	fileType CandidateResumeFileType,
 ) (*CandidateResume, error) {
 	timeNow := time.Now().Truncate(time.Microsecond)
 
 	account := &CandidateResume{
 		ID:        uuid.New(),
 		TenantID:  tenantID,
+		Status:    CandidateResumeStatusNew,
 		FileID:    fileID,
 		FileHash:  fileHash,
+		FileType:  fileType,
 		CreatedAt: timeNow,
 		UpdatedAt: timeNow,
 	}

@@ -3,7 +3,6 @@ package llm
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"log/slog"
 	"strings"
 	"time"
@@ -153,8 +152,6 @@ func (r *Repository) GenerateProfileTraitsMapByDescription(
 	if err != nil {
 		return nil, appErrors.Chainf(appErrors.ErrInternal.WithWrap(err), "%s.%s", r.pkg, op)
 	}
-
-	fmt.Println(string(llmReq))
 
 	resp, err := r.openaiClient.Chat.Completions.New(ctx, openai.ChatCompletionNewParams{
 		Model: r.cfg.Openai.DefaultModel,

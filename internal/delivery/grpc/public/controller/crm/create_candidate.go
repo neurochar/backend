@@ -3,6 +3,7 @@ package crm
 import (
 	"context"
 
+	"github.com/google/uuid"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
 	"github.com/neurochar/backend/internal/delivery/grpc/mapper"
 	"github.com/neurochar/backend/internal/delivery/grpc/mapper/helpers"
@@ -35,22 +36,33 @@ func (ctrl *Controller) CreateCandidate(
 		return nil, appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}
 
+	usecaseInput := crmUC.CreateCandidateDataInput{
+		CandidateName:     req.Payload.Name,
+		CandidateSurname:  req.Payload.Surname,
+		CandidateGender:   candidateGender,
+		CandidateBirthday: helpers.PbDateToTimePtr(lo.FromPtr(req.Payload.Birthday).Date),
+		CreatedBy:         &authData.TenantUserClaims().AccountID,
+	}
+
+	if req.Payload.GetResumeFiles() != nil {
+		parseID, err := uuid.Parse(req.Payload.GetResumeFiles().FileId)
+		if err != nil {
+			return nil, appErrors.Chainf(appErrors.ErrBadRequest.WithWrap(err), "%s.%s", ctrl.pkg, op)
+		}
+
+		usecaseInput.ResumeFileID = lo.ToPtr(parseID)
+	}
+
 	candidateDTO, err := ctrl.crmFacade.Candidate.CreateByDTO(
 		ctx,
 		authData.TenantUserClaims().TenantID,
-		crmUC.CreateCandidateDataInput{
-			CandidateName:     req.Payload.Name,
-			CandidateSurname:  req.Payload.Surname,
-			CandidateGender:   candidateGender,
-			CandidateBirthday: helpers.PbDateToTimePtr(lo.FromPtr(req.Payload.Birthday).Date),
-			CreatedBy:         &authData.TenantUserClaims().AccountID,
-		},
+		usecaseInput,
 	)
 	if err != nil {
 		return nil, appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}
 
 	return &desc.CreateCandidateResponse{
-		Item: mapper.CandidateDTOToPb(candidateDTO),
+		Item: mapper.CandidateDTOToPb(candidateDTO, ctrl.fileUC, true),
 	}, nil
 }

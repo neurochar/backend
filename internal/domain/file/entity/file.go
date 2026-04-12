@@ -13,6 +13,8 @@ type File struct {
 	AssignedToTarget    bool
 	StorageFileKey      *string
 	OriginalFileName    string
+	FileMimetype        *string
+	FileHash            *string
 	UploadedToStorage   bool
 	ToDeleteFromStorage bool
 
@@ -21,7 +23,12 @@ type File struct {
 	DeletedAt *time.Time
 }
 
-func NewFile(groupID uuid.UUID, target string, assignedToTarget bool, originalFileName string) *File {
+func NewFile(
+	groupID uuid.UUID,
+	target string,
+	assignedToTarget bool,
+	originalFileName string,
+) *File {
 	tNow := time.Now()
 
 	return &File{
@@ -45,4 +52,12 @@ func (i *File) SetUploadedToStorage(value bool) {
 
 func (i *File) SetAssignedToTarget(value bool) {
 	i.AssignedToTarget = value
+}
+
+func (i *File) SetFileMimetype(value *string) {
+	i.FileMimetype = value
+}
+
+func (i *File) SetFileHash(value *string) {
+	i.FileHash = value
 }

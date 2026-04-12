@@ -35,6 +35,6 @@ func (ctrl *Controller) GetCandidate(ctx context.Context, req *desc.GetCandidate
 	}
 
 	return &desc.GetCandidateResponse{
-		Item: mapper.CandidateDTOToPb(candidateDTO),
+		Item: mapper.CandidateDTOToPb(candidateDTO, ctrl.fileUC, true),
 	}, nil
 }

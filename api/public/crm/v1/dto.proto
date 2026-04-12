@@ -28,10 +28,15 @@ message GetCandidateResponse {
 }
 
 message CreateCandidateRequestPayload {
+  message ResumeFiles {
+    string file_id = 1 [(buf.validate.field).string = {uuid: true}];
+  }
+
   string name = 1 [(buf.validate.field).string = {min_len: 1, max_len: 150}];
   string surname = 2 [(buf.validate.field).string = {min_len: 1, max_len: 150}];
   types.v1.Gender gender = 3;
   types.v1.OptionalDate birthday = 4;
+  optional ResumeFiles resume_files = 5;
 }
 
 message CreateCandidateRequest {
@@ -43,10 +48,19 @@ message CreateCandidateResponse {
 }
 
 message PatchCandidateRequestPayload {
+  message ResumeFiles {
+    string file_id = 1 [(buf.validate.field).string = {uuid: true}];
+  }
+
   optional string name = 1 [(buf.validate.field).string = {min_len: 1, max_len: 150}];
   optional string surname = 2 [(buf.validate.field).string = {min_len: 1, max_len: 150}];
   optional types.v1.Gender gender = 3;
   optional types.v1.OptionalDate birthday = 4;
+
+  oneof resume_files_action {
+    ResumeFiles resume_files = 6;
+    bool resume_files_clear = 7;
+  }
 }
 
 message PatchCandidateRequest {

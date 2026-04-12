@@ -31,6 +31,7 @@ type Candidate struct {
 	Surname       string                 `protobuf:"bytes,5,opt,name=surname,proto3" json:"surname,omitempty"`
 	Gender        Gender                 `protobuf:"varint,6,opt,name=gender,proto3,enum=types.v1.Gender" json:"gender,omitempty"`
 	Birthday      *date.Date             `protobuf:"bytes,7,opt,name=birthday,proto3,oneof" json:"birthday,omitempty"`
+	ResumeFile    *File                  `protobuf:"bytes,8,opt,name=resume_file,json=resumeFile,proto3,oneof" json:"resume_file,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -110,6 +111,13 @@ func (x *Candidate) GetGender() Gender {
 func (x *Candidate) GetBirthday() *date.Date {
 	if x != nil {
 		return x.Birthday
+	}
+	return nil
+}
+
+func (x *Candidate) GetResumeFile() *File {
+	if x != nil {
+		return x.ResumeFile
 	}
 	return nil
 }
@@ -210,7 +218,7 @@ var File_common_types_crm_types_proto protoreflect.FileDescriptor
 
 const file_common_types_crm_types_proto_rawDesc = "" +
 	"\n" +
-	"\x1ccommon/types/crm_types.proto\x12\btypes.v1\x1a\x18common/types/types.proto\x1a\x16google/type/date.proto\"\xeb\x01\n" +
+	"\x1ccommon/types/crm_types.proto\x12\btypes.v1\x1a\x18common/types/types.proto\x1a\x16google/type/date.proto\"\xb1\x02\n" +
 	"\tCandidate\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\x03R\aversion\x12\x1b\n" +
@@ -218,8 +226,11 @@ const file_common_types_crm_types_proto_rawDesc = "" +
 	"\x04name\x18\x04 \x01(\tR\x04name\x12\x18\n" +
 	"\asurname\x18\x05 \x01(\tR\asurname\x12(\n" +
 	"\x06gender\x18\x06 \x01(\x0e2\x10.types.v1.GenderR\x06gender\x122\n" +
-	"\bbirthday\x18\a \x01(\v2\x11.google.type.DateH\x00R\bbirthday\x88\x01\x01B\v\n" +
-	"\t_birthday\"\xef\x01\n" +
+	"\bbirthday\x18\a \x01(\v2\x11.google.type.DateH\x00R\bbirthday\x88\x01\x01\x124\n" +
+	"\vresume_file\x18\b \x01(\v2\x0e.types.v1.FileH\x01R\n" +
+	"resumeFile\x88\x01\x01B\v\n" +
+	"\t_birthdayB\x0e\n" +
+	"\f_resume_file\"\xef\x01\n" +
 	"\rListCandidate\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\x03R\aversion\x12\x1b\n" +
@@ -249,17 +260,19 @@ var file_common_types_crm_types_proto_goTypes = []any{
 	(*ListCandidate)(nil), // 1: types.v1.ListCandidate
 	(Gender)(0),           // 2: types.v1.Gender
 	(*date.Date)(nil),     // 3: google.type.Date
+	(*File)(nil),          // 4: types.v1.File
 }
 var file_common_types_crm_types_proto_depIdxs = []int32{
 	2, // 0: types.v1.Candidate.gender:type_name -> types.v1.Gender
 	3, // 1: types.v1.Candidate.birthday:type_name -> google.type.Date
-	2, // 2: types.v1.ListCandidate.gender:type_name -> types.v1.Gender
-	3, // 3: types.v1.ListCandidate.birthday:type_name -> google.type.Date
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	4, // 2: types.v1.Candidate.resume_file:type_name -> types.v1.File
+	2, // 3: types.v1.ListCandidate.gender:type_name -> types.v1.Gender
+	3, // 4: types.v1.ListCandidate.birthday:type_name -> google.type.Date
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_common_types_crm_types_proto_init() }

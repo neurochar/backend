@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
 	"github.com/neurochar/backend/internal/common/uctypes"
+	"github.com/neurochar/backend/internal/domain/crm/usecase"
 	testingUC "github.com/neurochar/backend/internal/domain/testing/usecase"
 	"github.com/neurochar/backend/pkg/auth"
 	"github.com/samber/lo"
@@ -54,6 +55,10 @@ func (uc *UsecaseImpl) Delete(ctx context.Context, id uuid.UUID) error {
 		if err != nil {
 			return err
 		}
+
+		err = uc.candidateResumeUC.Delete(ctx, &usecase.CandidateResumeListOptions{
+			FilterCandidatesIDs: lo.ToPtr([]uuid.UUID{candidate.ID}),
+		})
 
 		return nil
 	})

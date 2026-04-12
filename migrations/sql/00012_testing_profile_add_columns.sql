@@ -1,6 +1,6 @@
 -- +goose Up
 ALTER TABLE "testing_profile"
-    ADD COLUMN "description" TEXT NOT NULL DEFAULT '';
+    ADD COLUMN IF NOT EXISTS "description" TEXT NOT NULL DEFAULT '';
 
 
 -- +goose Down

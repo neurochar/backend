@@ -55,6 +55,18 @@ func (ctrl *Controller) PatchCandidate(
 		usecaseInput.CandidateBirthday = lo.ToPtr(helpers.PbDateToTimePtr(req.Payload.Birthday.Date))
 	}
 
+	if req.Payload.GetResumeFiles() != nil {
+		parseID, err := uuid.Parse(req.Payload.GetResumeFiles().FileId)
+		if err != nil {
+			return nil, appErrors.Chainf(appErrors.ErrBadRequest.WithWrap(err), "%s.%s", ctrl.pkg, op)
+		}
+
+		usecaseInput.ResumeFileID = lo.ToPtr(&parseID)
+	} else if req.Payload.GetResumeFilesClear() {
+		var zeroUUID *uuid.UUID
+		usecaseInput.ResumeFileID = lo.ToPtr(zeroUUID)
+	}
+
 	err = ctrl.crmFacade.Candidate.PatchByDTO(
 		ctx,
 		id,

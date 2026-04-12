@@ -226,11 +226,12 @@ func (x *GetCandidateResponse) GetItem() *types.Candidate {
 }
 
 type CreateCandidateRequestPayload struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Surname       string                 `protobuf:"bytes,2,opt,name=surname,proto3" json:"surname,omitempty"`
-	Gender        types.Gender           `protobuf:"varint,3,opt,name=gender,proto3,enum=types.v1.Gender" json:"gender,omitempty"`
-	Birthday      *types.OptionalDate    `protobuf:"bytes,4,opt,name=birthday,proto3" json:"birthday,omitempty"`
+	state         protoimpl.MessageState                     `protogen:"open.v1"`
+	Name          string                                     `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Surname       string                                     `protobuf:"bytes,2,opt,name=surname,proto3" json:"surname,omitempty"`
+	Gender        types.Gender                               `protobuf:"varint,3,opt,name=gender,proto3,enum=types.v1.Gender" json:"gender,omitempty"`
+	Birthday      *types.OptionalDate                        `protobuf:"bytes,4,opt,name=birthday,proto3" json:"birthday,omitempty"`
+	ResumeFiles   *CreateCandidateRequestPayload_ResumeFiles `protobuf:"bytes,5,opt,name=resume_files,json=resumeFiles,proto3,oneof" json:"resume_files,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -289,6 +290,13 @@ func (x *CreateCandidateRequestPayload) GetGender() types.Gender {
 func (x *CreateCandidateRequestPayload) GetBirthday() *types.OptionalDate {
 	if x != nil {
 		return x.Birthday
+	}
+	return nil
+}
+
+func (x *CreateCandidateRequestPayload) GetResumeFiles() *CreateCandidateRequestPayload_ResumeFiles {
+	if x != nil {
+		return x.ResumeFiles
 	}
 	return nil
 }
@@ -382,13 +390,18 @@ func (x *CreateCandidateResponse) GetItem() *types.Candidate {
 }
 
 type PatchCandidateRequestPayload struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          *string                `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty"`
-	Surname       *string                `protobuf:"bytes,2,opt,name=surname,proto3,oneof" json:"surname,omitempty"`
-	Gender        *types.Gender          `protobuf:"varint,3,opt,name=gender,proto3,enum=types.v1.Gender,oneof" json:"gender,omitempty"`
-	Birthday      *types.OptionalDate    `protobuf:"bytes,4,opt,name=birthday,proto3,oneof" json:"birthday,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Name     *string                `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty"`
+	Surname  *string                `protobuf:"bytes,2,opt,name=surname,proto3,oneof" json:"surname,omitempty"`
+	Gender   *types.Gender          `protobuf:"varint,3,opt,name=gender,proto3,enum=types.v1.Gender,oneof" json:"gender,omitempty"`
+	Birthday *types.OptionalDate    `protobuf:"bytes,4,opt,name=birthday,proto3,oneof" json:"birthday,omitempty"`
+	// Types that are valid to be assigned to ResumeFilesAction:
+	//
+	//	*PatchCandidateRequestPayload_ResumeFiles_
+	//	*PatchCandidateRequestPayload_ResumeFilesClear
+	ResumeFilesAction isPatchCandidateRequestPayload_ResumeFilesAction `protobuf_oneof:"resume_files_action"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *PatchCandidateRequestPayload) Reset() {
@@ -447,6 +460,49 @@ func (x *PatchCandidateRequestPayload) GetBirthday() *types.OptionalDate {
 		return x.Birthday
 	}
 	return nil
+}
+
+func (x *PatchCandidateRequestPayload) GetResumeFilesAction() isPatchCandidateRequestPayload_ResumeFilesAction {
+	if x != nil {
+		return x.ResumeFilesAction
+	}
+	return nil
+}
+
+func (x *PatchCandidateRequestPayload) GetResumeFiles() *PatchCandidateRequestPayload_ResumeFiles {
+	if x != nil {
+		if x, ok := x.ResumeFilesAction.(*PatchCandidateRequestPayload_ResumeFiles_); ok {
+			return x.ResumeFiles
+		}
+	}
+	return nil
+}
+
+func (x *PatchCandidateRequestPayload) GetResumeFilesClear() bool {
+	if x != nil {
+		if x, ok := x.ResumeFilesAction.(*PatchCandidateRequestPayload_ResumeFilesClear); ok {
+			return x.ResumeFilesClear
+		}
+	}
+	return false
+}
+
+type isPatchCandidateRequestPayload_ResumeFilesAction interface {
+	isPatchCandidateRequestPayload_ResumeFilesAction()
+}
+
+type PatchCandidateRequestPayload_ResumeFiles_ struct {
+	ResumeFiles *PatchCandidateRequestPayload_ResumeFiles `protobuf:"bytes,6,opt,name=resume_files,json=resumeFiles,proto3,oneof"`
+}
+
+type PatchCandidateRequestPayload_ResumeFilesClear struct {
+	ResumeFilesClear bool `protobuf:"varint,7,opt,name=resume_files_clear,json=resumeFilesClear,proto3,oneof"`
+}
+
+func (*PatchCandidateRequestPayload_ResumeFiles_) isPatchCandidateRequestPayload_ResumeFilesAction() {
+}
+
+func (*PatchCandidateRequestPayload_ResumeFilesClear) isPatchCandidateRequestPayload_ResumeFilesAction() {
 }
 
 type PatchCandidateRequest struct {
@@ -729,6 +785,94 @@ func (x *UploadCandidateResumeFileResponse) GetData() *types.FilesMap {
 	return nil
 }
 
+type CreateCandidateRequestPayload_ResumeFiles struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	FileId        string                 `protobuf:"bytes,1,opt,name=file_id,json=fileId,proto3" json:"file_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateCandidateRequestPayload_ResumeFiles) Reset() {
+	*x = CreateCandidateRequestPayload_ResumeFiles{}
+	mi := &file_public_crm_v1_dto_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateCandidateRequestPayload_ResumeFiles) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateCandidateRequestPayload_ResumeFiles) ProtoMessage() {}
+
+func (x *CreateCandidateRequestPayload_ResumeFiles) ProtoReflect() protoreflect.Message {
+	mi := &file_public_crm_v1_dto_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateCandidateRequestPayload_ResumeFiles.ProtoReflect.Descriptor instead.
+func (*CreateCandidateRequestPayload_ResumeFiles) Descriptor() ([]byte, []int) {
+	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{4, 0}
+}
+
+func (x *CreateCandidateRequestPayload_ResumeFiles) GetFileId() string {
+	if x != nil {
+		return x.FileId
+	}
+	return ""
+}
+
+type PatchCandidateRequestPayload_ResumeFiles struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	FileId        string                 `protobuf:"bytes,1,opt,name=file_id,json=fileId,proto3" json:"file_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PatchCandidateRequestPayload_ResumeFiles) Reset() {
+	*x = PatchCandidateRequestPayload_ResumeFiles{}
+	mi := &file_public_crm_v1_dto_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PatchCandidateRequestPayload_ResumeFiles) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PatchCandidateRequestPayload_ResumeFiles) ProtoMessage() {}
+
+func (x *PatchCandidateRequestPayload_ResumeFiles) ProtoReflect() protoreflect.Message {
+	mi := &file_public_crm_v1_dto_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PatchCandidateRequestPayload_ResumeFiles.ProtoReflect.Descriptor instead.
+func (*PatchCandidateRequestPayload_ResumeFiles) Descriptor() ([]byte, []int) {
+	return file_public_crm_v1_dto_proto_rawDescGZIP(), []int{7, 0}
+}
+
+func (x *PatchCandidateRequestPayload_ResumeFiles) GetFileId() string {
+	if x != nil {
+		return x.FileId
+	}
+	return ""
+}
+
 var File_public_crm_v1_dto_proto protoreflect.FileDescriptor
 
 const file_public_crm_v1_dto_proto_rawDesc = "" +
@@ -747,25 +891,34 @@ const file_public_crm_v1_dto_proto_rawDesc = "" +
 	"\x13GetCandidateRequest\x12\x18\n" +
 	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"?\n" +
 	"\x14GetCandidateResponse\x12'\n" +
-	"\x04item\x18\x01 \x01(\v2\x13.types.v1.CandidateR\x04item\"\xc3\x01\n" +
+	"\x04item\x18\x01 \x01(\v2\x13.types.v1.CandidateR\x04item\"\xe1\x02\n" +
 	"\x1dCreateCandidateRequestPayload\x12\x1e\n" +
 	"\x04name\x18\x01 \x01(\tB\n" +
 	"\xbaH\ar\x05\x10\x01\x18\x96\x01R\x04name\x12$\n" +
 	"\asurname\x18\x02 \x01(\tB\n" +
 	"\xbaH\ar\x05\x10\x01\x18\x96\x01R\asurname\x12(\n" +
 	"\x06gender\x18\x03 \x01(\x0e2\x10.types.v1.GenderR\x06gender\x122\n" +
-	"\bbirthday\x18\x04 \x01(\v2\x16.types.v1.OptionalDateR\bbirthday\"a\n" +
+	"\bbirthday\x18\x04 \x01(\v2\x16.types.v1.OptionalDateR\bbirthday\x12Y\n" +
+	"\fresume_files\x18\x05 \x01(\v21.crm.v1.CreateCandidateRequestPayload.ResumeFilesH\x00R\vresumeFiles\x88\x01\x01\x1a0\n" +
+	"\vResumeFiles\x12!\n" +
+	"\afile_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06fileIdB\x0f\n" +
+	"\r_resume_files\"a\n" +
 	"\x16CreateCandidateRequest\x12G\n" +
 	"\apayload\x18\x01 \x01(\v2%.crm.v1.CreateCandidateRequestPayloadB\x06\xbaH\x03\xc8\x01\x01R\apayload\"B\n" +
 	"\x17CreateCandidateResponse\x12'\n" +
-	"\x04item\x18\x01 \x01(\v2\x13.types.v1.CandidateR\x04item\"\x83\x02\n" +
+	"\x04item\x18\x01 \x01(\v2\x13.types.v1.CandidateR\x04item\"\xd3\x03\n" +
 	"\x1cPatchCandidateRequestPayload\x12#\n" +
 	"\x04name\x18\x01 \x01(\tB\n" +
-	"\xbaH\ar\x05\x10\x01\x18\x96\x01H\x00R\x04name\x88\x01\x01\x12)\n" +
+	"\xbaH\ar\x05\x10\x01\x18\x96\x01H\x01R\x04name\x88\x01\x01\x12)\n" +
 	"\asurname\x18\x02 \x01(\tB\n" +
-	"\xbaH\ar\x05\x10\x01\x18\x96\x01H\x01R\asurname\x88\x01\x01\x12-\n" +
-	"\x06gender\x18\x03 \x01(\x0e2\x10.types.v1.GenderH\x02R\x06gender\x88\x01\x01\x127\n" +
-	"\bbirthday\x18\x04 \x01(\v2\x16.types.v1.OptionalDateH\x03R\bbirthday\x88\x01\x01B\a\n" +
+	"\xbaH\ar\x05\x10\x01\x18\x96\x01H\x02R\asurname\x88\x01\x01\x12-\n" +
+	"\x06gender\x18\x03 \x01(\x0e2\x10.types.v1.GenderH\x03R\x06gender\x88\x01\x01\x127\n" +
+	"\bbirthday\x18\x04 \x01(\v2\x16.types.v1.OptionalDateH\x04R\bbirthday\x88\x01\x01\x12U\n" +
+	"\fresume_files\x18\x06 \x01(\v20.crm.v1.PatchCandidateRequestPayload.ResumeFilesH\x00R\vresumeFiles\x12.\n" +
+	"\x12resume_files_clear\x18\a \x01(\bH\x00R\x10resumeFilesClear\x1a0\n" +
+	"\vResumeFiles\x12!\n" +
+	"\afile_id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x06fileIdB\x15\n" +
+	"\x13resume_files_actionB\a\n" +
 	"\x05_nameB\n" +
 	"\n" +
 	"\b_surnameB\t\n" +
@@ -800,44 +953,48 @@ func file_public_crm_v1_dto_proto_rawDescGZIP() []byte {
 	return file_public_crm_v1_dto_proto_rawDescData
 }
 
-var file_public_crm_v1_dto_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
+var file_public_crm_v1_dto_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_public_crm_v1_dto_proto_goTypes = []any{
-	(*ListCandidatesRequest)(nil),             // 0: crm.v1.ListCandidatesRequest
-	(*ListCandidatesResponse)(nil),            // 1: crm.v1.ListCandidatesResponse
-	(*GetCandidateRequest)(nil),               // 2: crm.v1.GetCandidateRequest
-	(*GetCandidateResponse)(nil),              // 3: crm.v1.GetCandidateResponse
-	(*CreateCandidateRequestPayload)(nil),     // 4: crm.v1.CreateCandidateRequestPayload
-	(*CreateCandidateRequest)(nil),            // 5: crm.v1.CreateCandidateRequest
-	(*CreateCandidateResponse)(nil),           // 6: crm.v1.CreateCandidateResponse
-	(*PatchCandidateRequestPayload)(nil),      // 7: crm.v1.PatchCandidateRequestPayload
-	(*PatchCandidateRequest)(nil),             // 8: crm.v1.PatchCandidateRequest
-	(*PatchCandidateResponse)(nil),            // 9: crm.v1.PatchCandidateResponse
-	(*DeleteCandidateRequest)(nil),            // 10: crm.v1.DeleteCandidateRequest
-	(*DeleteCandidateResponse)(nil),           // 11: crm.v1.DeleteCandidateResponse
-	(*UploadCandidateResumeFileRequest)(nil),  // 12: crm.v1.UploadCandidateResumeFileRequest
-	(*UploadCandidateResumeFileResponse)(nil), // 13: crm.v1.UploadCandidateResumeFileResponse
-	(*types.ListCandidate)(nil),               // 14: types.v1.ListCandidate
-	(*types.Candidate)(nil),                   // 15: types.v1.Candidate
-	(types.Gender)(0),                         // 16: types.v1.Gender
-	(*types.OptionalDate)(nil),                // 17: types.v1.OptionalDate
-	(*types.FilesMap)(nil),                    // 18: types.v1.FilesMap
+	(*ListCandidatesRequest)(nil),                     // 0: crm.v1.ListCandidatesRequest
+	(*ListCandidatesResponse)(nil),                    // 1: crm.v1.ListCandidatesResponse
+	(*GetCandidateRequest)(nil),                       // 2: crm.v1.GetCandidateRequest
+	(*GetCandidateResponse)(nil),                      // 3: crm.v1.GetCandidateResponse
+	(*CreateCandidateRequestPayload)(nil),             // 4: crm.v1.CreateCandidateRequestPayload
+	(*CreateCandidateRequest)(nil),                    // 5: crm.v1.CreateCandidateRequest
+	(*CreateCandidateResponse)(nil),                   // 6: crm.v1.CreateCandidateResponse
+	(*PatchCandidateRequestPayload)(nil),              // 7: crm.v1.PatchCandidateRequestPayload
+	(*PatchCandidateRequest)(nil),                     // 8: crm.v1.PatchCandidateRequest
+	(*PatchCandidateResponse)(nil),                    // 9: crm.v1.PatchCandidateResponse
+	(*DeleteCandidateRequest)(nil),                    // 10: crm.v1.DeleteCandidateRequest
+	(*DeleteCandidateResponse)(nil),                   // 11: crm.v1.DeleteCandidateResponse
+	(*UploadCandidateResumeFileRequest)(nil),          // 12: crm.v1.UploadCandidateResumeFileRequest
+	(*UploadCandidateResumeFileResponse)(nil),         // 13: crm.v1.UploadCandidateResumeFileResponse
+	(*CreateCandidateRequestPayload_ResumeFiles)(nil), // 14: crm.v1.CreateCandidateRequestPayload.ResumeFiles
+	(*PatchCandidateRequestPayload_ResumeFiles)(nil),  // 15: crm.v1.PatchCandidateRequestPayload.ResumeFiles
+	(*types.ListCandidate)(nil),                       // 16: types.v1.ListCandidate
+	(*types.Candidate)(nil),                           // 17: types.v1.Candidate
+	(types.Gender)(0),                                 // 18: types.v1.Gender
+	(*types.OptionalDate)(nil),                        // 19: types.v1.OptionalDate
+	(*types.FilesMap)(nil),                            // 20: types.v1.FilesMap
 }
 var file_public_crm_v1_dto_proto_depIdxs = []int32{
-	14, // 0: crm.v1.ListCandidatesResponse.items:type_name -> types.v1.ListCandidate
-	15, // 1: crm.v1.GetCandidateResponse.item:type_name -> types.v1.Candidate
-	16, // 2: crm.v1.CreateCandidateRequestPayload.gender:type_name -> types.v1.Gender
-	17, // 3: crm.v1.CreateCandidateRequestPayload.birthday:type_name -> types.v1.OptionalDate
-	4,  // 4: crm.v1.CreateCandidateRequest.payload:type_name -> crm.v1.CreateCandidateRequestPayload
-	15, // 5: crm.v1.CreateCandidateResponse.item:type_name -> types.v1.Candidate
-	16, // 6: crm.v1.PatchCandidateRequestPayload.gender:type_name -> types.v1.Gender
-	17, // 7: crm.v1.PatchCandidateRequestPayload.birthday:type_name -> types.v1.OptionalDate
-	7,  // 8: crm.v1.PatchCandidateRequest.payload:type_name -> crm.v1.PatchCandidateRequestPayload
-	18, // 9: crm.v1.UploadCandidateResumeFileResponse.data:type_name -> types.v1.FilesMap
-	10, // [10:10] is the sub-list for method output_type
-	10, // [10:10] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	16, // 0: crm.v1.ListCandidatesResponse.items:type_name -> types.v1.ListCandidate
+	17, // 1: crm.v1.GetCandidateResponse.item:type_name -> types.v1.Candidate
+	18, // 2: crm.v1.CreateCandidateRequestPayload.gender:type_name -> types.v1.Gender
+	19, // 3: crm.v1.CreateCandidateRequestPayload.birthday:type_name -> types.v1.OptionalDate
+	14, // 4: crm.v1.CreateCandidateRequestPayload.resume_files:type_name -> crm.v1.CreateCandidateRequestPayload.ResumeFiles
+	4,  // 5: crm.v1.CreateCandidateRequest.payload:type_name -> crm.v1.CreateCandidateRequestPayload
+	17, // 6: crm.v1.CreateCandidateResponse.item:type_name -> types.v1.Candidate
+	18, // 7: crm.v1.PatchCandidateRequestPayload.gender:type_name -> types.v1.Gender
+	19, // 8: crm.v1.PatchCandidateRequestPayload.birthday:type_name -> types.v1.OptionalDate
+	15, // 9: crm.v1.PatchCandidateRequestPayload.resume_files:type_name -> crm.v1.PatchCandidateRequestPayload.ResumeFiles
+	7,  // 10: crm.v1.PatchCandidateRequest.payload:type_name -> crm.v1.PatchCandidateRequestPayload
+	20, // 11: crm.v1.UploadCandidateResumeFileResponse.data:type_name -> types.v1.FilesMap
+	12, // [12:12] is the sub-list for method output_type
+	12, // [12:12] is the sub-list for method input_type
+	12, // [12:12] is the sub-list for extension type_name
+	12, // [12:12] is the sub-list for extension extendee
+	0,  // [0:12] is the sub-list for field type_name
 }
 
 func init() { file_public_crm_v1_dto_proto_init() }
@@ -846,14 +1003,18 @@ func file_public_crm_v1_dto_proto_init() {
 		return
 	}
 	file_public_crm_v1_dto_proto_msgTypes[0].OneofWrappers = []any{}
-	file_public_crm_v1_dto_proto_msgTypes[7].OneofWrappers = []any{}
+	file_public_crm_v1_dto_proto_msgTypes[4].OneofWrappers = []any{}
+	file_public_crm_v1_dto_proto_msgTypes[7].OneofWrappers = []any{
+		(*PatchCandidateRequestPayload_ResumeFiles_)(nil),
+		(*PatchCandidateRequestPayload_ResumeFilesClear)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_public_crm_v1_dto_proto_rawDesc), len(file_public_crm_v1_dto_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   14,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

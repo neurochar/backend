@@ -4,6 +4,7 @@ import (
 	"github.com/neurochar/backend/internal/delivery/grpc/mapper/helpers"
 	crmEntity "github.com/neurochar/backend/internal/domain/crm/entity"
 	crmUC "github.com/neurochar/backend/internal/domain/crm/usecase"
+	fileUC "github.com/neurochar/backend/internal/domain/file/usecase"
 	typesv1 "github.com/neurochar/backend/pkg/proto_pb/common/types"
 )
 
@@ -18,7 +19,7 @@ func CandidateGenderToPb(item crmEntity.CandidateGender) typesv1.Gender {
 	}
 }
 
-func CandidateDTOToPb(item *crmUC.CandidateDTO) *typesv1.Candidate {
+func CandidateDTOToPb(item *crmUC.CandidateDTO, fileUC fileUC.Usecase, isFull bool) *typesv1.Candidate {
 	if item == nil {
 		return nil
 	}
@@ -31,6 +32,10 @@ func CandidateDTOToPb(item *crmUC.CandidateDTO) *typesv1.Candidate {
 		Surname:  item.Candidate.CandidateSurname,
 		Gender:   CandidateGenderToPb(item.Candidate.CandidateGender),
 		Birthday: helpers.TimePtrToPbDate(item.Candidate.CandidateBirthday),
+	}
+
+	if item.Resume != nil && item.Resume.File != nil {
+		resp.ResumeFile = FileToPb(item.Resume.File, fileUC, isFull)
 	}
 
 	return resp

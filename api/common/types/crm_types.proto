@@ -13,6 +13,7 @@ message Candidate {
   string surname = 5;
   Gender gender = 6;
   optional google.type.Date birthday = 7;
+  optional types.v1.File resume_file = 8;
 }
 
 message ListCandidate {
