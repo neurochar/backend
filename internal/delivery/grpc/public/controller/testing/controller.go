@@ -1,6 +1,8 @@
 package testing
 
 import (
+	"time"
+
 	"github.com/neurochar/backend/internal/app/config"
 	"github.com/neurochar/backend/internal/delivery/common/limiter"
 	"github.com/neurochar/backend/internal/delivery/grpc/public"
@@ -46,6 +48,16 @@ func New(
 	return ctrl
 }
 
+const backoffConfigLLMGroupID = "controller.llm"
+
 func (ctrl *Controller) Register() {
 	desc.RegisterTestingPublicServiceServer(ctrl.server.Server().GRPCServer(), ctrl)
+
+	ctrl.backoff.SetConfigForGroup(
+		backoffConfigLLMGroupID,
+		backoff.WithTtl(time.Minute*10),
+		backoff.WithInitialInterval(time.Second*5),
+		backoff.WithMultiplier(2),
+		backoff.WithMaxInterval(time.Minute*1),
+	)
 }

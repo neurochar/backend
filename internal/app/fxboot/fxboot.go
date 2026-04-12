@@ -54,6 +54,9 @@ const (
 	// ProvidingIDDeliveryCommon - delivery common
 	ProvidingIDDeliveryCommon
 
+	// ProvidingIDOpenAIClient - openai
+	ProvidingIDOpenAIClient
+
 	// ProvidingIDFileModule - file module
 	ProvidingIDFileModule
 

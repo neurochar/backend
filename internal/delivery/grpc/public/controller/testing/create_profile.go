@@ -42,6 +42,7 @@ func (ctrl *Controller) CreateProfile(
 		authData.TenantUserClaims().TenantID,
 		testingUC.CreateProfileDataInput{
 			Name:                 req.Payload.Name,
+			Description:          req.Payload.Description,
 			PersonalityTraitsMap: personalityTraitsMap,
 			CreatedBy:            &authData.TenantUserClaims().AccountID,
 		},

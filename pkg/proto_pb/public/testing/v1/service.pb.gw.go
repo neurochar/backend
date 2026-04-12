@@ -241,6 +241,76 @@ func local_request_TestingPublicService_DeleteProfile_0(ctx context.Context, mar
 	return msg, metadata, err
 }
 
+var filter_TestingPublicService_GenerateProfileDescriptionByName_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+
+func request_TestingPublicService_GenerateProfileDescriptionByName_0(ctx context.Context, marshaler runtime.Marshaler, client TestingPublicServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq GenerateProfileDescriptionByNameRequest
+		metadata runtime.ServerMetadata
+	)
+	if req.Body != nil {
+		_, _ = io.Copy(io.Discard, req.Body)
+	}
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_TestingPublicService_GenerateProfileDescriptionByName_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := client.GenerateProfileDescriptionByName(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_TestingPublicService_GenerateProfileDescriptionByName_0(ctx context.Context, marshaler runtime.Marshaler, server TestingPublicServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq GenerateProfileDescriptionByNameRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_TestingPublicService_GenerateProfileDescriptionByName_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := server.GenerateProfileDescriptionByName(ctx, &protoReq)
+	return msg, metadata, err
+}
+
+var filter_TestingPublicService_GenerateProfileTraitsMapByDescription_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+
+func request_TestingPublicService_GenerateProfileTraitsMapByDescription_0(ctx context.Context, marshaler runtime.Marshaler, client TestingPublicServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq GenerateProfileTraitsMapByDescriptionRequest
+		metadata runtime.ServerMetadata
+	)
+	if req.Body != nil {
+		_, _ = io.Copy(io.Discard, req.Body)
+	}
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_TestingPublicService_GenerateProfileTraitsMapByDescription_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := client.GenerateProfileTraitsMapByDescription(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_TestingPublicService_GenerateProfileTraitsMapByDescription_0(ctx context.Context, marshaler runtime.Marshaler, server TestingPublicServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq GenerateProfileTraitsMapByDescriptionRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_TestingPublicService_GenerateProfileTraitsMapByDescription_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := server.GenerateProfileTraitsMapByDescription(ctx, &protoReq)
+	return msg, metadata, err
+}
+
 var filter_TestingPublicService_ListRooms_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 
 func request_TestingPublicService_ListRooms_0(ctx context.Context, marshaler runtime.Marshaler, client TestingPublicServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
@@ -507,6 +577,46 @@ func RegisterTestingPublicServiceHandlerServer(ctx context.Context, mux *runtime
 		}
 		forward_TestingPublicService_DeleteProfile_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
+	mux.Handle(http.MethodPost, pattern_TestingPublicService_GenerateProfileDescriptionByName_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/testing.v1.TestingPublicService/GenerateProfileDescriptionByName", runtime.WithHTTPPathPattern("/v1/testing/profiles/generate-profile-description-by-name"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_TestingPublicService_GenerateProfileDescriptionByName_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_TestingPublicService_GenerateProfileDescriptionByName_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodPost, pattern_TestingPublicService_GenerateProfileTraitsMapByDescription_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/testing.v1.TestingPublicService/GenerateProfileTraitsMapByDescription", runtime.WithHTTPPathPattern("/v1/testing/profiles/generate-profile-traits-map-by-description"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_TestingPublicService_GenerateProfileTraitsMapByDescription_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_TestingPublicService_GenerateProfileTraitsMapByDescription_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
 	mux.Handle(http.MethodGet, pattern_TestingPublicService_ListRooms_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
@@ -729,6 +839,40 @@ func RegisterTestingPublicServiceHandlerClient(ctx context.Context, mux *runtime
 		}
 		forward_TestingPublicService_DeleteProfile_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
+	mux.Handle(http.MethodPost, pattern_TestingPublicService_GenerateProfileDescriptionByName_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/testing.v1.TestingPublicService/GenerateProfileDescriptionByName", runtime.WithHTTPPathPattern("/v1/testing/profiles/generate-profile-description-by-name"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_TestingPublicService_GenerateProfileDescriptionByName_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_TestingPublicService_GenerateProfileDescriptionByName_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodPost, pattern_TestingPublicService_GenerateProfileTraitsMapByDescription_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/testing.v1.TestingPublicService/GenerateProfileTraitsMapByDescription", runtime.WithHTTPPathPattern("/v1/testing/profiles/generate-profile-traits-map-by-description"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_TestingPublicService_GenerateProfileTraitsMapByDescription_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_TestingPublicService_GenerateProfileTraitsMapByDescription_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
 	mux.Handle(http.MethodGet, pattern_TestingPublicService_ListRooms_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
@@ -801,27 +945,31 @@ func RegisterTestingPublicServiceHandlerClient(ctx context.Context, mux *runtime
 }
 
 var (
-	pattern_TestingPublicService_GetPersonalityTraits_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "testing", "personality_traits"}, ""))
-	pattern_TestingPublicService_ListProfiles_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "testing", "profiles"}, ""))
-	pattern_TestingPublicService_GetProfile_0           = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "testing", "profiles", "id"}, ""))
-	pattern_TestingPublicService_CreateProfile_0        = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "testing", "profiles"}, ""))
-	pattern_TestingPublicService_PatchProfile_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "testing", "profiles", "id"}, ""))
-	pattern_TestingPublicService_DeleteProfile_0        = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "testing", "profiles", "id"}, ""))
-	pattern_TestingPublicService_ListRooms_0            = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "testing", "rooms"}, ""))
-	pattern_TestingPublicService_GetRoom_0              = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "testing", "rooms", "id"}, ""))
-	pattern_TestingPublicService_CreateRoom_0           = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "testing", "rooms"}, ""))
-	pattern_TestingPublicService_DeleteRoom_0           = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "testing", "rooms", "id"}, ""))
+	pattern_TestingPublicService_GetPersonalityTraits_0                  = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "testing", "personality_traits"}, ""))
+	pattern_TestingPublicService_ListProfiles_0                          = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "testing", "profiles"}, ""))
+	pattern_TestingPublicService_GetProfile_0                            = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "testing", "profiles", "id"}, ""))
+	pattern_TestingPublicService_CreateProfile_0                         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "testing", "profiles"}, ""))
+	pattern_TestingPublicService_PatchProfile_0                          = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "testing", "profiles", "id"}, ""))
+	pattern_TestingPublicService_DeleteProfile_0                         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "testing", "profiles", "id"}, ""))
+	pattern_TestingPublicService_GenerateProfileDescriptionByName_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v1", "testing", "profiles", "generate-profile-description-by-name"}, ""))
+	pattern_TestingPublicService_GenerateProfileTraitsMapByDescription_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v1", "testing", "profiles", "generate-profile-traits-map-by-description"}, ""))
+	pattern_TestingPublicService_ListRooms_0                             = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "testing", "rooms"}, ""))
+	pattern_TestingPublicService_GetRoom_0                               = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "testing", "rooms", "id"}, ""))
+	pattern_TestingPublicService_CreateRoom_0                            = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "testing", "rooms"}, ""))
+	pattern_TestingPublicService_DeleteRoom_0                            = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "testing", "rooms", "id"}, ""))
 )
 
 var (
-	forward_TestingPublicService_GetPersonalityTraits_0 = runtime.ForwardResponseMessage
-	forward_TestingPublicService_ListProfiles_0         = runtime.ForwardResponseMessage
-	forward_TestingPublicService_GetProfile_0           = runtime.ForwardResponseMessage
-	forward_TestingPublicService_CreateProfile_0        = runtime.ForwardResponseMessage
-	forward_TestingPublicService_PatchProfile_0         = runtime.ForwardResponseMessage
-	forward_TestingPublicService_DeleteProfile_0        = runtime.ForwardResponseMessage
-	forward_TestingPublicService_ListRooms_0            = runtime.ForwardResponseMessage
-	forward_TestingPublicService_GetRoom_0              = runtime.ForwardResponseMessage
-	forward_TestingPublicService_CreateRoom_0           = runtime.ForwardResponseMessage
-	forward_TestingPublicService_DeleteRoom_0           = runtime.ForwardResponseMessage
+	forward_TestingPublicService_GetPersonalityTraits_0                  = runtime.ForwardResponseMessage
+	forward_TestingPublicService_ListProfiles_0                          = runtime.ForwardResponseMessage
+	forward_TestingPublicService_GetProfile_0                            = runtime.ForwardResponseMessage
+	forward_TestingPublicService_CreateProfile_0                         = runtime.ForwardResponseMessage
+	forward_TestingPublicService_PatchProfile_0                          = runtime.ForwardResponseMessage
+	forward_TestingPublicService_DeleteProfile_0                         = runtime.ForwardResponseMessage
+	forward_TestingPublicService_GenerateProfileDescriptionByName_0      = runtime.ForwardResponseMessage
+	forward_TestingPublicService_GenerateProfileTraitsMapByDescription_0 = runtime.ForwardResponseMessage
+	forward_TestingPublicService_ListRooms_0                             = runtime.ForwardResponseMessage
+	forward_TestingPublicService_GetRoom_0                               = runtime.ForwardResponseMessage
+	forward_TestingPublicService_CreateRoom_0                            = runtime.ForwardResponseMessage
+	forward_TestingPublicService_DeleteRoom_0                            = runtime.ForwardResponseMessage
 )

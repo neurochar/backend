@@ -19,6 +19,7 @@ type UsecaseImpl struct {
 	repo               usecase.ProfileRepository
 	tenantAccountUC    tenantUC.AccountUsecase
 	personalityTraitUC usecase.PersonalityTraitUsecase
+	llmRepo            usecase.LLMRepository
 }
 
 func NewUsecaseImpl(
@@ -29,6 +30,7 @@ func NewUsecaseImpl(
 	repo usecase.ProfileRepository,
 	tenantAccountUC tenantUC.AccountUsecase,
 	personalityTraitUC usecase.PersonalityTraitUsecase,
+	llmRepo usecase.LLMRepository,
 ) *UsecaseImpl {
 	uc := &UsecaseImpl{
 		pkg:                "Testing.Usecase.Profile",
@@ -37,6 +39,7 @@ func NewUsecaseImpl(
 		emailing:           emailing,
 		dbMasterClient:     dbMasterClient,
 		repo:               repo,
+		llmRepo:            llmRepo,
 		tenantAccountUC:    tenantAccountUC,
 		personalityTraitUC: personalityTraitUC,
 	}

@@ -34,7 +34,8 @@ message GetProfileResponse {
 
 message CreateProfileRequestPayload {
   string name = 1;
-  types.v1.ProfilePersonalityTraitsMap personality_traits = 2;
+  string description = 2;
+  types.v1.ProfilePersonalityTraitsMap personality_traits = 3;
 }
 
 message CreateProfileRequest {
@@ -47,7 +48,8 @@ message CreateProfileResponse {
 
 message PatchProfileRequestPayload {
   optional string name = 1;
-  optional types.v1.ProfilePersonalityTraitsMap personality_traits = 2;
+  optional string description = 2;
+  optional types.v1.ProfilePersonalityTraitsMap personality_traits = 3;
 }
 
 message PatchProfileRequest {
@@ -64,6 +66,23 @@ message DeleteProfileRequest {
 }
 
 message DeleteProfileResponse {}
+
+message GenerateProfileDescriptionByNameRequest {
+  string name = 1 [(buf.validate.field).required = true];
+}
+
+message GenerateProfileDescriptionByNameResponse {
+  string description = 1;
+}
+
+message GenerateProfileTraitsMapByDescriptionRequest {
+  string name = 1 [(buf.validate.field).required = true];
+  string description = 2 [(buf.validate.field).required = true];
+}
+
+message GenerateProfileTraitsMapByDescriptionResponse {
+  types.v1.ProfilePersonalityTraitsMap traits = 3;
+}
 
 message ListRoomsRequest {
   optional uint64 limit = 1;

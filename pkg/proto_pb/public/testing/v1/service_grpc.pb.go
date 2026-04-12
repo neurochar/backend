@@ -19,16 +19,18 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	TestingPublicService_GetPersonalityTraits_FullMethodName = "/testing.v1.TestingPublicService/GetPersonalityTraits"
-	TestingPublicService_ListProfiles_FullMethodName         = "/testing.v1.TestingPublicService/ListProfiles"
-	TestingPublicService_GetProfile_FullMethodName           = "/testing.v1.TestingPublicService/GetProfile"
-	TestingPublicService_CreateProfile_FullMethodName        = "/testing.v1.TestingPublicService/CreateProfile"
-	TestingPublicService_PatchProfile_FullMethodName         = "/testing.v1.TestingPublicService/PatchProfile"
-	TestingPublicService_DeleteProfile_FullMethodName        = "/testing.v1.TestingPublicService/DeleteProfile"
-	TestingPublicService_ListRooms_FullMethodName            = "/testing.v1.TestingPublicService/ListRooms"
-	TestingPublicService_GetRoom_FullMethodName              = "/testing.v1.TestingPublicService/GetRoom"
-	TestingPublicService_CreateRoom_FullMethodName           = "/testing.v1.TestingPublicService/CreateRoom"
-	TestingPublicService_DeleteRoom_FullMethodName           = "/testing.v1.TestingPublicService/DeleteRoom"
+	TestingPublicService_GetPersonalityTraits_FullMethodName                  = "/testing.v1.TestingPublicService/GetPersonalityTraits"
+	TestingPublicService_ListProfiles_FullMethodName                          = "/testing.v1.TestingPublicService/ListProfiles"
+	TestingPublicService_GetProfile_FullMethodName                            = "/testing.v1.TestingPublicService/GetProfile"
+	TestingPublicService_CreateProfile_FullMethodName                         = "/testing.v1.TestingPublicService/CreateProfile"
+	TestingPublicService_PatchProfile_FullMethodName                          = "/testing.v1.TestingPublicService/PatchProfile"
+	TestingPublicService_DeleteProfile_FullMethodName                         = "/testing.v1.TestingPublicService/DeleteProfile"
+	TestingPublicService_GenerateProfileDescriptionByName_FullMethodName      = "/testing.v1.TestingPublicService/GenerateProfileDescriptionByName"
+	TestingPublicService_GenerateProfileTraitsMapByDescription_FullMethodName = "/testing.v1.TestingPublicService/GenerateProfileTraitsMapByDescription"
+	TestingPublicService_ListRooms_FullMethodName                             = "/testing.v1.TestingPublicService/ListRooms"
+	TestingPublicService_GetRoom_FullMethodName                               = "/testing.v1.TestingPublicService/GetRoom"
+	TestingPublicService_CreateRoom_FullMethodName                            = "/testing.v1.TestingPublicService/CreateRoom"
+	TestingPublicService_DeleteRoom_FullMethodName                            = "/testing.v1.TestingPublicService/DeleteRoom"
 )
 
 // TestingPublicServiceClient is the client API for TestingPublicService service.
@@ -47,6 +49,8 @@ type TestingPublicServiceClient interface {
 	PatchProfile(ctx context.Context, in *PatchProfileRequest, opts ...grpc.CallOption) (*PatchProfileResponse, error)
 	// Удалить профиль профессии
 	DeleteProfile(ctx context.Context, in *DeleteProfileRequest, opts ...grpc.CallOption) (*DeleteProfileResponse, error)
+	GenerateProfileDescriptionByName(ctx context.Context, in *GenerateProfileDescriptionByNameRequest, opts ...grpc.CallOption) (*GenerateProfileDescriptionByNameResponse, error)
+	GenerateProfileTraitsMapByDescription(ctx context.Context, in *GenerateProfileTraitsMapByDescriptionRequest, opts ...grpc.CallOption) (*GenerateProfileTraitsMapByDescriptionResponse, error)
 	// Список комнат
 	ListRooms(ctx context.Context, in *ListRoomsRequest, opts ...grpc.CallOption) (*ListRoomsResponse, error)
 	// Получить комнату
@@ -125,6 +129,26 @@ func (c *testingPublicServiceClient) DeleteProfile(ctx context.Context, in *Dele
 	return out, nil
 }
 
+func (c *testingPublicServiceClient) GenerateProfileDescriptionByName(ctx context.Context, in *GenerateProfileDescriptionByNameRequest, opts ...grpc.CallOption) (*GenerateProfileDescriptionByNameResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenerateProfileDescriptionByNameResponse)
+	err := c.cc.Invoke(ctx, TestingPublicService_GenerateProfileDescriptionByName_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *testingPublicServiceClient) GenerateProfileTraitsMapByDescription(ctx context.Context, in *GenerateProfileTraitsMapByDescriptionRequest, opts ...grpc.CallOption) (*GenerateProfileTraitsMapByDescriptionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenerateProfileTraitsMapByDescriptionResponse)
+	err := c.cc.Invoke(ctx, TestingPublicService_GenerateProfileTraitsMapByDescription_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *testingPublicServiceClient) ListRooms(ctx context.Context, in *ListRoomsRequest, opts ...grpc.CallOption) (*ListRoomsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListRoomsResponse)
@@ -181,6 +205,8 @@ type TestingPublicServiceServer interface {
 	PatchProfile(context.Context, *PatchProfileRequest) (*PatchProfileResponse, error)
 	// Удалить профиль профессии
 	DeleteProfile(context.Context, *DeleteProfileRequest) (*DeleteProfileResponse, error)
+	GenerateProfileDescriptionByName(context.Context, *GenerateProfileDescriptionByNameRequest) (*GenerateProfileDescriptionByNameResponse, error)
+	GenerateProfileTraitsMapByDescription(context.Context, *GenerateProfileTraitsMapByDescriptionRequest) (*GenerateProfileTraitsMapByDescriptionResponse, error)
 	// Список комнат
 	ListRooms(context.Context, *ListRoomsRequest) (*ListRoomsResponse, error)
 	// Получить комнату
@@ -216,6 +242,12 @@ func (UnimplementedTestingPublicServiceServer) PatchProfile(context.Context, *Pa
 }
 func (UnimplementedTestingPublicServiceServer) DeleteProfile(context.Context, *DeleteProfileRequest) (*DeleteProfileResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method DeleteProfile not implemented")
+}
+func (UnimplementedTestingPublicServiceServer) GenerateProfileDescriptionByName(context.Context, *GenerateProfileDescriptionByNameRequest) (*GenerateProfileDescriptionByNameResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GenerateProfileDescriptionByName not implemented")
+}
+func (UnimplementedTestingPublicServiceServer) GenerateProfileTraitsMapByDescription(context.Context, *GenerateProfileTraitsMapByDescriptionRequest) (*GenerateProfileTraitsMapByDescriptionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GenerateProfileTraitsMapByDescription not implemented")
 }
 func (UnimplementedTestingPublicServiceServer) ListRooms(context.Context, *ListRoomsRequest) (*ListRoomsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListRooms not implemented")
@@ -358,6 +390,42 @@ func _TestingPublicService_DeleteProfile_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TestingPublicService_GenerateProfileDescriptionByName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GenerateProfileDescriptionByNameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TestingPublicServiceServer).GenerateProfileDescriptionByName(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TestingPublicService_GenerateProfileDescriptionByName_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TestingPublicServiceServer).GenerateProfileDescriptionByName(ctx, req.(*GenerateProfileDescriptionByNameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TestingPublicService_GenerateProfileTraitsMapByDescription_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GenerateProfileTraitsMapByDescriptionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TestingPublicServiceServer).GenerateProfileTraitsMapByDescription(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TestingPublicService_GenerateProfileTraitsMapByDescription_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TestingPublicServiceServer).GenerateProfileTraitsMapByDescription(ctx, req.(*GenerateProfileTraitsMapByDescriptionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _TestingPublicService_ListRooms_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListRoomsRequest)
 	if err := dec(in); err != nil {
@@ -460,6 +528,14 @@ var TestingPublicService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteProfile",
 			Handler:    _TestingPublicService_DeleteProfile_Handler,
+		},
+		{
+			MethodName: "GenerateProfileDescriptionByName",
+			Handler:    _TestingPublicService_GenerateProfileDescriptionByName_Handler,
+		},
+		{
+			MethodName: "GenerateProfileTraitsMapByDescription",
+			Handler:    _TestingPublicService_GenerateProfileTraitsMapByDescription_Handler,
 		},
 		{
 			MethodName: "ListRooms",

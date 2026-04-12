@@ -106,6 +106,18 @@ func loadDescriptorSet(path string) (*descriptorpb.FileDescriptorSet, error) {
 }
 
 func patchSwaggerRequired(doc map[string]any, messages []messageInfo) error {
+	if err := patchSwaggerDefinitionsRequired(doc, messages); err != nil {
+		return err
+	}
+
+	if err := patchSwaggerPathsRequired(doc, messages); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func patchSwaggerDefinitionsRequired(doc map[string]any, messages []messageInfo) error {
 	definitionsRaw, ok := doc["definitions"]
 	if !ok {
 		return nil
@@ -116,7 +128,7 @@ func patchSwaggerRequired(doc map[string]any, messages []messageInfo) error {
 		return fmt.Errorf(`field "definitions" is not an object`)
 	}
 
-	for _, defRaw := range definitions {
+	for defName, defRaw := range definitions {
 		def, ok := defRaw.(map[string]any)
 		if !ok {
 			continue
@@ -124,16 +136,19 @@ func patchSwaggerRequired(doc map[string]any, messages []messageInfo) error {
 
 		propertiesRaw, ok := def["properties"]
 		if !ok {
+			delete(def, "required")
 			continue
 		}
 
 		properties, ok := propertiesRaw.(map[string]any)
 		if !ok || len(properties) == 0 {
+			delete(def, "required")
 			continue
 		}
 
-		msg, found := findBestMessageForDefinition(properties, messages)
+		msg, found := findMessageByDefinitionName(defName, messages)
 		if !found {
+			// Ничего не патчим, чтобы не матчить чужой DTO по похожим полям.
 			continue
 		}
 
@@ -145,12 +160,7 @@ func patchSwaggerRequired(doc map[string]any, messages []messageInfo) error {
 				continue
 			}
 
-			if fi.Required {
-				required = append(required, swaggerFieldName)
-				continue
-			}
-
-			if !fi.Optional {
+			if fi.Required || !fi.Optional {
 				required = append(required, swaggerFieldName)
 			}
 		}
@@ -168,59 +178,161 @@ func patchSwaggerRequired(doc map[string]any, messages []messageInfo) error {
 	return nil
 }
 
-func findBestMessageForDefinition(
-	properties map[string]any,
-	messages []messageInfo,
-) (messageInfo, bool) {
-	var matched messageInfo
-	bestScore := -1
+func patchSwaggerPathsRequired(doc map[string]any, messages []messageInfo) error {
+	pathsRaw, ok := doc["paths"]
+	if !ok {
+		return nil
+	}
 
-	for _, msg := range messages {
-		score := scoreMessageMatch(msg, properties)
-		if score > bestScore {
-			bestScore = score
-			matched = msg
+	paths, ok := pathsRaw.(map[string]any)
+	if !ok {
+		return nil
+	}
+
+	for _, pathItemRaw := range paths {
+		pathItem, ok := pathItemRaw.(map[string]any)
+		if !ok {
+			continue
+		}
+
+		for _, methodItemRaw := range pathItem {
+			methodItem, ok := methodItemRaw.(map[string]any)
+			if !ok {
+				continue
+			}
+
+			paramsRaw, ok := methodItem["parameters"]
+			if !ok {
+				continue
+			}
+
+			params, ok := paramsRaw.([]any)
+			if !ok {
+				continue
+			}
+
+			for i, paramRaw := range params {
+				param, ok := paramRaw.(map[string]any)
+				if !ok {
+					continue
+				}
+
+				paramNameRaw, ok := param["name"]
+				if !ok {
+					continue
+				}
+
+				paramName, ok := paramNameRaw.(string)
+				if !ok {
+					continue
+				}
+
+				requiredField := findRequiredField(paramName, messages)
+				if requiredField {
+					param["required"] = true
+					params[i] = param
+				}
+			}
 		}
 	}
 
-	if bestScore <= 0 {
+	return nil
+}
+
+func findRequiredField(fieldName string, messages []messageInfo) bool {
+	normalizedName := strings.ToLower(fieldName)
+	normalizedName = strings.ReplaceAll(normalizedName, "_", "")
+	normalizedName = strings.ReplaceAll(normalizedName, "-", "")
+
+	for _, msg := range messages {
+		for _, fi := range msg.FieldsByJSONName {
+			if strings.ToLower(fi.JSONName) == normalizedName {
+				return fi.Required
+			}
+		}
+		for _, fi := range msg.FieldsByProtoName {
+			if strings.ToLower(fi.ProtoName) == normalizedName {
+				return fi.Required
+			}
+		}
+	}
+
+	return false
+}
+
+func findMessageByDefinitionName(defName string, messages []messageInfo) (messageInfo, bool) {
+	want := normalizeDefinitionName(defName)
+
+	candidates := make([]messageInfo, 0, 4)
+
+	for _, msg := range messages {
+		for _, name := range messageNameCandidates(msg) {
+			if name == want {
+				candidates = append(candidates, msg)
+				break
+			}
+		}
+	}
+
+	if len(candidates) == 0 {
 		return messageInfo{}, false
 	}
 
-	return matched, true
+	if len(candidates) == 1 {
+		return candidates[0], true
+	}
+
+	best := candidates[0]
+	for _, msg := range candidates[1:] {
+		if len(msg.FullName) > len(best.FullName) {
+			best = msg
+		}
+	}
+
+	return best, true
 }
 
-func scoreMessageMatch(msg messageInfo, properties map[string]any) int {
-	score := 0
-	matchedFields := 0
+func normalizeDefinitionName(s string) string {
+	s = strings.TrimSpace(s)
+	s = strings.TrimPrefix(s, "#/definitions/")
+	s = strings.TrimPrefix(s, ".")
+	s = strings.ReplaceAll(s, ".", "")
+	s = strings.ReplaceAll(s, "_", "")
+	s = strings.ReplaceAll(s, "-", "")
+	s = strings.ToLower(s)
+	return s
+}
 
-	for swaggerFieldName := range properties {
-		if _, ok := msg.FieldsByJSONName[swaggerFieldName]; ok {
-			score += 10
-			matchedFields++
+func messageNameCandidates(msg messageInfo) []string {
+	parts := strings.Split(msg.FullName, ".")
+
+	out := []string{
+		normalizeDefinitionName(msg.ShortName),
+		normalizeDefinitionName(msg.FullName),
+	}
+
+	if len(parts) > 0 {
+		out = append(out, normalizeDefinitionName(parts[len(parts)-1]))
+	}
+	if len(parts) >= 2 {
+		out = append(out, normalizeDefinitionName(strings.Join(parts[len(parts)-2:], ".")))
+	}
+
+	seen := map[string]struct{}{}
+	uniq := make([]string, 0, len(out))
+
+	for _, v := range out {
+		if v == "" {
 			continue
 		}
-		if _, ok := msg.FieldsByProtoName[swaggerFieldName]; ok {
-			score += 7
-			matchedFields++
+		if _, ok := seen[v]; ok {
 			continue
 		}
+		seen[v] = struct{}{}
+		uniq = append(uniq, v)
 	}
 
-	// штрафуем большие message с кучей лишних полей,
-	// чтобы более точный message побеждал при одинаковом числе совпадений.
-	totalFields := len(msg.FieldsByJSONName)
-	extraFields := totalFields - matchedFields
-	if extraFields > 0 {
-		score -= extraFields
-	}
-
-	// бонус за полное совпадение по количеству полей
-	if matchedFields == len(properties) && totalFields == len(properties) {
-		score += 1000
-	}
-
-	return score
+	return uniq
 }
 
 func lookupField(msg messageInfo, swaggerFieldName string) (fieldInfo, bool) {
@@ -278,14 +390,7 @@ func walkMessage(
 	}
 
 	for _, f := range msg.GetField() {
-		hasDecision, required := getExplicitRequiredDecision(f)
-
-		optional := false
-		if hasDecision {
-			optional = !required
-		} else {
-			optional = isFieldOptional(f, oneofIndexes)
-		}
+		optional, required := resolveFieldRequiredness(f, msg, oneofIndexes)
 
 		fi := fieldInfo{
 			ProtoName: f.GetName(),
@@ -307,6 +412,67 @@ func walkMessage(
 		}
 		walkMessage(pkg, nextParent, nested, out)
 	}
+}
+
+func resolveFieldRequiredness(
+	f *descriptorpb.FieldDescriptorProto,
+	msg *descriptorpb.DescriptorProto,
+	oneofIndexes map[int32]struct{},
+) (optional bool, required bool) {
+	if hasDecision, required := getExplicitRequiredDecision(f); hasDecision {
+		return !required, required
+	}
+
+	if f.GetProto3Optional() {
+		return true, false
+	}
+
+	if isProto3OptionalFallback(f, msg) {
+		return true, false
+	}
+
+	if f.OneofIndex != nil {
+		if _, ok := oneofIndexes[f.GetOneofIndex()]; ok {
+			return true, false
+		}
+	}
+
+	if f.GetLabel() == descriptorpb.FieldDescriptorProto_LABEL_REPEATED {
+		return true, false
+	}
+
+	if f.GetType() == descriptorpb.FieldDescriptorProto_TYPE_MESSAGE {
+		return false, false
+	}
+
+	return false, true
+}
+
+func isProto3OptionalFallback(
+	f *descriptorpb.FieldDescriptorProto,
+	msg *descriptorpb.DescriptorProto,
+) bool {
+	if f.OneofIndex == nil {
+		return false
+	}
+
+	idx := f.GetOneofIndex()
+	if int(idx) < 0 || int(idx) >= len(msg.GetOneofDecl()) {
+		return false
+	}
+
+	if f.GetType() == descriptorpb.FieldDescriptorProto_TYPE_MESSAGE {
+		return false
+	}
+
+	count := 0
+	for _, other := range msg.GetField() {
+		if other.OneofIndex != nil && other.GetOneofIndex() == idx {
+			count++
+		}
+	}
+
+	return count == 1
 }
 
 func effectiveJSONName(f *descriptorpb.FieldDescriptorProto) string {
@@ -342,33 +508,6 @@ func protoToJSONName(s string) string {
 	return b.String()
 }
 
-func isFieldOptional(
-	f *descriptorpb.FieldDescriptorProto,
-	oneofIndexes map[int32]struct{},
-) bool {
-	if f.GetProto3Optional() {
-		return true
-	}
-
-	if _, ok := oneofIndexes[f.GetOneofIndex()]; ok && f.OneofIndex != nil {
-		return true
-	}
-
-	if f.GetLabel() == descriptorpb.FieldDescriptorProto_LABEL_REPEATED {
-		return true
-	}
-
-	if f.GetType() == descriptorpb.FieldDescriptorProto_TYPE_MESSAGE {
-		return true
-	}
-
-	return false
-}
-
-// getExplicitRequiredDecision returns:
-//   - hasDecision=true, required=true  => field is explicitly required
-//   - hasDecision=true, required=false => field is explicitly optional
-//   - hasDecision=false                => fallback to heuristic
 func getExplicitRequiredDecision(f *descriptorpb.FieldDescriptorProto) (bool, bool) {
 	if has, required := getBufValidateRequiredDecision(f); has {
 		return true, required
@@ -381,7 +520,6 @@ func getExplicitRequiredDecision(f *descriptorpb.FieldDescriptorProto) (bool, bo
 	return false, false
 }
 
-// explicit decision exists only when `required` itself is present.
 func getBufValidateRequiredDecision(f *descriptorpb.FieldDescriptorProto) (bool, bool) {
 	opts := f.GetOptions()
 	if opts == nil {

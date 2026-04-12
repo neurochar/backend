@@ -307,7 +307,8 @@ func (x *GetProfileResponse) GetItem() *types.TestingProfile {
 type CreateProfileRequestPayload struct {
 	state             protoimpl.MessageState             `protogen:"open.v1"`
 	Name              string                             `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	PersonalityTraits *types.ProfilePersonalityTraitsMap `protobuf:"bytes,2,opt,name=personality_traits,json=personalityTraits,proto3" json:"personality_traits,omitempty"`
+	Description       string                             `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	PersonalityTraits *types.ProfilePersonalityTraitsMap `protobuf:"bytes,3,opt,name=personality_traits,json=personalityTraits,proto3" json:"personality_traits,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -345,6 +346,13 @@ func (*CreateProfileRequestPayload) Descriptor() ([]byte, []int) {
 func (x *CreateProfileRequestPayload) GetName() string {
 	if x != nil {
 		return x.Name
+	}
+	return ""
+}
+
+func (x *CreateProfileRequestPayload) GetDescription() string {
+	if x != nil {
+		return x.Description
 	}
 	return ""
 }
@@ -447,7 +455,8 @@ func (x *CreateProfileResponse) GetItem() *types.TestingProfile {
 type PatchProfileRequestPayload struct {
 	state             protoimpl.MessageState             `protogen:"open.v1"`
 	Name              *string                            `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty"`
-	PersonalityTraits *types.ProfilePersonalityTraitsMap `protobuf:"bytes,2,opt,name=personality_traits,json=personalityTraits,proto3,oneof" json:"personality_traits,omitempty"`
+	Description       *string                            `protobuf:"bytes,2,opt,name=description,proto3,oneof" json:"description,omitempty"`
+	PersonalityTraits *types.ProfilePersonalityTraitsMap `protobuf:"bytes,3,opt,name=personality_traits,json=personalityTraits,proto3,oneof" json:"personality_traits,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -485,6 +494,13 @@ func (*PatchProfileRequestPayload) Descriptor() ([]byte, []int) {
 func (x *PatchProfileRequestPayload) GetName() string {
 	if x != nil && x.Name != nil {
 		return *x.Name
+	}
+	return ""
+}
+
+func (x *PatchProfileRequestPayload) GetDescription() string {
+	if x != nil && x.Description != nil {
+		return *x.Description
 	}
 	return ""
 }
@@ -680,6 +696,190 @@ func (*DeleteProfileResponse) Descriptor() ([]byte, []int) {
 	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{13}
 }
 
+type GenerateProfileDescriptionByNameRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GenerateProfileDescriptionByNameRequest) Reset() {
+	*x = GenerateProfileDescriptionByNameRequest{}
+	mi := &file_public_testing_v1_dto_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GenerateProfileDescriptionByNameRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GenerateProfileDescriptionByNameRequest) ProtoMessage() {}
+
+func (x *GenerateProfileDescriptionByNameRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_public_testing_v1_dto_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GenerateProfileDescriptionByNameRequest.ProtoReflect.Descriptor instead.
+func (*GenerateProfileDescriptionByNameRequest) Descriptor() ([]byte, []int) {
+	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *GenerateProfileDescriptionByNameRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type GenerateProfileDescriptionByNameResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Description   string                 `protobuf:"bytes,1,opt,name=description,proto3" json:"description,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GenerateProfileDescriptionByNameResponse) Reset() {
+	*x = GenerateProfileDescriptionByNameResponse{}
+	mi := &file_public_testing_v1_dto_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GenerateProfileDescriptionByNameResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GenerateProfileDescriptionByNameResponse) ProtoMessage() {}
+
+func (x *GenerateProfileDescriptionByNameResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_public_testing_v1_dto_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GenerateProfileDescriptionByNameResponse.ProtoReflect.Descriptor instead.
+func (*GenerateProfileDescriptionByNameResponse) Descriptor() ([]byte, []int) {
+	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *GenerateProfileDescriptionByNameResponse) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+type GenerateProfileTraitsMapByDescriptionRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Description   string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GenerateProfileTraitsMapByDescriptionRequest) Reset() {
+	*x = GenerateProfileTraitsMapByDescriptionRequest{}
+	mi := &file_public_testing_v1_dto_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GenerateProfileTraitsMapByDescriptionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GenerateProfileTraitsMapByDescriptionRequest) ProtoMessage() {}
+
+func (x *GenerateProfileTraitsMapByDescriptionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_public_testing_v1_dto_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GenerateProfileTraitsMapByDescriptionRequest.ProtoReflect.Descriptor instead.
+func (*GenerateProfileTraitsMapByDescriptionRequest) Descriptor() ([]byte, []int) {
+	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *GenerateProfileTraitsMapByDescriptionRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *GenerateProfileTraitsMapByDescriptionRequest) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+type GenerateProfileTraitsMapByDescriptionResponse struct {
+	state         protoimpl.MessageState             `protogen:"open.v1"`
+	Traits        *types.ProfilePersonalityTraitsMap `protobuf:"bytes,3,opt,name=traits,proto3" json:"traits,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GenerateProfileTraitsMapByDescriptionResponse) Reset() {
+	*x = GenerateProfileTraitsMapByDescriptionResponse{}
+	mi := &file_public_testing_v1_dto_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GenerateProfileTraitsMapByDescriptionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GenerateProfileTraitsMapByDescriptionResponse) ProtoMessage() {}
+
+func (x *GenerateProfileTraitsMapByDescriptionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_public_testing_v1_dto_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GenerateProfileTraitsMapByDescriptionResponse.ProtoReflect.Descriptor instead.
+func (*GenerateProfileTraitsMapByDescriptionResponse) Descriptor() ([]byte, []int) {
+	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *GenerateProfileTraitsMapByDescriptionResponse) GetTraits() *types.ProfilePersonalityTraitsMap {
+	if x != nil {
+		return x.Traits
+	}
+	return nil
+}
+
 type ListRoomsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Limit         *uint64                `protobuf:"varint,1,opt,name=limit,proto3,oneof" json:"limit,omitempty"`
@@ -690,7 +890,7 @@ type ListRoomsRequest struct {
 
 func (x *ListRoomsRequest) Reset() {
 	*x = ListRoomsRequest{}
-	mi := &file_public_testing_v1_dto_proto_msgTypes[14]
+	mi := &file_public_testing_v1_dto_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -702,7 +902,7 @@ func (x *ListRoomsRequest) String() string {
 func (*ListRoomsRequest) ProtoMessage() {}
 
 func (x *ListRoomsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_public_testing_v1_dto_proto_msgTypes[14]
+	mi := &file_public_testing_v1_dto_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -715,7 +915,7 @@ func (x *ListRoomsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListRoomsRequest.ProtoReflect.Descriptor instead.
 func (*ListRoomsRequest) Descriptor() ([]byte, []int) {
-	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{14}
+	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *ListRoomsRequest) GetLimit() uint64 {
@@ -742,7 +942,7 @@ type ListRoomsResponse struct {
 
 func (x *ListRoomsResponse) Reset() {
 	*x = ListRoomsResponse{}
-	mi := &file_public_testing_v1_dto_proto_msgTypes[15]
+	mi := &file_public_testing_v1_dto_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -754,7 +954,7 @@ func (x *ListRoomsResponse) String() string {
 func (*ListRoomsResponse) ProtoMessage() {}
 
 func (x *ListRoomsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_public_testing_v1_dto_proto_msgTypes[15]
+	mi := &file_public_testing_v1_dto_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -767,7 +967,7 @@ func (x *ListRoomsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListRoomsResponse.ProtoReflect.Descriptor instead.
 func (*ListRoomsResponse) Descriptor() ([]byte, []int) {
-	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{15}
+	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *ListRoomsResponse) GetItems() []*types.TestingListRoom {
@@ -793,7 +993,7 @@ type GetRoomRequest struct {
 
 func (x *GetRoomRequest) Reset() {
 	*x = GetRoomRequest{}
-	mi := &file_public_testing_v1_dto_proto_msgTypes[16]
+	mi := &file_public_testing_v1_dto_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -805,7 +1005,7 @@ func (x *GetRoomRequest) String() string {
 func (*GetRoomRequest) ProtoMessage() {}
 
 func (x *GetRoomRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_public_testing_v1_dto_proto_msgTypes[16]
+	mi := &file_public_testing_v1_dto_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -818,7 +1018,7 @@ func (x *GetRoomRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetRoomRequest.ProtoReflect.Descriptor instead.
 func (*GetRoomRequest) Descriptor() ([]byte, []int) {
-	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{16}
+	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *GetRoomRequest) GetId() string {
@@ -837,7 +1037,7 @@ type GetRoomResponse struct {
 
 func (x *GetRoomResponse) Reset() {
 	*x = GetRoomResponse{}
-	mi := &file_public_testing_v1_dto_proto_msgTypes[17]
+	mi := &file_public_testing_v1_dto_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -849,7 +1049,7 @@ func (x *GetRoomResponse) String() string {
 func (*GetRoomResponse) ProtoMessage() {}
 
 func (x *GetRoomResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_public_testing_v1_dto_proto_msgTypes[17]
+	mi := &file_public_testing_v1_dto_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -862,7 +1062,7 @@ func (x *GetRoomResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetRoomResponse.ProtoReflect.Descriptor instead.
 func (*GetRoomResponse) Descriptor() ([]byte, []int) {
-	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{17}
+	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *GetRoomResponse) GetItem() *types.TestingRoom {
@@ -882,7 +1082,7 @@ type CreateRoomRequestPayload struct {
 
 func (x *CreateRoomRequestPayload) Reset() {
 	*x = CreateRoomRequestPayload{}
-	mi := &file_public_testing_v1_dto_proto_msgTypes[18]
+	mi := &file_public_testing_v1_dto_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -894,7 +1094,7 @@ func (x *CreateRoomRequestPayload) String() string {
 func (*CreateRoomRequestPayload) ProtoMessage() {}
 
 func (x *CreateRoomRequestPayload) ProtoReflect() protoreflect.Message {
-	mi := &file_public_testing_v1_dto_proto_msgTypes[18]
+	mi := &file_public_testing_v1_dto_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -907,7 +1107,7 @@ func (x *CreateRoomRequestPayload) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateRoomRequestPayload.ProtoReflect.Descriptor instead.
 func (*CreateRoomRequestPayload) Descriptor() ([]byte, []int) {
-	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{18}
+	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *CreateRoomRequestPayload) GetCandidateId() string {
@@ -933,7 +1133,7 @@ type CreateRoomRequest struct {
 
 func (x *CreateRoomRequest) Reset() {
 	*x = CreateRoomRequest{}
-	mi := &file_public_testing_v1_dto_proto_msgTypes[19]
+	mi := &file_public_testing_v1_dto_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -945,7 +1145,7 @@ func (x *CreateRoomRequest) String() string {
 func (*CreateRoomRequest) ProtoMessage() {}
 
 func (x *CreateRoomRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_public_testing_v1_dto_proto_msgTypes[19]
+	mi := &file_public_testing_v1_dto_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -958,7 +1158,7 @@ func (x *CreateRoomRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateRoomRequest.ProtoReflect.Descriptor instead.
 func (*CreateRoomRequest) Descriptor() ([]byte, []int) {
-	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{19}
+	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *CreateRoomRequest) GetPayload() *CreateRoomRequestPayload {
@@ -977,7 +1177,7 @@ type CreateRoomResponse struct {
 
 func (x *CreateRoomResponse) Reset() {
 	*x = CreateRoomResponse{}
-	mi := &file_public_testing_v1_dto_proto_msgTypes[20]
+	mi := &file_public_testing_v1_dto_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -989,7 +1189,7 @@ func (x *CreateRoomResponse) String() string {
 func (*CreateRoomResponse) ProtoMessage() {}
 
 func (x *CreateRoomResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_public_testing_v1_dto_proto_msgTypes[20]
+	mi := &file_public_testing_v1_dto_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1002,7 +1202,7 @@ func (x *CreateRoomResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateRoomResponse.ProtoReflect.Descriptor instead.
 func (*CreateRoomResponse) Descriptor() ([]byte, []int) {
-	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{20}
+	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *CreateRoomResponse) GetItem() *types.TestingRoom {
@@ -1021,7 +1221,7 @@ type DeleteRoomRequest struct {
 
 func (x *DeleteRoomRequest) Reset() {
 	*x = DeleteRoomRequest{}
-	mi := &file_public_testing_v1_dto_proto_msgTypes[21]
+	mi := &file_public_testing_v1_dto_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1033,7 +1233,7 @@ func (x *DeleteRoomRequest) String() string {
 func (*DeleteRoomRequest) ProtoMessage() {}
 
 func (x *DeleteRoomRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_public_testing_v1_dto_proto_msgTypes[21]
+	mi := &file_public_testing_v1_dto_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1046,7 +1246,7 @@ func (x *DeleteRoomRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteRoomRequest.ProtoReflect.Descriptor instead.
 func (*DeleteRoomRequest) Descriptor() ([]byte, []int) {
-	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{21}
+	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *DeleteRoomRequest) GetId() string {
@@ -1064,7 +1264,7 @@ type DeleteRoomResponse struct {
 
 func (x *DeleteRoomResponse) Reset() {
 	*x = DeleteRoomResponse{}
-	mi := &file_public_testing_v1_dto_proto_msgTypes[22]
+	mi := &file_public_testing_v1_dto_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1076,7 +1276,7 @@ func (x *DeleteRoomResponse) String() string {
 func (*DeleteRoomResponse) ProtoMessage() {}
 
 func (x *DeleteRoomResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_public_testing_v1_dto_proto_msgTypes[22]
+	mi := &file_public_testing_v1_dto_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1089,7 +1289,7 @@ func (x *DeleteRoomResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteRoomResponse.ProtoReflect.Descriptor instead.
 func (*DeleteRoomResponse) Descriptor() ([]byte, []int) {
-	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{22}
+	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{26}
 }
 
 var File_public_testing_v1_dto_proto protoreflect.FileDescriptor
@@ -1114,18 +1314,21 @@ const file_public_testing_v1_dto_proto_rawDesc = "" +
 	"\x11GetProfileRequest\x12\x18\n" +
 	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"B\n" +
 	"\x12GetProfileResponse\x12,\n" +
-	"\x04item\x18\x01 \x01(\v2\x18.types.v1.TestingProfileR\x04item\"\x87\x01\n" +
+	"\x04item\x18\x01 \x01(\v2\x18.types.v1.TestingProfileR\x04item\"\xa9\x01\n" +
 	"\x1bCreateProfileRequestPayload\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\x12T\n" +
-	"\x12personality_traits\x18\x02 \x01(\v2%.types.v1.ProfilePersonalityTraitsMapR\x11personalityTraits\"a\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12 \n" +
+	"\vdescription\x18\x02 \x01(\tR\vdescription\x12T\n" +
+	"\x12personality_traits\x18\x03 \x01(\v2%.types.v1.ProfilePersonalityTraitsMapR\x11personalityTraits\"a\n" +
 	"\x14CreateProfileRequest\x12I\n" +
 	"\apayload\x18\x01 \x01(\v2'.testing.v1.CreateProfileRequestPayloadB\x06\xbaH\x03\xc8\x01\x01R\apayload\"E\n" +
 	"\x15CreateProfileResponse\x12,\n" +
-	"\x04item\x18\x01 \x01(\v2\x18.types.v1.TestingProfileR\x04item\"\xb0\x01\n" +
+	"\x04item\x18\x01 \x01(\v2\x18.types.v1.TestingProfileR\x04item\"\xe7\x01\n" +
 	"\x1aPatchProfileRequestPayload\x12\x17\n" +
-	"\x04name\x18\x01 \x01(\tH\x00R\x04name\x88\x01\x01\x12Y\n" +
-	"\x12personality_traits\x18\x02 \x01(\v2%.types.v1.ProfilePersonalityTraitsMapH\x01R\x11personalityTraits\x88\x01\x01B\a\n" +
-	"\x05_nameB\x15\n" +
+	"\x04name\x18\x01 \x01(\tH\x00R\x04name\x88\x01\x01\x12%\n" +
+	"\vdescription\x18\x02 \x01(\tH\x01R\vdescription\x88\x01\x01\x12Y\n" +
+	"\x12personality_traits\x18\x03 \x01(\v2%.types.v1.ProfilePersonalityTraitsMapH\x02R\x11personalityTraits\x88\x01\x01B\a\n" +
+	"\x05_nameB\x0e\n" +
+	"\f_descriptionB\x15\n" +
 	"\x13_personality_traits\"\xc1\x01\n" +
 	"\x13PatchProfileRequest\x12\x18\n" +
 	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\x12H\n" +
@@ -1135,7 +1338,16 @@ const file_public_testing_v1_dto_proto_rawDesc = "" +
 	"\x14PatchProfileResponse\"0\n" +
 	"\x14DeleteProfileRequest\x12\x18\n" +
 	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"\x17\n" +
-	"\x15DeleteProfileResponse\"_\n" +
+	"\x15DeleteProfileResponse\"E\n" +
+	"'GenerateProfileDescriptionByNameRequest\x12\x1a\n" +
+	"\x04name\x18\x01 \x01(\tB\x06\xbaH\x03\xc8\x01\x01R\x04name\"L\n" +
+	"(GenerateProfileDescriptionByNameResponse\x12 \n" +
+	"\vdescription\x18\x01 \x01(\tR\vdescription\"t\n" +
+	",GenerateProfileTraitsMapByDescriptionRequest\x12\x1a\n" +
+	"\x04name\x18\x01 \x01(\tB\x06\xbaH\x03\xc8\x01\x01R\x04name\x12(\n" +
+	"\vdescription\x18\x02 \x01(\tB\x06\xbaH\x03\xc8\x01\x01R\vdescription\"n\n" +
+	"-GenerateProfileTraitsMapByDescriptionResponse\x12=\n" +
+	"\x06traits\x18\x03 \x01(\v2%.types.v1.ProfilePersonalityTraitsMapR\x06traits\"_\n" +
 	"\x10ListRoomsRequest\x12\x19\n" +
 	"\x05limit\x18\x01 \x01(\x04H\x00R\x05limit\x88\x01\x01\x12\x1b\n" +
 	"\x06offset\x18\x02 \x01(\x04H\x01R\x06offset\x88\x01\x01B\b\n" +
@@ -1175,56 +1387,61 @@ func file_public_testing_v1_dto_proto_rawDescGZIP() []byte {
 	return file_public_testing_v1_dto_proto_rawDescData
 }
 
-var file_public_testing_v1_dto_proto_msgTypes = make([]protoimpl.MessageInfo, 23)
+var file_public_testing_v1_dto_proto_msgTypes = make([]protoimpl.MessageInfo, 27)
 var file_public_testing_v1_dto_proto_goTypes = []any{
-	(*GetPersonalityTraitsRequest)(nil),       // 0: testing.v1.GetPersonalityTraitsRequest
-	(*GetPersonalityTraitsResponse)(nil),      // 1: testing.v1.GetPersonalityTraitsResponse
-	(*ListProfilesRequest)(nil),               // 2: testing.v1.ListProfilesRequest
-	(*ListProfilesResponse)(nil),              // 3: testing.v1.ListProfilesResponse
-	(*GetProfileRequest)(nil),                 // 4: testing.v1.GetProfileRequest
-	(*GetProfileResponse)(nil),                // 5: testing.v1.GetProfileResponse
-	(*CreateProfileRequestPayload)(nil),       // 6: testing.v1.CreateProfileRequestPayload
-	(*CreateProfileRequest)(nil),              // 7: testing.v1.CreateProfileRequest
-	(*CreateProfileResponse)(nil),             // 8: testing.v1.CreateProfileResponse
-	(*PatchProfileRequestPayload)(nil),        // 9: testing.v1.PatchProfileRequestPayload
-	(*PatchProfileRequest)(nil),               // 10: testing.v1.PatchProfileRequest
-	(*PatchProfileResponse)(nil),              // 11: testing.v1.PatchProfileResponse
-	(*DeleteProfileRequest)(nil),              // 12: testing.v1.DeleteProfileRequest
-	(*DeleteProfileResponse)(nil),             // 13: testing.v1.DeleteProfileResponse
-	(*ListRoomsRequest)(nil),                  // 14: testing.v1.ListRoomsRequest
-	(*ListRoomsResponse)(nil),                 // 15: testing.v1.ListRoomsResponse
-	(*GetRoomRequest)(nil),                    // 16: testing.v1.GetRoomRequest
-	(*GetRoomResponse)(nil),                   // 17: testing.v1.GetRoomResponse
-	(*CreateRoomRequestPayload)(nil),          // 18: testing.v1.CreateRoomRequestPayload
-	(*CreateRoomRequest)(nil),                 // 19: testing.v1.CreateRoomRequest
-	(*CreateRoomResponse)(nil),                // 20: testing.v1.CreateRoomResponse
-	(*DeleteRoomRequest)(nil),                 // 21: testing.v1.DeleteRoomRequest
-	(*DeleteRoomResponse)(nil),                // 22: testing.v1.DeleteRoomResponse
-	(*types.PersonalityTrait)(nil),            // 23: types.v1.PersonalityTrait
-	(*types.TestingListProfile)(nil),          // 24: types.v1.TestingListProfile
-	(*types.TestingProfile)(nil),              // 25: types.v1.TestingProfile
-	(*types.ProfilePersonalityTraitsMap)(nil), // 26: types.v1.ProfilePersonalityTraitsMap
-	(*types.TestingListRoom)(nil),             // 27: types.v1.TestingListRoom
-	(*types.TestingRoom)(nil),                 // 28: types.v1.TestingRoom
+	(*GetPersonalityTraitsRequest)(nil),                   // 0: testing.v1.GetPersonalityTraitsRequest
+	(*GetPersonalityTraitsResponse)(nil),                  // 1: testing.v1.GetPersonalityTraitsResponse
+	(*ListProfilesRequest)(nil),                           // 2: testing.v1.ListProfilesRequest
+	(*ListProfilesResponse)(nil),                          // 3: testing.v1.ListProfilesResponse
+	(*GetProfileRequest)(nil),                             // 4: testing.v1.GetProfileRequest
+	(*GetProfileResponse)(nil),                            // 5: testing.v1.GetProfileResponse
+	(*CreateProfileRequestPayload)(nil),                   // 6: testing.v1.CreateProfileRequestPayload
+	(*CreateProfileRequest)(nil),                          // 7: testing.v1.CreateProfileRequest
+	(*CreateProfileResponse)(nil),                         // 8: testing.v1.CreateProfileResponse
+	(*PatchProfileRequestPayload)(nil),                    // 9: testing.v1.PatchProfileRequestPayload
+	(*PatchProfileRequest)(nil),                           // 10: testing.v1.PatchProfileRequest
+	(*PatchProfileResponse)(nil),                          // 11: testing.v1.PatchProfileResponse
+	(*DeleteProfileRequest)(nil),                          // 12: testing.v1.DeleteProfileRequest
+	(*DeleteProfileResponse)(nil),                         // 13: testing.v1.DeleteProfileResponse
+	(*GenerateProfileDescriptionByNameRequest)(nil),       // 14: testing.v1.GenerateProfileDescriptionByNameRequest
+	(*GenerateProfileDescriptionByNameResponse)(nil),      // 15: testing.v1.GenerateProfileDescriptionByNameResponse
+	(*GenerateProfileTraitsMapByDescriptionRequest)(nil),  // 16: testing.v1.GenerateProfileTraitsMapByDescriptionRequest
+	(*GenerateProfileTraitsMapByDescriptionResponse)(nil), // 17: testing.v1.GenerateProfileTraitsMapByDescriptionResponse
+	(*ListRoomsRequest)(nil),                              // 18: testing.v1.ListRoomsRequest
+	(*ListRoomsResponse)(nil),                             // 19: testing.v1.ListRoomsResponse
+	(*GetRoomRequest)(nil),                                // 20: testing.v1.GetRoomRequest
+	(*GetRoomResponse)(nil),                               // 21: testing.v1.GetRoomResponse
+	(*CreateRoomRequestPayload)(nil),                      // 22: testing.v1.CreateRoomRequestPayload
+	(*CreateRoomRequest)(nil),                             // 23: testing.v1.CreateRoomRequest
+	(*CreateRoomResponse)(nil),                            // 24: testing.v1.CreateRoomResponse
+	(*DeleteRoomRequest)(nil),                             // 25: testing.v1.DeleteRoomRequest
+	(*DeleteRoomResponse)(nil),                            // 26: testing.v1.DeleteRoomResponse
+	(*types.PersonalityTrait)(nil),                        // 27: types.v1.PersonalityTrait
+	(*types.TestingListProfile)(nil),                      // 28: types.v1.TestingListProfile
+	(*types.TestingProfile)(nil),                          // 29: types.v1.TestingProfile
+	(*types.ProfilePersonalityTraitsMap)(nil),             // 30: types.v1.ProfilePersonalityTraitsMap
+	(*types.TestingListRoom)(nil),                         // 31: types.v1.TestingListRoom
+	(*types.TestingRoom)(nil),                             // 32: types.v1.TestingRoom
 }
 var file_public_testing_v1_dto_proto_depIdxs = []int32{
-	23, // 0: testing.v1.GetPersonalityTraitsResponse.items:type_name -> types.v1.PersonalityTrait
-	24, // 1: testing.v1.ListProfilesResponse.items:type_name -> types.v1.TestingListProfile
-	25, // 2: testing.v1.GetProfileResponse.item:type_name -> types.v1.TestingProfile
-	26, // 3: testing.v1.CreateProfileRequestPayload.personality_traits:type_name -> types.v1.ProfilePersonalityTraitsMap
+	27, // 0: testing.v1.GetPersonalityTraitsResponse.items:type_name -> types.v1.PersonalityTrait
+	28, // 1: testing.v1.ListProfilesResponse.items:type_name -> types.v1.TestingListProfile
+	29, // 2: testing.v1.GetProfileResponse.item:type_name -> types.v1.TestingProfile
+	30, // 3: testing.v1.CreateProfileRequestPayload.personality_traits:type_name -> types.v1.ProfilePersonalityTraitsMap
 	6,  // 4: testing.v1.CreateProfileRequest.payload:type_name -> testing.v1.CreateProfileRequestPayload
-	25, // 5: testing.v1.CreateProfileResponse.item:type_name -> types.v1.TestingProfile
-	26, // 6: testing.v1.PatchProfileRequestPayload.personality_traits:type_name -> types.v1.ProfilePersonalityTraitsMap
+	29, // 5: testing.v1.CreateProfileResponse.item:type_name -> types.v1.TestingProfile
+	30, // 6: testing.v1.PatchProfileRequestPayload.personality_traits:type_name -> types.v1.ProfilePersonalityTraitsMap
 	9,  // 7: testing.v1.PatchProfileRequest.payload:type_name -> testing.v1.PatchProfileRequestPayload
-	27, // 8: testing.v1.ListRoomsResponse.items:type_name -> types.v1.TestingListRoom
-	28, // 9: testing.v1.GetRoomResponse.item:type_name -> types.v1.TestingRoom
-	18, // 10: testing.v1.CreateRoomRequest.payload:type_name -> testing.v1.CreateRoomRequestPayload
-	28, // 11: testing.v1.CreateRoomResponse.item:type_name -> types.v1.TestingRoom
-	12, // [12:12] is the sub-list for method output_type
-	12, // [12:12] is the sub-list for method input_type
-	12, // [12:12] is the sub-list for extension type_name
-	12, // [12:12] is the sub-list for extension extendee
-	0,  // [0:12] is the sub-list for field type_name
+	30, // 8: testing.v1.GenerateProfileTraitsMapByDescriptionResponse.traits:type_name -> types.v1.ProfilePersonalityTraitsMap
+	31, // 9: testing.v1.ListRoomsResponse.items:type_name -> types.v1.TestingListRoom
+	32, // 10: testing.v1.GetRoomResponse.item:type_name -> types.v1.TestingRoom
+	22, // 11: testing.v1.CreateRoomRequest.payload:type_name -> testing.v1.CreateRoomRequestPayload
+	32, // 12: testing.v1.CreateRoomResponse.item:type_name -> types.v1.TestingRoom
+	13, // [13:13] is the sub-list for method output_type
+	13, // [13:13] is the sub-list for method input_type
+	13, // [13:13] is the sub-list for extension type_name
+	13, // [13:13] is the sub-list for extension extendee
+	0,  // [0:13] is the sub-list for field type_name
 }
 
 func init() { file_public_testing_v1_dto_proto_init() }
@@ -1234,14 +1451,14 @@ func file_public_testing_v1_dto_proto_init() {
 	}
 	file_public_testing_v1_dto_proto_msgTypes[2].OneofWrappers = []any{}
 	file_public_testing_v1_dto_proto_msgTypes[9].OneofWrappers = []any{}
-	file_public_testing_v1_dto_proto_msgTypes[14].OneofWrappers = []any{}
+	file_public_testing_v1_dto_proto_msgTypes[18].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_public_testing_v1_dto_proto_rawDesc), len(file_public_testing_v1_dto_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   23,
+			NumMessages:   27,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

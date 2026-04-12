@@ -117,3 +117,8 @@ auth:
     refresh_token_lifetime: 720h
     jwt_access_secret:
     jwt_refresh_secret:
+
+openai:
+    token: ""
+    base_url: ""
+    default_model: ""

@@ -3,6 +3,7 @@ package testing
 import (
 	"go.uber.org/fx"
 
+	llmRepo "github.com/neurochar/backend/internal/domain/testing/repository/llm"
 	profileRepo "github.com/neurochar/backend/internal/domain/testing/repository/pg/profile"
 	roomRepo "github.com/neurochar/backend/internal/domain/testing/repository/pg/room"
 	"github.com/neurochar/backend/internal/domain/testing/usecase"
@@ -24,6 +25,10 @@ var FxModule = fx.Module(
 	fx.Provide(
 		fx.Private,
 		fx.Annotate(roomRepo.NewRepository, fx.As(new(usecase.RoomRepository))),
+	),
+	fx.Provide(
+		fx.Private,
+		fx.Annotate(llmRepo.NewRepository, fx.As(new(usecase.LLMRepository))),
 	),
 
 	// usecases

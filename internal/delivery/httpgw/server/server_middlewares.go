@@ -58,7 +58,6 @@ func LoggerMiddleware(isActive bool, logger *slog.Logger) func(http.Handler) htt
 			reqData := &tools.LogRequestData{
 				Processor: "http",
 				Method:    fmt.Sprintf("%s %s", r.Method, r.URL.Path),
-				URI:       r.URL.Query().Encode(),
 				Referer:   r.Header.Get("X-Referer"),
 			}
 

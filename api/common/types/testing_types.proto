@@ -48,7 +48,8 @@ message TestingProfile {
   int64 version = 2;
   string tenant_id = 3;
   string name = 4;
-  ProfilePersonalityTraitsMap personality_traits = 5;
+  string description = 5;
+  ProfilePersonalityTraitsMap personality_traits = 6;
 }
 
 message TestingListProfile {

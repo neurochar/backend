@@ -27,8 +27,7 @@ var File_public_testing_v1_service_proto protoreflect.FileDescriptor
 const file_public_testing_v1_service_proto_rawDesc = "" +
 	"\n" +
 	"\x1fpublic/testing/v1/service.proto\x12\n" +
-	"testing.v1\x1a\x1bpublic/testing/v1/dto.proto\x1a\x1cgoogle/api/annotations.proto\x1a.protoc-gen-openapiv2/options/annotations.proto2\xed\n" +
-	"\n" +
+	"testing.v1\x1a\x1bpublic/testing/v1/dto.proto\x1a\x1cgoogle/api/annotations.proto\x1a.protoc-gen-openapiv2/options/annotations.proto2\xd2\x0e\n" +
 	"\x14TestingPublicService\x12\xa6\x01\n" +
 	"\x14GetPersonalityTraits\x12'.testing.v1.GetPersonalityTraitsRequest\x1a(.testing.v1.GetPersonalityTraitsResponse\";\x92A\x12b\x10\n" +
 	"\x0e\n" +
@@ -54,7 +53,15 @@ const file_public_testing_v1_service_proto_rawDesc = "" +
 	"\rDeleteProfile\x12 .testing.v1.DeleteProfileRequest\x1a!.testing.v1.DeleteProfileResponse\"6\x92A\x12b\x10\n" +
 	"\x0e\n" +
 	"\n" +
-	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x1b*\x19/v1/testing/profiles/{id}\x12x\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x1b*\x19/v1/testing/profiles/{id}\x12\xe5\x01\n" +
+	" GenerateProfileDescriptionByName\x123.testing.v1.GenerateProfileDescriptionByNameRequest\x1a4.testing.v1.GenerateProfileDescriptionByNameResponse\"V\x92A\x12b\x10\n" +
+	"\x0e\n" +
+	"\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02;\"9/v1/testing/profiles/generate-profile-description-by-name\x12\xfa\x01\n" +
+	"%GenerateProfileTraitsMapByDescription\x128.testing.v1.GenerateProfileTraitsMapByDescriptionRequest\x1a9.testing.v1.GenerateProfileTraitsMapByDescriptionResponse\"\\\x92A\x12b\x10\n" +
+	"\x0e\n" +
+	"\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02A\"?/v1/testing/profiles/generate-profile-traits-map-by-description\x12x\n" +
 	"\tListRooms\x12\x1c.testing.v1.ListRoomsRequest\x1a\x1d.testing.v1.ListRoomsResponse\".\x92A\x12b\x10\n" +
 	"\x0e\n" +
 	"\n" +
@@ -78,26 +85,30 @@ const file_public_testing_v1_service_proto_rawDesc = "" +
 	"Testing\\V1\xe2\x02\x16Testing\\V1\\GPBMetadata\xea\x02\vTesting::V1b\x06proto3"
 
 var file_public_testing_v1_service_proto_goTypes = []any{
-	(*GetPersonalityTraitsRequest)(nil),  // 0: testing.v1.GetPersonalityTraitsRequest
-	(*ListProfilesRequest)(nil),          // 1: testing.v1.ListProfilesRequest
-	(*GetProfileRequest)(nil),            // 2: testing.v1.GetProfileRequest
-	(*CreateProfileRequest)(nil),         // 3: testing.v1.CreateProfileRequest
-	(*PatchProfileRequest)(nil),          // 4: testing.v1.PatchProfileRequest
-	(*DeleteProfileRequest)(nil),         // 5: testing.v1.DeleteProfileRequest
-	(*ListRoomsRequest)(nil),             // 6: testing.v1.ListRoomsRequest
-	(*GetRoomRequest)(nil),               // 7: testing.v1.GetRoomRequest
-	(*CreateRoomRequest)(nil),            // 8: testing.v1.CreateRoomRequest
-	(*DeleteRoomRequest)(nil),            // 9: testing.v1.DeleteRoomRequest
-	(*GetPersonalityTraitsResponse)(nil), // 10: testing.v1.GetPersonalityTraitsResponse
-	(*ListProfilesResponse)(nil),         // 11: testing.v1.ListProfilesResponse
-	(*GetProfileResponse)(nil),           // 12: testing.v1.GetProfileResponse
-	(*CreateProfileResponse)(nil),        // 13: testing.v1.CreateProfileResponse
-	(*PatchProfileResponse)(nil),         // 14: testing.v1.PatchProfileResponse
-	(*DeleteProfileResponse)(nil),        // 15: testing.v1.DeleteProfileResponse
-	(*ListRoomsResponse)(nil),            // 16: testing.v1.ListRoomsResponse
-	(*GetRoomResponse)(nil),              // 17: testing.v1.GetRoomResponse
-	(*CreateRoomResponse)(nil),           // 18: testing.v1.CreateRoomResponse
-	(*DeleteRoomResponse)(nil),           // 19: testing.v1.DeleteRoomResponse
+	(*GetPersonalityTraitsRequest)(nil),                   // 0: testing.v1.GetPersonalityTraitsRequest
+	(*ListProfilesRequest)(nil),                           // 1: testing.v1.ListProfilesRequest
+	(*GetProfileRequest)(nil),                             // 2: testing.v1.GetProfileRequest
+	(*CreateProfileRequest)(nil),                          // 3: testing.v1.CreateProfileRequest
+	(*PatchProfileRequest)(nil),                           // 4: testing.v1.PatchProfileRequest
+	(*DeleteProfileRequest)(nil),                          // 5: testing.v1.DeleteProfileRequest
+	(*GenerateProfileDescriptionByNameRequest)(nil),       // 6: testing.v1.GenerateProfileDescriptionByNameRequest
+	(*GenerateProfileTraitsMapByDescriptionRequest)(nil),  // 7: testing.v1.GenerateProfileTraitsMapByDescriptionRequest
+	(*ListRoomsRequest)(nil),                              // 8: testing.v1.ListRoomsRequest
+	(*GetRoomRequest)(nil),                                // 9: testing.v1.GetRoomRequest
+	(*CreateRoomRequest)(nil),                             // 10: testing.v1.CreateRoomRequest
+	(*DeleteRoomRequest)(nil),                             // 11: testing.v1.DeleteRoomRequest
+	(*GetPersonalityTraitsResponse)(nil),                  // 12: testing.v1.GetPersonalityTraitsResponse
+	(*ListProfilesResponse)(nil),                          // 13: testing.v1.ListProfilesResponse
+	(*GetProfileResponse)(nil),                            // 14: testing.v1.GetProfileResponse
+	(*CreateProfileResponse)(nil),                         // 15: testing.v1.CreateProfileResponse
+	(*PatchProfileResponse)(nil),                          // 16: testing.v1.PatchProfileResponse
+	(*DeleteProfileResponse)(nil),                         // 17: testing.v1.DeleteProfileResponse
+	(*GenerateProfileDescriptionByNameResponse)(nil),      // 18: testing.v1.GenerateProfileDescriptionByNameResponse
+	(*GenerateProfileTraitsMapByDescriptionResponse)(nil), // 19: testing.v1.GenerateProfileTraitsMapByDescriptionResponse
+	(*ListRoomsResponse)(nil),                             // 20: testing.v1.ListRoomsResponse
+	(*GetRoomResponse)(nil),                               // 21: testing.v1.GetRoomResponse
+	(*CreateRoomResponse)(nil),                            // 22: testing.v1.CreateRoomResponse
+	(*DeleteRoomResponse)(nil),                            // 23: testing.v1.DeleteRoomResponse
 }
 var file_public_testing_v1_service_proto_depIdxs = []int32{
 	0,  // 0: testing.v1.TestingPublicService.GetPersonalityTraits:input_type -> testing.v1.GetPersonalityTraitsRequest
@@ -106,22 +117,26 @@ var file_public_testing_v1_service_proto_depIdxs = []int32{
 	3,  // 3: testing.v1.TestingPublicService.CreateProfile:input_type -> testing.v1.CreateProfileRequest
 	4,  // 4: testing.v1.TestingPublicService.PatchProfile:input_type -> testing.v1.PatchProfileRequest
 	5,  // 5: testing.v1.TestingPublicService.DeleteProfile:input_type -> testing.v1.DeleteProfileRequest
-	6,  // 6: testing.v1.TestingPublicService.ListRooms:input_type -> testing.v1.ListRoomsRequest
-	7,  // 7: testing.v1.TestingPublicService.GetRoom:input_type -> testing.v1.GetRoomRequest
-	8,  // 8: testing.v1.TestingPublicService.CreateRoom:input_type -> testing.v1.CreateRoomRequest
-	9,  // 9: testing.v1.TestingPublicService.DeleteRoom:input_type -> testing.v1.DeleteRoomRequest
-	10, // 10: testing.v1.TestingPublicService.GetPersonalityTraits:output_type -> testing.v1.GetPersonalityTraitsResponse
-	11, // 11: testing.v1.TestingPublicService.ListProfiles:output_type -> testing.v1.ListProfilesResponse
-	12, // 12: testing.v1.TestingPublicService.GetProfile:output_type -> testing.v1.GetProfileResponse
-	13, // 13: testing.v1.TestingPublicService.CreateProfile:output_type -> testing.v1.CreateProfileResponse
-	14, // 14: testing.v1.TestingPublicService.PatchProfile:output_type -> testing.v1.PatchProfileResponse
-	15, // 15: testing.v1.TestingPublicService.DeleteProfile:output_type -> testing.v1.DeleteProfileResponse
-	16, // 16: testing.v1.TestingPublicService.ListRooms:output_type -> testing.v1.ListRoomsResponse
-	17, // 17: testing.v1.TestingPublicService.GetRoom:output_type -> testing.v1.GetRoomResponse
-	18, // 18: testing.v1.TestingPublicService.CreateRoom:output_type -> testing.v1.CreateRoomResponse
-	19, // 19: testing.v1.TestingPublicService.DeleteRoom:output_type -> testing.v1.DeleteRoomResponse
-	10, // [10:20] is the sub-list for method output_type
-	0,  // [0:10] is the sub-list for method input_type
+	6,  // 6: testing.v1.TestingPublicService.GenerateProfileDescriptionByName:input_type -> testing.v1.GenerateProfileDescriptionByNameRequest
+	7,  // 7: testing.v1.TestingPublicService.GenerateProfileTraitsMapByDescription:input_type -> testing.v1.GenerateProfileTraitsMapByDescriptionRequest
+	8,  // 8: testing.v1.TestingPublicService.ListRooms:input_type -> testing.v1.ListRoomsRequest
+	9,  // 9: testing.v1.TestingPublicService.GetRoom:input_type -> testing.v1.GetRoomRequest
+	10, // 10: testing.v1.TestingPublicService.CreateRoom:input_type -> testing.v1.CreateRoomRequest
+	11, // 11: testing.v1.TestingPublicService.DeleteRoom:input_type -> testing.v1.DeleteRoomRequest
+	12, // 12: testing.v1.TestingPublicService.GetPersonalityTraits:output_type -> testing.v1.GetPersonalityTraitsResponse
+	13, // 13: testing.v1.TestingPublicService.ListProfiles:output_type -> testing.v1.ListProfilesResponse
+	14, // 14: testing.v1.TestingPublicService.GetProfile:output_type -> testing.v1.GetProfileResponse
+	15, // 15: testing.v1.TestingPublicService.CreateProfile:output_type -> testing.v1.CreateProfileResponse
+	16, // 16: testing.v1.TestingPublicService.PatchProfile:output_type -> testing.v1.PatchProfileResponse
+	17, // 17: testing.v1.TestingPublicService.DeleteProfile:output_type -> testing.v1.DeleteProfileResponse
+	18, // 18: testing.v1.TestingPublicService.GenerateProfileDescriptionByName:output_type -> testing.v1.GenerateProfileDescriptionByNameResponse
+	19, // 19: testing.v1.TestingPublicService.GenerateProfileTraitsMapByDescription:output_type -> testing.v1.GenerateProfileTraitsMapByDescriptionResponse
+	20, // 20: testing.v1.TestingPublicService.ListRooms:output_type -> testing.v1.ListRoomsResponse
+	21, // 21: testing.v1.TestingPublicService.GetRoom:output_type -> testing.v1.GetRoomResponse
+	22, // 22: testing.v1.TestingPublicService.CreateRoom:output_type -> testing.v1.CreateRoomResponse
+	23, // 23: testing.v1.TestingPublicService.DeleteRoom:output_type -> testing.v1.DeleteRoomResponse
+	12, // [12:24] is the sub-list for method output_type
+	0,  // [0:12] is the sub-list for method input_type
 	0,  // [0:0] is the sub-list for extension type_name
 	0,  // [0:0] is the sub-list for extension extendee
 	0,  // [0:0] is the sub-list for field type_name

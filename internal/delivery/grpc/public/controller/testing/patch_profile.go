@@ -39,7 +39,8 @@ func (ctrl *Controller) PatchProfile(
 	usecaseInput := testingUC.PatchProfileDataInput{
 		Version: req.Version,
 
-		Name: req.Payload.Name,
+		Name:        req.Payload.Name,
+		Description: req.Payload.Description,
 	}
 
 	if req.Payload.PersonalityTraits != nil {

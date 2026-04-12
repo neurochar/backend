@@ -30,6 +30,7 @@ type Profile struct {
 	ID                   uuid.UUID
 	TenantID             uuid.UUID
 	Name                 string
+	Description          string
 	PersonalityTraitsMap ProfilePersonalityTraitsMap
 	CreatedBy            *uuid.UUID
 	CreatedAt            time.Time
@@ -53,6 +54,14 @@ func (item *Profile) SetName(value string) error {
 	return nil
 }
 
+func (item *Profile) SetDescription(value string) error {
+	value = strings.TrimSpace(value)
+
+	item.Description = value
+
+	return nil
+}
+
 func (item *Profile) SetPersonalityTraitsMap(value ProfilePersonalityTraitsMap) error {
 	if value == nil {
 		value = make(ProfilePersonalityTraitsMap)
@@ -67,6 +76,7 @@ func NewProfile(
 	tenantID uuid.UUID,
 	createdBy *uuid.UUID,
 	name string,
+	description string,
 	personalityTraitsMap ProfilePersonalityTraitsMap,
 ) (*Profile, error) {
 	timeNow := time.Now().Truncate(time.Microsecond)
@@ -80,6 +90,11 @@ func NewProfile(
 	}
 
 	err := profile.SetName(name)
+	if err != nil {
+		return nil, err
+	}
+
+	err = profile.SetDescription(description)
 	if err != nil {
 		return nil, err
 	}

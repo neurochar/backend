@@ -23,6 +23,7 @@ type ProfileDBModel struct {
 	ID                   uuid.UUID       `db:"id"`
 	TenantID             uuid.UUID       `db:"tenant_id"`
 	Name                 string          `db:"name"`
+	Description          string          `db:"description"`
 	PersonalityTraitsMap json.RawMessage `db:"personality_traits_map"`
 	CreatedBy            *uuid.UUID      `db:"created_by"`
 
@@ -42,6 +43,7 @@ func (db *ProfileDBModel) ToEntity() *entity.Profile {
 		ID:                   db.ID,
 		TenantID:             db.TenantID,
 		Name:                 db.Name,
+		Description:          db.Description,
 		PersonalityTraitsMap: traitsMap,
 		CreatedBy:            db.CreatedBy,
 
@@ -61,6 +63,7 @@ func MapProfileEntityToDBModel(entity *entity.Profile) *ProfileDBModel {
 		ID:                   entity.ID,
 		TenantID:             entity.TenantID,
 		Name:                 entity.Name,
+		Description:          entity.Description,
 		PersonalityTraitsMap: traitsMap,
 		CreatedBy:            entity.CreatedBy,
 

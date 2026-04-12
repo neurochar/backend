@@ -400,7 +400,8 @@ type TestingProfile struct {
 	Version           int64                        `protobuf:"varint,2,opt,name=version,proto3" json:"version,omitempty"`
 	TenantId          string                       `protobuf:"bytes,3,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
 	Name              string                       `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	PersonalityTraits *ProfilePersonalityTraitsMap `protobuf:"bytes,5,opt,name=personality_traits,json=personalityTraits,proto3" json:"personality_traits,omitempty"`
+	Description       string                       `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	PersonalityTraits *ProfilePersonalityTraitsMap `protobuf:"bytes,6,opt,name=personality_traits,json=personalityTraits,proto3" json:"personality_traits,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -459,6 +460,13 @@ func (x *TestingProfile) GetTenantId() string {
 func (x *TestingProfile) GetName() string {
 	if x != nil {
 		return x.Name
+	}
+	return ""
+}
+
+func (x *TestingProfile) GetDescription() string {
+	if x != nil {
+		return x.Description
 	}
 	return ""
 }
@@ -973,13 +981,14 @@ const file_common_types_testing_types_proto_rawDesc = "" +
 	"\x03map\x18\x01 \x03(\v2..types.v1.ProfilePersonalityTraitsMap.MapEntryR\x03map\x1aa\n" +
 	"\bMapEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\x04R\x03key\x12?\n" +
-	"\x05value\x18\x02 \x01(\v2).types.v1.ProfilePersonalityTraitsMapItemR\x05value:\x028\x01\"\xc1\x01\n" +
+	"\x05value\x18\x02 \x01(\v2).types.v1.ProfilePersonalityTraitsMapItemR\x05value:\x028\x01\"\xe3\x01\n" +
 	"\x0eTestingProfile\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\x03R\aversion\x12\x1b\n" +
 	"\ttenant_id\x18\x03 \x01(\tR\btenantId\x12\x12\n" +
-	"\x04name\x18\x04 \x01(\tR\x04name\x12T\n" +
-	"\x12personality_traits\x18\x05 \x01(\v2%.types.v1.ProfilePersonalityTraitsMapR\x11personalityTraits\"o\n" +
+	"\x04name\x18\x04 \x01(\tR\x04name\x12 \n" +
+	"\vdescription\x18\x05 \x01(\tR\vdescription\x12T\n" +
+	"\x12personality_traits\x18\x06 \x01(\v2%.types.v1.ProfilePersonalityTraitsMapR\x11personalityTraits\"o\n" +
 	"\x12TestingListProfile\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\x03R\aversion\x12\x1b\n" +

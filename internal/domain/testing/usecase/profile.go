@@ -33,6 +33,7 @@ type ProfileDTO struct {
 
 type CreateProfileDataInput struct {
 	Name                 string
+	Description          string
 	PersonalityTraitsMap entity.ProfilePersonalityTraitsMap
 	CreatedBy            *uuid.UUID
 }
@@ -41,6 +42,7 @@ type PatchProfileDataInput struct {
 	Version int64
 
 	Name                 *string
+	Description          *string
 	PersonalityTraitsMap *entity.ProfilePersonalityTraitsMap
 }
 
@@ -87,6 +89,13 @@ type ProfileUsecase interface {
 	) (resErr error)
 
 	Update(ctx context.Context, item *entity.Profile) (resErr error)
+
+	GenerateProfileDescriptionByName(ctx context.Context, name string) (string, error)
+
+	GenerateProfileTraitsMapByDescription(
+		ctx context.Context,
+		req *GenerateProfileTraitsMapByDescriptionRequest,
+	) (*GenerateProfileTraitsMapByDescriptionResponse, error)
 }
 
 type ProfileRepository interface {

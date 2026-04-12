@@ -16,11 +16,6 @@
           "type": "string"
         }
       },
-      "required": [
-        "payload",
-        "skipVersionCheck",
-        "version"
-      ],
       "type": "object"
     },
     "RoomsPublicServiceFinishRoomBody": {
@@ -29,9 +24,6 @@
           "$ref": "#/definitions/v1FinishRoomRequestPayload"
         }
       },
-      "required": [
-        "payload"
-      ],
       "type": "object"
     },
     "TenantPublicServicePatchTenantBody": {
@@ -47,11 +39,6 @@
           "type": "string"
         }
       },
-      "required": [
-        "payload",
-        "skipVersionCheck",
-        "version"
-      ],
       "type": "object"
     },
     "TestingPublicServicePatchProfileBody": {
@@ -67,11 +54,6 @@
           "type": "string"
         }
       },
-      "required": [
-        "payload",
-        "skipVersionCheck",
-        "version"
-      ],
       "type": "object"
     },
     "UsersTenantPublicServicePatchAccountBody": {
@@ -87,11 +69,6 @@
           "type": "string"
         }
       },
-      "required": [
-        "payload",
-        "skipVersionCheck",
-        "version"
-      ],
       "type": "object"
     },
     "protobufAny": {
@@ -111,6 +88,9 @@
           "$ref": "#/definitions/v1Room"
         }
       },
+      "required": [
+        "room"
+      ],
       "type": "object"
     },
     "rpcStatus": {
@@ -130,9 +110,6 @@
           "type": "string"
         }
       },
-      "required": [
-        "code"
-      ],
       "type": "object"
     },
     "testingV1GetRoomResponse": {
@@ -141,6 +118,9 @@
           "$ref": "#/definitions/v1TestingRoom"
         }
       },
+      "required": [
+        "item"
+      ],
       "type": "object"
     },
     "typeDate": {
@@ -396,10 +376,6 @@
           "type": "string"
         }
       },
-      "required": [
-        "originalFileId",
-        "s100x100FileId"
-      ],
       "type": "object"
     },
     "v1CreateAccountResponse": {
@@ -408,6 +384,9 @@
           "$ref": "#/definitions/v1AccountTenant"
         }
       },
+      "required": [
+        "item"
+      ],
       "type": "object"
     },
     "v1CreateCandidateRequest": {
@@ -437,6 +416,7 @@
         }
       },
       "required": [
+        "birthday",
         "gender",
         "name",
         "surname"
@@ -449,6 +429,9 @@
           "$ref": "#/definitions/v1Candidate"
         }
       },
+      "required": [
+        "item"
+      ],
       "type": "object"
     },
     "v1CreateProfileRequest": {
@@ -464,6 +447,9 @@
     },
     "v1CreateProfileRequestPayload": {
       "properties": {
+        "description": {
+          "type": "string"
+        },
         "name": {
           "type": "string"
         },
@@ -472,7 +458,9 @@
         }
       },
       "required": [
-        "name"
+        "description",
+        "name",
+        "personalityTraits"
       ],
       "type": "object"
     },
@@ -482,6 +470,9 @@
           "$ref": "#/definitions/v1TestingProfile"
         }
       },
+      "required": [
+        "item"
+      ],
       "type": "object"
     },
     "v1CreateRoomRequest": {
@@ -516,6 +507,9 @@
           "$ref": "#/definitions/v1TestingRoom"
         }
       },
+      "required": [
+        "item"
+      ],
       "type": "object"
     },
     "v1DeleteCandidateResponse": {
@@ -614,6 +608,9 @@
           "$ref": "#/definitions/v1Answers"
         }
       },
+      "required": [
+        "answers"
+      ],
       "type": "object"
     },
     "v1FinishRoomResponse": {
@@ -628,12 +625,37 @@
       ],
       "type": "string"
     },
+    "v1GenerateProfileDescriptionByNameResponse": {
+      "properties": {
+        "description": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "description"
+      ],
+      "type": "object"
+    },
+    "v1GenerateProfileTraitsMapByDescriptionResponse": {
+      "properties": {
+        "traits": {
+          "$ref": "#/definitions/v1ProfilePersonalityTraitsMap"
+        }
+      },
+      "required": [
+        "traits"
+      ],
+      "type": "object"
+    },
     "v1GetAccountResponse": {
       "properties": {
         "item": {
           "$ref": "#/definitions/v1AccountTenant"
         }
       },
+      "required": [
+        "item"
+      ],
       "type": "object"
     },
     "v1GetCandidateResponse": {
@@ -642,6 +664,9 @@
           "$ref": "#/definitions/v1Candidate"
         }
       },
+      "required": [
+        "item"
+      ],
       "type": "object"
     },
     "v1GetPersonalityTraitsResponse": {
@@ -662,6 +687,9 @@
           "$ref": "#/definitions/v1TestingProfile"
         }
       },
+      "required": [
+        "item"
+      ],
       "type": "object"
     },
     "v1IsExistsResponse": {
@@ -809,6 +837,11 @@
           "$ref": "#/definitions/v1Tokens"
         }
       },
+      "required": [
+        "account",
+        "tenant",
+        "tokens"
+      ],
       "type": "object"
     },
     "v1LogoutRequest": {
@@ -861,10 +894,6 @@
           "type": "string"
         }
       },
-      "required": [
-        "originalFileId",
-        "s100x100FileId"
-      ],
       "type": "object"
     },
     "v1PatchAccountResponse": {
@@ -885,11 +914,6 @@
           "type": "string"
         }
       },
-      "required": [
-        "gender",
-        "name",
-        "surname"
-      ],
       "type": "object"
     },
     "v1PatchCandidateResponse": {
@@ -897,6 +921,9 @@
     },
     "v1PatchProfileRequestPayload": {
       "properties": {
+        "description": {
+          "type": "string"
+        },
         "name": {
           "type": "string"
         },
@@ -904,9 +931,6 @@
           "$ref": "#/definitions/v1ProfilePersonalityTraitsMap"
         }
       },
-      "required": [
-        "name"
-      ],
       "type": "object"
     },
     "v1PatchProfileResponse": {
@@ -1017,6 +1041,9 @@
           "$ref": "#/definitions/v1Tokens"
         }
       },
+      "required": [
+        "tokens"
+      ],
       "type": "object"
     },
     "v1RequestPasswordRecoveryRequest": {
@@ -1068,6 +1095,7 @@
         }
       },
       "required": [
+        "candidate",
         "id",
         "status",
         "tenantName"
@@ -1220,6 +1248,9 @@
     },
     "v1TestingProfile": {
       "properties": {
+        "description": {
+          "type": "string"
+        },
         "id": {
           "type": "string"
         },
@@ -1238,8 +1269,10 @@
         }
       },
       "required": [
+        "description",
         "id",
         "name",
+        "personalityTraits",
         "tenantId",
         "version"
       ],
@@ -1275,6 +1308,7 @@
       },
       "required": [
         "id",
+        "personalityTraits",
         "status",
         "tenantId",
         "version"
@@ -1456,10 +1490,6 @@
           "type": "string"
         }
       },
-      "required": [
-        "originalFileId",
-        "s100x100FileId"
-      ],
       "type": "object"
     },
     "v1UpdateMyProfileResponse": {
@@ -1513,6 +1543,9 @@
           "$ref": "#/definitions/v1FilesMap"
         }
       },
+      "required": [
+        "data"
+      ],
       "type": "object"
     },
     "v1UploadProfilePhotoFileRequest": {
@@ -1537,6 +1570,9 @@
           "$ref": "#/definitions/v1FilesMap"
         }
       },
+      "required": [
+        "data"
+      ],
       "type": "object"
     },
     "v1WhoIAmResponse": {
@@ -1548,6 +1584,10 @@
           "$ref": "#/definitions/v1Tenant"
         }
       },
+      "required": [
+        "account",
+        "tenant"
+      ],
       "type": "object"
     }
   },
@@ -2683,6 +2723,82 @@
           }
         ],
         "summary": "Создать профиль профессии",
+        "tags": [
+          "TestingPublicService"
+        ]
+      }
+    },
+    "/v1/testing/profiles/generate-profile-description-by-name": {
+      "post": {
+        "operationId": "TestingPublicService_GenerateProfileDescriptionByName",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GenerateProfileDescriptionByNameResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "tags": [
+          "TestingPublicService"
+        ]
+      }
+    },
+    "/v1/testing/profiles/generate-profile-traits-map-by-description": {
+      "post": {
+        "operationId": "TestingPublicService_GenerateProfileTraitsMapByDescription",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "name",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "description",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GenerateProfileTraitsMapByDescriptionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "tags": [
           "TestingPublicService"
         ]

@@ -67,6 +67,7 @@ func BackendAppGetOptionsMap(appID app.ID, cfg config.Config) OptionsMap {
 					)
 				},
 			),
+			ProvidingIDOpenAIClient:    fx.Provide(providing.NewOpenAIClient),
 			ProvidingIDBackoff:         fx.Provide(providing.NewBackoff),
 			ProvidingIDStorageClient:   fx.Provide(providing.NewStorageClient),
 			ProvidingIDEmailing:        fx.Provide(providing.NewEmailing),

@@ -145,13 +145,18 @@ type Config struct {
 	Alerts struct {
 		BotToken      string `yaml:"bot_token" env:"ALERTS_BOT_TOKEN" env-default:""`
 		TargetChannel int64  `yaml:"target_channel" env:"ALERTS_TARGET_CHANNEL"`
-	}
+	} `yaml:"alerts"`
 	Auth struct {
 		AccessTokenLifetime  time.Duration `yaml:"access_token_lifetime" env:"AUTH_ACCESS_TOKEN_LIFETIME"`
 		RefreshTokenLifetime time.Duration `yaml:"refresh_token_lifetime" env:"AUTH_REFRESH_TOKEN_LIFETIME"`
 		JwtAccessSecret      string        `yaml:"jwt_access_secret" env:"AUTH_JWT_ACCESS_SECRET"`
 		JwtRefreshSecret     string        `yaml:"jwt_refresh_secret" env:"AUTH_JWT_REFRESH_SECRET"`
-	}
+	} `yaml:"auth"`
+	Openai struct {
+		Token        string `yaml:"token" env:"OPENAI_TOKEN"`
+		BaseURL      string `yaml:"base_url" env:"OPENAI_BASE_URL"`
+		DefaultModel string `yaml:"default_model" env:"OPENAI_DEFAULT_MODEL"`
+	} `yaml:"openai"`
 }
 
 // LoadConfig loads app config from file

@@ -96,6 +96,19 @@ func ProfilePersonalityTraitsMapItemToPb(
 	}
 }
 
+func ProfilePersonalityTraitsMapToPb(
+	item testingEntity.ProfilePersonalityTraitsMap,
+) *typesv1.ProfilePersonalityTraitsMap {
+	return &typesv1.ProfilePersonalityTraitsMap{
+		Map: lo.MapValues(
+			item,
+			func(v testingEntity.ProfilePersonalityTraitsMapItem, _ uint64) *typesv1.ProfilePersonalityTraitsMapItem {
+				return lo.ToPtr(ProfilePersonalityTraitsMapItemToPb(v))
+			},
+		),
+	}
+}
+
 func TestingListProfileDTOToPb(item *testingUC.ProfileDTO) *typesv1.TestingListProfile {
 	return &typesv1.TestingListProfile{
 		Id:       item.Profile.ID.String(),
@@ -107,18 +120,12 @@ func TestingListProfileDTOToPb(item *testingUC.ProfileDTO) *typesv1.TestingListP
 
 func TestingProfileDTOToPb(item *testingUC.ProfileDTO) *typesv1.TestingProfile {
 	return &typesv1.TestingProfile{
-		Id:       item.Profile.ID.String(),
-		Version:  item.Profile.Version(),
-		TenantId: item.Profile.TenantID.String(),
-		Name:     item.Profile.Name,
-		PersonalityTraits: &typesv1.ProfilePersonalityTraitsMap{
-			Map: lo.MapValues(
-				item.Profile.PersonalityTraitsMap,
-				func(v testingEntity.ProfilePersonalityTraitsMapItem, _ uint64) *typesv1.ProfilePersonalityTraitsMapItem {
-					return lo.ToPtr(ProfilePersonalityTraitsMapItemToPb(v))
-				},
-			),
-		},
+		Id:                item.Profile.ID.String(),
+		Version:           item.Profile.Version(),
+		TenantId:          item.Profile.TenantID.String(),
+		Name:              item.Profile.Name,
+		Description:       item.Profile.Description,
+		PersonalityTraits: ProfilePersonalityTraitsMapToPb(item.Profile.PersonalityTraitsMap),
 	}
 }
 

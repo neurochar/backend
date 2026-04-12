@@ -2,6 +2,7 @@ package profile
 
 import (
 	"context"
+	"errors"
 
 	"github.com/google/uuid"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
@@ -34,6 +35,7 @@ func (uc *UsecaseImpl) CreateByDTO(
 		tenantID,
 		authorAccountID,
 		in.Name,
+		in.Description,
 		in.PersonalityTraitsMap,
 	)
 	if err != nil {
@@ -101,6 +103,13 @@ func (uc *UsecaseImpl) PatchByDTO(
 			}
 		}
 
+		if in.Description != nil {
+			err := candidate.SetDescription(*in.Description)
+			if err != nil {
+				return err
+			}
+		}
+
 		if in.PersonalityTraitsMap != nil {
 			err := candidate.SetPersonalityTraitsMap(*in.PersonalityTraitsMap)
 			if err != nil {
@@ -131,4 +140,53 @@ func (uc *UsecaseImpl) Update(ctx context.Context, item *entity.Profile) error {
 	}
 
 	return nil
+}
+
+func (uc *UsecaseImpl) GenerateProfileDescriptionByName(ctx context.Context, name string) (string, error) {
+	const op = "GenerateProfileDescriptionByName"
+
+	if name == "" {
+		return "", appErrors.Chainf(appErrors.ErrBadRequest, "%s.%s", uc.pkg, op)
+	}
+
+	res, err := uc.llmRepo.GenerateProfileDescriptionByName(ctx, name)
+	if err != nil {
+		if errors.Is(err, usecase.ErrLLMInvalidResponse) {
+			return "", appErrors.Chainf(usecase.ErrLLMInvalidResponse, "%s.%s", uc.pkg, op)
+		}
+
+		if errors.Is(err, usecase.ErrLLMBadRequest) {
+			return "", appErrors.Chainf(usecase.ErrLLMBadRequest.WithTextCode("INVALID_PROFILE_NAME"), "%s.%s", uc.pkg, op)
+		}
+
+		return "", appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	return res, nil
+}
+
+func (uc *UsecaseImpl) GenerateProfileTraitsMapByDescription(
+	ctx context.Context,
+	req *usecase.GenerateProfileTraitsMapByDescriptionRequest,
+) (*usecase.GenerateProfileTraitsMapByDescriptionResponse, error) {
+	const op = "GenerateProfileTraitsMapByDescription"
+
+	if req.Description == "" || req.Role == "" {
+		return nil, appErrors.Chainf(appErrors.ErrBadRequest, "%s.%s", uc.pkg, op)
+	}
+
+	res, err := uc.llmRepo.GenerateProfileTraitsMapByDescription(ctx, req)
+	if err != nil {
+		if errors.Is(err, usecase.ErrLLMInvalidResponse) {
+			return nil, appErrors.Chainf(usecase.ErrLLMInvalidResponse, "%s.%s", uc.pkg, op)
+		}
+
+		if errors.Is(err, usecase.ErrLLMBadRequest) {
+			return nil, appErrors.Chainf(usecase.ErrLLMBadRequest.WithTextCode("INVALID_PROFILE"), "%s.%s", uc.pkg, op)
+		}
+
+		return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	return res, nil
 }
