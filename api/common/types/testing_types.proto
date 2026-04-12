@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package types.v1;
 
+import "google/protobuf/timestamp.proto";
+
 enum TechniqueItemType {
   TECHNIQUE_ITEM_TYPE_UNSPECIFIED = 0;
   TECHNIQUE_ITEM_TYPE_QUESTION_WITH_VARIANTS_SINGLE_ANSWER = 1;
@@ -86,10 +88,13 @@ message TestingRoom {
   int64 version = 2;
   string tenant_id = 3;
   RoomStatus status = 4;
-  optional TestingRoomCandidate candidate = 5;
-  optional TestingRoomProfile profile = 6;
-  optional TestingRoomResult result = 7;
-  ProfilePersonalityTraitsMap personality_traits = 8;
+  google.protobuf.Timestamp created_at = 5;
+  optional TestingRoomCandidate candidate = 6;
+  optional TestingRoomProfile profile = 7;
+  optional TestingRoomResult result = 8;
+  optional int32 result_index = 9;
+  optional google.protobuf.Timestamp finished_at = 10;
+  ProfilePersonalityTraitsMap personality_traits = 11;
 }
 
 message TestingListRoom {
@@ -97,9 +102,11 @@ message TestingListRoom {
   int64 version = 2;
   string tenant_id = 3;
   RoomStatus status = 4;
-  optional TestingRoomCandidate candidate = 5;
-  optional TestingRoomProfile profile = 6;
-  optional TestingRoomResult result = 7;
+  google.protobuf.Timestamp created_at = 5;
+  optional TestingRoomCandidate candidate = 6;
+  optional TestingRoomProfile profile = 7;
+  optional int32 result_index = 8;
+  optional google.protobuf.Timestamp finished_at = 9;
 }
 
 

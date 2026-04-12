@@ -1,7 +1,7 @@
 package entity
 
 import (
-	"net"
+	"net/netip"
 	"time"
 
 	"github.com/google/uuid"
@@ -41,11 +41,14 @@ type Room struct {
 	TechniqueData        []RoomTechniqueDataItem
 	CandidateAnswerData  map[uint64]any
 	Result               *RoomResult
+	ResultIndex          *int
 	CreatedBy            *uuid.UUID
-	FinishedIP           *net.IP
-	CreatedAt            time.Time
-	UpdatedAt            time.Time
-	DeletedAt            *time.Time
+	FinishedIP           *netip.Addr
+	FinishedAt           *time.Time
+
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time
 }
 
 func (item *Room) Version() int64 {
@@ -60,6 +63,12 @@ func (item *Room) SetCandidateID(value *uuid.UUID) error {
 
 func (item *Room) SetProfileID(value *uuid.UUID) error {
 	item.ProfileID = value
+
+	return nil
+}
+
+func (item *Room) SetResultIndex(value *int) error {
+	item.ResultIndex = value
 
 	return nil
 }

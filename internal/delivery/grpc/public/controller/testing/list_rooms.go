@@ -3,6 +3,7 @@ package testing
 import (
 	"context"
 
+	"github.com/google/uuid"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
 	"github.com/neurochar/backend/internal/common/uctypes"
 	"github.com/neurochar/backend/internal/delivery/grpc/mapper"
@@ -39,12 +40,44 @@ func (ctrl *Controller) ListRooms(
 
 	listOptions := &testingUC.RoomListOptions{
 		FilterTenantID: &authData.TenantUserClaims().TenantID,
-		Sort: []uctypes.SortOption[testingUC.RoomListOptionsSortField]{
+	}
+
+	if req.Sort != nil {
+		sortField := testingUC.RoomListOptionsSortFieldCreatedAt
+
+		switch *req.Sort {
+		case desc.ListRoomsSort_LIST_ROOM_SORT_CREATED_AT:
+			sortField = testingUC.RoomListOptionsSortFieldCreatedAt
+		case desc.ListRoomsSort_LIST_ROOM_SORT_FINISHED_AT:
+			sortField = testingUC.RoomListOptionsSortFieldFinishedAt
+		case desc.ListRoomsSort_LIST_ROOM_SORT_RESULT_INDEX:
+			sortField = testingUC.RoomListOptionsSortFieldResultIndex
+		}
+
+		listOptions.Sort = []uctypes.SortOption[testingUC.RoomListOptionsSortField]{
 			{
-				Field:  testingUC.RoomListOptionsSortFieldCreatedAt,
+				Field:  sortField,
 				IsDesc: true,
 			},
-		},
+		}
+	}
+
+	if req.FilterCandidateId != nil {
+		id, err := uuid.Parse(*req.FilterCandidateId)
+		if err != nil {
+			return nil, appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
+		}
+
+		listOptions.FilterCandidateID = lo.ToPtr(id)
+	}
+
+	if req.FilterProfileId != nil {
+		id, err := uuid.Parse(*req.FilterProfileId)
+		if err != nil {
+			return nil, appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
+		}
+
+		listOptions.FilterProfileID = lo.ToPtr(id)
 	}
 
 	listParams := &uctypes.QueryGetListParams{

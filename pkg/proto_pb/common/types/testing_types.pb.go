@@ -9,6 +9,7 @@ package typesv1
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -776,10 +777,13 @@ type TestingRoom struct {
 	Version           int64                        `protobuf:"varint,2,opt,name=version,proto3" json:"version,omitempty"`
 	TenantId          string                       `protobuf:"bytes,3,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
 	Status            RoomStatus                   `protobuf:"varint,4,opt,name=status,proto3,enum=types.v1.RoomStatus" json:"status,omitempty"`
-	Candidate         *TestingRoomCandidate        `protobuf:"bytes,5,opt,name=candidate,proto3,oneof" json:"candidate,omitempty"`
-	Profile           *TestingRoomProfile          `protobuf:"bytes,6,opt,name=profile,proto3,oneof" json:"profile,omitempty"`
-	Result            *TestingRoomResult           `protobuf:"bytes,7,opt,name=result,proto3,oneof" json:"result,omitempty"`
-	PersonalityTraits *ProfilePersonalityTraitsMap `protobuf:"bytes,8,opt,name=personality_traits,json=personalityTraits,proto3" json:"personality_traits,omitempty"`
+	CreatedAt         *timestamppb.Timestamp       `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	Candidate         *TestingRoomCandidate        `protobuf:"bytes,6,opt,name=candidate,proto3,oneof" json:"candidate,omitempty"`
+	Profile           *TestingRoomProfile          `protobuf:"bytes,7,opt,name=profile,proto3,oneof" json:"profile,omitempty"`
+	Result            *TestingRoomResult           `protobuf:"bytes,8,opt,name=result,proto3,oneof" json:"result,omitempty"`
+	ResultIndex       *int32                       `protobuf:"varint,9,opt,name=result_index,json=resultIndex,proto3,oneof" json:"result_index,omitempty"`
+	FinishedAt        *timestamppb.Timestamp       `protobuf:"bytes,10,opt,name=finished_at,json=finishedAt,proto3,oneof" json:"finished_at,omitempty"`
+	PersonalityTraits *ProfilePersonalityTraitsMap `protobuf:"bytes,11,opt,name=personality_traits,json=personalityTraits,proto3" json:"personality_traits,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -842,6 +846,13 @@ func (x *TestingRoom) GetStatus() RoomStatus {
 	return RoomStatus_ROOM_STATUS_UNSPECIFIED
 }
 
+func (x *TestingRoom) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
 func (x *TestingRoom) GetCandidate() *TestingRoomCandidate {
 	if x != nil {
 		return x.Candidate
@@ -863,6 +874,20 @@ func (x *TestingRoom) GetResult() *TestingRoomResult {
 	return nil
 }
 
+func (x *TestingRoom) GetResultIndex() int32 {
+	if x != nil && x.ResultIndex != nil {
+		return *x.ResultIndex
+	}
+	return 0
+}
+
+func (x *TestingRoom) GetFinishedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.FinishedAt
+	}
+	return nil
+}
+
 func (x *TestingRoom) GetPersonalityTraits() *ProfilePersonalityTraitsMap {
 	if x != nil {
 		return x.PersonalityTraits
@@ -876,9 +901,11 @@ type TestingListRoom struct {
 	Version       int64                  `protobuf:"varint,2,opt,name=version,proto3" json:"version,omitempty"`
 	TenantId      string                 `protobuf:"bytes,3,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
 	Status        RoomStatus             `protobuf:"varint,4,opt,name=status,proto3,enum=types.v1.RoomStatus" json:"status,omitempty"`
-	Candidate     *TestingRoomCandidate  `protobuf:"bytes,5,opt,name=candidate,proto3,oneof" json:"candidate,omitempty"`
-	Profile       *TestingRoomProfile    `protobuf:"bytes,6,opt,name=profile,proto3,oneof" json:"profile,omitempty"`
-	Result        *TestingRoomResult     `protobuf:"bytes,7,opt,name=result,proto3,oneof" json:"result,omitempty"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	Candidate     *TestingRoomCandidate  `protobuf:"bytes,6,opt,name=candidate,proto3,oneof" json:"candidate,omitempty"`
+	Profile       *TestingRoomProfile    `protobuf:"bytes,7,opt,name=profile,proto3,oneof" json:"profile,omitempty"`
+	ResultIndex   *int32                 `protobuf:"varint,8,opt,name=result_index,json=resultIndex,proto3,oneof" json:"result_index,omitempty"`
+	FinishedAt    *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=finished_at,json=finishedAt,proto3,oneof" json:"finished_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -941,6 +968,13 @@ func (x *TestingListRoom) GetStatus() RoomStatus {
 	return RoomStatus_ROOM_STATUS_UNSPECIFIED
 }
 
+func (x *TestingListRoom) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
 func (x *TestingListRoom) GetCandidate() *TestingRoomCandidate {
 	if x != nil {
 		return x.Candidate
@@ -955,9 +989,16 @@ func (x *TestingListRoom) GetProfile() *TestingRoomProfile {
 	return nil
 }
 
-func (x *TestingListRoom) GetResult() *TestingRoomResult {
+func (x *TestingListRoom) GetResultIndex() int32 {
+	if x != nil && x.ResultIndex != nil {
+		return *x.ResultIndex
+	}
+	return 0
+}
+
+func (x *TestingListRoom) GetFinishedAt() *timestamppb.Timestamp {
 	if x != nil {
-		return x.Result
+		return x.FinishedAt
 	}
 	return nil
 }
@@ -966,7 +1007,7 @@ var File_common_types_testing_types_proto protoreflect.FileDescriptor
 
 const file_common_types_testing_types_proto_rawDesc = "" +
 	"\n" +
-	" common/types/testing_types.proto\x12\btypes.v1\"\xde\x01\n" +
+	" common/types/testing_types.proto\x12\btypes.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\xde\x01\n" +
 	"\x10PersonalityTrait\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x122\n" +
 	"\x04type\x18\x02 \x01(\x0e2\x1e.types.v1.PersonalityTraitTypeR\x04type\x12\x12\n" +
@@ -1011,34 +1052,47 @@ const file_common_types_testing_types_proto_rawDesc = "" +
 	"\x06traits\x18\x03 \x03(\v2'.types.v1.TestingRoomResult.TraitsEntryR\x06traits\x1a[\n" +
 	"\vTraitsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\x04R\x03key\x126\n" +
-	"\x05value\x18\x02 \x01(\v2 .types.v1.TestingRoomResultTraitR\x05value:\x028\x01\"\xb7\x03\n" +
+	"\x05value\x18\x02 \x01(\v2 .types.v1.TestingRoomResultTraitR\x05value:\x028\x01\"\xfd\x04\n" +
 	"\vTestingRoom\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\x03R\aversion\x12\x1b\n" +
 	"\ttenant_id\x18\x03 \x01(\tR\btenantId\x12,\n" +
-	"\x06status\x18\x04 \x01(\x0e2\x14.types.v1.RoomStatusR\x06status\x12A\n" +
-	"\tcandidate\x18\x05 \x01(\v2\x1e.types.v1.TestingRoomCandidateH\x00R\tcandidate\x88\x01\x01\x12;\n" +
-	"\aprofile\x18\x06 \x01(\v2\x1c.types.v1.TestingRoomProfileH\x01R\aprofile\x88\x01\x01\x128\n" +
-	"\x06result\x18\a \x01(\v2\x1b.types.v1.TestingRoomResultH\x02R\x06result\x88\x01\x01\x12T\n" +
-	"\x12personality_traits\x18\b \x01(\v2%.types.v1.ProfilePersonalityTraitsMapR\x11personalityTraitsB\f\n" +
+	"\x06status\x18\x04 \x01(\x0e2\x14.types.v1.RoomStatusR\x06status\x129\n" +
+	"\n" +
+	"created_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12A\n" +
+	"\tcandidate\x18\x06 \x01(\v2\x1e.types.v1.TestingRoomCandidateH\x00R\tcandidate\x88\x01\x01\x12;\n" +
+	"\aprofile\x18\a \x01(\v2\x1c.types.v1.TestingRoomProfileH\x01R\aprofile\x88\x01\x01\x128\n" +
+	"\x06result\x18\b \x01(\v2\x1b.types.v1.TestingRoomResultH\x02R\x06result\x88\x01\x01\x12&\n" +
+	"\fresult_index\x18\t \x01(\x05H\x03R\vresultIndex\x88\x01\x01\x12@\n" +
+	"\vfinished_at\x18\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampH\x04R\n" +
+	"finishedAt\x88\x01\x01\x12T\n" +
+	"\x12personality_traits\x18\v \x01(\v2%.types.v1.ProfilePersonalityTraitsMapR\x11personalityTraitsB\f\n" +
 	"\n" +
 	"_candidateB\n" +
 	"\n" +
 	"\b_profileB\t\n" +
-	"\a_result\"\xe5\x02\n" +
+	"\a_resultB\x0f\n" +
+	"\r_result_indexB\x0e\n" +
+	"\f_finished_at\"\xe6\x03\n" +
 	"\x0fTestingListRoom\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\x03R\aversion\x12\x1b\n" +
 	"\ttenant_id\x18\x03 \x01(\tR\btenantId\x12,\n" +
-	"\x06status\x18\x04 \x01(\x0e2\x14.types.v1.RoomStatusR\x06status\x12A\n" +
-	"\tcandidate\x18\x05 \x01(\v2\x1e.types.v1.TestingRoomCandidateH\x00R\tcandidate\x88\x01\x01\x12;\n" +
-	"\aprofile\x18\x06 \x01(\v2\x1c.types.v1.TestingRoomProfileH\x01R\aprofile\x88\x01\x01\x128\n" +
-	"\x06result\x18\a \x01(\v2\x1b.types.v1.TestingRoomResultH\x02R\x06result\x88\x01\x01B\f\n" +
+	"\x06status\x18\x04 \x01(\x0e2\x14.types.v1.RoomStatusR\x06status\x129\n" +
+	"\n" +
+	"created_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12A\n" +
+	"\tcandidate\x18\x06 \x01(\v2\x1e.types.v1.TestingRoomCandidateH\x00R\tcandidate\x88\x01\x01\x12;\n" +
+	"\aprofile\x18\a \x01(\v2\x1c.types.v1.TestingRoomProfileH\x01R\aprofile\x88\x01\x01\x12&\n" +
+	"\fresult_index\x18\b \x01(\x05H\x02R\vresultIndex\x88\x01\x01\x12@\n" +
+	"\vfinished_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampH\x03R\n" +
+	"finishedAt\x88\x01\x01B\f\n" +
 	"\n" +
 	"_candidateB\n" +
 	"\n" +
-	"\b_profileB\t\n" +
-	"\a_result*v\n" +
+	"\b_profileB\x0f\n" +
+	"\r_result_indexB\x0e\n" +
+	"\f_finished_at*v\n" +
 	"\x11TechniqueItemType\x12#\n" +
 	"\x1fTECHNIQUE_ITEM_TYPE_UNSPECIFIED\x10\x00\x12<\n" +
 	"8TECHNIQUE_ITEM_TYPE_QUESTION_WITH_VARIANTS_SINGLE_ANSWER\x10\x01*`\n" +
@@ -1090,6 +1144,7 @@ var file_common_types_testing_types_proto_goTypes = []any{
 	(*TestingListRoom)(nil),                 // 14: types.v1.TestingListRoom
 	nil,                                     // 15: types.v1.ProfilePersonalityTraitsMap.MapEntry
 	nil,                                     // 16: types.v1.TestingRoomResult.TraitsEntry
+	(*timestamppb.Timestamp)(nil),           // 17: google.protobuf.Timestamp
 }
 var file_common_types_testing_types_proto_depIdxs = []int32{
 	2,  // 0: types.v1.PersonalityTrait.type:type_name -> types.v1.PersonalityTraitType
@@ -1098,21 +1153,24 @@ var file_common_types_testing_types_proto_depIdxs = []int32{
 	6,  // 3: types.v1.TestingProfile.personality_traits:type_name -> types.v1.ProfilePersonalityTraitsMap
 	16, // 4: types.v1.TestingRoomResult.traits:type_name -> types.v1.TestingRoomResult.TraitsEntry
 	1,  // 5: types.v1.TestingRoom.status:type_name -> types.v1.RoomStatus
-	9,  // 6: types.v1.TestingRoom.candidate:type_name -> types.v1.TestingRoomCandidate
-	10, // 7: types.v1.TestingRoom.profile:type_name -> types.v1.TestingRoomProfile
-	12, // 8: types.v1.TestingRoom.result:type_name -> types.v1.TestingRoomResult
-	6,  // 9: types.v1.TestingRoom.personality_traits:type_name -> types.v1.ProfilePersonalityTraitsMap
-	1,  // 10: types.v1.TestingListRoom.status:type_name -> types.v1.RoomStatus
-	9,  // 11: types.v1.TestingListRoom.candidate:type_name -> types.v1.TestingRoomCandidate
-	10, // 12: types.v1.TestingListRoom.profile:type_name -> types.v1.TestingRoomProfile
-	12, // 13: types.v1.TestingListRoom.result:type_name -> types.v1.TestingRoomResult
-	5,  // 14: types.v1.ProfilePersonalityTraitsMap.MapEntry.value:type_name -> types.v1.ProfilePersonalityTraitsMapItem
-	11, // 15: types.v1.TestingRoomResult.TraitsEntry.value:type_name -> types.v1.TestingRoomResultTrait
-	16, // [16:16] is the sub-list for method output_type
-	16, // [16:16] is the sub-list for method input_type
-	16, // [16:16] is the sub-list for extension type_name
-	16, // [16:16] is the sub-list for extension extendee
-	0,  // [0:16] is the sub-list for field type_name
+	17, // 6: types.v1.TestingRoom.created_at:type_name -> google.protobuf.Timestamp
+	9,  // 7: types.v1.TestingRoom.candidate:type_name -> types.v1.TestingRoomCandidate
+	10, // 8: types.v1.TestingRoom.profile:type_name -> types.v1.TestingRoomProfile
+	12, // 9: types.v1.TestingRoom.result:type_name -> types.v1.TestingRoomResult
+	17, // 10: types.v1.TestingRoom.finished_at:type_name -> google.protobuf.Timestamp
+	6,  // 11: types.v1.TestingRoom.personality_traits:type_name -> types.v1.ProfilePersonalityTraitsMap
+	1,  // 12: types.v1.TestingListRoom.status:type_name -> types.v1.RoomStatus
+	17, // 13: types.v1.TestingListRoom.created_at:type_name -> google.protobuf.Timestamp
+	9,  // 14: types.v1.TestingListRoom.candidate:type_name -> types.v1.TestingRoomCandidate
+	10, // 15: types.v1.TestingListRoom.profile:type_name -> types.v1.TestingRoomProfile
+	17, // 16: types.v1.TestingListRoom.finished_at:type_name -> google.protobuf.Timestamp
+	5,  // 17: types.v1.ProfilePersonalityTraitsMap.MapEntry.value:type_name -> types.v1.ProfilePersonalityTraitsMapItem
+	11, // 18: types.v1.TestingRoomResult.TraitsEntry.value:type_name -> types.v1.TestingRoomResultTrait
+	19, // [19:19] is the sub-list for method output_type
+	19, // [19:19] is the sub-list for method input_type
+	19, // [19:19] is the sub-list for extension type_name
+	19, // [19:19] is the sub-list for extension extendee
+	0,  // [0:19] is the sub-list for field type_name
 }
 
 func init() { file_common_types_testing_types_proto_init() }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"log/slog"
+	"net/netip"
 
 	"github.com/google/uuid"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
@@ -170,6 +171,7 @@ func (uc *UsecaseImpl) Finish(
 	ctx context.Context,
 	id uuid.UUID,
 	answerData map[uint64]any,
+	requestIP *netip.Addr,
 ) error {
 	const op = "Finish"
 
@@ -198,6 +200,8 @@ func (uc *UsecaseImpl) Finish(
 		if err != nil {
 			return err
 		}
+
+		room.FinishedIP = requestIP
 
 		err = uc.repo.Update(ctx, room)
 		if err != nil {

@@ -34,6 +34,10 @@ func (r *Repository) buildWhereForList(listOptions *usecase.RoomListOptions, wit
 		where = append(where, squirrel.Eq{"candidate_id": *listOptions.FilterCandidateID})
 	}
 
+	if listOptions.FilterProfileID != nil {
+		where = append(where, squirrel.Eq{"profile_id": *listOptions.FilterProfileID})
+	}
+
 	return where
 }
 
@@ -51,6 +55,18 @@ func (r *Repository) buildSortForList(listOptions *usecase.RoomListOptions) []st
 				sort = append(sort, "created_at DESC")
 			} else {
 				sort = append(sort, "created_at ASC")
+			}
+		case usecase.RoomListOptionsSortFieldFinishedAt:
+			if sortOption.IsDesc {
+				sort = append(sort, "finished_at DESC nulls last")
+			} else {
+				sort = append(sort, "finished_at ASC nulls first")
+			}
+		case usecase.RoomListOptionsSortFieldResultIndex:
+			if sortOption.IsDesc {
+				sort = append(sort, "result_index DESC nulls last")
+			} else {
+				sort = append(sort, "result_index ASC nulls first")
 			}
 		}
 	}

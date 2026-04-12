@@ -24,6 +24,58 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type ListRoomsSort int32
+
+const (
+	ListRoomsSort_LIST_ROOM_SORT_UNSPECIFIED  ListRoomsSort = 0
+	ListRoomsSort_LIST_ROOM_SORT_CREATED_AT   ListRoomsSort = 1
+	ListRoomsSort_LIST_ROOM_SORT_FINISHED_AT  ListRoomsSort = 2
+	ListRoomsSort_LIST_ROOM_SORT_RESULT_INDEX ListRoomsSort = 3
+)
+
+// Enum value maps for ListRoomsSort.
+var (
+	ListRoomsSort_name = map[int32]string{
+		0: "LIST_ROOM_SORT_UNSPECIFIED",
+		1: "LIST_ROOM_SORT_CREATED_AT",
+		2: "LIST_ROOM_SORT_FINISHED_AT",
+		3: "LIST_ROOM_SORT_RESULT_INDEX",
+	}
+	ListRoomsSort_value = map[string]int32{
+		"LIST_ROOM_SORT_UNSPECIFIED":  0,
+		"LIST_ROOM_SORT_CREATED_AT":   1,
+		"LIST_ROOM_SORT_FINISHED_AT":  2,
+		"LIST_ROOM_SORT_RESULT_INDEX": 3,
+	}
+)
+
+func (x ListRoomsSort) Enum() *ListRoomsSort {
+	p := new(ListRoomsSort)
+	*p = x
+	return p
+}
+
+func (x ListRoomsSort) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ListRoomsSort) Descriptor() protoreflect.EnumDescriptor {
+	return file_public_testing_v1_dto_proto_enumTypes[0].Descriptor()
+}
+
+func (ListRoomsSort) Type() protoreflect.EnumType {
+	return &file_public_testing_v1_dto_proto_enumTypes[0]
+}
+
+func (x ListRoomsSort) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ListRoomsSort.Descriptor instead.
+func (ListRoomsSort) EnumDescriptor() ([]byte, []int) {
+	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{0}
+}
+
 type GetPersonalityTraitsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -881,11 +933,14 @@ func (x *GenerateProfileTraitsMapByDescriptionResponse) GetTraits() *types.Profi
 }
 
 type ListRoomsRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Limit         *uint64                `protobuf:"varint,1,opt,name=limit,proto3,oneof" json:"limit,omitempty"`
-	Offset        *uint64                `protobuf:"varint,2,opt,name=offset,proto3,oneof" json:"offset,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	Limit             *uint64                `protobuf:"varint,1,opt,name=limit,proto3,oneof" json:"limit,omitempty"`
+	Offset            *uint64                `protobuf:"varint,2,opt,name=offset,proto3,oneof" json:"offset,omitempty"`
+	Sort              *ListRoomsSort         `protobuf:"varint,3,opt,name=sort,proto3,enum=testing.v1.ListRoomsSort,oneof" json:"sort,omitempty"`
+	FilterCandidateId *string                `protobuf:"bytes,4,opt,name=filter_candidate_id,json=filterCandidateId,proto3,oneof" json:"filter_candidate_id,omitempty"`
+	FilterProfileId   *string                `protobuf:"bytes,5,opt,name=filter_profile_id,json=filterProfileId,proto3,oneof" json:"filter_profile_id,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *ListRoomsRequest) Reset() {
@@ -930,6 +985,27 @@ func (x *ListRoomsRequest) GetOffset() uint64 {
 		return *x.Offset
 	}
 	return 0
+}
+
+func (x *ListRoomsRequest) GetSort() ListRoomsSort {
+	if x != nil && x.Sort != nil {
+		return *x.Sort
+	}
+	return ListRoomsSort_LIST_ROOM_SORT_UNSPECIFIED
+}
+
+func (x *ListRoomsRequest) GetFilterCandidateId() string {
+	if x != nil && x.FilterCandidateId != nil {
+		return *x.FilterCandidateId
+	}
+	return ""
+}
+
+func (x *ListRoomsRequest) GetFilterProfileId() string {
+	if x != nil && x.FilterProfileId != nil {
+		return *x.FilterProfileId
+	}
+	return ""
 }
 
 type ListRoomsResponse struct {
@@ -1347,12 +1423,18 @@ const file_public_testing_v1_dto_proto_rawDesc = "" +
 	"\x04name\x18\x01 \x01(\tB\x06\xbaH\x03\xc8\x01\x01R\x04name\x12(\n" +
 	"\vdescription\x18\x02 \x01(\tB\x06\xbaH\x03\xc8\x01\x01R\vdescription\"n\n" +
 	"-GenerateProfileTraitsMapByDescriptionResponse\x12=\n" +
-	"\x06traits\x18\x03 \x01(\v2%.types.v1.ProfilePersonalityTraitsMapR\x06traits\"_\n" +
+	"\x06traits\x18\x03 \x01(\v2%.types.v1.ProfilePersonalityTraitsMapR\x06traits\"\xb0\x02\n" +
 	"\x10ListRoomsRequest\x12\x19\n" +
 	"\x05limit\x18\x01 \x01(\x04H\x00R\x05limit\x88\x01\x01\x12\x1b\n" +
-	"\x06offset\x18\x02 \x01(\x04H\x01R\x06offset\x88\x01\x01B\b\n" +
+	"\x06offset\x18\x02 \x01(\x04H\x01R\x06offset\x88\x01\x01\x122\n" +
+	"\x04sort\x18\x03 \x01(\x0e2\x19.testing.v1.ListRoomsSortH\x02R\x04sort\x88\x01\x01\x123\n" +
+	"\x13filter_candidate_id\x18\x04 \x01(\tH\x03R\x11filterCandidateId\x88\x01\x01\x12/\n" +
+	"\x11filter_profile_id\x18\x05 \x01(\tH\x04R\x0ffilterProfileId\x88\x01\x01B\b\n" +
 	"\x06_limitB\t\n" +
-	"\a_offset\"Z\n" +
+	"\a_offsetB\a\n" +
+	"\x05_sortB\x16\n" +
+	"\x14_filter_candidate_idB\x14\n" +
+	"\x12_filter_profile_id\"Z\n" +
 	"\x11ListRoomsResponse\x12/\n" +
 	"\x05items\x18\x01 \x03(\v2\x19.types.v1.TestingListRoomR\x05items\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x05R\x05total\"*\n" +
@@ -1370,7 +1452,12 @@ const file_public_testing_v1_dto_proto_rawDesc = "" +
 	"\x04item\x18\x01 \x01(\v2\x15.types.v1.TestingRoomR\x04item\"-\n" +
 	"\x11DeleteRoomRequest\x12\x18\n" +
 	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"\x14\n" +
-	"\x12DeleteRoomResponseB\xaa\x01\n" +
+	"\x12DeleteRoomResponse*\x8f\x01\n" +
+	"\rListRoomsSort\x12\x1e\n" +
+	"\x1aLIST_ROOM_SORT_UNSPECIFIED\x10\x00\x12\x1d\n" +
+	"\x19LIST_ROOM_SORT_CREATED_AT\x10\x01\x12\x1e\n" +
+	"\x1aLIST_ROOM_SORT_FINISHED_AT\x10\x02\x12\x1f\n" +
+	"\x1bLIST_ROOM_SORT_RESULT_INDEX\x10\x03B\xaa\x01\n" +
 	"\x0ecom.testing.v1B\bDtoProtoP\x01ZEgithub.com/neurochar/backend/pkg/proto_pb/public/testing/v1;testingv1\xa2\x02\x03TXX\xaa\x02\n" +
 	"Testing.V1\xca\x02\n" +
 	"Testing\\V1\xe2\x02\x16Testing\\V1\\GPBMetadata\xea\x02\vTesting::V1b\x06proto3"
@@ -1387,61 +1474,64 @@ func file_public_testing_v1_dto_proto_rawDescGZIP() []byte {
 	return file_public_testing_v1_dto_proto_rawDescData
 }
 
+var file_public_testing_v1_dto_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_public_testing_v1_dto_proto_msgTypes = make([]protoimpl.MessageInfo, 27)
 var file_public_testing_v1_dto_proto_goTypes = []any{
-	(*GetPersonalityTraitsRequest)(nil),                   // 0: testing.v1.GetPersonalityTraitsRequest
-	(*GetPersonalityTraitsResponse)(nil),                  // 1: testing.v1.GetPersonalityTraitsResponse
-	(*ListProfilesRequest)(nil),                           // 2: testing.v1.ListProfilesRequest
-	(*ListProfilesResponse)(nil),                          // 3: testing.v1.ListProfilesResponse
-	(*GetProfileRequest)(nil),                             // 4: testing.v1.GetProfileRequest
-	(*GetProfileResponse)(nil),                            // 5: testing.v1.GetProfileResponse
-	(*CreateProfileRequestPayload)(nil),                   // 6: testing.v1.CreateProfileRequestPayload
-	(*CreateProfileRequest)(nil),                          // 7: testing.v1.CreateProfileRequest
-	(*CreateProfileResponse)(nil),                         // 8: testing.v1.CreateProfileResponse
-	(*PatchProfileRequestPayload)(nil),                    // 9: testing.v1.PatchProfileRequestPayload
-	(*PatchProfileRequest)(nil),                           // 10: testing.v1.PatchProfileRequest
-	(*PatchProfileResponse)(nil),                          // 11: testing.v1.PatchProfileResponse
-	(*DeleteProfileRequest)(nil),                          // 12: testing.v1.DeleteProfileRequest
-	(*DeleteProfileResponse)(nil),                         // 13: testing.v1.DeleteProfileResponse
-	(*GenerateProfileDescriptionByNameRequest)(nil),       // 14: testing.v1.GenerateProfileDescriptionByNameRequest
-	(*GenerateProfileDescriptionByNameResponse)(nil),      // 15: testing.v1.GenerateProfileDescriptionByNameResponse
-	(*GenerateProfileTraitsMapByDescriptionRequest)(nil),  // 16: testing.v1.GenerateProfileTraitsMapByDescriptionRequest
-	(*GenerateProfileTraitsMapByDescriptionResponse)(nil), // 17: testing.v1.GenerateProfileTraitsMapByDescriptionResponse
-	(*ListRoomsRequest)(nil),                              // 18: testing.v1.ListRoomsRequest
-	(*ListRoomsResponse)(nil),                             // 19: testing.v1.ListRoomsResponse
-	(*GetRoomRequest)(nil),                                // 20: testing.v1.GetRoomRequest
-	(*GetRoomResponse)(nil),                               // 21: testing.v1.GetRoomResponse
-	(*CreateRoomRequestPayload)(nil),                      // 22: testing.v1.CreateRoomRequestPayload
-	(*CreateRoomRequest)(nil),                             // 23: testing.v1.CreateRoomRequest
-	(*CreateRoomResponse)(nil),                            // 24: testing.v1.CreateRoomResponse
-	(*DeleteRoomRequest)(nil),                             // 25: testing.v1.DeleteRoomRequest
-	(*DeleteRoomResponse)(nil),                            // 26: testing.v1.DeleteRoomResponse
-	(*types.PersonalityTrait)(nil),                        // 27: types.v1.PersonalityTrait
-	(*types.TestingListProfile)(nil),                      // 28: types.v1.TestingListProfile
-	(*types.TestingProfile)(nil),                          // 29: types.v1.TestingProfile
-	(*types.ProfilePersonalityTraitsMap)(nil),             // 30: types.v1.ProfilePersonalityTraitsMap
-	(*types.TestingListRoom)(nil),                         // 31: types.v1.TestingListRoom
-	(*types.TestingRoom)(nil),                             // 32: types.v1.TestingRoom
+	(ListRoomsSort)(0),                                    // 0: testing.v1.ListRoomsSort
+	(*GetPersonalityTraitsRequest)(nil),                   // 1: testing.v1.GetPersonalityTraitsRequest
+	(*GetPersonalityTraitsResponse)(nil),                  // 2: testing.v1.GetPersonalityTraitsResponse
+	(*ListProfilesRequest)(nil),                           // 3: testing.v1.ListProfilesRequest
+	(*ListProfilesResponse)(nil),                          // 4: testing.v1.ListProfilesResponse
+	(*GetProfileRequest)(nil),                             // 5: testing.v1.GetProfileRequest
+	(*GetProfileResponse)(nil),                            // 6: testing.v1.GetProfileResponse
+	(*CreateProfileRequestPayload)(nil),                   // 7: testing.v1.CreateProfileRequestPayload
+	(*CreateProfileRequest)(nil),                          // 8: testing.v1.CreateProfileRequest
+	(*CreateProfileResponse)(nil),                         // 9: testing.v1.CreateProfileResponse
+	(*PatchProfileRequestPayload)(nil),                    // 10: testing.v1.PatchProfileRequestPayload
+	(*PatchProfileRequest)(nil),                           // 11: testing.v1.PatchProfileRequest
+	(*PatchProfileResponse)(nil),                          // 12: testing.v1.PatchProfileResponse
+	(*DeleteProfileRequest)(nil),                          // 13: testing.v1.DeleteProfileRequest
+	(*DeleteProfileResponse)(nil),                         // 14: testing.v1.DeleteProfileResponse
+	(*GenerateProfileDescriptionByNameRequest)(nil),       // 15: testing.v1.GenerateProfileDescriptionByNameRequest
+	(*GenerateProfileDescriptionByNameResponse)(nil),      // 16: testing.v1.GenerateProfileDescriptionByNameResponse
+	(*GenerateProfileTraitsMapByDescriptionRequest)(nil),  // 17: testing.v1.GenerateProfileTraitsMapByDescriptionRequest
+	(*GenerateProfileTraitsMapByDescriptionResponse)(nil), // 18: testing.v1.GenerateProfileTraitsMapByDescriptionResponse
+	(*ListRoomsRequest)(nil),                              // 19: testing.v1.ListRoomsRequest
+	(*ListRoomsResponse)(nil),                             // 20: testing.v1.ListRoomsResponse
+	(*GetRoomRequest)(nil),                                // 21: testing.v1.GetRoomRequest
+	(*GetRoomResponse)(nil),                               // 22: testing.v1.GetRoomResponse
+	(*CreateRoomRequestPayload)(nil),                      // 23: testing.v1.CreateRoomRequestPayload
+	(*CreateRoomRequest)(nil),                             // 24: testing.v1.CreateRoomRequest
+	(*CreateRoomResponse)(nil),                            // 25: testing.v1.CreateRoomResponse
+	(*DeleteRoomRequest)(nil),                             // 26: testing.v1.DeleteRoomRequest
+	(*DeleteRoomResponse)(nil),                            // 27: testing.v1.DeleteRoomResponse
+	(*types.PersonalityTrait)(nil),                        // 28: types.v1.PersonalityTrait
+	(*types.TestingListProfile)(nil),                      // 29: types.v1.TestingListProfile
+	(*types.TestingProfile)(nil),                          // 30: types.v1.TestingProfile
+	(*types.ProfilePersonalityTraitsMap)(nil),             // 31: types.v1.ProfilePersonalityTraitsMap
+	(*types.TestingListRoom)(nil),                         // 32: types.v1.TestingListRoom
+	(*types.TestingRoom)(nil),                             // 33: types.v1.TestingRoom
 }
 var file_public_testing_v1_dto_proto_depIdxs = []int32{
-	27, // 0: testing.v1.GetPersonalityTraitsResponse.items:type_name -> types.v1.PersonalityTrait
-	28, // 1: testing.v1.ListProfilesResponse.items:type_name -> types.v1.TestingListProfile
-	29, // 2: testing.v1.GetProfileResponse.item:type_name -> types.v1.TestingProfile
-	30, // 3: testing.v1.CreateProfileRequestPayload.personality_traits:type_name -> types.v1.ProfilePersonalityTraitsMap
-	6,  // 4: testing.v1.CreateProfileRequest.payload:type_name -> testing.v1.CreateProfileRequestPayload
-	29, // 5: testing.v1.CreateProfileResponse.item:type_name -> types.v1.TestingProfile
-	30, // 6: testing.v1.PatchProfileRequestPayload.personality_traits:type_name -> types.v1.ProfilePersonalityTraitsMap
-	9,  // 7: testing.v1.PatchProfileRequest.payload:type_name -> testing.v1.PatchProfileRequestPayload
-	30, // 8: testing.v1.GenerateProfileTraitsMapByDescriptionResponse.traits:type_name -> types.v1.ProfilePersonalityTraitsMap
-	31, // 9: testing.v1.ListRoomsResponse.items:type_name -> types.v1.TestingListRoom
-	32, // 10: testing.v1.GetRoomResponse.item:type_name -> types.v1.TestingRoom
-	22, // 11: testing.v1.CreateRoomRequest.payload:type_name -> testing.v1.CreateRoomRequestPayload
-	32, // 12: testing.v1.CreateRoomResponse.item:type_name -> types.v1.TestingRoom
-	13, // [13:13] is the sub-list for method output_type
-	13, // [13:13] is the sub-list for method input_type
-	13, // [13:13] is the sub-list for extension type_name
-	13, // [13:13] is the sub-list for extension extendee
-	0,  // [0:13] is the sub-list for field type_name
+	28, // 0: testing.v1.GetPersonalityTraitsResponse.items:type_name -> types.v1.PersonalityTrait
+	29, // 1: testing.v1.ListProfilesResponse.items:type_name -> types.v1.TestingListProfile
+	30, // 2: testing.v1.GetProfileResponse.item:type_name -> types.v1.TestingProfile
+	31, // 3: testing.v1.CreateProfileRequestPayload.personality_traits:type_name -> types.v1.ProfilePersonalityTraitsMap
+	7,  // 4: testing.v1.CreateProfileRequest.payload:type_name -> testing.v1.CreateProfileRequestPayload
+	30, // 5: testing.v1.CreateProfileResponse.item:type_name -> types.v1.TestingProfile
+	31, // 6: testing.v1.PatchProfileRequestPayload.personality_traits:type_name -> types.v1.ProfilePersonalityTraitsMap
+	10, // 7: testing.v1.PatchProfileRequest.payload:type_name -> testing.v1.PatchProfileRequestPayload
+	31, // 8: testing.v1.GenerateProfileTraitsMapByDescriptionResponse.traits:type_name -> types.v1.ProfilePersonalityTraitsMap
+	0,  // 9: testing.v1.ListRoomsRequest.sort:type_name -> testing.v1.ListRoomsSort
+	32, // 10: testing.v1.ListRoomsResponse.items:type_name -> types.v1.TestingListRoom
+	33, // 11: testing.v1.GetRoomResponse.item:type_name -> types.v1.TestingRoom
+	23, // 12: testing.v1.CreateRoomRequest.payload:type_name -> testing.v1.CreateRoomRequestPayload
+	33, // 13: testing.v1.CreateRoomResponse.item:type_name -> types.v1.TestingRoom
+	14, // [14:14] is the sub-list for method output_type
+	14, // [14:14] is the sub-list for method input_type
+	14, // [14:14] is the sub-list for extension type_name
+	14, // [14:14] is the sub-list for extension extendee
+	0,  // [0:14] is the sub-list for field type_name
 }
 
 func init() { file_public_testing_v1_dto_proto_init() }
@@ -1457,13 +1547,14 @@ func file_public_testing_v1_dto_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_public_testing_v1_dto_proto_rawDesc), len(file_public_testing_v1_dto_proto_rawDesc)),
-			NumEnums:      0,
+			NumEnums:      1,
 			NumMessages:   27,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_public_testing_v1_dto_proto_goTypes,
 		DependencyIndexes: file_public_testing_v1_dto_proto_depIdxs,
+		EnumInfos:         file_public_testing_v1_dto_proto_enumTypes,
 		MessageInfos:      file_public_testing_v1_dto_proto_msgTypes,
 	}.Build()
 	File_public_testing_v1_dto_proto = out.File

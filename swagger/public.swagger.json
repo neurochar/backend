@@ -820,6 +820,16 @@
       ],
       "type": "object"
     },
+    "v1ListRoomsSort": {
+      "default": "LIST_ROOM_SORT_UNSPECIFIED",
+      "enum": [
+        "LIST_ROOM_SORT_UNSPECIFIED",
+        "LIST_ROOM_SORT_CREATED_AT",
+        "LIST_ROOM_SORT_FINISHED_AT",
+        "LIST_ROOM_SORT_RESULT_INDEX"
+      ],
+      "type": "string"
+    },
     "v1LoginRequest": {
       "properties": {
         "email": {
@@ -1246,14 +1256,23 @@
         "candidate": {
           "$ref": "#/definitions/v1TestingRoomCandidate"
         },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "finishedAt": {
+          "format": "date-time",
+          "type": "string"
+        },
         "id": {
           "type": "string"
         },
         "profile": {
           "$ref": "#/definitions/v1TestingRoomProfile"
         },
-        "result": {
-          "$ref": "#/definitions/v1TestingRoomResult"
+        "resultIndex": {
+          "format": "int32",
+          "type": "integer"
         },
         "status": {
           "$ref": "#/definitions/v1RoomStatus"
@@ -1267,6 +1286,7 @@
         }
       },
       "required": [
+        "createdAt",
         "id",
         "status",
         "tenantId",
@@ -1311,6 +1331,14 @@
         "candidate": {
           "$ref": "#/definitions/v1TestingRoomCandidate"
         },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "finishedAt": {
+          "format": "date-time",
+          "type": "string"
+        },
         "id": {
           "type": "string"
         },
@@ -1322,6 +1350,10 @@
         },
         "result": {
           "$ref": "#/definitions/v1TestingRoomResult"
+        },
+        "resultIndex": {
+          "format": "int32",
+          "type": "integer"
         },
         "status": {
           "$ref": "#/definitions/v1RoomStatus"
@@ -1335,6 +1367,7 @@
         }
       },
       "required": [
+        "createdAt",
         "id",
         "personalityTraits",
         "status",
@@ -2959,6 +2992,31 @@
             "format": "uint64",
             "in": "query",
             "name": "offset",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "default": "LIST_ROOM_SORT_UNSPECIFIED",
+            "enum": [
+              "LIST_ROOM_SORT_UNSPECIFIED",
+              "LIST_ROOM_SORT_CREATED_AT",
+              "LIST_ROOM_SORT_FINISHED_AT",
+              "LIST_ROOM_SORT_RESULT_INDEX"
+            ],
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "filterCandidateId",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "filterProfileId",
             "required": false,
             "type": "string"
           }

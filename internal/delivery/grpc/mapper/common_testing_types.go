@@ -6,6 +6,7 @@ import (
 	testingUC "github.com/neurochar/backend/internal/domain/testing/usecase"
 	typesv1 "github.com/neurochar/backend/pkg/proto_pb/common/types"
 	"github.com/samber/lo"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 var roomStatusToPb = map[testingEntity.RoomStatusType]typesv1.RoomStatus{
@@ -197,23 +198,34 @@ func TestingRoomResultToPb(item *testingEntity.RoomResult) *typesv1.TestingRoomR
 }
 
 func TestingRoomDTOToListPb(item *testingUC.RoomDTO) *typesv1.TestingListRoom {
-	return &typesv1.TestingListRoom{
+	res := &typesv1.TestingListRoom{
 		Id:        item.Room.ID.String(),
 		Version:   item.Room.Version(),
 		TenantId:  item.Room.TenantID.String(),
 		Status:    RoomStatusToPb(item.Room.Status),
+		CreatedAt: timestamppb.New(item.Room.CreatedAt),
 		Candidate: CrmCandidateToTestingRoomPb(item.CandidateDTO),
 		Profile:   TestingProfileToTestingRoomPb(item.ProfileDTO),
-		Result:    TestingRoomResultToPb(item.Room.Result),
 	}
+
+	if item.Room.ResultIndex != nil {
+		res.ResultIndex = lo.ToPtr(int32(*item.Room.ResultIndex))
+	}
+
+	if item.Room.FinishedAt != nil {
+		res.FinishedAt = timestamppb.New(*item.Room.FinishedAt)
+	}
+
+	return res
 }
 
 func TestingRoomDTOToPb(item *testingUC.RoomDTO) *typesv1.TestingRoom {
-	return &typesv1.TestingRoom{
+	res := &typesv1.TestingRoom{
 		Id:        item.Room.ID.String(),
 		Version:   item.Room.Version(),
 		TenantId:  item.Room.TenantID.String(),
 		Status:    RoomStatusToPb(item.Room.Status),
+		CreatedAt: timestamppb.New(item.Room.CreatedAt),
 		Candidate: CrmCandidateToTestingRoomPb(item.CandidateDTO),
 		Profile:   TestingProfileToTestingRoomPb(item.ProfileDTO),
 		Result:    TestingRoomResultToPb(item.Room.Result),
@@ -226,4 +238,14 @@ func TestingRoomDTOToPb(item *testingUC.RoomDTO) *typesv1.TestingRoom {
 			),
 		},
 	}
+
+	if item.Room.ResultIndex != nil {
+		res.ResultIndex = lo.ToPtr(int32(*item.Room.ResultIndex))
+	}
+
+	if item.Room.FinishedAt != nil {
+		res.FinishedAt = timestamppb.New(*item.Room.FinishedAt)
+	}
+
+	return res
 }

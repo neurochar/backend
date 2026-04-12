@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"net/netip"
 
 	"github.com/google/uuid"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
@@ -16,13 +17,16 @@ var ErrRoomAlreadyFinished = appErrors.ErrBadRequest.WithTextCode("ROOM_ALREADY_
 type RoomListOptions struct {
 	FilterTenantID    *uuid.UUID
 	FilterCandidateID *uuid.UUID
+	FilterProfileID   *uuid.UUID
 	Sort              []uctypes.SortOption[RoomListOptionsSortField]
 }
 
 type RoomListOptionsSortField string
 
 const (
-	RoomListOptionsSortFieldCreatedAt RoomListOptionsSortField = "created_at"
+	RoomListOptionsSortFieldCreatedAt   RoomListOptionsSortField = "created_at"
+	RoomListOptionsSortFieldFinishedAt  RoomListOptionsSortField = "finished_at"
+	RoomListOptionsSortFieldResultIndex RoomListOptionsSortField = "result_index"
 )
 
 type RoomDTOOptions struct {
@@ -96,6 +100,7 @@ type RoomUsecase interface {
 		ctx context.Context,
 		id uuid.UUID,
 		answerData map[uint64]any,
+		requestIP *netip.Addr,
 	) (resErr error)
 }
 

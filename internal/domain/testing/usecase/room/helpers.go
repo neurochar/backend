@@ -383,6 +383,16 @@ func (uc *UsecaseImpl) processRoom(
 		bucket, _ := uc.roundToProfileBucket(totalMatch)
 		room.Result.TotalMatchTip = ProfileMatchText[bucket]
 
+		room.FinishedAt = lo.ToPtr(time.Now())
+
+		totalMatchInt := 0
+		i64, _, ok := totalMatch.Int64(0)
+		if ok {
+			totalMatchInt = int(i64)
+		}
+
+		room.ResultIndex = lo.ToPtr(totalMatchInt)
+
 		err = uc.repo.Update(ctx, room)
 		if err != nil {
 			return err

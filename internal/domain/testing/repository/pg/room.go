@@ -3,6 +3,7 @@ package pg
 import (
 	"encoding/json"
 	"fmt"
+	"net/netip"
 	"time"
 
 	"github.com/google/uuid"
@@ -31,7 +32,10 @@ type RoomDBModel struct {
 	TechniqueData        json.RawMessage `db:"technique_data"`
 	CandidateAnswerData  json.RawMessage `db:"candidate_answer_data"`
 	Result               json.RawMessage `db:"result"`
+	ResultIndex          *int            `db:"result_index"`
 	CreatedBy            *uuid.UUID      `db:"created_by"`
+	FinishedIP           *netip.Addr     `db:"finished_ip"`
+	FinishedAt           *time.Time      `db:"finished_at"`
 
 	CreatedAt time.Time  `db:"created_at"`
 	UpdatedAt time.Time  `db:"updated_at"`
@@ -105,7 +109,10 @@ func (db *RoomDBModel) ToEntity() *entity.Room {
 		TechniqueData:        techniqueData,
 		CandidateAnswerData:  candidateAnswerData,
 		Result:               result,
+		ResultIndex:          db.ResultIndex,
 		CreatedBy:            db.CreatedBy,
+		FinishedIP:           db.FinishedIP,
+		FinishedAt:           db.FinishedAt,
 
 		CreatedAt: db.CreatedAt,
 		UpdatedAt: db.UpdatedAt,
@@ -150,7 +157,10 @@ func MapRoomEntityToDBModel(entity *entity.Room) *RoomDBModel {
 		TechniqueData:        techniqueData,
 		CandidateAnswerData:  candidateAnswerData,
 		Result:               result,
+		ResultIndex:          entity.ResultIndex,
 		CreatedBy:            entity.CreatedBy,
+		FinishedAt:           entity.FinishedAt,
+		FinishedIP:           entity.FinishedIP,
 
 		CreatedAt: entity.CreatedAt,
 		UpdatedAt: entity.UpdatedAt,

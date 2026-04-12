@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
+	"github.com/neurochar/backend/internal/delivery/common/tools"
 	"github.com/neurochar/backend/internal/delivery/grpc/mapper"
 	"github.com/neurochar/backend/pkg/auth"
 	desc "github.com/neurochar/backend/pkg/proto_pb/public/rooms/v1"
@@ -17,6 +18,8 @@ func (ctrl *Controller) FinishRoom(
 	const op = "FinishRoom"
 
 	ctx = auth.WithoutCheckTenantAccess(ctx)
+
+	ip := tools.GetRealIP(ctx)
 
 	if req.Payload == nil {
 		return nil, appErrors.Chainf(appErrors.ErrBadRequest, "%s.%s", ctrl.pkg, op)
@@ -35,7 +38,7 @@ func (ctrl *Controller) FinishRoom(
 		}
 	}
 
-	err = ctrl.testingFacade.Room.Finish(ctx, id, answerData)
+	err = ctrl.testingFacade.Room.Finish(ctx, id, answerData, ip)
 	if err != nil {
 		return nil, appErrors.Chainf(err, "%s.%s", ctrl.pkg, op)
 	}

@@ -84,9 +84,19 @@ message GenerateProfileTraitsMapByDescriptionResponse {
   types.v1.ProfilePersonalityTraitsMap traits = 3;
 }
 
+enum ListRoomsSort {
+  LIST_ROOM_SORT_UNSPECIFIED = 0;
+  LIST_ROOM_SORT_CREATED_AT = 1;
+  LIST_ROOM_SORT_FINISHED_AT = 2;
+  LIST_ROOM_SORT_RESULT_INDEX = 3;
+}
+
 message ListRoomsRequest {
   optional uint64 limit = 1;
-  optional uint64 offset = 2; 
+  optional uint64 offset = 2;
+  optional ListRoomsSort sort = 3;
+  optional string filter_candidate_id = 4;
+  optional string filter_profile_id = 5;
 }
 
 message ListRoomsResponse {
