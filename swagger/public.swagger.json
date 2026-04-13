@@ -1264,6 +1264,9 @@
           "format": "date-time",
           "type": "string"
         },
+        "hiringDecision": {
+          "$ref": "#/definitions/v1TestingRoomResultAnalyzeHiringDecision"
+        },
         "id": {
           "type": "string"
         },
@@ -1412,6 +1415,9 @@
     },
     "v1TestingRoomResult": {
       "properties": {
+        "analyze": {
+          "$ref": "#/definitions/v1TestingRoomResultAnalyze"
+        },
         "totalMatch": {
           "format": "float",
           "type": "number"
@@ -1429,6 +1435,80 @@
       "required": [
         "totalMatch",
         "totalMatchTip"
+      ],
+      "type": "object"
+    },
+    "v1TestingRoomResultAnalyze": {
+      "properties": {
+        "actionItems": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "confidenceScore": {
+          "format": "float",
+          "type": "number"
+        },
+        "hiringDecision": {
+          "$ref": "#/definitions/v1TestingRoomResultAnalyzeHiringDecision"
+        },
+        "mainRecomendation": {
+          "type": "string"
+        },
+        "personalityFit": {
+          "$ref": "#/definitions/v1TestingRoomResultAnalyzePersonalityFit"
+        },
+        "risks": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "confidenceScore",
+        "hiringDecision",
+        "mainRecomendation",
+        "personalityFit"
+      ],
+      "type": "object"
+    },
+    "v1TestingRoomResultAnalyzeHiringDecision": {
+      "default": "TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_UNSPECIFIED",
+      "enum": [
+        "TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_UNSPECIFIED",
+        "TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_HIRE",
+        "TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_HIRE_WITH_CONDITIONS",
+        "TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_DONT_HIRE"
+      ],
+      "type": "string"
+    },
+    "v1TestingRoomResultAnalyzePersonalityFit": {
+      "properties": {
+        "keyGaps": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "keyMatches": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "score": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "summary": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "score",
+        "summary"
       ],
       "type": "object"
     },

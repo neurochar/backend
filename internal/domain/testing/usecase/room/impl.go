@@ -18,6 +18,7 @@ type UsecaseImpl struct {
 	dbMasterClient     db.MasterClient
 	emailing           emailing.Emailing
 	repo               usecase.RoomRepository
+	repoLLM            usecase.LLMRepository
 	candidateUC        candidateUC.CandidateUsecase
 	tenantAccountUC    tenantUC.AccountUsecase
 	personalityTraitUC usecase.PersonalityTraitUsecase
@@ -30,6 +31,7 @@ func NewUsecaseImpl(
 	dbMasterClient db.MasterClient,
 	emailing emailing.Emailing,
 	repo usecase.RoomRepository,
+	repoLLM usecase.LLMRepository,
 	candidateUC candidateUC.CandidateUsecase,
 	tenantAccountUC tenantUC.AccountUsecase,
 	personalityTraitUC usecase.PersonalityTraitUsecase,
@@ -42,6 +44,7 @@ func NewUsecaseImpl(
 		emailing:           emailing,
 		dbMasterClient:     dbMasterClient,
 		repo:               repo,
+		repoLLM:            repoLLM,
 		candidateUC:        candidateUC,
 		tenantAccountUC:    tenantAccountUC,
 		personalityTraitUC: personalityTraitUC,

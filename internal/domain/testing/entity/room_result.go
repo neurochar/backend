@@ -19,4 +19,30 @@ type RoomResult struct {
 	TotalMatchTip string
 	Techniques    map[uint64]RoomResultTechnique
 	Traits        map[uint64]RoomResultTraitItem
+	Analyze       *RoomResultAnalyze
+}
+
+type RoomResultAnalyzeHiringDecision int
+
+const (
+	RoomResultAnalyzeHiringDecisionUnspecified        RoomResultAnalyzeHiringDecision = 0
+	RoomResultAnalyzeHiringDecisionHire               RoomResultAnalyzeHiringDecision = 1
+	RoomResultAnalyzeHiringDecisionHireWithConditions RoomResultAnalyzeHiringDecision = 2
+	RoomResultAnalyzeHiringDecisionDoNotHire          RoomResultAnalyzeHiringDecision = 3
+)
+
+type RoomResultAnalyze struct {
+	HiringDecision     RoomResultAnalyzeHiringDecision
+	ConfidenceScore    float64
+	MainRecommendation string
+	PersonalityFit     RoomResultAnalyzePersonalityFit
+	Risks              []string
+	ActionItems        []string
+}
+
+type RoomResultAnalyzePersonalityFit struct {
+	Score      int
+	Summary    string
+	KeyMatches []string
+	KeyGaps    []string
 }

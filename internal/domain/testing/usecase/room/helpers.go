@@ -2,6 +2,7 @@ package room
 
 import (
 	"context"
+	"log/slog"
 	"time"
 
 	"github.com/google/uuid"
@@ -392,6 +393,64 @@ func (uc *UsecaseImpl) processRoom(
 		}
 
 		room.ResultIndex = lo.ToPtr(totalMatchInt)
+
+		llmReq := &usecase.GenerateRoomResultsRequest{
+			Job: usecase.GenerateRoomResultsRequestJob{
+				Role:        roomDTO.ProfileDTO.Profile.Name,
+				Description: roomDTO.ProfileDTO.Profile.Description,
+			},
+			Candidate: usecase.GenerateRoomResultsRequestCandidate{
+				Sex: roomDTO.CandidateDTO.Candidate.CandidateGender,
+			},
+			PsyTestResult: usecase.GenerateRoomResultsRequestPsyTestResult{
+				SumResult: float64(totalMatchInt),
+				Traits:    make([]usecase.GenerateRoomResultsRequestTrait, 0, len(roomDTO.Room.TechniqueData)),
+			},
+		}
+
+		if roomDTO.CandidateDTO.Candidate.CandidateBirthday != nil {
+			llmReq.Candidate.Age = roomDTO.CandidateDTO.Candidate.CalcAge(time.Now())
+		}
+
+		for traitID, trait := range roomDTO.Room.Result.Traits {
+
+			teqTrait, err := uc.personalityTraitUC.FindOneByID(ctx, traitID)
+			if err != nil {
+				continue
+			}
+
+			traitTotalRes := 0
+			i64, _, ok := trait.TotalResult.Int64(0)
+			if ok {
+				traitTotalRes = int(i64)
+			}
+
+			roomTrait, ok := roomDTO.Room.PersonalityTraitsMap[traitID]
+			if !ok {
+				continue
+			}
+
+			llmReq.PsyTestResult.Traits = append(llmReq.PsyTestResult.Traits, usecase.GenerateRoomResultsRequestTrait{
+				Name:           teqTrait.GetName(),
+				Description:    teqTrait.GetDescription(),
+				LeftStateName:  teqTrait.GetLeftStateName(),
+				RightStateName: teqTrait.GetRightStateName(),
+				Result:         traitTotalRes,
+				Priority:       roomTrait.Priority,
+				Target:         roomTrait.Target,
+			})
+		}
+
+		llmResp, err := uc.repoLLM.GenerateRoomResults(ctx, llmReq)
+		if err != nil {
+			uc.logger.ErrorContext(ctx, "repoLLM.GenerateRoomResults", slog.Any("error", err))
+		} else if llmResp != nil {
+			room.Result.Analyze = llmResp.Analyze
+
+			if room.Result.Analyze != nil {
+				room.ResultIndex = lo.ToPtr(room.Result.Analyze.PersonalityFit.Score)
+			}
+		}
 
 		err = uc.repo.Update(ctx, room)
 		if err != nil {

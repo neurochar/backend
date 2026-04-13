@@ -215,6 +215,58 @@ func (PersonalityTraitPriority) EnumDescriptor() ([]byte, []int) {
 	return file_common_types_testing_types_proto_rawDescGZIP(), []int{3}
 }
 
+type TestingRoomResultAnalyzeHiringDecision int32
+
+const (
+	TestingRoomResultAnalyzeHiringDecision_TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_UNSPECIFIED          TestingRoomResultAnalyzeHiringDecision = 0
+	TestingRoomResultAnalyzeHiringDecision_TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_HIRE                 TestingRoomResultAnalyzeHiringDecision = 1
+	TestingRoomResultAnalyzeHiringDecision_TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_HIRE_WITH_CONDITIONS TestingRoomResultAnalyzeHiringDecision = 2
+	TestingRoomResultAnalyzeHiringDecision_TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_DONT_HIRE            TestingRoomResultAnalyzeHiringDecision = 3
+)
+
+// Enum value maps for TestingRoomResultAnalyzeHiringDecision.
+var (
+	TestingRoomResultAnalyzeHiringDecision_name = map[int32]string{
+		0: "TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_UNSPECIFIED",
+		1: "TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_HIRE",
+		2: "TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_HIRE_WITH_CONDITIONS",
+		3: "TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_DONT_HIRE",
+	}
+	TestingRoomResultAnalyzeHiringDecision_value = map[string]int32{
+		"TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_UNSPECIFIED":          0,
+		"TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_HIRE":                 1,
+		"TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_HIRE_WITH_CONDITIONS": 2,
+		"TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_DONT_HIRE":            3,
+	}
+)
+
+func (x TestingRoomResultAnalyzeHiringDecision) Enum() *TestingRoomResultAnalyzeHiringDecision {
+	p := new(TestingRoomResultAnalyzeHiringDecision)
+	*p = x
+	return p
+}
+
+func (x TestingRoomResultAnalyzeHiringDecision) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (TestingRoomResultAnalyzeHiringDecision) Descriptor() protoreflect.EnumDescriptor {
+	return file_common_types_testing_types_proto_enumTypes[4].Descriptor()
+}
+
+func (TestingRoomResultAnalyzeHiringDecision) Type() protoreflect.EnumType {
+	return &file_common_types_testing_types_proto_enumTypes[4]
+}
+
+func (x TestingRoomResultAnalyzeHiringDecision) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use TestingRoomResultAnalyzeHiringDecision.Descriptor instead.
+func (TestingRoomResultAnalyzeHiringDecision) EnumDescriptor() ([]byte, []int) {
+	return file_common_types_testing_types_proto_rawDescGZIP(), []int{4}
+}
+
 type PersonalityTrait struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	Id             uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -711,18 +763,171 @@ func (x *TestingRoomResultTrait) GetTip() string {
 	return ""
 }
 
+type TestingRoomResultAnalyzePersonalityFit struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Score         int32                  `protobuf:"varint,1,opt,name=score,proto3" json:"score,omitempty"`
+	Summary       string                 `protobuf:"bytes,2,opt,name=summary,proto3" json:"summary,omitempty"`
+	KeyMatches    []string               `protobuf:"bytes,3,rep,name=key_matches,json=keyMatches,proto3" json:"key_matches,omitempty"`
+	KeyGaps       []string               `protobuf:"bytes,4,rep,name=key_gaps,json=keyGaps,proto3" json:"key_gaps,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TestingRoomResultAnalyzePersonalityFit) Reset() {
+	*x = TestingRoomResultAnalyzePersonalityFit{}
+	mi := &file_common_types_testing_types_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TestingRoomResultAnalyzePersonalityFit) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TestingRoomResultAnalyzePersonalityFit) ProtoMessage() {}
+
+func (x *TestingRoomResultAnalyzePersonalityFit) ProtoReflect() protoreflect.Message {
+	mi := &file_common_types_testing_types_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TestingRoomResultAnalyzePersonalityFit.ProtoReflect.Descriptor instead.
+func (*TestingRoomResultAnalyzePersonalityFit) Descriptor() ([]byte, []int) {
+	return file_common_types_testing_types_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *TestingRoomResultAnalyzePersonalityFit) GetScore() int32 {
+	if x != nil {
+		return x.Score
+	}
+	return 0
+}
+
+func (x *TestingRoomResultAnalyzePersonalityFit) GetSummary() string {
+	if x != nil {
+		return x.Summary
+	}
+	return ""
+}
+
+func (x *TestingRoomResultAnalyzePersonalityFit) GetKeyMatches() []string {
+	if x != nil {
+		return x.KeyMatches
+	}
+	return nil
+}
+
+func (x *TestingRoomResultAnalyzePersonalityFit) GetKeyGaps() []string {
+	if x != nil {
+		return x.KeyGaps
+	}
+	return nil
+}
+
+type TestingRoomResultAnalyze struct {
+	state             protoimpl.MessageState                  `protogen:"open.v1"`
+	HiringDecision    TestingRoomResultAnalyzeHiringDecision  `protobuf:"varint,1,opt,name=hiring_decision,json=hiringDecision,proto3,enum=types.v1.TestingRoomResultAnalyzeHiringDecision" json:"hiring_decision,omitempty"`
+	ConfidenceScore   float32                                 `protobuf:"fixed32,2,opt,name=confidence_score,json=confidenceScore,proto3" json:"confidence_score,omitempty"`
+	MainRecomendation string                                  `protobuf:"bytes,3,opt,name=main_recomendation,json=mainRecomendation,proto3" json:"main_recomendation,omitempty"`
+	Risks             []string                                `protobuf:"bytes,4,rep,name=risks,proto3" json:"risks,omitempty"`
+	ActionItems       []string                                `protobuf:"bytes,5,rep,name=action_items,json=actionItems,proto3" json:"action_items,omitempty"`
+	PersonalityFit    *TestingRoomResultAnalyzePersonalityFit `protobuf:"bytes,6,opt,name=personality_fit,json=personalityFit,proto3" json:"personality_fit,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *TestingRoomResultAnalyze) Reset() {
+	*x = TestingRoomResultAnalyze{}
+	mi := &file_common_types_testing_types_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TestingRoomResultAnalyze) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TestingRoomResultAnalyze) ProtoMessage() {}
+
+func (x *TestingRoomResultAnalyze) ProtoReflect() protoreflect.Message {
+	mi := &file_common_types_testing_types_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TestingRoomResultAnalyze.ProtoReflect.Descriptor instead.
+func (*TestingRoomResultAnalyze) Descriptor() ([]byte, []int) {
+	return file_common_types_testing_types_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *TestingRoomResultAnalyze) GetHiringDecision() TestingRoomResultAnalyzeHiringDecision {
+	if x != nil {
+		return x.HiringDecision
+	}
+	return TestingRoomResultAnalyzeHiringDecision_TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_UNSPECIFIED
+}
+
+func (x *TestingRoomResultAnalyze) GetConfidenceScore() float32 {
+	if x != nil {
+		return x.ConfidenceScore
+	}
+	return 0
+}
+
+func (x *TestingRoomResultAnalyze) GetMainRecomendation() string {
+	if x != nil {
+		return x.MainRecomendation
+	}
+	return ""
+}
+
+func (x *TestingRoomResultAnalyze) GetRisks() []string {
+	if x != nil {
+		return x.Risks
+	}
+	return nil
+}
+
+func (x *TestingRoomResultAnalyze) GetActionItems() []string {
+	if x != nil {
+		return x.ActionItems
+	}
+	return nil
+}
+
+func (x *TestingRoomResultAnalyze) GetPersonalityFit() *TestingRoomResultAnalyzePersonalityFit {
+	if x != nil {
+		return x.PersonalityFit
+	}
+	return nil
+}
+
 type TestingRoomResult struct {
 	state         protoimpl.MessageState             `protogen:"open.v1"`
 	TotalMatch    float32                            `protobuf:"fixed32,1,opt,name=total_match,json=totalMatch,proto3" json:"total_match,omitempty"`
 	TotalMatchTip string                             `protobuf:"bytes,2,opt,name=total_match_tip,json=totalMatchTip,proto3" json:"total_match_tip,omitempty"`
 	Traits        map[uint64]*TestingRoomResultTrait `protobuf:"bytes,3,rep,name=traits,proto3" json:"traits,omitempty" protobuf_key:"varint,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Analyze       *TestingRoomResultAnalyze          `protobuf:"bytes,4,opt,name=analyze,proto3,oneof" json:"analyze,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *TestingRoomResult) Reset() {
 	*x = TestingRoomResult{}
-	mi := &file_common_types_testing_types_proto_msgTypes[8]
+	mi := &file_common_types_testing_types_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -734,7 +939,7 @@ func (x *TestingRoomResult) String() string {
 func (*TestingRoomResult) ProtoMessage() {}
 
 func (x *TestingRoomResult) ProtoReflect() protoreflect.Message {
-	mi := &file_common_types_testing_types_proto_msgTypes[8]
+	mi := &file_common_types_testing_types_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -747,7 +952,7 @@ func (x *TestingRoomResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TestingRoomResult.ProtoReflect.Descriptor instead.
 func (*TestingRoomResult) Descriptor() ([]byte, []int) {
-	return file_common_types_testing_types_proto_rawDescGZIP(), []int{8}
+	return file_common_types_testing_types_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *TestingRoomResult) GetTotalMatch() float32 {
@@ -771,6 +976,13 @@ func (x *TestingRoomResult) GetTraits() map[uint64]*TestingRoomResultTrait {
 	return nil
 }
 
+func (x *TestingRoomResult) GetAnalyze() *TestingRoomResultAnalyze {
+	if x != nil {
+		return x.Analyze
+	}
+	return nil
+}
+
 type TestingRoom struct {
 	state             protoimpl.MessageState       `protogen:"open.v1"`
 	Id                string                       `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -790,7 +1002,7 @@ type TestingRoom struct {
 
 func (x *TestingRoom) Reset() {
 	*x = TestingRoom{}
-	mi := &file_common_types_testing_types_proto_msgTypes[9]
+	mi := &file_common_types_testing_types_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -802,7 +1014,7 @@ func (x *TestingRoom) String() string {
 func (*TestingRoom) ProtoMessage() {}
 
 func (x *TestingRoom) ProtoReflect() protoreflect.Message {
-	mi := &file_common_types_testing_types_proto_msgTypes[9]
+	mi := &file_common_types_testing_types_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -815,7 +1027,7 @@ func (x *TestingRoom) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TestingRoom.ProtoReflect.Descriptor instead.
 func (*TestingRoom) Descriptor() ([]byte, []int) {
-	return file_common_types_testing_types_proto_rawDescGZIP(), []int{9}
+	return file_common_types_testing_types_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *TestingRoom) GetId() string {
@@ -896,23 +1108,24 @@ func (x *TestingRoom) GetPersonalityTraits() *ProfilePersonalityTraitsMap {
 }
 
 type TestingListRoom struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Version       int64                  `protobuf:"varint,2,opt,name=version,proto3" json:"version,omitempty"`
-	TenantId      string                 `protobuf:"bytes,3,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
-	Status        RoomStatus             `protobuf:"varint,4,opt,name=status,proto3,enum=types.v1.RoomStatus" json:"status,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	Candidate     *TestingRoomCandidate  `protobuf:"bytes,6,opt,name=candidate,proto3,oneof" json:"candidate,omitempty"`
-	Profile       *TestingRoomProfile    `protobuf:"bytes,7,opt,name=profile,proto3,oneof" json:"profile,omitempty"`
-	ResultIndex   *int32                 `protobuf:"varint,8,opt,name=result_index,json=resultIndex,proto3,oneof" json:"result_index,omitempty"`
-	FinishedAt    *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=finished_at,json=finishedAt,proto3,oneof" json:"finished_at,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state          protoimpl.MessageState                  `protogen:"open.v1"`
+	Id             string                                  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Version        int64                                   `protobuf:"varint,2,opt,name=version,proto3" json:"version,omitempty"`
+	TenantId       string                                  `protobuf:"bytes,3,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
+	Status         RoomStatus                              `protobuf:"varint,4,opt,name=status,proto3,enum=types.v1.RoomStatus" json:"status,omitempty"`
+	CreatedAt      *timestamppb.Timestamp                  `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	Candidate      *TestingRoomCandidate                   `protobuf:"bytes,6,opt,name=candidate,proto3,oneof" json:"candidate,omitempty"`
+	Profile        *TestingRoomProfile                     `protobuf:"bytes,7,opt,name=profile,proto3,oneof" json:"profile,omitempty"`
+	ResultIndex    *int32                                  `protobuf:"varint,8,opt,name=result_index,json=resultIndex,proto3,oneof" json:"result_index,omitempty"`
+	HiringDecision *TestingRoomResultAnalyzeHiringDecision `protobuf:"varint,9,opt,name=hiring_decision,json=hiringDecision,proto3,enum=types.v1.TestingRoomResultAnalyzeHiringDecision,oneof" json:"hiring_decision,omitempty"`
+	FinishedAt     *timestamppb.Timestamp                  `protobuf:"bytes,10,opt,name=finished_at,json=finishedAt,proto3,oneof" json:"finished_at,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *TestingListRoom) Reset() {
 	*x = TestingListRoom{}
-	mi := &file_common_types_testing_types_proto_msgTypes[10]
+	mi := &file_common_types_testing_types_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -924,7 +1137,7 @@ func (x *TestingListRoom) String() string {
 func (*TestingListRoom) ProtoMessage() {}
 
 func (x *TestingListRoom) ProtoReflect() protoreflect.Message {
-	mi := &file_common_types_testing_types_proto_msgTypes[10]
+	mi := &file_common_types_testing_types_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -937,7 +1150,7 @@ func (x *TestingListRoom) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TestingListRoom.ProtoReflect.Descriptor instead.
 func (*TestingListRoom) Descriptor() ([]byte, []int) {
-	return file_common_types_testing_types_proto_rawDescGZIP(), []int{10}
+	return file_common_types_testing_types_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *TestingListRoom) GetId() string {
@@ -996,6 +1209,13 @@ func (x *TestingListRoom) GetResultIndex() int32 {
 	return 0
 }
 
+func (x *TestingListRoom) GetHiringDecision() TestingRoomResultAnalyzeHiringDecision {
+	if x != nil && x.HiringDecision != nil {
+		return *x.HiringDecision
+	}
+	return TestingRoomResultAnalyzeHiringDecision_TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_UNSPECIFIED
+}
+
 func (x *TestingListRoom) GetFinishedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.FinishedAt
@@ -1044,15 +1264,31 @@ const file_common_types_testing_types_proto_rawDesc = "" +
 	"\x04name\x18\x02 \x01(\tR\x04name\"@\n" +
 	"\x16TestingRoomResultTrait\x12\x14\n" +
 	"\x05match\x18\x01 \x01(\x02R\x05match\x12\x10\n" +
-	"\x03tip\x18\x02 \x01(\tR\x03tip\"\xfa\x01\n" +
+	"\x03tip\x18\x02 \x01(\tR\x03tip\"\x94\x01\n" +
+	"&TestingRoomResultAnalyzePersonalityFit\x12\x14\n" +
+	"\x05score\x18\x01 \x01(\x05R\x05score\x12\x18\n" +
+	"\asummary\x18\x02 \x01(\tR\asummary\x12\x1f\n" +
+	"\vkey_matches\x18\x03 \x03(\tR\n" +
+	"keyMatches\x12\x19\n" +
+	"\bkey_gaps\x18\x04 \x03(\tR\akeyGaps\"\xe3\x02\n" +
+	"\x18TestingRoomResultAnalyze\x12Y\n" +
+	"\x0fhiring_decision\x18\x01 \x01(\x0e20.types.v1.TestingRoomResultAnalyzeHiringDecisionR\x0ehiringDecision\x12)\n" +
+	"\x10confidence_score\x18\x02 \x01(\x02R\x0fconfidenceScore\x12-\n" +
+	"\x12main_recomendation\x18\x03 \x01(\tR\x11mainRecomendation\x12\x14\n" +
+	"\x05risks\x18\x04 \x03(\tR\x05risks\x12!\n" +
+	"\faction_items\x18\x05 \x03(\tR\vactionItems\x12Y\n" +
+	"\x0fpersonality_fit\x18\x06 \x01(\v20.types.v1.TestingRoomResultAnalyzePersonalityFitR\x0epersonalityFit\"\xc9\x02\n" +
 	"\x11TestingRoomResult\x12\x1f\n" +
 	"\vtotal_match\x18\x01 \x01(\x02R\n" +
 	"totalMatch\x12&\n" +
 	"\x0ftotal_match_tip\x18\x02 \x01(\tR\rtotalMatchTip\x12?\n" +
-	"\x06traits\x18\x03 \x03(\v2'.types.v1.TestingRoomResult.TraitsEntryR\x06traits\x1a[\n" +
+	"\x06traits\x18\x03 \x03(\v2'.types.v1.TestingRoomResult.TraitsEntryR\x06traits\x12A\n" +
+	"\aanalyze\x18\x04 \x01(\v2\".types.v1.TestingRoomResultAnalyzeH\x00R\aanalyze\x88\x01\x01\x1a[\n" +
 	"\vTraitsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\x04R\x03key\x126\n" +
-	"\x05value\x18\x02 \x01(\v2 .types.v1.TestingRoomResultTraitR\x05value:\x028\x01\"\xfd\x04\n" +
+	"\x05value\x18\x02 \x01(\v2 .types.v1.TestingRoomResultTraitR\x05value:\x028\x01B\n" +
+	"\n" +
+	"\b_analyze\"\xfd\x04\n" +
 	"\vTestingRoom\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\x03R\aversion\x12\x1b\n" +
@@ -1074,7 +1310,7 @@ const file_common_types_testing_types_proto_rawDesc = "" +
 	"\b_profileB\t\n" +
 	"\a_resultB\x0f\n" +
 	"\r_result_indexB\x0e\n" +
-	"\f_finished_at\"\xe6\x03\n" +
+	"\f_finished_at\"\xda\x04\n" +
 	"\x0fTestingListRoom\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\x03R\aversion\x12\x1b\n" +
@@ -1084,14 +1320,17 @@ const file_common_types_testing_types_proto_rawDesc = "" +
 	"created_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12A\n" +
 	"\tcandidate\x18\x06 \x01(\v2\x1e.types.v1.TestingRoomCandidateH\x00R\tcandidate\x88\x01\x01\x12;\n" +
 	"\aprofile\x18\a \x01(\v2\x1c.types.v1.TestingRoomProfileH\x01R\aprofile\x88\x01\x01\x12&\n" +
-	"\fresult_index\x18\b \x01(\x05H\x02R\vresultIndex\x88\x01\x01\x12@\n" +
-	"\vfinished_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampH\x03R\n" +
+	"\fresult_index\x18\b \x01(\x05H\x02R\vresultIndex\x88\x01\x01\x12^\n" +
+	"\x0fhiring_decision\x18\t \x01(\x0e20.types.v1.TestingRoomResultAnalyzeHiringDecisionH\x03R\x0ehiringDecision\x88\x01\x01\x12@\n" +
+	"\vfinished_at\x18\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampH\x04R\n" +
 	"finishedAt\x88\x01\x01B\f\n" +
 	"\n" +
 	"_candidateB\n" +
 	"\n" +
 	"\b_profileB\x0f\n" +
-	"\r_result_indexB\x0e\n" +
+	"\r_result_indexB\x12\n" +
+	"\x10_hiring_decisionB\x0e\n" +
 	"\f_finished_at*v\n" +
 	"\x11TechniqueItemType\x12#\n" +
 	"\x1fTECHNIQUE_ITEM_TYPE_UNSPECIFIED\x10\x00\x12<\n" +
@@ -1109,7 +1348,12 @@ const file_common_types_testing_types_proto_rawDesc = "" +
 	"\x1fPRESONALITY_TRAIT_PRIORITY_NONE\x10\x00\x12\"\n" +
 	"\x1ePRESONALITY_TRAIT_PRIORITY_LOW\x10\x01\x12%\n" +
 	"!PRESONALITY_TRAIT_PRIORITY_MEDIUM\x10\x02\x12#\n" +
-	"\x1fPRESONALITY_TRAIT_PRIORITY_HIGH\x10\x03B\xa2\x01\n" +
+	"\x1fPRESONALITY_TRAIT_PRIORITY_HIGH\x10\x03*\x9c\x02\n" +
+	"&TestingRoomResultAnalyzeHiringDecision\x12;\n" +
+	"7TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_UNSPECIFIED\x10\x00\x124\n" +
+	"0TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_HIRE\x10\x01\x12D\n" +
+	"@TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_HIRE_WITH_CONDITIONS\x10\x02\x129\n" +
+	"5TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_DONT_HIRE\x10\x03B\xa2\x01\n" +
 	"\fcom.types.v1B\x11TestingTypesProtoP\x01Z>github.com/neurochar/backend/pkg/proto_pb/common/types;typesv1\xa2\x02\x03TXX\xaa\x02\bTypes.V1\xca\x02\bTypes\\V1\xe2\x02\x14Types\\V1\\GPBMetadata\xea\x02\tTypes::V1b\x06proto3"
 
 var (
@@ -1124,53 +1368,60 @@ func file_common_types_testing_types_proto_rawDescGZIP() []byte {
 	return file_common_types_testing_types_proto_rawDescData
 }
 
-var file_common_types_testing_types_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_common_types_testing_types_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_common_types_testing_types_proto_enumTypes = make([]protoimpl.EnumInfo, 5)
+var file_common_types_testing_types_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_common_types_testing_types_proto_goTypes = []any{
-	(TechniqueItemType)(0),                  // 0: types.v1.TechniqueItemType
-	(RoomStatus)(0),                         // 1: types.v1.RoomStatus
-	(PersonalityTraitType)(0),               // 2: types.v1.PersonalityTraitType
-	(PersonalityTraitPriority)(0),           // 3: types.v1.PersonalityTraitPriority
-	(*PersonalityTrait)(nil),                // 4: types.v1.PersonalityTrait
-	(*ProfilePersonalityTraitsMapItem)(nil), // 5: types.v1.ProfilePersonalityTraitsMapItem
-	(*ProfilePersonalityTraitsMap)(nil),     // 6: types.v1.ProfilePersonalityTraitsMap
-	(*TestingProfile)(nil),                  // 7: types.v1.TestingProfile
-	(*TestingListProfile)(nil),              // 8: types.v1.TestingListProfile
-	(*TestingRoomCandidate)(nil),            // 9: types.v1.TestingRoomCandidate
-	(*TestingRoomProfile)(nil),              // 10: types.v1.TestingRoomProfile
-	(*TestingRoomResultTrait)(nil),          // 11: types.v1.TestingRoomResultTrait
-	(*TestingRoomResult)(nil),               // 12: types.v1.TestingRoomResult
-	(*TestingRoom)(nil),                     // 13: types.v1.TestingRoom
-	(*TestingListRoom)(nil),                 // 14: types.v1.TestingListRoom
-	nil,                                     // 15: types.v1.ProfilePersonalityTraitsMap.MapEntry
-	nil,                                     // 16: types.v1.TestingRoomResult.TraitsEntry
-	(*timestamppb.Timestamp)(nil),           // 17: google.protobuf.Timestamp
+	(TechniqueItemType)(0),                         // 0: types.v1.TechniqueItemType
+	(RoomStatus)(0),                                // 1: types.v1.RoomStatus
+	(PersonalityTraitType)(0),                      // 2: types.v1.PersonalityTraitType
+	(PersonalityTraitPriority)(0),                  // 3: types.v1.PersonalityTraitPriority
+	(TestingRoomResultAnalyzeHiringDecision)(0),    // 4: types.v1.TestingRoomResultAnalyzeHiringDecision
+	(*PersonalityTrait)(nil),                       // 5: types.v1.PersonalityTrait
+	(*ProfilePersonalityTraitsMapItem)(nil),        // 6: types.v1.ProfilePersonalityTraitsMapItem
+	(*ProfilePersonalityTraitsMap)(nil),            // 7: types.v1.ProfilePersonalityTraitsMap
+	(*TestingProfile)(nil),                         // 8: types.v1.TestingProfile
+	(*TestingListProfile)(nil),                     // 9: types.v1.TestingListProfile
+	(*TestingRoomCandidate)(nil),                   // 10: types.v1.TestingRoomCandidate
+	(*TestingRoomProfile)(nil),                     // 11: types.v1.TestingRoomProfile
+	(*TestingRoomResultTrait)(nil),                 // 12: types.v1.TestingRoomResultTrait
+	(*TestingRoomResultAnalyzePersonalityFit)(nil), // 13: types.v1.TestingRoomResultAnalyzePersonalityFit
+	(*TestingRoomResultAnalyze)(nil),               // 14: types.v1.TestingRoomResultAnalyze
+	(*TestingRoomResult)(nil),                      // 15: types.v1.TestingRoomResult
+	(*TestingRoom)(nil),                            // 16: types.v1.TestingRoom
+	(*TestingListRoom)(nil),                        // 17: types.v1.TestingListRoom
+	nil,                                            // 18: types.v1.ProfilePersonalityTraitsMap.MapEntry
+	nil,                                            // 19: types.v1.TestingRoomResult.TraitsEntry
+	(*timestamppb.Timestamp)(nil),                  // 20: google.protobuf.Timestamp
 }
 var file_common_types_testing_types_proto_depIdxs = []int32{
 	2,  // 0: types.v1.PersonalityTrait.type:type_name -> types.v1.PersonalityTraitType
 	3,  // 1: types.v1.ProfilePersonalityTraitsMapItem.priority:type_name -> types.v1.PersonalityTraitPriority
-	15, // 2: types.v1.ProfilePersonalityTraitsMap.map:type_name -> types.v1.ProfilePersonalityTraitsMap.MapEntry
-	6,  // 3: types.v1.TestingProfile.personality_traits:type_name -> types.v1.ProfilePersonalityTraitsMap
-	16, // 4: types.v1.TestingRoomResult.traits:type_name -> types.v1.TestingRoomResult.TraitsEntry
-	1,  // 5: types.v1.TestingRoom.status:type_name -> types.v1.RoomStatus
-	17, // 6: types.v1.TestingRoom.created_at:type_name -> google.protobuf.Timestamp
-	9,  // 7: types.v1.TestingRoom.candidate:type_name -> types.v1.TestingRoomCandidate
-	10, // 8: types.v1.TestingRoom.profile:type_name -> types.v1.TestingRoomProfile
-	12, // 9: types.v1.TestingRoom.result:type_name -> types.v1.TestingRoomResult
-	17, // 10: types.v1.TestingRoom.finished_at:type_name -> google.protobuf.Timestamp
-	6,  // 11: types.v1.TestingRoom.personality_traits:type_name -> types.v1.ProfilePersonalityTraitsMap
-	1,  // 12: types.v1.TestingListRoom.status:type_name -> types.v1.RoomStatus
-	17, // 13: types.v1.TestingListRoom.created_at:type_name -> google.protobuf.Timestamp
-	9,  // 14: types.v1.TestingListRoom.candidate:type_name -> types.v1.TestingRoomCandidate
-	10, // 15: types.v1.TestingListRoom.profile:type_name -> types.v1.TestingRoomProfile
-	17, // 16: types.v1.TestingListRoom.finished_at:type_name -> google.protobuf.Timestamp
-	5,  // 17: types.v1.ProfilePersonalityTraitsMap.MapEntry.value:type_name -> types.v1.ProfilePersonalityTraitsMapItem
-	11, // 18: types.v1.TestingRoomResult.TraitsEntry.value:type_name -> types.v1.TestingRoomResultTrait
-	19, // [19:19] is the sub-list for method output_type
-	19, // [19:19] is the sub-list for method input_type
-	19, // [19:19] is the sub-list for extension type_name
-	19, // [19:19] is the sub-list for extension extendee
-	0,  // [0:19] is the sub-list for field type_name
+	18, // 2: types.v1.ProfilePersonalityTraitsMap.map:type_name -> types.v1.ProfilePersonalityTraitsMap.MapEntry
+	7,  // 3: types.v1.TestingProfile.personality_traits:type_name -> types.v1.ProfilePersonalityTraitsMap
+	4,  // 4: types.v1.TestingRoomResultAnalyze.hiring_decision:type_name -> types.v1.TestingRoomResultAnalyzeHiringDecision
+	13, // 5: types.v1.TestingRoomResultAnalyze.personality_fit:type_name -> types.v1.TestingRoomResultAnalyzePersonalityFit
+	19, // 6: types.v1.TestingRoomResult.traits:type_name -> types.v1.TestingRoomResult.TraitsEntry
+	14, // 7: types.v1.TestingRoomResult.analyze:type_name -> types.v1.TestingRoomResultAnalyze
+	1,  // 8: types.v1.TestingRoom.status:type_name -> types.v1.RoomStatus
+	20, // 9: types.v1.TestingRoom.created_at:type_name -> google.protobuf.Timestamp
+	10, // 10: types.v1.TestingRoom.candidate:type_name -> types.v1.TestingRoomCandidate
+	11, // 11: types.v1.TestingRoom.profile:type_name -> types.v1.TestingRoomProfile
+	15, // 12: types.v1.TestingRoom.result:type_name -> types.v1.TestingRoomResult
+	20, // 13: types.v1.TestingRoom.finished_at:type_name -> google.protobuf.Timestamp
+	7,  // 14: types.v1.TestingRoom.personality_traits:type_name -> types.v1.ProfilePersonalityTraitsMap
+	1,  // 15: types.v1.TestingListRoom.status:type_name -> types.v1.RoomStatus
+	20, // 16: types.v1.TestingListRoom.created_at:type_name -> google.protobuf.Timestamp
+	10, // 17: types.v1.TestingListRoom.candidate:type_name -> types.v1.TestingRoomCandidate
+	11, // 18: types.v1.TestingListRoom.profile:type_name -> types.v1.TestingRoomProfile
+	4,  // 19: types.v1.TestingListRoom.hiring_decision:type_name -> types.v1.TestingRoomResultAnalyzeHiringDecision
+	20, // 20: types.v1.TestingListRoom.finished_at:type_name -> google.protobuf.Timestamp
+	6,  // 21: types.v1.ProfilePersonalityTraitsMap.MapEntry.value:type_name -> types.v1.ProfilePersonalityTraitsMapItem
+	12, // 22: types.v1.TestingRoomResult.TraitsEntry.value:type_name -> types.v1.TestingRoomResultTrait
+	23, // [23:23] is the sub-list for method output_type
+	23, // [23:23] is the sub-list for method input_type
+	23, // [23:23] is the sub-list for extension type_name
+	23, // [23:23] is the sub-list for extension extendee
+	0,  // [0:23] is the sub-list for field type_name
 }
 
 func init() { file_common_types_testing_types_proto_init() }
@@ -1178,15 +1429,16 @@ func file_common_types_testing_types_proto_init() {
 	if File_common_types_testing_types_proto != nil {
 		return
 	}
-	file_common_types_testing_types_proto_msgTypes[9].OneofWrappers = []any{}
 	file_common_types_testing_types_proto_msgTypes[10].OneofWrappers = []any{}
+	file_common_types_testing_types_proto_msgTypes[11].OneofWrappers = []any{}
+	file_common_types_testing_types_proto_msgTypes[12].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_common_types_testing_types_proto_rawDesc), len(file_common_types_testing_types_proto_rawDesc)),
-			NumEnums:      4,
-			NumMessages:   13,
+			NumEnums:      5,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

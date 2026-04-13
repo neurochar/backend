@@ -32,6 +32,13 @@ var traitPriorityToPb = map[testingEntity.TraitPriority]typesv1.PersonalityTrait
 	testingEntity.TraitPriorityHigh:   typesv1.PersonalityTraitPriority_PRESONALITY_TRAIT_PRIORITY_HIGH,
 }
 
+var roomResultAnalyzeHiringDecisionToPb = map[testingEntity.RoomResultAnalyzeHiringDecision]typesv1.TestingRoomResultAnalyzeHiringDecision{
+	testingEntity.RoomResultAnalyzeHiringDecisionUnspecified:        typesv1.TestingRoomResultAnalyzeHiringDecision_TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_UNSPECIFIED,
+	testingEntity.RoomResultAnalyzeHiringDecisionHire:               typesv1.TestingRoomResultAnalyzeHiringDecision_TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_HIRE,
+	testingEntity.RoomResultAnalyzeHiringDecisionHireWithConditions: typesv1.TestingRoomResultAnalyzeHiringDecision_TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_HIRE_WITH_CONDITIONS,
+	testingEntity.RoomResultAnalyzeHiringDecisionDoNotHire:          typesv1.TestingRoomResultAnalyzeHiringDecision_TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_DONT_HIRE,
+}
+
 var traitPriorityPbToEntity = make(
 	map[typesv1.PersonalityTraitPriority]testingEntity.TraitPriority,
 	len(traitPriorityToPb),
@@ -83,6 +90,15 @@ func TraitPriorityPbToEntity(item typesv1.PersonalityTraitPriority) testingEntit
 	val, ok := traitPriorityPbToEntity[item]
 	if !ok {
 		return testingEntity.TraitPriorityNone
+	}
+
+	return val
+}
+
+func ToomResultAnalyzeHiringDecisionToPb(item testingEntity.RoomResultAnalyzeHiringDecision) typesv1.TestingRoomResultAnalyzeHiringDecision {
+	val, ok := roomResultAnalyzeHiringDecisionToPb[item]
+	if !ok {
+		return typesv1.TestingRoomResultAnalyzeHiringDecision_TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_UNSPECIFIED
 	}
 
 	return val
@@ -194,6 +210,22 @@ func TestingRoomResultToPb(item *testingEntity.RoomResult) *typesv1.TestingRoomR
 		res.TotalMatch = float32(totalMatch)
 	}
 
+	if item.Analyze != nil {
+		res.Analyze = &typesv1.TestingRoomResultAnalyze{
+			HiringDecision:    ToomResultAnalyzeHiringDecisionToPb(item.Analyze.HiringDecision),
+			ConfidenceScore:   float32(item.Analyze.ConfidenceScore),
+			MainRecomendation: item.Analyze.MainRecommendation,
+			Risks:             item.Analyze.Risks,
+			ActionItems:       item.Analyze.ActionItems,
+			PersonalityFit: &typesv1.TestingRoomResultAnalyzePersonalityFit{
+				Score:      int32(item.Analyze.PersonalityFit.Score),
+				Summary:    item.Analyze.PersonalityFit.Summary,
+				KeyMatches: item.Analyze.PersonalityFit.KeyMatches,
+				KeyGaps:    item.Analyze.PersonalityFit.KeyGaps,
+			},
+		}
+	}
+
 	return res
 }
 
@@ -214,6 +246,10 @@ func TestingRoomDTOToListPb(item *testingUC.RoomDTO) *typesv1.TestingListRoom {
 
 	if item.Room.FinishedAt != nil {
 		res.FinishedAt = timestamppb.New(*item.Room.FinishedAt)
+	}
+
+	if item.Room.Result != nil && item.Room.Result.Analyze != nil {
+		res.HiringDecision = lo.ToPtr(ToomResultAnalyzeHiringDecisionToPb(item.Room.Result.Analyze.HiringDecision))
 	}
 
 	return res

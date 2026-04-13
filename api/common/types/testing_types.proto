@@ -27,6 +27,13 @@ enum PersonalityTraitPriority {
   PRESONALITY_TRAIT_PRIORITY_HIGH = 3;
 }
 
+enum TestingRoomResultAnalyzeHiringDecision {
+  TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_UNSPECIFIED = 0;
+  TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_HIRE = 1;
+  TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_HIRE_WITH_CONDITIONS = 2;
+  TESTING_ROOM_RESULT_ANALYZE_HIRING_DECISION_DONT_HIRE = 3;
+}
+
 message PersonalityTrait {
   uint64 id = 1;
   PersonalityTraitType type = 2;
@@ -77,10 +84,27 @@ message TestingRoomResultTrait {
   string tip = 2;
 }
 
+message TestingRoomResultAnalyzePersonalityFit {
+  int32 score = 1;
+  string summary = 2;
+  repeated string key_matches = 3;
+  repeated string key_gaps = 4;
+}
+
+message TestingRoomResultAnalyze {
+  TestingRoomResultAnalyzeHiringDecision hiring_decision = 1;
+  float confidence_score = 2;
+  string main_recomendation = 3;
+  repeated string risks = 4;
+  repeated string action_items = 5;
+  TestingRoomResultAnalyzePersonalityFit personality_fit = 6;
+}
+
 message TestingRoomResult {
   float total_match = 1;
   string total_match_tip = 2;
   map<uint64, TestingRoomResultTrait> traits = 3;
+  optional TestingRoomResultAnalyze analyze = 4;
 }
 
 message TestingRoom {
@@ -106,7 +130,8 @@ message TestingListRoom {
   optional TestingRoomCandidate candidate = 6;
   optional TestingRoomProfile profile = 7;
   optional int32 result_index = 8;
-  optional google.protobuf.Timestamp finished_at = 9;
+  optional TestingRoomResultAnalyzeHiringDecision hiring_decision = 9;
+  optional google.protobuf.Timestamp finished_at = 10;
 }
 
 
