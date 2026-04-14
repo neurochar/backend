@@ -158,6 +158,13 @@ func (uc *UsecaseImpl) processResumeFilesForCandidateInTx(
 		if err != nil {
 			return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
 		}
+
+		newFile.SetAssignedToTarget(true)
+
+		err = uc.fileUC.Update(ctx, newFile)
+		if err != nil {
+			return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+		}
 	}
 
 	if len(toDelete) > 0 {
