@@ -229,3 +229,29 @@ func (uc *UsecaseImpl) Finish(
 
 	return nil
 }
+
+func (uc *UsecaseImpl) Process(
+	ctx context.Context,
+	id uuid.UUID,
+) error {
+	const op = "Process"
+
+	room, err := uc.repo.FindOneByID(ctx, id, nil)
+	if err != nil {
+		return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	if auth.IsNeedToCheckTenantAccess(ctx) {
+		authData := auth.GetAuthData(ctx)
+		if authData == nil || !authData.IsTenantUser() || authData.TenantUserClaims().TenantID != room.TenantID {
+			return appErrors.ErrForbidden
+		}
+	}
+
+	err = uc.processRoom(ctx, id)
+	if err != nil {
+		return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	return nil
+}

@@ -1035,6 +1035,9 @@
       ],
       "type": "string"
     },
+    "v1ProcessRoomResponse": {
+      "type": "object"
+    },
     "v1ProfilePersonalityTraitsMap": {
       "properties": {
         "map": {
@@ -3227,6 +3230,42 @@
           }
         ],
         "summary": "Получить комнату",
+        "tags": [
+          "TestingPublicService"
+        ]
+      }
+    },
+    "/v1/testing/rooms/{id}/process": {
+      "post": {
+        "operationId": "TestingPublicService_ProcessRoom",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ProcessRoomResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Обработать результаты комнаты",
         "tags": [
           "TestingPublicService"
         ]

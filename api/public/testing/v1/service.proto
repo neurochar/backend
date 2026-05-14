@@ -188,4 +188,19 @@ service TestingPublicService {
     };
   }
 
+  // Обработать результаты комнаты
+  rpc ProcessRoom(ProcessRoomRequest) returns (ProcessRoomResponse) {
+    option (google.api.http) = {
+      post: "/v1/testing/rooms/{id}/process"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: {
+        security_requirement: {
+          key: "BearerAuth";
+          value: {};
+        }
+      }
+    };
+  }
+
 }

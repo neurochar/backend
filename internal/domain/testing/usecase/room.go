@@ -102,6 +102,11 @@ type RoomUsecase interface {
 		answerData map[uint64]any,
 		requestIP *netip.Addr,
 	) (resErr error)
+
+	Process(
+		ctx context.Context,
+		id uuid.UUID,
+	) (resErr error)
 }
 
 type RoomRepository interface {

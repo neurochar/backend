@@ -1368,6 +1368,86 @@ func (*DeleteRoomResponse) Descriptor() ([]byte, []int) {
 	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{26}
 }
 
+type ProcessRoomRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ProcessRoomRequest) Reset() {
+	*x = ProcessRoomRequest{}
+	mi := &file_public_testing_v1_dto_proto_msgTypes[27]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ProcessRoomRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ProcessRoomRequest) ProtoMessage() {}
+
+func (x *ProcessRoomRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_public_testing_v1_dto_proto_msgTypes[27]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ProcessRoomRequest.ProtoReflect.Descriptor instead.
+func (*ProcessRoomRequest) Descriptor() ([]byte, []int) {
+	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *ProcessRoomRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type ProcessRoomResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ProcessRoomResponse) Reset() {
+	*x = ProcessRoomResponse{}
+	mi := &file_public_testing_v1_dto_proto_msgTypes[28]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ProcessRoomResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ProcessRoomResponse) ProtoMessage() {}
+
+func (x *ProcessRoomResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_public_testing_v1_dto_proto_msgTypes[28]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ProcessRoomResponse.ProtoReflect.Descriptor instead.
+func (*ProcessRoomResponse) Descriptor() ([]byte, []int) {
+	return file_public_testing_v1_dto_proto_rawDescGZIP(), []int{28}
+}
+
 var File_public_testing_v1_dto_proto protoreflect.FileDescriptor
 
 const file_public_testing_v1_dto_proto_rawDesc = "" +
@@ -1452,7 +1532,10 @@ const file_public_testing_v1_dto_proto_rawDesc = "" +
 	"\x04item\x18\x01 \x01(\v2\x15.types.v1.TestingRoomR\x04item\"-\n" +
 	"\x11DeleteRoomRequest\x12\x18\n" +
 	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"\x14\n" +
-	"\x12DeleteRoomResponse*\x8f\x01\n" +
+	"\x12DeleteRoomResponse\".\n" +
+	"\x12ProcessRoomRequest\x12\x18\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\"\x15\n" +
+	"\x13ProcessRoomResponse*\x8f\x01\n" +
 	"\rListRoomsSort\x12\x1e\n" +
 	"\x1aLIST_ROOM_SORT_UNSPECIFIED\x10\x00\x12\x1d\n" +
 	"\x19LIST_ROOM_SORT_CREATED_AT\x10\x01\x12\x1e\n" +
@@ -1475,7 +1558,7 @@ func file_public_testing_v1_dto_proto_rawDescGZIP() []byte {
 }
 
 var file_public_testing_v1_dto_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_public_testing_v1_dto_proto_msgTypes = make([]protoimpl.MessageInfo, 27)
+var file_public_testing_v1_dto_proto_msgTypes = make([]protoimpl.MessageInfo, 29)
 var file_public_testing_v1_dto_proto_goTypes = []any{
 	(ListRoomsSort)(0),                                    // 0: testing.v1.ListRoomsSort
 	(*GetPersonalityTraitsRequest)(nil),                   // 1: testing.v1.GetPersonalityTraitsRequest
@@ -1505,28 +1588,30 @@ var file_public_testing_v1_dto_proto_goTypes = []any{
 	(*CreateRoomResponse)(nil),                            // 25: testing.v1.CreateRoomResponse
 	(*DeleteRoomRequest)(nil),                             // 26: testing.v1.DeleteRoomRequest
 	(*DeleteRoomResponse)(nil),                            // 27: testing.v1.DeleteRoomResponse
-	(*types.PersonalityTrait)(nil),                        // 28: types.v1.PersonalityTrait
-	(*types.TestingListProfile)(nil),                      // 29: types.v1.TestingListProfile
-	(*types.TestingProfile)(nil),                          // 30: types.v1.TestingProfile
-	(*types.ProfilePersonalityTraitsMap)(nil),             // 31: types.v1.ProfilePersonalityTraitsMap
-	(*types.TestingListRoom)(nil),                         // 32: types.v1.TestingListRoom
-	(*types.TestingRoom)(nil),                             // 33: types.v1.TestingRoom
+	(*ProcessRoomRequest)(nil),                            // 28: testing.v1.ProcessRoomRequest
+	(*ProcessRoomResponse)(nil),                           // 29: testing.v1.ProcessRoomResponse
+	(*types.PersonalityTrait)(nil),                        // 30: types.v1.PersonalityTrait
+	(*types.TestingListProfile)(nil),                      // 31: types.v1.TestingListProfile
+	(*types.TestingProfile)(nil),                          // 32: types.v1.TestingProfile
+	(*types.ProfilePersonalityTraitsMap)(nil),             // 33: types.v1.ProfilePersonalityTraitsMap
+	(*types.TestingListRoom)(nil),                         // 34: types.v1.TestingListRoom
+	(*types.TestingRoom)(nil),                             // 35: types.v1.TestingRoom
 }
 var file_public_testing_v1_dto_proto_depIdxs = []int32{
-	28, // 0: testing.v1.GetPersonalityTraitsResponse.items:type_name -> types.v1.PersonalityTrait
-	29, // 1: testing.v1.ListProfilesResponse.items:type_name -> types.v1.TestingListProfile
-	30, // 2: testing.v1.GetProfileResponse.item:type_name -> types.v1.TestingProfile
-	31, // 3: testing.v1.CreateProfileRequestPayload.personality_traits:type_name -> types.v1.ProfilePersonalityTraitsMap
+	30, // 0: testing.v1.GetPersonalityTraitsResponse.items:type_name -> types.v1.PersonalityTrait
+	31, // 1: testing.v1.ListProfilesResponse.items:type_name -> types.v1.TestingListProfile
+	32, // 2: testing.v1.GetProfileResponse.item:type_name -> types.v1.TestingProfile
+	33, // 3: testing.v1.CreateProfileRequestPayload.personality_traits:type_name -> types.v1.ProfilePersonalityTraitsMap
 	7,  // 4: testing.v1.CreateProfileRequest.payload:type_name -> testing.v1.CreateProfileRequestPayload
-	30, // 5: testing.v1.CreateProfileResponse.item:type_name -> types.v1.TestingProfile
-	31, // 6: testing.v1.PatchProfileRequestPayload.personality_traits:type_name -> types.v1.ProfilePersonalityTraitsMap
+	32, // 5: testing.v1.CreateProfileResponse.item:type_name -> types.v1.TestingProfile
+	33, // 6: testing.v1.PatchProfileRequestPayload.personality_traits:type_name -> types.v1.ProfilePersonalityTraitsMap
 	10, // 7: testing.v1.PatchProfileRequest.payload:type_name -> testing.v1.PatchProfileRequestPayload
-	31, // 8: testing.v1.GenerateProfileTraitsMapByDescriptionResponse.traits:type_name -> types.v1.ProfilePersonalityTraitsMap
+	33, // 8: testing.v1.GenerateProfileTraitsMapByDescriptionResponse.traits:type_name -> types.v1.ProfilePersonalityTraitsMap
 	0,  // 9: testing.v1.ListRoomsRequest.sort:type_name -> testing.v1.ListRoomsSort
-	32, // 10: testing.v1.ListRoomsResponse.items:type_name -> types.v1.TestingListRoom
-	33, // 11: testing.v1.GetRoomResponse.item:type_name -> types.v1.TestingRoom
+	34, // 10: testing.v1.ListRoomsResponse.items:type_name -> types.v1.TestingListRoom
+	35, // 11: testing.v1.GetRoomResponse.item:type_name -> types.v1.TestingRoom
 	23, // 12: testing.v1.CreateRoomRequest.payload:type_name -> testing.v1.CreateRoomRequestPayload
-	33, // 13: testing.v1.CreateRoomResponse.item:type_name -> types.v1.TestingRoom
+	35, // 13: testing.v1.CreateRoomResponse.item:type_name -> types.v1.TestingRoom
 	14, // [14:14] is the sub-list for method output_type
 	14, // [14:14] is the sub-list for method input_type
 	14, // [14:14] is the sub-list for extension type_name
@@ -1548,7 +1633,7 @@ func file_public_testing_v1_dto_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_public_testing_v1_dto_proto_rawDesc), len(file_public_testing_v1_dto_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   27,
+			NumMessages:   29,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

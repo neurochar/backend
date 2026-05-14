@@ -131,3 +131,8 @@ message DeleteRoomRequest {
 
 message DeleteRoomResponse {}
 
+message ProcessRoomRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+}
+
+message ProcessRoomResponse {}
