@@ -29,6 +29,7 @@ RUN addgroup -S app && adduser -S -G app app \
 COPY --from=build /out/app ./app
 COPY --from=build /src/configs ./configs
 COPY --from=build /src/migrations ./migrations
+COPY --from=build /src/swagger ./swagger
 
 RUN chown -R app:app /app \
     && chmod 555 ./app
