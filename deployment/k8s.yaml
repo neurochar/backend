@@ -48,6 +48,8 @@ data:
     EMAILING_DEFAULT_FROM_EMAIL: "no-reply@neurochar.ru"
     EMAILING_DEFAULT_FROM_TITLE: "Нейрочар"
     ALERTS_TARGET_CHANNEL: "-1002702081888"
+    TEMPORAL_HOST: temporal-service.neurochar.svc.cluster.local:7233
+    TEMPORAL_NAMESPACE: default
 ---
 # ------------------------------------------------------------
 # Deployment приложения backend-app
