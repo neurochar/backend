@@ -155,7 +155,7 @@ func (uc *UsecaseImpl) JobProcessCandidatesResumesToProcess(ctx context.Context)
 			&payload,
 		)
 		if err != nil {
-			return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+			return err
 		}
 
 		item.Resume.Status = entity.CandidateResumeStatusProcessing
