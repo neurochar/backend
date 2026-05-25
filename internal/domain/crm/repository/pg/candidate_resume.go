@@ -28,6 +28,7 @@ type CandidateResumeDBModel struct {
 	FileHash    string          `db:"file_hash"`
 	FileType    uint8           `db:"file_type"`
 	AnalyzeData json.RawMessage `db:"analyze_data"`
+	ErrorText   *string         `db:"error_text"`
 
 	CreatedAt time.Time  `db:"created_at"`
 	UpdatedAt time.Time  `db:"updated_at"`
@@ -54,6 +55,7 @@ func (db *CandidateResumeDBModel) ToEntity() *entity.CandidateResume {
 		FileHash:    db.FileHash,
 		FileType:    fileType,
 		AnalyzeData: analyzeData,
+		ErrorText:   db.ErrorText,
 
 		CreatedAt: db.CreatedAt,
 		UpdatedAt: db.UpdatedAt,
@@ -76,6 +78,7 @@ func MapCandidateResumeEntityToDBModel(entity *entity.CandidateResume) *Candidat
 		FileHash:    entity.FileHash,
 		FileType:    uint8(entity.FileType),
 		AnalyzeData: analyzeData,
+		ErrorText:   entity.ErrorText,
 
 		CreatedAt: entity.CreatedAt,
 		UpdatedAt: entity.UpdatedAt,

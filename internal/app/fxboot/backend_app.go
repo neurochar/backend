@@ -11,6 +11,7 @@ import (
 	"github.com/neurochar/backend/internal/app/fxboot/invoking"
 	"github.com/neurochar/backend/internal/app/fxboot/providing"
 	deliveryCommon "github.com/neurochar/backend/internal/delivery/common"
+	privateGRPC "github.com/neurochar/backend/internal/delivery/grpc/private"
 	publicGRPC "github.com/neurochar/backend/internal/delivery/grpc/public"
 	publicHTTPServer "github.com/neurochar/backend/internal/delivery/httpgw/server"
 	"github.com/neurochar/backend/internal/domain/alert"
@@ -23,6 +24,7 @@ import (
 	"github.com/neurochar/backend/internal/infra/db"
 	"github.com/neurochar/backend/internal/infra/storage"
 	"github.com/neurochar/backend/internal/infra/storage/s3d"
+	temporalClient "github.com/neurochar/backend/internal/infra/temporal/client"
 	"github.com/neurochar/backend/internal/jobs"
 	"github.com/neurochar/backend/pkg/backoff"
 	"github.com/neurochar/backend/pkg/pgclient"
@@ -67,12 +69,20 @@ func BackendAppGetOptionsMap(appID app.ID, cfg config.Config) OptionsMap {
 					)
 				},
 			),
+			ProvidingIDTemporalClient: fx.Provide(func(cfg config.Config, logger *slog.Logger) (temporalClient.Client, error) {
+				return temporalClient.NewClient(
+					cfg.Temporal.Host,
+					cfg.Temporal.Namespace,
+					logger,
+				)
+			}),
 			ProvidingIDOpenAIClient:    fx.Provide(providing.NewOpenAIClient),
 			ProvidingIDBackoff:         fx.Provide(providing.NewBackoff),
 			ProvidingIDStorageClient:   fx.Provide(providing.NewStorageClient),
 			ProvidingIDEmailing:        fx.Provide(providing.NewEmailing),
 			ProvidingIDDeliveryCommon:  deliveryCommon.FxModule,
 			ProvidingPublicGRPCServer:  providing.PublicGRPCServer,
+			ProvidingPrivateGRPCServer: providing.PrivateGRPCServer,
 			ProvidingPublicHTTPGateway: providing.PublicHTTPGateway,
 			ProvidingIDJobsController:  fx.Provide(jobs.NewController),
 			ProvidingIDFileModule:      file.FxModule,
@@ -92,18 +102,20 @@ func BackendAppGetOptionsMap(appID app.ID, cfg config.Config) OptionsMap {
 type BackendInvokeInput struct {
 	fx.In
 
-	LC               fx.Lifecycle
-	Shutdowner       fx.Shutdowner
-	Invokes          []invoking.InvokeInit `group:"InvokeInit"`
-	Logger           *slog.Logger
-	Cfg              config.Config
-	DBMasterClient   db.MasterClient
-	BackoffCtrl      *backoff.Controller
-	S3Client         *s3.Client
-	StorageClient    storage.Client
-	PublicGRPCServer *publicGRPC.PublicServer
-	PublicHTTPServer *publicHTTPServer.Server
-	JobsController   *jobs.Controller
+	LC                fx.Lifecycle
+	Shutdowner        fx.Shutdowner
+	Invokes           []invoking.InvokeInit `group:"InvokeInit"`
+	Logger            *slog.Logger
+	Cfg               config.Config
+	DBMasterClient    db.MasterClient
+	BackoffCtrl       *backoff.Controller
+	S3Client          *s3.Client
+	StorageClient     storage.Client
+	PrivateGRPCServer *privateGRPC.PrivateServer
+	PublicGRPCServer  *publicGRPC.PublicServer
+	PublicHTTPServer  *publicHTTPServer.Server
+	JobsController    *jobs.Controller
+	TemporalClient    temporalClient.Client
 }
 
 // BackendAppInitInvoke - app init
@@ -188,6 +200,16 @@ func BackendAppInitInvoke(
 				time.Duration(in.Cfg.CronjobApp.Jobs.ProcessEmailsToDelete.TtlMin)*time.Minute,
 			)
 
+			in.JobsController.RegisterProcessCrmCandidatesResumesNew(
+				in.Cfg.CronjobApp.Jobs.ProcessCrmCandidatesResumesNew.Timeout,
+				in.Cfg.CronjobApp.Jobs.ProcessCrmCandidatesResumesNew.FailedTimeout,
+			)
+
+			in.JobsController.RegisterProcessCrmCandidatesResumesToProcess(
+				in.Cfg.CronjobApp.Jobs.ProcessCrmCandidatesResumesToProcess.Timeout,
+				in.Cfg.CronjobApp.Jobs.ProcessCrmCandidatesResumesToProcess.FailedTimeout,
+			)
+
 			// Запускаем invoke функции до открытия
 			for _, invokeItem := range in.Invokes {
 				if invokeItem.StartBeforeOpen != nil {
@@ -205,6 +227,19 @@ func BackendAppInitInvoke(
 			} else {
 				in.Logger.InfoContext(ctx, "jobs autostart skipped")
 			}
+
+			// Запускаем private gRPC
+			serverPrivateGRPC, err := in.PrivateGRPCServer.Server().Listen()
+			if err != nil {
+				in.Logger.ErrorContext(ctx, "failed to start gRPC private server", slog.Any("error", err))
+			}
+			in.Logger.InfoContext(ctx, "started gRPC private server", slog.Int("port", in.Cfg.BackendApp.GRPC.Port))
+
+			go func() {
+				if err := serverPrivateGRPC(); err != nil {
+					in.Logger.ErrorContext(ctx, "failed to serve gRPC private server", slog.Any("error", err))
+				}
+			}()
 
 			// Запускаем public gRPC
 			servePublicGRPC, err := in.PublicGRPCServer.Server().Listen()
@@ -257,6 +292,10 @@ func BackendAppInitInvoke(
 			in.Logger.InfoContext(ctx, "stopping public gRPC server")
 			in.PublicGRPCServer.Server().Shutdown()
 
+			// Останавливаем private gRPC
+			in.Logger.InfoContext(ctx, "stopping private gRPC server")
+			in.PrivateGRPCServer.Server().Shutdown()
+
 			for _, invokeItem := range in.Invokes {
 				if invokeItem.Stop != nil {
 					err := invokeItem.Stop(ctx)
@@ -276,12 +315,16 @@ func BackendAppInitInvoke(
 				in.Logger.InfoContext(ctx, "jobs stopped")
 			}
 
+			// Закрываем temporal client
+			in.TemporalClient.Close()
+
 			// Закрываем postgress
 			in.DBMasterClient.Close()
-			in.Logger.InfoContext(ctx, "closing db clients")
+			in.Logger.InfoContext(ctx, "db clients closed")
 
 			// Останавливаем backoff
 			in.BackoffCtrl.Stop(ctx)
+			in.Logger.InfoContext(ctx, "backoff stopped")
 
 			return nil
 		},

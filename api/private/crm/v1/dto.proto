@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package crm.v1;
+
+import "common/types/crm_types.proto";
+import "buf/validate/validate.proto";
+
+message PatchCandidatesResumeRequestPayload {
+  message ErrorText {
+    optional string text = 1;
+  }
+
+  message AnalyzeData {
+    optional types.v1.CandidateResumeAnalyzeData data = 1;
+  }
+
+  optional types.v1.CandidateResumeStatus status = 1;
+  optional ErrorText error_text = 2;
+  optional AnalyzeData analyze_data = 3;
+}
+
+message PatchCandidatesResumeRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+  PatchCandidatesResumeRequestPayload payload = 2 [(buf.validate.field).required = true];
+  int64 version = 3;
+  bool skip_version_check = 4;
+}
+
+message PatchCandidatesResumeResponse {}

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package crm.v1;
+
+import "private/crm/v1/dto.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+service CrmPrivateService {
+  // Обновить резюме кандидата
+  rpc PatchCandidatesResume(PatchCandidatesResumeRequest) returns (PatchCandidatesResumeResponse) {}
+}

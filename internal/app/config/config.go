@@ -70,6 +70,11 @@ type Config struct {
 			LogResponseSent    bool `yaml:"log_response_sent" env:"BACKEND_APP_GRPC_LOG_RESPONSE_SENT" env-default:"false"`
 			LogPayloadReceived bool `yaml:"log_payload_received" env:"BACKEND_APP_GRPC_LOG_PAYLOAD_RECEIVED" env-default:"false"`
 		} `yaml:"grpc"`
+		PrivateGRPC struct {
+			Port               int  `yaml:"port" env:"BACKEND_APP_PRIVATE_GRPC_PORT" env-default:"50052"`
+			LogResponseSent    bool `yaml:"log_response_sent" env:"BACKEND_APP_PRIVATE_GRPC_LOG_RESPONSE_SENT" env-default:"false"`
+			LogPayloadReceived bool `yaml:"log_payload_received" env:"BACKEND_APP_PRIVATE_GRPC_LOG_PAYLOAD_RECEIVED" env-default:"false"`
+		} `yaml:"private_grpc"`
 	} `yaml:"backend_app"`
 	CronjobApp struct {
 		Name    string `yaml:"name" env:"CRONJOB_APP_NAME" env-default:"cronjob"`
@@ -113,6 +118,18 @@ type Config struct {
 				// nolint
 				TtlMin int `yaml:"ttl_min" env:"CRONJOB_APP_JOBS_PROCESS_EMAILS_TO_DELETE_TTL_MIN" env-default:"43200"`
 			} `yaml:"process_emails_to_delete"`
+			ProcessCrmCandidatesResumesNew struct {
+				// nolint
+				Timeout time.Duration `yaml:"timeout" env:"CRONJOB_APP_JOBS_PROCESS_CRM_CANDIDATES_RESUMES_NEW_TIMEOUT" env-default:"5s"`
+				// nolint
+				FailedTimeout time.Duration `yaml:"failed_timeout" env:"CRONJOB_APP_JOBS_PROCESS_CRM_CANDIDATES_RESUMES_NEW_FAILED_TIMEOUT" env-default:"1m"`
+			} `yaml:"process_crm_candidates_resumes_new"`
+			ProcessCrmCandidatesResumesToProcess struct {
+				// nolint
+				Timeout time.Duration `yaml:"timeout" env:"CRONJOB_APP_JOBS_PROCESS_CRM_CANDIDATES_RESUMES_TO_PROCESS_TIMEOUT" env-default:"5s"`
+				// nolint
+				FailedTimeout time.Duration `yaml:"failed_timeout" env:"CRONJOB_APP_JOBS_PROCESS_CRM_CANDIDATES_RESUMES_TO_PROCESS_FAILED_TIMEOUT" env-default:"1m"`
+			} `yaml:"process_crm_candidates_resumes_to_process"`
 		} `yaml:"jobs"`
 	} `yaml:"cronjob_app"`
 	Postgres struct {
@@ -123,6 +140,10 @@ type Config struct {
 			DSN string `yaml:"dsn" env:"POSTGRES_MASTER_DSN"`
 		} `yaml:"master"`
 	} `yaml:"postgres"`
+	Temporal struct {
+		Host      string `yaml:"host" env:"TEMPORAL_HOST" env-default:"127.0.0.1:7233"`
+		Namespace string `yaml:"namespace" env:"TEMPORAL_NAMESPACE" env-default:"default"`
+	} `yaml:"temporal"`
 	Storage struct {
 		UpMigrations     bool   `yaml:"up_migrations" env:"STORAGE_UP_MIGRATIONS" env-default:"false"`
 		S3Endpoint       string `yaml:"s3_endpoint" env:"STORAGE_S3_ENDPOINT" env-default:""`

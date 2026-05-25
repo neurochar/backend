@@ -11,6 +11,7 @@ import (
 	"github.com/neurochar/backend/internal/domain/crm/usecase"
 	fileEntity "github.com/neurochar/backend/internal/domain/file/entity"
 	fileUC "github.com/neurochar/backend/internal/domain/file/usecase"
+	"github.com/neurochar/backend/pkg/auth"
 	"github.com/samber/lo"
 )
 
@@ -63,6 +64,70 @@ func (uc *UsecaseImpl) Update(ctx context.Context, item *entity.CandidateResume)
 	const op = "Update"
 
 	err := uc.repo.Update(ctx, item)
+	if err != nil {
+		return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	return nil
+}
+
+func (uc *UsecaseImpl) PatchByDTO(
+	ctx context.Context,
+	id uuid.UUID,
+	in usecase.PatchCandidateResumeDataInput,
+	skipVersionCheck bool,
+) error {
+	const op = "PatchByDTO"
+
+	err := uc.dbMasterClient.Do(ctx, func(ctx context.Context) error {
+		item, err := uc.repo.FindOneByID(ctx, id, &uctypes.QueryGetOneParams{
+			ForUpdate: true,
+		})
+		if err != nil {
+			return err
+		}
+
+		if auth.IsNeedToCheckTenantAccess(ctx) {
+			authData := auth.GetAuthData(ctx)
+			if authData == nil || !authData.IsTenantUser() || authData.TenantUserClaims().TenantID != item.TenantID {
+				return appErrors.ErrForbidden
+			}
+		}
+
+		if !skipVersionCheck && item.Version() != in.Version {
+			return appErrors.ErrVersionConflict.
+				WithDetail("last_version", false, item.Version()).
+				WithDetail("last_updated_at", false, item.UpdatedAt)
+		}
+
+		if in.Status != nil {
+			err := item.SetStatus(*in.Status)
+			if err != nil {
+				return err
+			}
+		}
+
+		if in.AnalyzeData != nil {
+			err := item.SetAnalyzeData(*in.AnalyzeData)
+			if err != nil {
+				return err
+			}
+		}
+
+		if in.ErrorText != nil {
+			err := item.SetErrorText(*in.ErrorText)
+			if err != nil {
+				return err
+			}
+		}
+
+		err = uc.repo.Update(ctx, item)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
 	}

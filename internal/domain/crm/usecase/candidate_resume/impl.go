@@ -8,6 +8,7 @@ import (
 	fileUC "github.com/neurochar/backend/internal/domain/file/usecase"
 	"github.com/neurochar/backend/internal/infra/db"
 	"github.com/neurochar/backend/internal/infra/storage"
+	temporalClient "github.com/neurochar/backend/internal/infra/temporal/client"
 )
 
 type UsecaseImpl struct {
@@ -18,6 +19,7 @@ type UsecaseImpl struct {
 	storageClient  storage.Client
 	fileUC         fileUC.Usecase
 	repo           usecase.CandidateResumeRepository
+	temporalClient temporalClient.Client
 }
 
 func NewUsecaseImpl(
@@ -27,6 +29,7 @@ func NewUsecaseImpl(
 	storageClient storage.Client,
 	fileUC fileUC.Usecase,
 	repo usecase.CandidateResumeRepository,
+	temporalClient temporalClient.Client,
 ) *UsecaseImpl {
 	uc := &UsecaseImpl{
 		pkg:            "CRM.Usecase.CandidateResume",
@@ -36,6 +39,7 @@ func NewUsecaseImpl(
 		fileUC:         fileUC,
 		dbMasterClient: dbMasterClient,
 		repo:           repo,
+		temporalClient: temporalClient,
 	}
 	return uc
 }

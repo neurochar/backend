@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package word2pdf.v1;
+
+service Word2PdfService {
+  rpc Convert(stream ClientMsg) returns (stream ServerMsg);
+}
+
+message ClientMsg {
+  oneof payload {
+    Start start = 1;
+    FileChunk chunk = 2;
+    End end = 3;
+    Ping ping = 4;
+  }
+}
+
+message ServerMsg {
+  oneof payload {
+    Ready ready = 1;
+    Pong pong = 2;
+    Progress progress = 3;
+    Result result = 4;
+    Error error = 5;
+  }
+}
+
+message Start {
+  string request_id = 1;
+  string filename = 2;
+  string content_type = 3;
+}
+
+message FileChunk {
+  bytes data = 1;
+}
+
+message End {}
+
+message Ping {
+  string id = 1;
+  int64 ts_ms = 2;
+}
+
+message Ready {
+  string request_id = 1;
+}
+
+message Pong {
+  string id = 1;
+  int64 ts_ms = 2;
+}
+
+message Progress {
+  string stage = 1;
+  int32 done = 2;
+}
+
+message Result {
+  string request_id = 1;
+  string filename = 2;
+  bytes data = 3;
+}
+
+message Error {
+  string message = 1;
+}

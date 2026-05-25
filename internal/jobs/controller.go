@@ -13,6 +13,7 @@ import (
 	"github.com/neurochar/backend/internal/app/config"
 	"github.com/neurochar/backend/internal/infra/loghandler"
 
+	crmUC "github.com/neurochar/backend/internal/domain/crm/usecase"
 	emailingUC "github.com/neurochar/backend/internal/domain/emailing/usecase"
 	fileUC "github.com/neurochar/backend/internal/domain/file/usecase"
 )
@@ -37,6 +38,7 @@ type Controller struct {
 	logger     *slog.Logger
 	fileUC     fileUC.Usecase
 	emailingUC emailingUC.Usecase
+	crmFacade  *crmUC.Facade
 }
 
 // NewController - constructor for Controller
@@ -45,6 +47,7 @@ func NewController(
 	logger *slog.Logger,
 	fileUC fileUC.Usecase,
 	emailingUC emailingUC.Usecase,
+	crmFacade *crmUC.Facade,
 ) *Controller {
 	return &Controller{
 		pkg:        "jobs.Controller",
@@ -53,6 +56,7 @@ func NewController(
 		logger:     logger,
 		fileUC:     fileUC,
 		emailingUC: emailingUC,
+		crmFacade:  crmFacade,
 	}
 }
 

@@ -58,6 +58,7 @@ func CandidateResumeFileTypeFromUint8(value uint8) CandidateResumeFileType {
 
 type CandidateResumeAnalyzeData struct {
 	AnonymizedText string
+	DataVersion    int64
 }
 
 type CandidateResume struct {
@@ -69,6 +70,7 @@ type CandidateResume struct {
 	FileHash    string
 	FileType    CandidateResumeFileType
 	AnalyzeData *CandidateResumeAnalyzeData
+	ErrorText   *string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	DeletedAt   *time.Time
@@ -98,6 +100,12 @@ func (item *CandidateResume) SetCandidateID(value *uuid.UUID) error {
 
 func (item *CandidateResume) SetAnalyzeData(value *CandidateResumeAnalyzeData) error {
 	item.AnalyzeData = value
+
+	return nil
+}
+
+func (item *CandidateResume) SetErrorText(value *string) error {
+	item.ErrorText = value
 
 	return nil
 }

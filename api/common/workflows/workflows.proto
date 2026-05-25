@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package workflows.v1;
+
+enum WorkflowsQueue {
+    WORKFLOWS_QUEUE_DEFAULT = 0;
+    WORKFLOWS_QUEUE_OCR = 1;
+    WORKFLOWS_QUEUE_STORAGE = 2;
+    WORKFLOWS_QUEUE_WORD2PDF = 3;   
+    WORKFLOWS_QUEUE_PD_REMOVER = 4;        
+}
+
+enum Workflow {
+    WORKFLOW_UNSPECIFIED = 0;
+    WORKFLOW_PROCESS_RESUME_FILE = 1;       
+}
+
+message WorkflowProcessResumeFileInput {
+    enum FileType {
+        FILE_TYPE_UNSPECIFIED = 0;
+        FILE_TYPE_PDF = 1;
+        FILE_TYPE_WORD = 2;        
+    }
+
+    message FileData {
+        string name = 1;
+        string storage_bucket = 2;
+        string storage_key = 3;
+        FileType type = 4;
+    }
+
+    string resume_id = 1;
+    FileData data = 2;
+}
+
+message WorkflowProcessResumeFileOutput {
+    string status = 1;
+}

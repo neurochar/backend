@@ -22,6 +22,64 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type CandidateResumeStatus int32
+
+const (
+	CandidateResumeStatus_CANDIDATE_RESUME_STATUS_UNSPECIFIED   CandidateResumeStatus = 0
+	CandidateResumeStatus_CANDIDATE_RESUME_STATUS_NEW           CandidateResumeStatus = 1
+	CandidateResumeStatus_CANDIDATE_RESUME_STATUS_TO_PROCESS    CandidateResumeStatus = 2
+	CandidateResumeStatus_CANDIDATE_RESUME_STATUS_PROCESSING    CandidateResumeStatus = 3
+	CandidateResumeStatus_CANDIDATE_RESUME_STATUS_PROCESSED     CandidateResumeStatus = 4
+	CandidateResumeStatus_CANDIDATE_RESUME_STATUS_PROCESS_ERROR CandidateResumeStatus = 5
+)
+
+// Enum value maps for CandidateResumeStatus.
+var (
+	CandidateResumeStatus_name = map[int32]string{
+		0: "CANDIDATE_RESUME_STATUS_UNSPECIFIED",
+		1: "CANDIDATE_RESUME_STATUS_NEW",
+		2: "CANDIDATE_RESUME_STATUS_TO_PROCESS",
+		3: "CANDIDATE_RESUME_STATUS_PROCESSING",
+		4: "CANDIDATE_RESUME_STATUS_PROCESSED",
+		5: "CANDIDATE_RESUME_STATUS_PROCESS_ERROR",
+	}
+	CandidateResumeStatus_value = map[string]int32{
+		"CANDIDATE_RESUME_STATUS_UNSPECIFIED":   0,
+		"CANDIDATE_RESUME_STATUS_NEW":           1,
+		"CANDIDATE_RESUME_STATUS_TO_PROCESS":    2,
+		"CANDIDATE_RESUME_STATUS_PROCESSING":    3,
+		"CANDIDATE_RESUME_STATUS_PROCESSED":     4,
+		"CANDIDATE_RESUME_STATUS_PROCESS_ERROR": 5,
+	}
+)
+
+func (x CandidateResumeStatus) Enum() *CandidateResumeStatus {
+	p := new(CandidateResumeStatus)
+	*p = x
+	return p
+}
+
+func (x CandidateResumeStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (CandidateResumeStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_common_types_crm_types_proto_enumTypes[0].Descriptor()
+}
+
+func (CandidateResumeStatus) Type() protoreflect.EnumType {
+	return &file_common_types_crm_types_proto_enumTypes[0]
+}
+
+func (x CandidateResumeStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use CandidateResumeStatus.Descriptor instead.
+func (CandidateResumeStatus) EnumDescriptor() ([]byte, []int) {
+	return file_common_types_crm_types_proto_rawDescGZIP(), []int{0}
+}
+
 type Candidate struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -214,6 +272,58 @@ func (x *ListCandidate) GetBirthday() *date.Date {
 	return nil
 }
 
+type CandidateResumeAnalyzeData struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	AnonymizedText string                 `protobuf:"bytes,1,opt,name=anonymized_text,json=anonymizedText,proto3" json:"anonymized_text,omitempty"`
+	DataVersion    int64                  `protobuf:"varint,2,opt,name=data_version,json=dataVersion,proto3" json:"data_version,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *CandidateResumeAnalyzeData) Reset() {
+	*x = CandidateResumeAnalyzeData{}
+	mi := &file_common_types_crm_types_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CandidateResumeAnalyzeData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CandidateResumeAnalyzeData) ProtoMessage() {}
+
+func (x *CandidateResumeAnalyzeData) ProtoReflect() protoreflect.Message {
+	mi := &file_common_types_crm_types_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CandidateResumeAnalyzeData.ProtoReflect.Descriptor instead.
+func (*CandidateResumeAnalyzeData) Descriptor() ([]byte, []int) {
+	return file_common_types_crm_types_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *CandidateResumeAnalyzeData) GetAnonymizedText() string {
+	if x != nil {
+		return x.AnonymizedText
+	}
+	return ""
+}
+
+func (x *CandidateResumeAnalyzeData) GetDataVersion() int64 {
+	if x != nil {
+		return x.DataVersion
+	}
+	return 0
+}
+
 var File_common_types_crm_types_proto protoreflect.FileDescriptor
 
 const file_common_types_crm_types_proto_rawDesc = "" +
@@ -239,7 +349,17 @@ const file_common_types_crm_types_proto_rawDesc = "" +
 	"\asurname\x18\x05 \x01(\tR\asurname\x12(\n" +
 	"\x06gender\x18\x06 \x01(\x0e2\x10.types.v1.GenderR\x06gender\x122\n" +
 	"\bbirthday\x18\a \x01(\v2\x11.google.type.DateH\x00R\bbirthday\x88\x01\x01B\v\n" +
-	"\t_birthdayB\x9e\x01\n" +
+	"\t_birthday\"h\n" +
+	"\x1aCandidateResumeAnalyzeData\x12'\n" +
+	"\x0fanonymized_text\x18\x01 \x01(\tR\x0eanonymizedText\x12!\n" +
+	"\fdata_version\x18\x02 \x01(\x03R\vdataVersion*\x83\x02\n" +
+	"\x15CandidateResumeStatus\x12'\n" +
+	"#CANDIDATE_RESUME_STATUS_UNSPECIFIED\x10\x00\x12\x1f\n" +
+	"\x1bCANDIDATE_RESUME_STATUS_NEW\x10\x01\x12&\n" +
+	"\"CANDIDATE_RESUME_STATUS_TO_PROCESS\x10\x02\x12&\n" +
+	"\"CANDIDATE_RESUME_STATUS_PROCESSING\x10\x03\x12%\n" +
+	"!CANDIDATE_RESUME_STATUS_PROCESSED\x10\x04\x12)\n" +
+	"%CANDIDATE_RESUME_STATUS_PROCESS_ERROR\x10\x05B\x9e\x01\n" +
 	"\fcom.types.v1B\rCrmTypesProtoP\x01Z>github.com/neurochar/backend/pkg/proto_pb/common/types;typesv1\xa2\x02\x03TXX\xaa\x02\bTypes.V1\xca\x02\bTypes\\V1\xe2\x02\x14Types\\V1\\GPBMetadata\xea\x02\tTypes::V1b\x06proto3"
 
 var (
@@ -254,20 +374,23 @@ func file_common_types_crm_types_proto_rawDescGZIP() []byte {
 	return file_common_types_crm_types_proto_rawDescData
 }
 
-var file_common_types_crm_types_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_common_types_crm_types_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_common_types_crm_types_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_common_types_crm_types_proto_goTypes = []any{
-	(*Candidate)(nil),     // 0: types.v1.Candidate
-	(*ListCandidate)(nil), // 1: types.v1.ListCandidate
-	(Gender)(0),           // 2: types.v1.Gender
-	(*date.Date)(nil),     // 3: google.type.Date
-	(*File)(nil),          // 4: types.v1.File
+	(CandidateResumeStatus)(0),         // 0: types.v1.CandidateResumeStatus
+	(*Candidate)(nil),                  // 1: types.v1.Candidate
+	(*ListCandidate)(nil),              // 2: types.v1.ListCandidate
+	(*CandidateResumeAnalyzeData)(nil), // 3: types.v1.CandidateResumeAnalyzeData
+	(Gender)(0),                        // 4: types.v1.Gender
+	(*date.Date)(nil),                  // 5: google.type.Date
+	(*File)(nil),                       // 6: types.v1.File
 }
 var file_common_types_crm_types_proto_depIdxs = []int32{
-	2, // 0: types.v1.Candidate.gender:type_name -> types.v1.Gender
-	3, // 1: types.v1.Candidate.birthday:type_name -> google.type.Date
-	4, // 2: types.v1.Candidate.resume_file:type_name -> types.v1.File
-	2, // 3: types.v1.ListCandidate.gender:type_name -> types.v1.Gender
-	3, // 4: types.v1.ListCandidate.birthday:type_name -> google.type.Date
+	4, // 0: types.v1.Candidate.gender:type_name -> types.v1.Gender
+	5, // 1: types.v1.Candidate.birthday:type_name -> google.type.Date
+	6, // 2: types.v1.Candidate.resume_file:type_name -> types.v1.File
+	4, // 3: types.v1.ListCandidate.gender:type_name -> types.v1.Gender
+	5, // 4: types.v1.ListCandidate.birthday:type_name -> google.type.Date
 	5, // [5:5] is the sub-list for method output_type
 	5, // [5:5] is the sub-list for method input_type
 	5, // [5:5] is the sub-list for extension type_name
@@ -288,13 +411,14 @@ func file_common_types_crm_types_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_common_types_crm_types_proto_rawDesc), len(file_common_types_crm_types_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   2,
+			NumEnums:      1,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_common_types_crm_types_proto_goTypes,
 		DependencyIndexes: file_common_types_crm_types_proto_depIdxs,
+		EnumInfos:         file_common_types_crm_types_proto_enumTypes,
 		MessageInfos:      file_common_types_crm_types_proto_msgTypes,
 	}.Build()
 	File_common_types_crm_types_proto = out.File

@@ -31,12 +31,20 @@ func (r *Repository) buildWhereForList(listOptions *usecase.CandidateResumeListO
 		where = append(where, squirrel.Eq{"id": lo.Uniq(*listOptions.FilterIDs)})
 	}
 
+	if listOptions.FilterNotIDs != nil {
+		where = append(where, squirrel.NotEq{"id": lo.Uniq(*listOptions.FilterNotIDs)})
+	}
+
 	if listOptions.FilterCandidatesIDs != nil {
 		where = append(where, squirrel.Eq{"candidate_id": lo.Uniq(*listOptions.FilterCandidatesIDs)})
 	}
 
 	if listOptions.FilterStatus != nil {
 		where = append(where, squirrel.Eq{"status": *listOptions.FilterStatus})
+	}
+
+	if listOptions.FilterFileHash != nil {
+		where = append(where, squirrel.Eq{"file_hash": *listOptions.FilterFileHash})
 	}
 
 	return where
@@ -56,6 +64,12 @@ func (r *Repository) buildSortForList(listOptions *usecase.CandidateResumeListOp
 				sort = append(sort, "created_at DESC")
 			} else {
 				sort = append(sort, "created_at ASC")
+			}
+		case usecase.CandidateResumeListOptionsSortFieldUpdatedAt:
+			if sortOption.IsDesc {
+				sort = append(sort, "updated_at DESC")
+			} else {
+				sort = append(sort, "updated_at ASC")
 			}
 		}
 	}

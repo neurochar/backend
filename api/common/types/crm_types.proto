@@ -25,3 +25,17 @@ message ListCandidate {
   Gender gender = 6;
   optional google.type.Date birthday = 7;
 }
+
+enum CandidateResumeStatus {
+  CANDIDATE_RESUME_STATUS_UNSPECIFIED = 0;
+  CANDIDATE_RESUME_STATUS_NEW = 1;    
+  CANDIDATE_RESUME_STATUS_TO_PROCESS = 2;
+  CANDIDATE_RESUME_STATUS_PROCESSING = 3;
+  CANDIDATE_RESUME_STATUS_PROCESSED = 4;
+  CANDIDATE_RESUME_STATUS_PROCESS_ERROR = 5;
+}
+
+message CandidateResumeAnalyzeData {
+	string anonymized_text = 1;
+	int64 data_version = 2;
+}

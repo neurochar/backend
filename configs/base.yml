@@ -40,8 +40,7 @@ cronjob_app:
         log_sql_queries: true
         log_jobs: true
     jobs:
-        #autostart: true
-        autostart: false
+        autostart: true
 
         process_files_to_delete:
             timeout_millisec: 5000
@@ -60,6 +59,14 @@ cronjob_app:
             timeout_millisec: 3600000
             failed_timeout_millisec: 60000
             ttl_min: 43200
+
+        process_crm_candidates_resumes_new:
+            timeout: 5s
+            failed_timeout: 1m
+
+        process_crm_candidates_resumes_to_process:
+            timeout: 5s
+            failed_timeout: 1m
 
 backend_app:
     name: backend
@@ -80,6 +87,10 @@ backend_app:
         port: 50051
         log_response_sent: false
         log_payload_received: false
+    private_grpc:
+        port: 50052
+        log_response_sent: false
+        log_payload_received: false
 
 postgres:
     max_attempts: 5
@@ -87,6 +98,10 @@ postgres:
     migrations_path: migrations/sql
     master:
         dsn:
+
+temporal:
+    host: "127.0.0.1:7233"
+    namespace: "default"
 
 storage:
     up_migrations: false

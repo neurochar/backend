@@ -16,7 +16,9 @@ var FileTargetCandidateResumeFile string = "crm:candidate:resume"
 
 type CandidateResumeListOptions struct {
 	FilterIDs           *[]uuid.UUID
+	FilterNotIDs        *[]uuid.UUID
 	FilterCandidatesIDs *[]uuid.UUID
+	FilterFileHash      *string
 	FilterStatus        *entity.CandidateResumeStatus
 	Sort                []uctypes.SortOption[CandidateResumeListOptionsSortField]
 }
@@ -25,6 +27,7 @@ type CandidateResumeListOptionsSortField string
 
 const (
 	CandidateResumeListOptionsSortFieldCreatedAt CandidateResumeListOptionsSortField = "created_at"
+	CandidateResumeListOptionsSortFieldUpdatedAt CandidateResumeListOptionsSortField = "updated_at"
 )
 
 type CandidateResumeDTOOptions struct {
@@ -34,6 +37,14 @@ type CandidateResumeDTOOptions struct {
 type CandidateResumeDTO struct {
 	Resume *entity.CandidateResume
 	File   *fileEntity.File
+}
+
+type PatchCandidateResumeDataInput struct {
+	Version int64
+
+	Status      *entity.CandidateResumeStatus
+	AnalyzeData **entity.CandidateResumeAnalyzeData
+	ErrorText   **string
 }
 
 type CandidateResumeUsecase interface {
@@ -53,6 +64,13 @@ type CandidateResumeUsecase interface {
 
 	Create(ctx context.Context, item *entity.CandidateResume) (resErr error)
 
+	PatchByDTO(
+		ctx context.Context,
+		id uuid.UUID,
+		in PatchCandidateResumeDataInput,
+		skipVersionCheck bool,
+	) (resErr error)
+
 	Update(ctx context.Context, item *entity.CandidateResume) (resErr error)
 
 	Delete(ctx context.Context, selectReq *CandidateResumeListOptions) (resErr error)
@@ -62,6 +80,10 @@ type CandidateResumeUsecase interface {
 		fileName string,
 		fileData []byte,
 	) ([]*fileEntity.File, error)
+
+	JobProcessCandidatesResumesNew(ctx context.Context) (bool, error)
+
+	JobProcessCandidatesResumesToProcess(ctx context.Context) (bool, error)
 }
 
 type CandidateResumeRepository interface {

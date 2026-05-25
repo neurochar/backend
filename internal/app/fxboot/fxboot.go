@@ -30,6 +30,9 @@ const (
 	// ProvidingIDDBClients - db clients
 	ProvidingIDDBClients
 
+	// ProvidingIDTemporalClient - temporal client
+	ProvidingIDTemporalClient
+
 	// ProvidingIDBackoff - backoff
 	ProvidingIDBackoff
 
@@ -44,6 +47,9 @@ const (
 
 	// ProvidingPublicGRPCServer - grpc
 	ProvidingPublicGRPCServer
+
+	// ProvidingPrivateGRPCServer - grpc
+	ProvidingPrivateGRPCServer
 
 	// ProvidingPublicHTTPGateway - http fiber server
 	ProvidingPublicHTTPGateway

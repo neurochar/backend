@@ -8,6 +8,35 @@ import (
 	typesv1 "github.com/neurochar/backend/pkg/proto_pb/common/types"
 )
 
+var candidateResumeStatusToPb = map[crmEntity.CandidateResumeStatus]typesv1.CandidateResumeStatus{
+	crmEntity.CandidateResumeStatusUnspecified:  typesv1.CandidateResumeStatus_CANDIDATE_RESUME_STATUS_UNSPECIFIED,
+	crmEntity.CandidateResumeStatusNew:          typesv1.CandidateResumeStatus_CANDIDATE_RESUME_STATUS_NEW,
+	crmEntity.CandidateResumeStatusToProcess:    typesv1.CandidateResumeStatus_CANDIDATE_RESUME_STATUS_TO_PROCESS,
+	crmEntity.CandidateResumeStatusProcessing:   typesv1.CandidateResumeStatus_CANDIDATE_RESUME_STATUS_PROCESSING,
+	crmEntity.CandidateResumeStatusProcessed:    typesv1.CandidateResumeStatus_CANDIDATE_RESUME_STATUS_PROCESSED,
+	crmEntity.CandidateResumeStatusProcessError: typesv1.CandidateResumeStatus_CANDIDATE_RESUME_STATUS_PROCESS_ERROR,
+}
+
+var candidateResumeStatusPbToEntity = make(
+	map[typesv1.CandidateResumeStatus]crmEntity.CandidateResumeStatus,
+	len(candidateResumeStatusToPb),
+)
+
+func init() {
+	for k, v := range candidateResumeStatusToPb {
+		candidateResumeStatusPbToEntity[v] = k
+	}
+}
+
+func CandidateResumeStatusPbToEntity(item typesv1.CandidateResumeStatus) crmEntity.CandidateResumeStatus {
+	val, ok := candidateResumeStatusPbToEntity[item]
+	if !ok {
+		return crmEntity.CandidateResumeStatusUnspecified
+	}
+
+	return val
+}
+
 func CandidateGenderToPb(item crmEntity.CandidateGender) typesv1.Gender {
 	switch item {
 	case crmEntity.CandidateGenderMale:
