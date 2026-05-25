@@ -91,6 +91,8 @@ backend_app:
         port: 50052
         log_response_sent: false
         log_payload_received: false
+    private_http:
+        port: 9090
 
 postgres:
     max_attempts: 5

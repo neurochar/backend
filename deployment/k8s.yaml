@@ -78,6 +78,9 @@ spec:
 
                   ports:
                       - containerPort: 8080
+                      - containerPort: 50051
+                      - containerPort: 50052
+                      - containerPort: 9090
 
                   envFrom:
                       - configMapRef:
@@ -127,4 +130,16 @@ spec:
         - name: http
           port: 8080
           targetPort: 8080
+          protocol: TCP
+        - name: grpc-public
+          port: 50051
+          targetPort: 50051
+          protocol: TCP
+        - name: grpc-private
+          port: 50052
+          targetPort: 50052
+          protocol: TCP
+        - name: http-private
+          port: 9090
+          targetPort: 9090
           protocol: TCP

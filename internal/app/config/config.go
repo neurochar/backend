@@ -75,6 +75,9 @@ type Config struct {
 			LogResponseSent    bool `yaml:"log_response_sent" env:"BACKEND_APP_PRIVATE_GRPC_LOG_RESPONSE_SENT" env-default:"false"`
 			LogPayloadReceived bool `yaml:"log_payload_received" env:"BACKEND_APP_PRIVATE_GRPC_LOG_PAYLOAD_RECEIVED" env-default:"false"`
 		} `yaml:"private_grpc"`
+		PrivateHTTP struct {
+			Port int `yaml:"port" env:"BACKEND_APP_PRIVATE_HTTP_PORT" env-default:"9090"`
+		} `yaml:"private_http"`
 	} `yaml:"backend_app"`
 	CronjobApp struct {
 		Name    string `yaml:"name" env:"CRONJOB_APP_NAME" env-default:"cronjob"`

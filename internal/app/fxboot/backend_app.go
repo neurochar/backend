@@ -14,6 +14,7 @@ import (
 	privateGRPC "github.com/neurochar/backend/internal/delivery/grpc/private"
 	publicGRPC "github.com/neurochar/backend/internal/delivery/grpc/public"
 	publicHTTPServer "github.com/neurochar/backend/internal/delivery/httpgw/server"
+	privateHTTPServer "github.com/neurochar/backend/internal/delivery/private_http/server"
 	"github.com/neurochar/backend/internal/domain/alert"
 	"github.com/neurochar/backend/internal/domain/crm"
 	emailingModule "github.com/neurochar/backend/internal/domain/emailing"
@@ -76,22 +77,23 @@ func BackendAppGetOptionsMap(appID app.ID, cfg config.Config) OptionsMap {
 					logger,
 				)
 			}),
-			ProvidingIDOpenAIClient:    fx.Provide(providing.NewOpenAIClient),
-			ProvidingIDBackoff:         fx.Provide(providing.NewBackoff),
-			ProvidingIDStorageClient:   fx.Provide(providing.NewStorageClient),
-			ProvidingIDEmailing:        fx.Provide(providing.NewEmailing),
-			ProvidingIDDeliveryCommon:  deliveryCommon.FxModule,
-			ProvidingPublicGRPCServer:  providing.PublicGRPCServer,
-			ProvidingPrivateGRPCServer: providing.PrivateGRPCServer,
-			ProvidingPublicHTTPGateway: providing.PublicHTTPGateway,
-			ProvidingIDJobsController:  fx.Provide(jobs.NewController),
-			ProvidingIDFileModule:      file.FxModule,
-			ProvidingIDUserModule:      user.FxModule,
-			ProvidingIDEmailingModule:  emailingModule.FxModule,
-			ProvidingIDAlertModule:     alert.FxModule,
-			ProvidingIDTenantModule:    tenant.FxModule,
-			ProvidingIDCRMModule:       crm.FxModule,
-			ProvidingIDTestingModule:   testing.FxModule,
+			ProvidingIDOpenAIClient:     fx.Provide(providing.NewOpenAIClient),
+			ProvidingIDBackoff:          fx.Provide(providing.NewBackoff),
+			ProvidingIDStorageClient:    fx.Provide(providing.NewStorageClient),
+			ProvidingIDEmailing:         fx.Provide(providing.NewEmailing),
+			ProvidingIDDeliveryCommon:   deliveryCommon.FxModule,
+			ProvidingPublicGRPCServer:   providing.PublicGRPCServer,
+			ProvidingPrivateGRPCServer:  providing.PrivateGRPCServer,
+			ProvidingPublicHTTPGateway:  providing.PublicHTTPGateway,
+			ProvidingPrivateHTTPGateway: providing.PrivateHTTPGateway,
+			ProvidingIDJobsController:   fx.Provide(jobs.NewController),
+			ProvidingIDFileModule:       file.FxModule,
+			ProvidingIDUserModule:       user.FxModule,
+			ProvidingIDEmailingModule:   emailingModule.FxModule,
+			ProvidingIDAlertModule:      alert.FxModule,
+			ProvidingIDTenantModule:     tenant.FxModule,
+			ProvidingIDCRMModule:        crm.FxModule,
+			ProvidingIDTestingModule:    testing.FxModule,
 		},
 		Invokes: []fx.Option{
 			fx.Invoke(BackendAppInitInvoke),
@@ -114,6 +116,7 @@ type BackendInvokeInput struct {
 	PrivateGRPCServer *privateGRPC.PrivateServer
 	PublicGRPCServer  *publicGRPC.PublicServer
 	PublicHTTPServer  *publicHTTPServer.Server
+	PrivateHTTPServer *privateHTTPServer.Server
 	JobsController    *jobs.Controller
 	TemporalClient    temporalClient.Client
 }
@@ -267,6 +270,19 @@ func BackendAppInitInvoke(
 				}
 			}()
 
+			// Запускаем private HTTP server
+			servePrivateHTTP, err := in.PrivateHTTPServer.Listen()
+			if err != nil {
+				in.Logger.ErrorContext(ctx, "failed to start HTTP private server", slog.Any("error", err))
+			}
+			in.Logger.InfoContext(ctx, "started HTTP private server", slog.Int("port", in.Cfg.BackendApp.PrivateHTTP.Port))
+
+			go func() {
+				if err := servePrivateHTTP(); err != nil {
+					in.Logger.ErrorContext(ctx, "failed to serve HTTP private server", slog.Any("error", err))
+				}
+			}()
+
 			// Запускаем invoke функции после открытия
 			for _, invokeItem := range in.Invokes {
 				if invokeItem.StartAfterOpen != nil {
@@ -286,6 +302,13 @@ func BackendAppInitInvoke(
 			err := in.PublicHTTPServer.Shutdown(ctx)
 			if err != nil {
 				in.Logger.ErrorContext(ctx, "failed to shutdown public HTTP gateway", slog.Any("error", err))
+			}
+
+			// Останавливаем private HTTP server
+			in.Logger.InfoContext(ctx, "stopping private HTTP server")
+			err = in.PrivateHTTPServer.Shutdown(ctx)
+			if err != nil {
+				in.Logger.ErrorContext(ctx, "failed to shutdown private HTTP server", slog.Any("error", err))
 			}
 
 			// Останавливаем public gRPC

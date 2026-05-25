@@ -83,6 +83,9 @@ const (
 
 	// ProvidingIDTestingModule - testing
 	ProvidingIDTestingModule
+
+	// ProvidingPrivateHTTPGateway - private http
+	ProvidingPrivateHTTPGateway
 )
 
 // OptionsMap - options map item with providing and invokes elements
