@@ -18,12 +18,19 @@
       },
       "type": "object"
     },
-    "RoomsPublicServiceFinishRoomBody": {
+    "RoomsPublicServiceAnswerBody": {
       "properties": {
-        "payload": {
-          "$ref": "#/definitions/v1FinishRoomRequestPayload"
+        "answerValue": {
+          "$ref": "#/definitions/v1AnswerValue"
+        },
+        "questionIndex": {
+          "format": "int32",
+          "type": "integer"
         }
       },
+      "type": "object"
+    },
+    "RoomsPublicServiceStartRoomBody": {
       "type": "object"
     },
     "TenantPublicServicePatchTenantBody": {
@@ -239,6 +246,17 @@
     "v1AccountVerifyEmailResponse": {
       "type": "object"
     },
+    "v1AnswerResponse": {
+      "properties": {
+        "room": {
+          "$ref": "#/definitions/v1Room"
+        }
+      },
+      "required": [
+        "room"
+      ],
+      "type": "object"
+    },
     "v1AnswerValue": {
       "properties": {
         "boolValue": {
@@ -254,17 +272,6 @@
         },
         "stringValue": {
           "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "v1Answers": {
-      "properties": {
-        "data": {
-          "additionalProperties": {
-            "$ref": "#/definitions/v1AnswerValue"
-          },
-          "type": "object"
         }
       },
       "type": "object"
@@ -614,20 +621,6 @@
         "textId",
         "url"
       ],
-      "type": "object"
-    },
-    "v1FinishRoomRequestPayload": {
-      "properties": {
-        "answers": {
-          "$ref": "#/definitions/v1Answers"
-        }
-      },
-      "required": [
-        "answers"
-      ],
-      "type": "object"
-    },
-    "v1FinishRoomResponse": {
       "type": "object"
     },
     "v1Gender": {
@@ -1118,18 +1111,18 @@
         "candidate": {
           "$ref": "#/definitions/v1RoomCandidate"
         },
+        "currentQuestion": {
+          "$ref": "#/definitions/v1RoomTechniqueItem"
+        },
+        "currentQuestionIndex": {
+          "format": "int32",
+          "type": "integer"
+        },
         "id": {
           "type": "string"
         },
         "status": {
           "$ref": "#/definitions/v1RoomStatus"
-        },
-        "techniqueData": {
-          "items": {
-            "$ref": "#/definitions/v1RoomTechniqueItem",
-            "type": "object"
-          },
-          "type": "array"
         },
         "tenantName": {
           "type": "string"
@@ -1137,6 +1130,7 @@
       },
       "required": [
         "candidate",
+        "currentQuestion",
         "id",
         "status",
         "tenantName"
@@ -1159,6 +1153,7 @@
       "enum": [
         "ROOM_STATUS_UNSPECIFIED",
         "ROOM_STATUS_NOT_STARTED",
+        "ROOM_STATUS_STARTED",
         "ROOM_STATUS_FINISHED"
       ],
       "type": "string"
@@ -1196,6 +1191,17 @@
       "type": "object"
     },
     "v1StartRegistrationResponse": {
+      "type": "object"
+    },
+    "v1StartRoomResponse": {
+      "properties": {
+        "room": {
+          "$ref": "#/definitions/v1Room"
+        }
+      },
+      "required": [
+        "room"
+      ],
       "type": "object"
     },
     "v1TechniqueItemType": {
@@ -1263,6 +1269,10 @@
           "format": "date-time",
           "type": "string"
         },
+        "durationSec": {
+          "format": "int32",
+          "type": "integer"
+        },
         "finishedAt": {
           "format": "date-time",
           "type": "string"
@@ -1279,6 +1289,10 @@
         "resultIndex": {
           "format": "int32",
           "type": "integer"
+        },
+        "startedAt": {
+          "format": "date-time",
+          "type": "string"
         },
         "status": {
           "$ref": "#/definitions/v1RoomStatus"
@@ -1341,6 +1355,10 @@
           "format": "date-time",
           "type": "string"
         },
+        "durationSec": {
+          "format": "int32",
+          "type": "integer"
+        },
         "finishedAt": {
           "format": "date-time",
           "type": "string"
@@ -1360,6 +1378,10 @@
         "resultIndex": {
           "format": "int32",
           "type": "integer"
+        },
+        "startedAt": {
+          "format": "date-time",
+          "type": "string"
         },
         "status": {
           "$ref": "#/definitions/v1RoomStatus"
@@ -2106,9 +2128,9 @@
         ]
       }
     },
-    "/v1/rooms/{id}/finish": {
+    "/v1/rooms/{id}/answer": {
       "post": {
-        "operationId": "RoomsPublicService_FinishRoom",
+        "operationId": "RoomsPublicService_Answer",
         "parameters": [
           {
             "in": "path",
@@ -2121,7 +2143,7 @@
             "name": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/RoomsPublicServiceFinishRoomBody"
+              "$ref": "#/definitions/RoomsPublicServiceAnswerBody"
             }
           }
         ],
@@ -2129,7 +2151,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1FinishRoomResponse"
+              "$ref": "#/definitions/v1AnswerResponse"
             }
           },
           "default": {
@@ -2139,7 +2161,46 @@
             }
           }
         },
-        "summary": "Завершить комнату",
+        "summary": "Ответить на вопрос",
+        "tags": [
+          "RoomsPublicService"
+        ]
+      }
+    },
+    "/v1/rooms/{id}/start": {
+      "post": {
+        "operationId": "RoomsPublicService_StartRoom",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RoomsPublicServiceStartRoomBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1StartRoomResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "summary": "Начать комнату",
         "tags": [
           "RoomsPublicService"
         ]

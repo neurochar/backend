@@ -106,12 +106,19 @@ type RoomUsecase interface {
 
 	Update(ctx context.Context, item *entity.Room) (resErr error)
 
-	Finish(
+	Start(
 		ctx context.Context,
 		id uuid.UUID,
-		answerData map[uint64]any,
 		requestIP *netip.Addr,
-	) (resErr error)
+	) (resRoomDTO *RoomDTO, resErr error)
+
+	Answer(
+		ctx context.Context,
+		id uuid.UUID,
+		questionIndex int32,
+		answer any,
+		requestIP *netip.Addr,
+	) (resRoomDTO *RoomDTO, resErr error)
 
 	Process(
 		ctx context.Context,

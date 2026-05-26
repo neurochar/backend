@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	RoomsPublicService_GetRoom_FullMethodName    = "/rooms.v1.RoomsPublicService/GetRoom"
-	RoomsPublicService_FinishRoom_FullMethodName = "/rooms.v1.RoomsPublicService/FinishRoom"
+	RoomsPublicService_GetRoom_FullMethodName   = "/rooms.v1.RoomsPublicService/GetRoom"
+	RoomsPublicService_StartRoom_FullMethodName = "/rooms.v1.RoomsPublicService/StartRoom"
+	RoomsPublicService_Answer_FullMethodName    = "/rooms.v1.RoomsPublicService/Answer"
 )
 
 // RoomsPublicServiceClient is the client API for RoomsPublicService service.
@@ -29,8 +30,10 @@ const (
 type RoomsPublicServiceClient interface {
 	// Получить комнату
 	GetRoom(ctx context.Context, in *GetRoomRequest, opts ...grpc.CallOption) (*GetRoomResponse, error)
-	// Завершить комнату
-	FinishRoom(ctx context.Context, in *FinishRoomRequest, opts ...grpc.CallOption) (*FinishRoomResponse, error)
+	// Начать комнату
+	StartRoom(ctx context.Context, in *StartRoomRequest, opts ...grpc.CallOption) (*StartRoomResponse, error)
+	// Ответить на вопрос
+	Answer(ctx context.Context, in *AnswerRequest, opts ...grpc.CallOption) (*AnswerResponse, error)
 }
 
 type roomsPublicServiceClient struct {
@@ -51,10 +54,20 @@ func (c *roomsPublicServiceClient) GetRoom(ctx context.Context, in *GetRoomReque
 	return out, nil
 }
 
-func (c *roomsPublicServiceClient) FinishRoom(ctx context.Context, in *FinishRoomRequest, opts ...grpc.CallOption) (*FinishRoomResponse, error) {
+func (c *roomsPublicServiceClient) StartRoom(ctx context.Context, in *StartRoomRequest, opts ...grpc.CallOption) (*StartRoomResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(FinishRoomResponse)
-	err := c.cc.Invoke(ctx, RoomsPublicService_FinishRoom_FullMethodName, in, out, cOpts...)
+	out := new(StartRoomResponse)
+	err := c.cc.Invoke(ctx, RoomsPublicService_StartRoom_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *roomsPublicServiceClient) Answer(ctx context.Context, in *AnswerRequest, opts ...grpc.CallOption) (*AnswerResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AnswerResponse)
+	err := c.cc.Invoke(ctx, RoomsPublicService_Answer_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -67,8 +80,10 @@ func (c *roomsPublicServiceClient) FinishRoom(ctx context.Context, in *FinishRoo
 type RoomsPublicServiceServer interface {
 	// Получить комнату
 	GetRoom(context.Context, *GetRoomRequest) (*GetRoomResponse, error)
-	// Завершить комнату
-	FinishRoom(context.Context, *FinishRoomRequest) (*FinishRoomResponse, error)
+	// Начать комнату
+	StartRoom(context.Context, *StartRoomRequest) (*StartRoomResponse, error)
+	// Ответить на вопрос
+	Answer(context.Context, *AnswerRequest) (*AnswerResponse, error)
 	mustEmbedUnimplementedRoomsPublicServiceServer()
 }
 
@@ -82,8 +97,11 @@ type UnimplementedRoomsPublicServiceServer struct{}
 func (UnimplementedRoomsPublicServiceServer) GetRoom(context.Context, *GetRoomRequest) (*GetRoomResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetRoom not implemented")
 }
-func (UnimplementedRoomsPublicServiceServer) FinishRoom(context.Context, *FinishRoomRequest) (*FinishRoomResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method FinishRoom not implemented")
+func (UnimplementedRoomsPublicServiceServer) StartRoom(context.Context, *StartRoomRequest) (*StartRoomResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method StartRoom not implemented")
+}
+func (UnimplementedRoomsPublicServiceServer) Answer(context.Context, *AnswerRequest) (*AnswerResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Answer not implemented")
 }
 func (UnimplementedRoomsPublicServiceServer) mustEmbedUnimplementedRoomsPublicServiceServer() {}
 func (UnimplementedRoomsPublicServiceServer) testEmbeddedByValue()                            {}
@@ -124,20 +142,38 @@ func _RoomsPublicService_GetRoom_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
-func _RoomsPublicService_FinishRoom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FinishRoomRequest)
+func _RoomsPublicService_StartRoom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StartRoomRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RoomsPublicServiceServer).FinishRoom(ctx, in)
+		return srv.(RoomsPublicServiceServer).StartRoom(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: RoomsPublicService_FinishRoom_FullMethodName,
+		FullMethod: RoomsPublicService_StartRoom_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RoomsPublicServiceServer).FinishRoom(ctx, req.(*FinishRoomRequest))
+		return srv.(RoomsPublicServiceServer).StartRoom(ctx, req.(*StartRoomRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _RoomsPublicService_Answer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AnswerRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RoomsPublicServiceServer).Answer(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RoomsPublicService_Answer_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RoomsPublicServiceServer).Answer(ctx, req.(*AnswerRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -154,8 +190,12 @@ var RoomsPublicService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _RoomsPublicService_GetRoom_Handler,
 		},
 		{
-			MethodName: "FinishRoom",
-			Handler:    _RoomsPublicService_FinishRoom_Handler,
+			MethodName: "StartRoom",
+			Handler:    _RoomsPublicService_StartRoom_Handler,
+		},
+		{
+			MethodName: "Answer",
+			Handler:    _RoomsPublicService_Answer_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

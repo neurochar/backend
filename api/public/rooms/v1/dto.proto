@@ -23,7 +23,8 @@ message Room {
   types.v1.RoomStatus status = 2;
   string tenant_name = 3;
   RoomCandidate candidate = 4;
-  repeated RoomTechniqueItem technique_data = 5;
+  RoomTechniqueItem current_question = 5;
+  optional int32 current_question_index = 6;
 }
 
 message AnswerValue {
@@ -35,10 +36,6 @@ message AnswerValue {
   }
 }
 
-message Answers {
-  map<uint64, AnswerValue> data = 1;
-}
-
 message GetRoomRequest {
   string id = 1;
 }
@@ -47,13 +44,20 @@ message GetRoomResponse {
   Room room = 1;
 }
 
-message FinishRoomRequestPayload {
-  Answers answers = 1;
+message StartRoomRequest {
+  string id = 1;
 }
 
-message FinishRoomRequest {
+message StartRoomResponse {
+  Room room = 1;
+}
+
+message AnswerRequest {
   string id = 1 [(buf.validate.field).string = {uuid: true}];
-  FinishRoomRequestPayload payload = 2 [(buf.validate.field).required = true];
+  int32 question_index = 2;
+  AnswerValue answer_value = 3;
 }
 
-message FinishRoomResponse {}
+message AnswerResponse {
+  Room room = 1;
+}

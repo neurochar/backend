@@ -51,6 +51,7 @@ func (uc *UsecaseImpl) JobProcessRoomsResults(ctx context.Context) (bool, error)
 			item.Room.ProcessError = lo.ToPtr(err.Error())
 			item.Room.NeedProcessAt = lo.ToPtr(time.Now().Add(time.Duration(item.Room.ProcessTries*5) * time.Minute))
 		} else {
+			item.Room.ProcessError = nil
 			item.Room.IsProcessed = true
 		}
 

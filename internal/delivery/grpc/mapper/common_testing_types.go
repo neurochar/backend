@@ -12,6 +12,7 @@ import (
 var roomStatusToPb = map[testingEntity.RoomStatusType]typesv1.RoomStatus{
 	testingEntity.RoomStatusTypeUnspecified: typesv1.RoomStatus_ROOM_STATUS_UNSPECIFIED,
 	testingEntity.RoomStatusTypeNotStarted:  typesv1.RoomStatus_ROOM_STATUS_NOT_STARTED,
+	testingEntity.RoomStatusTypeStarted:     typesv1.RoomStatus_ROOM_STATUS_STARTED,
 	testingEntity.RoomStatusTypeFinished:    typesv1.RoomStatus_ROOM_STATUS_FINISHED,
 }
 
@@ -252,6 +253,15 @@ func TestingRoomDTOToListPb(item *testingUC.RoomDTO) *typesv1.TestingListRoom {
 		res.HiringDecision = lo.ToPtr(ToomResultAnalyzeHiringDecisionToPb(item.Room.Result.Analyze.HiringDecision))
 	}
 
+	if item.Room.StartedAt != nil {
+		res.StartedAt = timestamppb.New(*item.Room.StartedAt)
+	}
+
+	duration := item.Room.Duration()
+	if duration != nil {
+		res.DurationSec = lo.ToPtr(int32(duration.Seconds()))
+	}
+
 	return res
 }
 
@@ -279,8 +289,17 @@ func TestingRoomDTOToPb(item *testingUC.RoomDTO) *typesv1.TestingRoom {
 		res.ResultIndex = lo.ToPtr(int32(*item.Room.ResultIndex))
 	}
 
+	if item.Room.StartedAt != nil {
+		res.StartedAt = timestamppb.New(*item.Room.StartedAt)
+	}
+
 	if item.Room.FinishedAt != nil {
 		res.FinishedAt = timestamppb.New(*item.Room.FinishedAt)
+	}
+
+	duration := item.Room.Duration()
+	if duration != nil {
+		res.DurationSec = lo.ToPtr(int32(duration.Seconds()))
 	}
 
 	return res

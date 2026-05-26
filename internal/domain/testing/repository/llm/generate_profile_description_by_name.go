@@ -108,12 +108,15 @@ func (r *Repository) GenerateProfileDescriptionByName(ctx context.Context, name 
 		return "", usecase.ErrLLMInvalidResponse
 	}
 
-	var response *GenerateProfileDescriptionByNameResponse
+	content, err := extractJSONContent(resp.Choices[0].Message.Content)
+	if err != nil {
+		return "", usecase.ErrLLMInvalidResponse.WithParent(err)
+	}
+	if content == "" {
+		return "", usecase.ErrLLMInvalidResponse
+	}
 
-	content := resp.Choices[0].Message.Content
-	content = strings.TrimPrefix(content, "```json\n")
-	content = strings.TrimSuffix(content, "\n```")
-	content = strings.TrimSpace(content)
+	var response *GenerateProfileDescriptionByNameResponse
 
 	err = json.Unmarshal([]byte(content), &response)
 	if err != nil {

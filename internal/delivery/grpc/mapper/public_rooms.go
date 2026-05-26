@@ -9,7 +9,30 @@ import (
 	testingEntity "github.com/neurochar/backend/internal/domain/testing/entity"
 	testingUC "github.com/neurochar/backend/internal/domain/testing/usecase"
 	roomsv1 "github.com/neurochar/backend/pkg/proto_pb/public/rooms/v1"
+	"github.com/samber/lo"
 )
+
+func RoomTechniqueItemToPb(
+	techniqueItem testingEntity.TechniqueItem,
+	candidateGender crmEntity.CandidateGender,
+	candidateBirthday *time.Time,
+) (*roomsv1.RoomTechniqueItem, error) {
+	item := &roomsv1.RoomTechniqueItem{
+		Type: TechniqueItemTypeToPb(techniqueItem.GetType()),
+	}
+
+	if techniqueItem.GetType() == testingEntity.TechniqueItemTypeQuestionWithVariantsSignleAnswer {
+		itemQuestionWithVariantsSignleAnswer, ok := techniqueItem.(testingEntity.TechniqueItemQuestionWithVariants)
+		if !ok {
+			return nil, appErrors.ErrInternal
+		}
+
+		item.Question = itemQuestionWithVariantsSignleAnswer.GetQuestion(candidateGender, candidateBirthday)
+		item.Variants = itemQuestionWithVariantsSignleAnswer.GetVariants(candidateGender, candidateBirthday)
+	}
+
+	return item, nil
+}
 
 func RoomToPb(
 	roomDTO *testingUC.RoomDTO,
@@ -40,29 +63,20 @@ func RoomToPb(
 		candidateBirthday = roomDTO.CandidateDTO.Candidate.CandidateBirthday
 	}
 
-	if roomDTO.Room.Status != testingEntity.RoomStatusTypeFinished {
-		for _, techniqueDataItem := range roomDTO.Room.TechniqueData {
-			techniqueItem, err := techniqueDataItem.ItemData.GetItem()
-			if err != nil {
-				return nil, err
-			}
-
-			item := &roomsv1.RoomTechniqueItem{
-				Type: TechniqueItemTypeToPb(techniqueItem.GetType()),
-			}
-
-			if techniqueItem.GetType() == testingEntity.TechniqueItemTypeQuestionWithVariantsSignleAnswer {
-				itemQuestionWithVariantsSignleAnswer, ok := techniqueItem.(testingEntity.TechniqueItemQuestionWithVariants)
-				if !ok {
-					return nil, appErrors.ErrInternal
-				}
-
-				item.Question = itemQuestionWithVariantsSignleAnswer.GetQuestion(candidateGender, candidateBirthday)
-				item.Variants = itemQuestionWithVariantsSignleAnswer.GetVariants(candidateGender, candidateBirthday)
-			}
-
-			out.TechniqueData = append(out.TechniqueData, item)
+	if len(roomDTO.Room.TechniqueData) > 0 && roomDTO.Room.Status == testingEntity.RoomStatusTypeStarted {
+		lastQuestionIndex := len(roomDTO.Room.TechniqueData) - 1
+		techniqueItem, err := roomDTO.Room.TechniqueData[lastQuestionIndex].ItemData.GetItem()
+		if err != nil {
+			return nil, err
 		}
+
+		item, err := RoomTechniqueItemToPb(techniqueItem, candidateGender, candidateBirthday)
+		if err != nil {
+			return nil, appErrors.ErrInternal
+		}
+
+		out.CurrentQuestion = item
+		out.CurrentQuestionIndex = lo.ToPtr(int32(lastQuestionIndex))
 	}
 
 	return out, nil

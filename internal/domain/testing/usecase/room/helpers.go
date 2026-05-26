@@ -13,7 +13,10 @@ import (
 	tenantUC "github.com/neurochar/backend/internal/domain/tenant/usecase"
 	"github.com/neurochar/backend/internal/domain/testing/entity"
 	"github.com/neurochar/backend/internal/domain/testing/lib/techniques"
+	"github.com/neurochar/backend/internal/domain/testing/lib/techniques/kettel"
+	"github.com/neurochar/backend/internal/domain/testing/lib/techniques/kettel/cat"
 	"github.com/neurochar/backend/internal/domain/testing/usecase"
+	"github.com/neurochar/backend/pkg/convert"
 	"github.com/samber/lo"
 )
 
@@ -250,52 +253,24 @@ func (uc *UsecaseImpl) processRoom(
 ) error {
 	const op = "processRoom"
 
-	candidateGender := crmEntity.CandidateGenderUnspecified
-	var candidateBirthday *time.Time
-
-	if roomDTO.CandidateDTO != nil {
-		candidateGender = roomDTO.CandidateDTO.Candidate.CandidateGender
-		candidateBirthday = roomDTO.CandidateDTO.Candidate.CandidateBirthday
-	}
-
 	roomDTO.Room.Result = &entity.RoomResult{
 		Techniques: make(map[uint64]entity.RoomResultTechnique),
 		Traits:     make(map[uint64]entity.RoomResultTraitItem),
 	}
 
-	techniqueToAnswers := make(map[uint64]map[uint64]any, 0)
+	roomDTO.Room.Result.Techniques[1] = make(entity.RoomResultTechnique, 0)
 
-	for i, techniqueData := range roomDTO.Room.TechniqueData {
-		if _, ok := techniqueToAnswers[techniqueData.TechniqueID]; !ok {
-			techniqueToAnswers[techniqueData.TechniqueID] = make(map[uint64]any, 0)
+	for traitID, traitStatus := range roomDTO.Room.TraitsStatuses {
+		if traitStatus.Sten != nil {
+			dSten, err := decimal.NewFromInt64(int64(*traitStatus.Sten), 0, 0)
+			if err != nil {
+				return appErrors.ErrInternal
+			}
+
+			roomDTO.Room.Result.Techniques[1][traitID] = entity.RoomResultTechniquesItem{
+				Result: dSten,
+			}
 		}
-
-		val, ok := roomDTO.Room.CandidateAnswerData[uint64(i)]
-		if !ok {
-			return appErrors.ErrInternal
-		}
-
-		techniqueToAnswers[techniqueData.TechniqueID][uint64(i)] = val
-	}
-
-	for techniqueID, answers := range techniqueToAnswers {
-		technique, ok := techniques.TechniquesLib[techniqueID]
-		if !ok {
-			return appErrors.ErrInternal
-		}
-
-		roomResultTechnique, err := technique.CountResult(
-			roomDTO.Room.PersonalityTraitsMap,
-			roomDTO.Room.TechniqueData,
-			answers,
-			candidateGender,
-			candidateBirthday,
-		)
-		if err != nil {
-			return err
-		}
-
-		roomDTO.Room.Result.Techniques[techniqueID] = roomResultTechnique
 	}
 
 	metricMatches := make([]MetricMatch, 0)
@@ -439,11 +414,358 @@ func (uc *UsecaseImpl) processRoom(
 	llmResp, err := uc.repoLLM.GenerateRoomResults(ctx, llmReq)
 	if err != nil {
 		uc.logger.ErrorContext(ctx, "repoLLM.GenerateRoomResults", slog.Any("error", err))
+		roomDTO.Room.Result = nil
+		roomDTO.Room.ResultIndex = nil
+		return appErrors.ErrInternal.WithWrap(err)
 	} else if llmResp != nil {
 		roomDTO.Room.Result.Analyze = llmResp.Analyze
 
 		if roomDTO.Room.Result.Analyze != nil {
+			score := roomDTO.Room.Result.Analyze.PersonalityFit.Score
+
+			score = max(0, min(100, score))
+
+			total, _, _ := roomDTO.Room.Result.TotalMatch.Int64(0)
+			totalInt := int(total)
+
+			const maxDiff = 30
+
+			score = max(totalInt-maxDiff, min(totalInt+maxDiff, score))
+			score = max(0, min(100, score))
+
+			roomDTO.Room.Result.Analyze.PersonalityFit.Score = score
+
 			roomDTO.Room.ResultIndex = lo.ToPtr(roomDTO.Room.Result.Analyze.PersonalityFit.Score)
+		}
+	} else {
+		roomDTO.Room.Result = nil
+		roomDTO.Room.ResultIndex = nil
+		return appErrors.ErrInternal.WithHints("empty llm req")
+	}
+
+	return nil
+}
+
+var (
+	ErrQenerateNextQuestionLastAnswerNotFilled = appErrors.ErrBadRequest.Extend("last answer not filled")
+	ErrQenerateNextQuestionAllFinished         = appErrors.ErrBadRequest.Extend("all finished")
+)
+
+func (uc *UsecaseImpl) generateNextQuestionForRoom(
+	room *entity.Room,
+) error {
+	if len(room.TechniqueData) > 0 {
+		lastIndex := len(room.TechniqueData) - 1
+		if _, ok := room.CandidateAnswerData[uint64(lastIndex)]; !ok {
+			return ErrQenerateNextQuestionLastAnswerNotFilled
+		}
+	}
+
+	allTraits := make([]uint64, 0, len(room.PersonalityTraitsMap))
+	for traitID := range room.PersonalityTraitsMap {
+		allTraits = append(allTraits, traitID)
+	}
+
+	notFinishedTraits := make([]uint64, 0, len(room.TraitsStatuses))
+	for traitID, trait := range room.TraitsStatuses {
+		if trait.Sten == nil {
+			notFinishedTraits = append(notFinishedTraits, traitID)
+		}
+	}
+
+	if len(notFinishedTraits) == 0 {
+		return ErrQenerateNextQuestionAllFinished
+	}
+
+	useTraitID := lo.Sample(notFinishedTraits)
+
+	if room.TraitsStatuses[useTraitID].UseCat {
+		traitAnswers := []cat.SessionAnswer{}
+		for i, technique := range room.TechniqueData {
+			if technique.TechniqueID != 1 {
+				continue
+			}
+
+			teqItem, err := technique.ItemData.GetItem()
+			if err != nil {
+				return appErrors.ErrInternal.WithWrap(err)
+			}
+
+			kettelQuestion, ok := kettel.ItemsLib[teqItem.GetID()]
+			if !ok {
+				return appErrors.ErrInternal
+			}
+
+			if kettelQuestion.TraitID != useTraitID {
+				continue
+			}
+
+			answer, ok := room.CandidateAnswerData[uint64(i)]
+			if !ok {
+				return appErrors.ErrInternal
+			}
+
+			answerVariantID, ok := convert.ToInt(answer)
+			if !ok {
+				return appErrors.ErrInternal
+			}
+
+			traitAnswers = append(traitAnswers, cat.SessionAnswer{
+				QuestionID: kettelQuestion.ID,
+				VariantID:  answerVariantID,
+			})
+		}
+
+		result, err := uc.catCtrl.PlaySession(useTraitID, traitAnswers)
+		if err != nil {
+			return appErrors.ErrInternal.WithWrap(err)
+		}
+
+		if result.IsFinished {
+			return nil
+		} else if result.NextAnswerID != nil {
+			room.TechniqueData = append(room.TechniqueData, entity.RoomTechniqueDataItem{
+				TechniqueID: 1,
+				ItemData:    kettel.NewKettelItem(*result.NextAnswerID),
+			})
+		}
+	} else {
+		technique, ok := techniques.TechniquesLib[1]
+		if !ok {
+			return appErrors.ErrInternal
+		}
+
+		traitsItems, err := technique.TraitItems(useTraitID)
+		if err != nil {
+			return appErrors.ErrInternal.WithWrap(err)
+		}
+
+		questions := make([]uint64, 0, len(traitsItems))
+		for _, technique := range room.TechniqueData {
+			if technique.TechniqueID != 1 {
+				continue
+			}
+
+			teqItem, err := technique.ItemData.GetItem()
+			if err != nil {
+				return appErrors.ErrInternal.WithWrap(err)
+			}
+
+			kettelQuestion, ok := kettel.ItemsLib[teqItem.GetID()]
+			if !ok {
+				return appErrors.ErrInternal
+			}
+
+			if kettelQuestion.TraitID != useTraitID {
+				continue
+			}
+
+			questions = append(questions, kettelQuestion.ID)
+		}
+
+		notAsked, _ := lo.Difference(traitsItems, questions)
+
+		if len(notAsked) == 0 {
+			return nil
+		}
+
+		useQuestionID := lo.Sample(notAsked)
+
+		room.TechniqueData = append(room.TechniqueData, entity.RoomTechniqueDataItem{
+			TechniqueID: 1,
+			ItemData:    kettel.NewKettelItem(useQuestionID),
+		})
+	}
+
+	return nil
+}
+
+var (
+	ErrAnswerQuestionForRoomAllAnswered          = appErrors.ErrBadRequest.Extend("all answered")
+	ErrAnswerQuestionForRoomInvalidQuestionIndex = appErrors.ErrBadRequest.Extend("invalid question index")
+)
+
+func (uc *UsecaseImpl) answerQuestionForRoom(
+	ctx context.Context,
+	room *entity.Room,
+	questionIndex int32,
+	answer any,
+) error {
+	if len(room.TechniqueData) == 0 {
+		return appErrors.ErrInternal.Extend("no technique data")
+	}
+
+	lastIndex := len(room.TechniqueData) - 1
+	if _, ok := room.CandidateAnswerData[uint64(lastIndex)]; ok {
+		return ErrAnswerQuestionForRoomAllAnswered
+	}
+
+	if int(questionIndex) != lastIndex {
+		return ErrAnswerQuestionForRoomInvalidQuestionIndex
+	}
+
+	teqItem, err := room.TechniqueData[lastIndex].ItemData.GetItem()
+	if err != nil {
+		return appErrors.ErrInternal.WithWrap(err)
+	}
+
+	kettelQuestion, ok := kettel.ItemsLib[teqItem.GetID()]
+	if !ok {
+		return appErrors.ErrInternal
+	}
+
+	useTraitID := kettelQuestion.TraitID
+
+	var answerInt int
+	switch teqItem.GetType() {
+	case entity.TechniqueItemTypeQuestionWithVariantsSignleAnswer:
+		answerInt, ok = convert.ToInt(answer)
+		if !ok {
+			return appErrors.ErrBadRequest
+		}
+	}
+
+	err = teqItem.ValidateAnswer(answerInt)
+	if err != nil {
+		return err
+	}
+
+	if room.CandidateAnswerData == nil {
+		room.CandidateAnswerData = make(map[uint64]any, 0)
+	}
+	room.CandidateAnswerData[uint64(lastIndex)] = answerInt
+
+	if _, ok := room.TraitsStatuses[useTraitID]; !ok {
+		return appErrors.ErrInternal
+	}
+
+	room.TraitsStatuses[useTraitID].AnsweredCount++
+
+	continueToClassic := false
+	if room.TraitsStatuses[useTraitID].UseCat {
+		traitAnswers := []cat.SessionAnswer{}
+		for i, technique := range room.TechniqueData {
+			if technique.TechniqueID != 1 {
+				continue
+			}
+
+			teqItem, err := technique.ItemData.GetItem()
+			if err != nil {
+				return appErrors.ErrInternal.WithWrap(err)
+			}
+
+			kettelQuestion, ok := kettel.ItemsLib[teqItem.GetID()]
+			if !ok {
+				return appErrors.ErrInternal
+			}
+
+			if kettelQuestion.TraitID != useTraitID {
+				continue
+			}
+
+			answer, ok := room.CandidateAnswerData[uint64(i)]
+			if !ok {
+				return appErrors.ErrInternal
+			}
+
+			answerVariantID, ok := convert.ToInt(answer)
+			if !ok {
+				return appErrors.ErrInternal
+			}
+
+			traitAnswers = append(traitAnswers, cat.SessionAnswer{
+				QuestionID: kettelQuestion.ID,
+				VariantID:  answerVariantID,
+			})
+
+		}
+
+		result, err := uc.catCtrl.PlaySession(useTraitID, traitAnswers)
+		if err != nil {
+			return appErrors.ErrInternal.WithWrap(err)
+		}
+
+		if result.IsFinished {
+			if result.IsSure {
+				room.TraitsStatuses[useTraitID].Sten = result.ResultSten
+			} else {
+				room.TraitsStatuses[useTraitID].UseCat = false
+				continueToClassic = true
+			}
+		}
+	}
+
+	if !room.TraitsStatuses[useTraitID].UseCat || continueToClassic {
+		technique, ok := techniques.TechniquesLib[1]
+		if !ok {
+			return appErrors.ErrInternal
+		}
+
+		answers := map[uint64]any{}
+		for i, technique := range room.TechniqueData {
+			if technique.TechniqueID != 1 {
+				continue
+			}
+
+			teqItem, err := technique.ItemData.GetItem()
+			if err != nil {
+				return appErrors.ErrInternal.WithWrap(err)
+			}
+
+			kettelQuestion, ok := kettel.ItemsLib[teqItem.GetID()]
+			if !ok {
+				return appErrors.ErrInternal
+			}
+
+			if kettelQuestion.TraitID != useTraitID {
+				continue
+			}
+
+			answer, ok := room.CandidateAnswerData[uint64(i)]
+			if !ok {
+				return appErrors.ErrInternal
+			}
+
+			answers[kettelQuestion.ID] = answer
+		}
+
+		traitsItems, err := technique.TraitItems(useTraitID)
+		if err != nil {
+			return err
+		}
+
+		if len(answers) == len(traitsItems) {
+			dto, err := uc.entitiesToDTO(ctx, []*entity.Room{room}, &usecase.RoomDTOOptions{
+				FetchCandidate: true,
+			})
+			if err != nil {
+				return err
+			}
+			if len(dto) == 0 {
+				return appErrors.ErrInternal
+			}
+
+			roomDTO := dto[0]
+
+			candidateGender := crmEntity.CandidateGenderUnspecified
+			var candidateBirthday *time.Time
+
+			if roomDTO.CandidateDTO != nil {
+				candidateGender = roomDTO.CandidateDTO.Candidate.CandidateGender
+				candidateBirthday = roomDTO.CandidateDTO.Candidate.CandidateBirthday
+			}
+
+			roomResultTechnique, err := technique.CountTraitSten(
+				useTraitID,
+				answers,
+				candidateGender,
+				candidateBirthday,
+			)
+			if err != nil {
+				return err
+			}
+
+			room.TraitsStatuses[useTraitID].Sten = lo.ToPtr(roomResultTechnique)
 		}
 	}
 

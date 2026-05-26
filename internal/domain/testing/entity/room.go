@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
 	"github.com/neurochar/backend/pkg/convert"
+	"github.com/samber/lo"
 )
 
 type RoomStatusType uint8
@@ -14,6 +15,7 @@ type RoomStatusType uint8
 const (
 	RoomStatusTypeUnspecified RoomStatusType = 0
 	RoomStatusTypeNotStarted  RoomStatusType = 1
+	RoomStatusTypeStarted     RoomStatusType = 2
 	RoomStatusTypeFinished    RoomStatusType = 10
 )
 
@@ -31,6 +33,14 @@ type RoomTechniqueDataItem struct {
 	ItemData    TechniqueItemData
 }
 
+type RoomTraitsStatuses map[uint64]*RoomTraitsStatusesItem
+
+type RoomTraitsStatusesItem struct {
+	AnsweredCount int
+	UseCat        bool
+	Sten          *int
+}
+
 type Room struct {
 	ID                   uuid.UUID
 	TenantID             uuid.UUID
@@ -39,10 +49,12 @@ type Room struct {
 	ProfileID            *uuid.UUID
 	PersonalityTraitsMap ProfilePersonalityTraitsMap
 	TechniqueData        []RoomTechniqueDataItem
+	TraitsStatuses       RoomTraitsStatuses
 	CandidateAnswerData  map[uint64]any
 	Result               *RoomResult
 	ResultIndex          *int
 	CreatedBy            *uuid.UUID
+	StartedAt            *time.Time
 	FinishedIP           *netip.Addr
 	FinishedAt           *time.Time
 	IsProcessed          bool
@@ -132,6 +144,14 @@ func (item *Room) SetCandidateAnswerData(value map[uint64]any) error {
 	item.CandidateAnswerData = answerData
 
 	return nil
+}
+
+func (item *Room) Duration() *time.Duration {
+	if item.StartedAt == nil || item.FinishedAt == nil {
+		return nil
+	}
+
+	return lo.ToPtr(item.FinishedAt.Sub(*item.StartedAt))
 }
 
 func NewRoom(

@@ -124,3 +124,55 @@ func (t *KettelImpl) CountResult(
 
 	return result, nil
 }
+
+func (t *KettelImpl) CountTraitSten(
+	traitID uint64,
+	answers map[uint64]any,
+	candidateGender crmEntity.CandidateGender,
+	candidateBirthday *time.Time,
+) (int, error) {
+	rawValue := 0
+
+	for _, libItem := range ItemsLib {
+		if libItem.TraitID != traitID {
+			continue
+		}
+
+		answer, ok := answers[libItem.ID]
+		if !ok {
+			return 0, appErrors.ErrInternal.WithHints("question not found in answers")
+		}
+
+		valueInt, ok := convert.ToInt(answer)
+		if !ok {
+			return 0, appErrors.ErrInternal.WithHints("cant convert answer value to int")
+		}
+
+		if valueInt < 0 || valueInt >= len(libItem.RawVariantKeys) {
+			return 0, appErrors.ErrInternal.WithHints("value dont exists in RawVariantKeys")
+		}
+
+		rawValue += libItem.RawVariantKeys[valueInt]
+	}
+
+	stenValue := convertRawToSten(rawValue, traitID, candidateGender, candidateBirthday)
+
+	if stenValue == -1 {
+		return 0, appErrors.ErrInternal.WithHints("cant convert raw to sten")
+	}
+
+	return stenValue, nil
+}
+
+func (t *KettelImpl) TraitItems(
+	traitID uint64,
+) ([]uint64, error) {
+	result := make([]uint64, 0, len(ItemsLib))
+	for _, item := range ItemsLib {
+		if item.TraitID == traitID {
+			result = append(result, item.ID)
+		}
+	}
+
+	return result, nil
+}

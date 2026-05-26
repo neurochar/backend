@@ -26,26 +26,30 @@ var File_public_rooms_v1_service_proto protoreflect.FileDescriptor
 
 const file_public_rooms_v1_service_proto_rawDesc = "" +
 	"\n" +
-	"\x1dpublic/rooms/v1/service.proto\x12\brooms.v1\x1a\x19public/rooms/v1/dto.proto\x1a\x1cgoogle/api/annotations.proto\x1a.protoc-gen-openapiv2/options/annotations.proto2\xd7\x01\n" +
+	"\x1dpublic/rooms/v1/service.proto\x12\brooms.v1\x1a\x19public/rooms/v1/dto.proto\x1a\x1cgoogle/api/annotations.proto\x1a.protoc-gen-openapiv2/options/annotations.proto2\xb2\x02\n" +
 	"\x12RoomsPublicService\x12V\n" +
-	"\aGetRoom\x12\x18.rooms.v1.GetRoomRequest\x1a\x19.rooms.v1.GetRoomResponse\"\x16\x82\xd3\xe4\x93\x02\x10\x12\x0e/v1/rooms/{id}\x12i\n" +
-	"\n" +
-	"FinishRoom\x12\x1b.rooms.v1.FinishRoomRequest\x1a\x1c.rooms.v1.FinishRoomResponse\" \x82\xd3\xe4\x93\x02\x1a:\x01*\"\x15/v1/rooms/{id}/finishB\xa0\x01\n" +
+	"\aGetRoom\x12\x18.rooms.v1.GetRoomRequest\x1a\x19.rooms.v1.GetRoomResponse\"\x16\x82\xd3\xe4\x93\x02\x10\x12\x0e/v1/rooms/{id}\x12e\n" +
+	"\tStartRoom\x12\x1a.rooms.v1.StartRoomRequest\x1a\x1b.rooms.v1.StartRoomResponse\"\x1f\x82\xd3\xe4\x93\x02\x19:\x01*\"\x14/v1/rooms/{id}/start\x12]\n" +
+	"\x06Answer\x12\x17.rooms.v1.AnswerRequest\x1a\x18.rooms.v1.AnswerResponse\" \x82\xd3\xe4\x93\x02\x1a:\x01*\"\x15/v1/rooms/{id}/answerB\xa0\x01\n" +
 	"\fcom.rooms.v1B\fServiceProtoP\x01ZAgithub.com/neurochar/backend/pkg/proto_pb/public/rooms/v1;roomsv1\xa2\x02\x03RXX\xaa\x02\bRooms.V1\xca\x02\bRooms\\V1\xe2\x02\x14Rooms\\V1\\GPBMetadata\xea\x02\tRooms::V1b\x06proto3"
 
 var file_public_rooms_v1_service_proto_goTypes = []any{
-	(*GetRoomRequest)(nil),     // 0: rooms.v1.GetRoomRequest
-	(*FinishRoomRequest)(nil),  // 1: rooms.v1.FinishRoomRequest
-	(*GetRoomResponse)(nil),    // 2: rooms.v1.GetRoomResponse
-	(*FinishRoomResponse)(nil), // 3: rooms.v1.FinishRoomResponse
+	(*GetRoomRequest)(nil),    // 0: rooms.v1.GetRoomRequest
+	(*StartRoomRequest)(nil),  // 1: rooms.v1.StartRoomRequest
+	(*AnswerRequest)(nil),     // 2: rooms.v1.AnswerRequest
+	(*GetRoomResponse)(nil),   // 3: rooms.v1.GetRoomResponse
+	(*StartRoomResponse)(nil), // 4: rooms.v1.StartRoomResponse
+	(*AnswerResponse)(nil),    // 5: rooms.v1.AnswerResponse
 }
 var file_public_rooms_v1_service_proto_depIdxs = []int32{
 	0, // 0: rooms.v1.RoomsPublicService.GetRoom:input_type -> rooms.v1.GetRoomRequest
-	1, // 1: rooms.v1.RoomsPublicService.FinishRoom:input_type -> rooms.v1.FinishRoomRequest
-	2, // 2: rooms.v1.RoomsPublicService.GetRoom:output_type -> rooms.v1.GetRoomResponse
-	3, // 3: rooms.v1.RoomsPublicService.FinishRoom:output_type -> rooms.v1.FinishRoomResponse
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
+	1, // 1: rooms.v1.RoomsPublicService.StartRoom:input_type -> rooms.v1.StartRoomRequest
+	2, // 2: rooms.v1.RoomsPublicService.Answer:input_type -> rooms.v1.AnswerRequest
+	3, // 3: rooms.v1.RoomsPublicService.GetRoom:output_type -> rooms.v1.GetRoomResponse
+	4, // 4: rooms.v1.RoomsPublicService.StartRoom:output_type -> rooms.v1.StartRoomResponse
+	5, // 5: rooms.v1.RoomsPublicService.Answer:output_type -> rooms.v1.AnswerResponse
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name

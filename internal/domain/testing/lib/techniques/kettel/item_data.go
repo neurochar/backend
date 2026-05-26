@@ -9,6 +9,12 @@ type KettelItemDataImpl struct {
 	ID uint64 `json:"id"`
 }
 
+func NewKettelItem(id uint64) *KettelItemDataImpl {
+	return &KettelItemDataImpl{
+		ID: id,
+	}
+}
+
 func (i *KettelItemDataImpl) GetItem() (entity.TechniqueItem, error) {
 	item, ok := ItemsLib[i.ID]
 	if !ok {

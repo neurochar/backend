@@ -130,14 +130,15 @@ func (x *RoomTechniqueItem) GetVariants() []string {
 }
 
 type Room struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Status        types.RoomStatus       `protobuf:"varint,2,opt,name=status,proto3,enum=types.v1.RoomStatus" json:"status,omitempty"`
-	TenantName    string                 `protobuf:"bytes,3,opt,name=tenant_name,json=tenantName,proto3" json:"tenant_name,omitempty"`
-	Candidate     *RoomCandidate         `protobuf:"bytes,4,opt,name=candidate,proto3" json:"candidate,omitempty"`
-	TechniqueData []*RoomTechniqueItem   `protobuf:"bytes,5,rep,name=technique_data,json=techniqueData,proto3" json:"technique_data,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state                protoimpl.MessageState `protogen:"open.v1"`
+	Id                   string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Status               types.RoomStatus       `protobuf:"varint,2,opt,name=status,proto3,enum=types.v1.RoomStatus" json:"status,omitempty"`
+	TenantName           string                 `protobuf:"bytes,3,opt,name=tenant_name,json=tenantName,proto3" json:"tenant_name,omitempty"`
+	Candidate            *RoomCandidate         `protobuf:"bytes,4,opt,name=candidate,proto3" json:"candidate,omitempty"`
+	CurrentQuestion      *RoomTechniqueItem     `protobuf:"bytes,5,opt,name=current_question,json=currentQuestion,proto3" json:"current_question,omitempty"`
+	CurrentQuestionIndex *int32                 `protobuf:"varint,6,opt,name=current_question_index,json=currentQuestionIndex,proto3,oneof" json:"current_question_index,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *Room) Reset() {
@@ -198,11 +199,18 @@ func (x *Room) GetCandidate() *RoomCandidate {
 	return nil
 }
 
-func (x *Room) GetTechniqueData() []*RoomTechniqueItem {
+func (x *Room) GetCurrentQuestion() *RoomTechniqueItem {
 	if x != nil {
-		return x.TechniqueData
+		return x.CurrentQuestion
 	}
 	return nil
+}
+
+func (x *Room) GetCurrentQuestionIndex() int32 {
+	if x != nil && x.CurrentQuestionIndex != nil {
+		return *x.CurrentQuestionIndex
+	}
+	return 0
 }
 
 type AnswerValue struct {
@@ -319,50 +327,6 @@ func (*AnswerValue_DoubleValue) isAnswerValue_Value() {}
 
 func (*AnswerValue_BoolValue) isAnswerValue_Value() {}
 
-type Answers struct {
-	state         protoimpl.MessageState  `protogen:"open.v1"`
-	Data          map[uint64]*AnswerValue `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty" protobuf_key:"varint,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Answers) Reset() {
-	*x = Answers{}
-	mi := &file_public_rooms_v1_dto_proto_msgTypes[4]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Answers) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Answers) ProtoMessage() {}
-
-func (x *Answers) ProtoReflect() protoreflect.Message {
-	mi := &file_public_rooms_v1_dto_proto_msgTypes[4]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Answers.ProtoReflect.Descriptor instead.
-func (*Answers) Descriptor() ([]byte, []int) {
-	return file_public_rooms_v1_dto_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *Answers) GetData() map[uint64]*AnswerValue {
-	if x != nil {
-		return x.Data
-	}
-	return nil
-}
-
 type GetRoomRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -372,7 +336,7 @@ type GetRoomRequest struct {
 
 func (x *GetRoomRequest) Reset() {
 	*x = GetRoomRequest{}
-	mi := &file_public_rooms_v1_dto_proto_msgTypes[5]
+	mi := &file_public_rooms_v1_dto_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -384,7 +348,7 @@ func (x *GetRoomRequest) String() string {
 func (*GetRoomRequest) ProtoMessage() {}
 
 func (x *GetRoomRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_public_rooms_v1_dto_proto_msgTypes[5]
+	mi := &file_public_rooms_v1_dto_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -397,7 +361,7 @@ func (x *GetRoomRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetRoomRequest.ProtoReflect.Descriptor instead.
 func (*GetRoomRequest) Descriptor() ([]byte, []int) {
-	return file_public_rooms_v1_dto_proto_rawDescGZIP(), []int{5}
+	return file_public_rooms_v1_dto_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *GetRoomRequest) GetId() string {
@@ -416,7 +380,7 @@ type GetRoomResponse struct {
 
 func (x *GetRoomResponse) Reset() {
 	*x = GetRoomResponse{}
-	mi := &file_public_rooms_v1_dto_proto_msgTypes[6]
+	mi := &file_public_rooms_v1_dto_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -428,7 +392,7 @@ func (x *GetRoomResponse) String() string {
 func (*GetRoomResponse) ProtoMessage() {}
 
 func (x *GetRoomResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_public_rooms_v1_dto_proto_msgTypes[6]
+	mi := &file_public_rooms_v1_dto_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -441,7 +405,7 @@ func (x *GetRoomResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetRoomResponse.ProtoReflect.Descriptor instead.
 func (*GetRoomResponse) Descriptor() ([]byte, []int) {
-	return file_public_rooms_v1_dto_proto_rawDescGZIP(), []int{6}
+	return file_public_rooms_v1_dto_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *GetRoomResponse) GetRoom() *Room {
@@ -451,28 +415,28 @@ func (x *GetRoomResponse) GetRoom() *Room {
 	return nil
 }
 
-type FinishRoomRequestPayload struct {
+type StartRoomRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Answers       *Answers               `protobuf:"bytes,1,opt,name=answers,proto3" json:"answers,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *FinishRoomRequestPayload) Reset() {
-	*x = FinishRoomRequestPayload{}
-	mi := &file_public_rooms_v1_dto_proto_msgTypes[7]
+func (x *StartRoomRequest) Reset() {
+	*x = StartRoomRequest{}
+	mi := &file_public_rooms_v1_dto_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *FinishRoomRequestPayload) String() string {
+func (x *StartRoomRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*FinishRoomRequestPayload) ProtoMessage() {}
+func (*StartRoomRequest) ProtoMessage() {}
 
-func (x *FinishRoomRequestPayload) ProtoReflect() protoreflect.Message {
-	mi := &file_public_rooms_v1_dto_proto_msgTypes[7]
+func (x *StartRoomRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_public_rooms_v1_dto_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -483,90 +447,143 @@ func (x *FinishRoomRequestPayload) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use FinishRoomRequestPayload.ProtoReflect.Descriptor instead.
-func (*FinishRoomRequestPayload) Descriptor() ([]byte, []int) {
-	return file_public_rooms_v1_dto_proto_rawDescGZIP(), []int{7}
+// Deprecated: Use StartRoomRequest.ProtoReflect.Descriptor instead.
+func (*StartRoomRequest) Descriptor() ([]byte, []int) {
+	return file_public_rooms_v1_dto_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *FinishRoomRequestPayload) GetAnswers() *Answers {
-	if x != nil {
-		return x.Answers
-	}
-	return nil
-}
-
-type FinishRoomRequest struct {
-	state         protoimpl.MessageState    `protogen:"open.v1"`
-	Id            string                    `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Payload       *FinishRoomRequestPayload `protobuf:"bytes,2,opt,name=payload,proto3" json:"payload,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *FinishRoomRequest) Reset() {
-	*x = FinishRoomRequest{}
-	mi := &file_public_rooms_v1_dto_proto_msgTypes[8]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *FinishRoomRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*FinishRoomRequest) ProtoMessage() {}
-
-func (x *FinishRoomRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_public_rooms_v1_dto_proto_msgTypes[8]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use FinishRoomRequest.ProtoReflect.Descriptor instead.
-func (*FinishRoomRequest) Descriptor() ([]byte, []int) {
-	return file_public_rooms_v1_dto_proto_rawDescGZIP(), []int{8}
-}
-
-func (x *FinishRoomRequest) GetId() string {
+func (x *StartRoomRequest) GetId() string {
 	if x != nil {
 		return x.Id
 	}
 	return ""
 }
 
-func (x *FinishRoomRequest) GetPayload() *FinishRoomRequestPayload {
-	if x != nil {
-		return x.Payload
-	}
-	return nil
-}
-
-type FinishRoomResponse struct {
+type StartRoomResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	Room          *Room                  `protobuf:"bytes,1,opt,name=room,proto3" json:"room,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *FinishRoomResponse) Reset() {
-	*x = FinishRoomResponse{}
+func (x *StartRoomResponse) Reset() {
+	*x = StartRoomResponse{}
+	mi := &file_public_rooms_v1_dto_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StartRoomResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StartRoomResponse) ProtoMessage() {}
+
+func (x *StartRoomResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_public_rooms_v1_dto_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StartRoomResponse.ProtoReflect.Descriptor instead.
+func (*StartRoomResponse) Descriptor() ([]byte, []int) {
+	return file_public_rooms_v1_dto_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *StartRoomResponse) GetRoom() *Room {
+	if x != nil {
+		return x.Room
+	}
+	return nil
+}
+
+type AnswerRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	QuestionIndex int32                  `protobuf:"varint,2,opt,name=question_index,json=questionIndex,proto3" json:"question_index,omitempty"`
+	AnswerValue   *AnswerValue           `protobuf:"bytes,3,opt,name=answer_value,json=answerValue,proto3" json:"answer_value,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AnswerRequest) Reset() {
+	*x = AnswerRequest{}
+	mi := &file_public_rooms_v1_dto_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AnswerRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AnswerRequest) ProtoMessage() {}
+
+func (x *AnswerRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_public_rooms_v1_dto_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AnswerRequest.ProtoReflect.Descriptor instead.
+func (*AnswerRequest) Descriptor() ([]byte, []int) {
+	return file_public_rooms_v1_dto_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *AnswerRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *AnswerRequest) GetQuestionIndex() int32 {
+	if x != nil {
+		return x.QuestionIndex
+	}
+	return 0
+}
+
+func (x *AnswerRequest) GetAnswerValue() *AnswerValue {
+	if x != nil {
+		return x.AnswerValue
+	}
+	return nil
+}
+
+type AnswerResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Room          *Room                  `protobuf:"bytes,1,opt,name=room,proto3" json:"room,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AnswerResponse) Reset() {
+	*x = AnswerResponse{}
 	mi := &file_public_rooms_v1_dto_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *FinishRoomResponse) String() string {
+func (x *AnswerResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*FinishRoomResponse) ProtoMessage() {}
+func (*AnswerResponse) ProtoMessage() {}
 
-func (x *FinishRoomResponse) ProtoReflect() protoreflect.Message {
+func (x *AnswerResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_public_rooms_v1_dto_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -578,9 +595,16 @@ func (x *FinishRoomResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use FinishRoomResponse.ProtoReflect.Descriptor instead.
-func (*FinishRoomResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use AnswerResponse.ProtoReflect.Descriptor instead.
+func (*AnswerResponse) Descriptor() ([]byte, []int) {
 	return file_public_rooms_v1_dto_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *AnswerResponse) GetRoom() *Room {
+	if x != nil {
+		return x.Room
+	}
+	return nil
 }
 
 var File_public_rooms_v1_dto_proto protoreflect.FileDescriptor
@@ -593,36 +617,37 @@ const file_public_rooms_v1_dto_proto_rawDesc = "" +
 	"\x11RoomTechniqueItem\x12/\n" +
 	"\x04type\x18\x01 \x01(\x0e2\x1b.types.v1.TechniqueItemTypeR\x04type\x12\x1a\n" +
 	"\bquestion\x18\x02 \x01(\tR\bquestion\x12\x1a\n" +
-	"\bvariants\x18\x03 \x03(\tR\bvariants\"\xe0\x01\n" +
+	"\bvariants\x18\x03 \x03(\tR\bvariants\"\xba\x02\n" +
 	"\x04Room\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12,\n" +
 	"\x06status\x18\x02 \x01(\x0e2\x14.types.v1.RoomStatusR\x06status\x12\x1f\n" +
 	"\vtenant_name\x18\x03 \x01(\tR\n" +
 	"tenantName\x125\n" +
-	"\tcandidate\x18\x04 \x01(\v2\x17.rooms.v1.RoomCandidateR\tcandidate\x12B\n" +
-	"\x0etechnique_data\x18\x05 \x03(\v2\x1b.rooms.v1.RoomTechniqueItemR\rtechniqueData\"\xa0\x01\n" +
+	"\tcandidate\x18\x04 \x01(\v2\x17.rooms.v1.RoomCandidateR\tcandidate\x12F\n" +
+	"\x10current_question\x18\x05 \x01(\v2\x1b.rooms.v1.RoomTechniqueItemR\x0fcurrentQuestion\x129\n" +
+	"\x16current_question_index\x18\x06 \x01(\x05H\x00R\x14currentQuestionIndex\x88\x01\x01B\x19\n" +
+	"\x17_current_question_index\"\xa0\x01\n" +
 	"\vAnswerValue\x12#\n" +
 	"\fstring_value\x18\x01 \x01(\tH\x00R\vstringValue\x12\x1d\n" +
 	"\tint_value\x18\x02 \x01(\x03H\x00R\bintValue\x12#\n" +
 	"\fdouble_value\x18\x03 \x01(\x01H\x00R\vdoubleValue\x12\x1f\n" +
 	"\n" +
 	"bool_value\x18\x04 \x01(\bH\x00R\tboolValueB\a\n" +
-	"\x05value\"\x8a\x01\n" +
-	"\aAnswers\x12/\n" +
-	"\x04data\x18\x01 \x03(\v2\x1b.rooms.v1.Answers.DataEntryR\x04data\x1aN\n" +
-	"\tDataEntry\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\x04R\x03key\x12+\n" +
-	"\x05value\x18\x02 \x01(\v2\x15.rooms.v1.AnswerValueR\x05value:\x028\x01\" \n" +
+	"\x05value\" \n" +
 	"\x0eGetRoomRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"5\n" +
 	"\x0fGetRoomResponse\x12\"\n" +
-	"\x04room\x18\x01 \x01(\v2\x0e.rooms.v1.RoomR\x04room\"G\n" +
-	"\x18FinishRoomRequestPayload\x12+\n" +
-	"\aanswers\x18\x01 \x01(\v2\x11.rooms.v1.AnswersR\aanswers\"s\n" +
-	"\x11FinishRoomRequest\x12\x18\n" +
-	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\x12D\n" +
-	"\apayload\x18\x02 \x01(\v2\".rooms.v1.FinishRoomRequestPayloadB\x06\xbaH\x03\xc8\x01\x01R\apayload\"\x14\n" +
-	"\x12FinishRoomResponseB\x9c\x01\n" +
+	"\x04room\x18\x01 \x01(\v2\x0e.rooms.v1.RoomR\x04room\"\"\n" +
+	"\x10StartRoomRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"7\n" +
+	"\x11StartRoomResponse\x12\"\n" +
+	"\x04room\x18\x01 \x01(\v2\x0e.rooms.v1.RoomR\x04room\"\x8a\x01\n" +
+	"\rAnswerRequest\x12\x18\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x02id\x12%\n" +
+	"\x0equestion_index\x18\x02 \x01(\x05R\rquestionIndex\x128\n" +
+	"\fanswer_value\x18\x03 \x01(\v2\x15.rooms.v1.AnswerValueR\vanswerValue\"4\n" +
+	"\x0eAnswerResponse\x12\"\n" +
+	"\x04room\x18\x01 \x01(\v2\x0e.rooms.v1.RoomR\x04roomB\x9c\x01\n" +
 	"\fcom.rooms.v1B\bDtoProtoP\x01ZAgithub.com/neurochar/backend/pkg/proto_pb/public/rooms/v1;roomsv1\xa2\x02\x03RXX\xaa\x02\bRooms.V1\xca\x02\bRooms\\V1\xe2\x02\x14Rooms\\V1\\GPBMetadata\xea\x02\tRooms::V1b\x06proto3"
 
 var (
@@ -637,37 +662,35 @@ func file_public_rooms_v1_dto_proto_rawDescGZIP() []byte {
 	return file_public_rooms_v1_dto_proto_rawDescData
 }
 
-var file_public_rooms_v1_dto_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_public_rooms_v1_dto_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_public_rooms_v1_dto_proto_goTypes = []any{
-	(*RoomCandidate)(nil),            // 0: rooms.v1.RoomCandidate
-	(*RoomTechniqueItem)(nil),        // 1: rooms.v1.RoomTechniqueItem
-	(*Room)(nil),                     // 2: rooms.v1.Room
-	(*AnswerValue)(nil),              // 3: rooms.v1.AnswerValue
-	(*Answers)(nil),                  // 4: rooms.v1.Answers
-	(*GetRoomRequest)(nil),           // 5: rooms.v1.GetRoomRequest
-	(*GetRoomResponse)(nil),          // 6: rooms.v1.GetRoomResponse
-	(*FinishRoomRequestPayload)(nil), // 7: rooms.v1.FinishRoomRequestPayload
-	(*FinishRoomRequest)(nil),        // 8: rooms.v1.FinishRoomRequest
-	(*FinishRoomResponse)(nil),       // 9: rooms.v1.FinishRoomResponse
-	nil,                              // 10: rooms.v1.Answers.DataEntry
-	(types.TechniqueItemType)(0),     // 11: types.v1.TechniqueItemType
-	(types.RoomStatus)(0),            // 12: types.v1.RoomStatus
+	(*RoomCandidate)(nil),        // 0: rooms.v1.RoomCandidate
+	(*RoomTechniqueItem)(nil),    // 1: rooms.v1.RoomTechniqueItem
+	(*Room)(nil),                 // 2: rooms.v1.Room
+	(*AnswerValue)(nil),          // 3: rooms.v1.AnswerValue
+	(*GetRoomRequest)(nil),       // 4: rooms.v1.GetRoomRequest
+	(*GetRoomResponse)(nil),      // 5: rooms.v1.GetRoomResponse
+	(*StartRoomRequest)(nil),     // 6: rooms.v1.StartRoomRequest
+	(*StartRoomResponse)(nil),    // 7: rooms.v1.StartRoomResponse
+	(*AnswerRequest)(nil),        // 8: rooms.v1.AnswerRequest
+	(*AnswerResponse)(nil),       // 9: rooms.v1.AnswerResponse
+	(types.TechniqueItemType)(0), // 10: types.v1.TechniqueItemType
+	(types.RoomStatus)(0),        // 11: types.v1.RoomStatus
 }
 var file_public_rooms_v1_dto_proto_depIdxs = []int32{
-	11, // 0: rooms.v1.RoomTechniqueItem.type:type_name -> types.v1.TechniqueItemType
-	12, // 1: rooms.v1.Room.status:type_name -> types.v1.RoomStatus
+	10, // 0: rooms.v1.RoomTechniqueItem.type:type_name -> types.v1.TechniqueItemType
+	11, // 1: rooms.v1.Room.status:type_name -> types.v1.RoomStatus
 	0,  // 2: rooms.v1.Room.candidate:type_name -> rooms.v1.RoomCandidate
-	1,  // 3: rooms.v1.Room.technique_data:type_name -> rooms.v1.RoomTechniqueItem
-	10, // 4: rooms.v1.Answers.data:type_name -> rooms.v1.Answers.DataEntry
-	2,  // 5: rooms.v1.GetRoomResponse.room:type_name -> rooms.v1.Room
-	4,  // 6: rooms.v1.FinishRoomRequestPayload.answers:type_name -> rooms.v1.Answers
-	7,  // 7: rooms.v1.FinishRoomRequest.payload:type_name -> rooms.v1.FinishRoomRequestPayload
-	3,  // 8: rooms.v1.Answers.DataEntry.value:type_name -> rooms.v1.AnswerValue
-	9,  // [9:9] is the sub-list for method output_type
-	9,  // [9:9] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	1,  // 3: rooms.v1.Room.current_question:type_name -> rooms.v1.RoomTechniqueItem
+	2,  // 4: rooms.v1.GetRoomResponse.room:type_name -> rooms.v1.Room
+	2,  // 5: rooms.v1.StartRoomResponse.room:type_name -> rooms.v1.Room
+	3,  // 6: rooms.v1.AnswerRequest.answer_value:type_name -> rooms.v1.AnswerValue
+	2,  // 7: rooms.v1.AnswerResponse.room:type_name -> rooms.v1.Room
+	8,  // [8:8] is the sub-list for method output_type
+	8,  // [8:8] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_public_rooms_v1_dto_proto_init() }
@@ -675,6 +698,7 @@ func file_public_rooms_v1_dto_proto_init() {
 	if File_public_rooms_v1_dto_proto != nil {
 		return
 	}
+	file_public_rooms_v1_dto_proto_msgTypes[2].OneofWrappers = []any{}
 	file_public_rooms_v1_dto_proto_msgTypes[3].OneofWrappers = []any{
 		(*AnswerValue_StringValue)(nil),
 		(*AnswerValue_IntValue)(nil),
@@ -687,7 +711,7 @@ func file_public_rooms_v1_dto_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_public_rooms_v1_dto_proto_rawDesc), len(file_public_rooms_v1_dto_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

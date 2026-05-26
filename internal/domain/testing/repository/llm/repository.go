@@ -16,7 +16,7 @@ type Repository struct {
 
 func NewRepository(logger *slog.Logger, cfg config.Config, openaiClient openai.Client) *Repository {
 	return &Repository{
-		pkg:          "Tesing.repository.LLM",
+		pkg:          "Testing.repository.LLM",
 		cfg:          cfg,
 		logger:       logger,
 		openaiClient: openaiClient,

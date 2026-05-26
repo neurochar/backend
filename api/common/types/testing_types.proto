@@ -12,6 +12,7 @@ enum TechniqueItemType {
 enum RoomStatus {
   ROOM_STATUS_UNSPECIFIED = 0;
   ROOM_STATUS_NOT_STARTED = 1;
+  ROOM_STATUS_STARTED = 2;
   ROOM_STATUS_FINISHED = 10;
 }
 
@@ -119,6 +120,8 @@ message TestingRoom {
   optional int32 result_index = 9;
   optional google.protobuf.Timestamp finished_at = 10;
   ProfilePersonalityTraitsMap personality_traits = 11;
+  optional google.protobuf.Timestamp started_at = 12;
+  optional int32 duration_sec = 13;
 }
 
 message TestingListRoom {
@@ -132,6 +135,8 @@ message TestingListRoom {
   optional int32 result_index = 8;
   optional TestingRoomResultAnalyzeHiringDecision hiring_decision = 9;
   optional google.protobuf.Timestamp finished_at = 10;
+  optional google.protobuf.Timestamp started_at = 11;
+  optional int32 duration_sec = 12;
 }
 
 

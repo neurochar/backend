@@ -31,9 +31,11 @@ type RoomDBModel struct {
 	PersonalityTraitsMap json.RawMessage `db:"personality_traits_map"`
 	TechniqueData        json.RawMessage `db:"technique_data"`
 	CandidateAnswerData  json.RawMessage `db:"candidate_answer_data"`
+	TraitsStatuses       json.RawMessage `db:"traits_statuses"`
 	Result               json.RawMessage `db:"result"`
 	ResultIndex          *int            `db:"result_index"`
 	CreatedBy            *uuid.UUID      `db:"created_by"`
+	StartedAt            *time.Time      `db:"started_at"`
 	FinishedIP           *netip.Addr     `db:"finished_ip"`
 	FinishedAt           *time.Time      `db:"finished_at"`
 	IsProcessed          bool            `db:"is_processed"`
@@ -94,6 +96,15 @@ func (db *RoomDBModel) ToEntity() *entity.Room {
 		}
 	}
 
+	var traitsStatuses entity.RoomTraitsStatuses
+	if db.TraitsStatuses != nil {
+		traitsStatuses = make(entity.RoomTraitsStatuses)
+		err = json.Unmarshal(db.TraitsStatuses, &traitsStatuses)
+		if err != nil {
+			panic(err)
+		}
+	}
+
 	var result *entity.RoomResult
 	if db.Result != nil {
 		result = &entity.RoomResult{}
@@ -112,9 +123,11 @@ func (db *RoomDBModel) ToEntity() *entity.Room {
 		PersonalityTraitsMap: traitsMap,
 		TechniqueData:        techniqueData,
 		CandidateAnswerData:  candidateAnswerData,
+		TraitsStatuses:       traitsStatuses,
 		Result:               result,
 		ResultIndex:          db.ResultIndex,
 		CreatedBy:            db.CreatedBy,
+		StartedAt:            db.StartedAt,
 		FinishedIP:           db.FinishedIP,
 		FinishedAt:           db.FinishedAt,
 		IsProcessed:          db.IsProcessed,
@@ -147,6 +160,14 @@ func MapRoomEntityToDBModel(entity *entity.Room) *RoomDBModel {
 		}
 	}
 
+	var traitsStatuses json.RawMessage
+	if entity.TraitsStatuses != nil {
+		traitsStatuses, err = json.Marshal(entity.TraitsStatuses)
+		if err != nil {
+			panic(err)
+		}
+	}
+
 	var result json.RawMessage
 	if entity.Result != nil {
 		result, err = json.Marshal(entity.Result)
@@ -164,9 +185,11 @@ func MapRoomEntityToDBModel(entity *entity.Room) *RoomDBModel {
 		PersonalityTraitsMap: traitsMap,
 		TechniqueData:        techniqueData,
 		CandidateAnswerData:  candidateAnswerData,
+		TraitsStatuses:       traitsStatuses,
 		Result:               result,
 		ResultIndex:          entity.ResultIndex,
 		CreatedBy:            entity.CreatedBy,
+		StartedAt:            entity.StartedAt,
 		FinishedAt:           entity.FinishedAt,
 		FinishedIP:           entity.FinishedIP,
 		IsProcessed:          entity.IsProcessed,

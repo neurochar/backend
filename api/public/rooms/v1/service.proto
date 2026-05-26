@@ -14,10 +14,18 @@ service RoomsPublicService {
     };
   }
 
-  // Завершить комнату
-  rpc FinishRoom(FinishRoomRequest) returns (FinishRoomResponse) {
+  // Начать комнату
+  rpc StartRoom(StartRoomRequest) returns (StartRoomResponse) {
     option (google.api.http) = {
-      post: "/v1/rooms/{id}/finish"
+      post: "/v1/rooms/{id}/start"
+      body: "*"
+    };
+  }
+
+  // Ответить на вопрос
+  rpc Answer(AnswerRequest) returns (AnswerResponse) {
+    option (google.api.http) = {
+      post: "/v1/rooms/{id}/answer"
       body: "*"
     };
   }

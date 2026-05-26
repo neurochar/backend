@@ -11,7 +11,6 @@ import (
 	"github.com/neurochar/backend/internal/common/uctypes"
 	candidateUC "github.com/neurochar/backend/internal/domain/crm/usecase"
 	"github.com/neurochar/backend/internal/domain/testing/entity"
-	"github.com/neurochar/backend/internal/domain/testing/lib/techniques"
 	"github.com/neurochar/backend/internal/domain/testing/usecase"
 	"github.com/neurochar/backend/internal/infra/loghandler"
 	"github.com/neurochar/backend/pkg/auth"
@@ -77,16 +76,11 @@ func (uc *UsecaseImpl) CreateByDTO(
 			return err
 		}
 
-		room.TechniqueData = make([]entity.RoomTechniqueDataItem, 0)
-
-		for _, technique := range techniques.TechniquesLib {
-			items := technique.GetItemsByPersonalityTraits(room.PersonalityTraitsMap)
-
-			for _, item := range items {
-				room.TechniqueData = append(room.TechniqueData, entity.RoomTechniqueDataItem{
-					TechniqueID: technique.GetID(),
-					ItemData:    item,
-				})
+		room.TraitsStatuses = make(entity.RoomTraitsStatuses, len(room.PersonalityTraitsMap))
+		for traitID := range room.PersonalityTraitsMap {
+			room.TraitsStatuses[traitID] = &entity.RoomTraitsStatusesItem{
+				AnsweredCount: 0,
+				UseCat:        true,
 			}
 		}
 
@@ -168,24 +162,22 @@ func (uc *UsecaseImpl) Update(ctx context.Context, item *entity.Room) error {
 	return nil
 }
 
-func (uc *UsecaseImpl) Finish(
+func (uc *UsecaseImpl) Start(
 	ctx context.Context,
 	id uuid.UUID,
-	answerData map[uint64]any,
 	requestIP *netip.Addr,
-) error {
-	const op = "Finish"
+) (*usecase.RoomDTO, error) {
+	const op = "Start"
+
+	var room *entity.Room
 
 	err := uc.dbMasterClient.Do(ctx, func(ctx context.Context) error {
-		room, err := uc.repo.FindOneByID(ctx, id, &uctypes.QueryGetOneParams{
+		var err error
+		room, err = uc.repo.FindOneByID(ctx, id, &uctypes.QueryGetOneParams{
 			ForUpdate: true,
 		})
 		if err != nil {
 			return err
-		}
-
-		if room.Status == entity.RoomStatusTypeFinished {
-			return usecase.ErrRoomAlreadyFinished
 		}
 
 		if auth.IsNeedToCheckTenantAccess(ctx) {
@@ -195,15 +187,17 @@ func (uc *UsecaseImpl) Finish(
 			}
 		}
 
-		room.Status = entity.RoomStatusTypeFinished
+		if room.Status != entity.RoomStatusTypeNotStarted {
+			return appErrors.ErrBadRequest.WithHints("room already started")
+		}
 
-		err = room.SetCandidateAnswerData(answerData)
+		err = uc.generateNextQuestionForRoom(room)
 		if err != nil {
 			return err
 		}
 
-		room.FinishedIP = requestIP
-		room.FinishedAt = lo.ToPtr(time.Now())
+		room.Status = entity.RoomStatusTypeStarted
+		room.StartedAt = lo.ToPtr(time.Now())
 
 		err = uc.repo.Update(ctx, room)
 		if err != nil {
@@ -213,10 +207,91 @@ func (uc *UsecaseImpl) Finish(
 		return nil
 	})
 	if err != nil {
-		return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+		return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
 	}
 
-	return nil
+	roomDTO, err := uc.entitiesToDTO(ctx, []*entity.Room{room}, nil)
+	if err != nil {
+		return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	if len(roomDTO) == 0 {
+		uc.logger.ErrorContext(loghandler.WithSource(ctx), "unpredicted empty room dto")
+		return nil, appErrors.Chainf(appErrors.ErrInternal, "%s.%s", uc.pkg, op)
+	}
+
+	return roomDTO[0], nil
+}
+
+func (uc *UsecaseImpl) Answer(
+	ctx context.Context,
+	id uuid.UUID,
+	questionIndex int32,
+	answer any,
+	requestIP *netip.Addr,
+) (*usecase.RoomDTO, error) {
+	const op = "Answer"
+
+	var room *entity.Room
+
+	err := uc.dbMasterClient.Do(ctx, func(ctx context.Context) error {
+		var err error
+		room, err = uc.repo.FindOneByID(ctx, id, &uctypes.QueryGetOneParams{
+			ForUpdate: true,
+		})
+		if err != nil {
+			return err
+		}
+
+		if auth.IsNeedToCheckTenantAccess(ctx) {
+			authData := auth.GetAuthData(ctx)
+			if authData == nil || !authData.IsTenantUser() || authData.TenantUserClaims().TenantID != room.TenantID {
+				return appErrors.ErrForbidden
+			}
+		}
+
+		if room.Status != entity.RoomStatusTypeStarted {
+			return appErrors.ErrBadRequest.WithHints("room not in started status")
+		}
+
+		err = uc.answerQuestionForRoom(ctx, room, questionIndex, answer)
+		if err != nil {
+			return err
+		}
+
+		err = uc.generateNextQuestionForRoom(room)
+		if err != nil {
+			if errors.Is(err, ErrQenerateNextQuestionAllFinished) {
+				room.Status = entity.RoomStatusTypeFinished
+				room.FinishedIP = requestIP
+				room.FinishedAt = lo.ToPtr(time.Now())
+			} else {
+				return err
+			}
+		}
+
+		err = uc.repo.Update(ctx, room)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	roomDTO, err := uc.entitiesToDTO(ctx, []*entity.Room{room}, nil)
+	if err != nil {
+		return nil, appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+	}
+
+	if len(roomDTO) == 0 {
+		uc.logger.ErrorContext(loghandler.WithSource(ctx), "unpredicted empty room dto")
+		return nil, appErrors.Chainf(appErrors.ErrInternal, "%s.%s", uc.pkg, op)
+	}
+
+	return roomDTO[0], nil
 }
 
 func (uc *UsecaseImpl) Process(

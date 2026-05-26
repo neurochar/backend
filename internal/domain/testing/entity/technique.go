@@ -20,4 +20,15 @@ type Technique interface {
 		candidateGender crmEntity.CandidateGender,
 		candidateBirthday *time.Time,
 	) (RoomResultTechnique, error)
+
+	CountTraitSten(
+		traitID uint64,
+		answers map[uint64]any,
+		candidateGender crmEntity.CandidateGender,
+		candidateBirthday *time.Time,
+	) (int, error)
+
+	TraitItems(
+		traitID uint64,
+	) ([]uint64, error)
 }

@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"log/slog"
-	"strings"
 	"time"
 
 	appErrors "github.com/neurochar/backend/internal/app/errors"
@@ -171,12 +170,15 @@ func (r *Repository) GenerateProfileTraitsMapByDescription(
 		return nil, usecase.ErrLLMInvalidResponse
 	}
 
-	var response *GenerateProfileTraitsMapByDescriptionResponse
+	content, err := extractJSONContent(resp.Choices[0].Message.Content)
+	if err != nil {
+		return nil, usecase.ErrLLMInvalidResponse.WithParent(err)
+	}
+	if content == "" {
+		return nil, usecase.ErrLLMInvalidResponse
+	}
 
-	content := resp.Choices[0].Message.Content
-	content = strings.TrimPrefix(content, "```json\n")
-	content = strings.TrimSuffix(content, "\n```")
-	content = strings.TrimSpace(content)
+	var response *GenerateProfileTraitsMapByDescriptionResponse
 
 	err = json.Unmarshal([]byte(content), &response)
 	if err != nil {
