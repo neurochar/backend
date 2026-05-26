@@ -241,21 +241,16 @@ func local_request_TestingPublicService_DeleteProfile_0(ctx context.Context, mar
 	return msg, metadata, err
 }
 
-var filter_TestingPublicService_GenerateProfileDescriptionByName_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
-
 func request_TestingPublicService_GenerateProfileDescriptionByName_0(ctx context.Context, marshaler runtime.Marshaler, client TestingPublicServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq GenerateProfileDescriptionByNameRequest
 		metadata runtime.ServerMetadata
 	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
 	if req.Body != nil {
 		_, _ = io.Copy(io.Discard, req.Body)
-	}
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_TestingPublicService_GenerateProfileDescriptionByName_0); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	msg, err := client.GenerateProfileDescriptionByName(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
@@ -266,31 +261,23 @@ func local_request_TestingPublicService_GenerateProfileDescriptionByName_0(ctx c
 		protoReq GenerateProfileDescriptionByNameRequest
 		metadata runtime.ServerMetadata
 	)
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_TestingPublicService_GenerateProfileDescriptionByName_0); err != nil {
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	msg, err := server.GenerateProfileDescriptionByName(ctx, &protoReq)
 	return msg, metadata, err
 }
 
-var filter_TestingPublicService_GenerateProfileTraitsMapByDescription_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
-
 func request_TestingPublicService_GenerateProfileTraitsMapByDescription_0(ctx context.Context, marshaler runtime.Marshaler, client TestingPublicServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq GenerateProfileTraitsMapByDescriptionRequest
 		metadata runtime.ServerMetadata
 	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
 	if req.Body != nil {
 		_, _ = io.Copy(io.Discard, req.Body)
-	}
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_TestingPublicService_GenerateProfileTraitsMapByDescription_0); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	msg, err := client.GenerateProfileTraitsMapByDescription(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
@@ -301,10 +288,7 @@ func local_request_TestingPublicService_GenerateProfileTraitsMapByDescription_0(
 		protoReq GenerateProfileTraitsMapByDescriptionRequest
 		metadata runtime.ServerMetadata
 	)
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_TestingPublicService_GenerateProfileTraitsMapByDescription_0); err != nil {
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	msg, err := server.GenerateProfileTraitsMapByDescription(ctx, &protoReq)

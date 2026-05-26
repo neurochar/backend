@@ -632,6 +632,17 @@
       ],
       "type": "string"
     },
+    "v1GenerateProfileDescriptionByNameRequest": {
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
     "v1GenerateProfileDescriptionByNameResponse": {
       "properties": {
         "description": {
@@ -640,6 +651,21 @@
       },
       "required": [
         "description"
+      ],
+      "type": "object"
+    },
+    "v1GenerateProfileTraitsMapByDescriptionRequest": {
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "description",
+        "name"
       ],
       "type": "object"
     },
@@ -2938,10 +2964,12 @@
         "operationId": "TestingPublicService_GenerateProfileDescriptionByName",
         "parameters": [
           {
-            "in": "query",
-            "name": "name",
+            "in": "body",
+            "name": "body",
             "required": true,
-            "type": "string"
+            "schema": {
+              "$ref": "#/definitions/v1GenerateProfileDescriptionByNameRequest"
+            }
           }
         ],
         "responses": {
@@ -2973,16 +3001,12 @@
         "operationId": "TestingPublicService_GenerateProfileTraitsMapByDescription",
         "parameters": [
           {
-            "in": "query",
-            "name": "name",
+            "in": "body",
+            "name": "body",
             "required": true,
-            "type": "string"
-          },
-          {
-            "in": "query",
-            "name": "description",
-            "required": true,
-            "type": "string"
+            "schema": {
+              "$ref": "#/definitions/v1GenerateProfileTraitsMapByDescriptionRequest"
+            }
           }
         ],
         "responses": {

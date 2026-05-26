@@ -102,6 +102,7 @@ service TestingPublicService {
   rpc GenerateProfileDescriptionByName(GenerateProfileDescriptionByNameRequest) returns (GenerateProfileDescriptionByNameResponse) {
     option (google.api.http) = {
       post: "/v1/testing/profiles/generate-profile-description-by-name"
+      body: "*"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       security: {
@@ -116,6 +117,7 @@ service TestingPublicService {
   rpc GenerateProfileTraitsMapByDescription(GenerateProfileTraitsMapByDescriptionRequest) returns (GenerateProfileTraitsMapByDescriptionResponse) {
     option (google.api.http) = {
       post: "/v1/testing/profiles/generate-profile-traits-map-by-description"
+      body: "*"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       security: {

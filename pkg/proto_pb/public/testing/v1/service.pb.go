@@ -27,7 +27,7 @@ var File_public_testing_v1_service_proto protoreflect.FileDescriptor
 const file_public_testing_v1_service_proto_rawDesc = "" +
 	"\n" +
 	"\x1fpublic/testing/v1/service.proto\x12\n" +
-	"testing.v1\x1a\x1bpublic/testing/v1/dto.proto\x1a\x1cgoogle/api/annotations.proto\x1a.protoc-gen-openapiv2/options/annotations.proto2\xe0\x0f\n" +
+	"testing.v1\x1a\x1bpublic/testing/v1/dto.proto\x1a\x1cgoogle/api/annotations.proto\x1a.protoc-gen-openapiv2/options/annotations.proto2\xe6\x0f\n" +
 	"\x14TestingPublicService\x12\xa6\x01\n" +
 	"\x14GetPersonalityTraits\x12'.testing.v1.GetPersonalityTraitsRequest\x1a(.testing.v1.GetPersonalityTraitsResponse\";\x92A\x12b\x10\n" +
 	"\x0e\n" +
@@ -53,15 +53,15 @@ const file_public_testing_v1_service_proto_rawDesc = "" +
 	"\rDeleteProfile\x12 .testing.v1.DeleteProfileRequest\x1a!.testing.v1.DeleteProfileResponse\"6\x92A\x12b\x10\n" +
 	"\x0e\n" +
 	"\n" +
-	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x1b*\x19/v1/testing/profiles/{id}\x12\xe5\x01\n" +
-	" GenerateProfileDescriptionByName\x123.testing.v1.GenerateProfileDescriptionByNameRequest\x1a4.testing.v1.GenerateProfileDescriptionByNameResponse\"V\x92A\x12b\x10\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x1b*\x19/v1/testing/profiles/{id}\x12\xe8\x01\n" +
+	" GenerateProfileDescriptionByName\x123.testing.v1.GenerateProfileDescriptionByNameRequest\x1a4.testing.v1.GenerateProfileDescriptionByNameResponse\"Y\x92A\x12b\x10\n" +
 	"\x0e\n" +
 	"\n" +
-	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02;\"9/v1/testing/profiles/generate-profile-description-by-name\x12\xfa\x01\n" +
-	"%GenerateProfileTraitsMapByDescription\x128.testing.v1.GenerateProfileTraitsMapByDescriptionRequest\x1a9.testing.v1.GenerateProfileTraitsMapByDescriptionResponse\"\\\x92A\x12b\x10\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02>:\x01*\"9/v1/testing/profiles/generate-profile-description-by-name\x12\xfd\x01\n" +
+	"%GenerateProfileTraitsMapByDescription\x128.testing.v1.GenerateProfileTraitsMapByDescriptionRequest\x1a9.testing.v1.GenerateProfileTraitsMapByDescriptionResponse\"_\x92A\x12b\x10\n" +
 	"\x0e\n" +
 	"\n" +
-	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02A\"?/v1/testing/profiles/generate-profile-traits-map-by-description\x12x\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02D:\x01*\"?/v1/testing/profiles/generate-profile-traits-map-by-description\x12x\n" +
 	"\tListRooms\x12\x1c.testing.v1.ListRoomsRequest\x1a\x1d.testing.v1.ListRoomsResponse\".\x92A\x12b\x10\n" +
 	"\x0e\n" +
 	"\n" +
