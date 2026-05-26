@@ -68,6 +68,10 @@ cronjob_app:
             timeout: 5s
             failed_timeout: 1m
 
+        process_rooms_results:
+            timeout: 15s
+            failed_timeout: 30s
+
 backend_app:
     name: backend
     version: 1.0.0

@@ -45,6 +45,10 @@ type Room struct {
 	CreatedBy            *uuid.UUID
 	FinishedIP           *netip.Addr
 	FinishedAt           *time.Time
+	IsProcessed          bool
+	ProcessTries         int
+	ProcessError         *string
+	NeedProcessAt        *time.Time
 
 	CreatedAt time.Time
 	UpdatedAt time.Time

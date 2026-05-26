@@ -133,6 +133,12 @@ type Config struct {
 				// nolint
 				FailedTimeout time.Duration `yaml:"failed_timeout" env:"CRONJOB_APP_JOBS_PROCESS_CRM_CANDIDATES_RESUMES_TO_PROCESS_FAILED_TIMEOUT" env-default:"1m"`
 			} `yaml:"process_crm_candidates_resumes_to_process"`
+			ProcessRoomsResults struct {
+				// nolint
+				Timeout time.Duration `yaml:"timeout" env:"CRONJOB_APP_JOBS_PROCESS_ROOMS_RESULTS_TIMEOUT" env-default:"15s"`
+				// nolint
+				FailedTimeout time.Duration `yaml:"failed_timeout" env:"CRONJOB_APP_JOBS_PROCESS_ROOMS_RESULTS_FAILED_TIMEOUT" env-default:"30s"`
+			} `yaml:"process_rooms_results"`
 		} `yaml:"jobs"`
 	} `yaml:"cronjob_app"`
 	Postgres struct {

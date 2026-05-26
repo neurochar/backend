@@ -8,7 +8,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/govalues/decimal"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
-	"github.com/neurochar/backend/internal/common/uctypes"
 	crmEntity "github.com/neurochar/backend/internal/domain/crm/entity"
 	candidateUC "github.com/neurochar/backend/internal/domain/crm/usecase"
 	tenantUC "github.com/neurochar/backend/internal/domain/tenant/usecase"
@@ -247,220 +246,205 @@ func (uc *UsecaseImpl) roundToProfileBucket(d decimal.Decimal) (int, error) {
 
 func (uc *UsecaseImpl) processRoom(
 	ctx context.Context,
-	id uuid.UUID,
+	roomDTO *usecase.RoomDTO,
 ) error {
 	const op = "processRoom"
 
-	err := uc.dbMasterClient.Do(ctx, func(ctx context.Context) error {
-		roomDTO, err := uc.FindOneByID(ctx, id, &uctypes.QueryGetOneParams{
-			ForUpdate: true,
-		}, nil)
+	candidateGender := crmEntity.CandidateGenderUnspecified
+	var candidateBirthday *time.Time
+
+	if roomDTO.CandidateDTO != nil {
+		candidateGender = roomDTO.CandidateDTO.Candidate.CandidateGender
+		candidateBirthday = roomDTO.CandidateDTO.Candidate.CandidateBirthday
+	}
+
+	roomDTO.Room.Result = &entity.RoomResult{
+		Techniques: make(map[uint64]entity.RoomResultTechnique),
+		Traits:     make(map[uint64]entity.RoomResultTraitItem),
+	}
+
+	techniqueToAnswers := make(map[uint64]map[uint64]any, 0)
+
+	for i, techniqueData := range roomDTO.Room.TechniqueData {
+		if _, ok := techniqueToAnswers[techniqueData.TechniqueID]; !ok {
+			techniqueToAnswers[techniqueData.TechniqueID] = make(map[uint64]any, 0)
+		}
+
+		val, ok := roomDTO.Room.CandidateAnswerData[uint64(i)]
+		if !ok {
+			return appErrors.ErrInternal
+		}
+
+		techniqueToAnswers[techniqueData.TechniqueID][uint64(i)] = val
+	}
+
+	for techniqueID, answers := range techniqueToAnswers {
+		technique, ok := techniques.TechniquesLib[techniqueID]
+		if !ok {
+			return appErrors.ErrInternal
+		}
+
+		roomResultTechnique, err := technique.CountResult(
+			roomDTO.Room.PersonalityTraitsMap,
+			roomDTO.Room.TechniqueData,
+			answers,
+			candidateGender,
+			candidateBirthday,
+		)
 		if err != nil {
 			return err
 		}
 
-		candidateGender := crmEntity.CandidateGenderUnspecified
-		var candidateBirthday *time.Time
+		roomDTO.Room.Result.Techniques[techniqueID] = roomResultTechnique
+	}
 
-		if roomDTO.CandidateDTO != nil {
-			candidateGender = roomDTO.CandidateDTO.Candidate.CandidateGender
-			candidateBirthday = roomDTO.CandidateDTO.Candidate.CandidateBirthday
-		}
+	metricMatches := make([]MetricMatch, 0)
 
-		room := roomDTO.Room
+	for traitID, traitConfig := range roomDTO.Room.PersonalityTraitsMap {
+		traitValueSum := decimal.Zero
+		count := decimal.Zero
 
-		room.Result = &entity.RoomResult{
-			Techniques: make(map[uint64]entity.RoomResultTechnique),
-			Traits:     make(map[uint64]entity.RoomResultTraitItem),
-		}
+		for _, roomResultTechnique := range roomDTO.Room.Result.Techniques {
+			for resTraitID, traitTechResult := range roomResultTechnique {
+				if resTraitID != traitID {
+					continue
+				}
 
-		techniqueToAnswers := make(map[uint64]map[uint64]any, 0)
+				var err error
+				traitValueSum, err = traitValueSum.Add(traitTechResult.Result)
+				if err != nil {
+					return appErrors.ErrInternal.WithWrap(err)
+				}
 
-		for i, techniqueData := range room.TechniqueData {
-			if _, ok := techniqueToAnswers[techniqueData.TechniqueID]; !ok {
-				techniqueToAnswers[techniqueData.TechniqueID] = make(map[uint64]any, 0)
-			}
-
-			val, ok := room.CandidateAnswerData[uint64(i)]
-			if !ok {
-				return appErrors.ErrInternal
-			}
-
-			techniqueToAnswers[techniqueData.TechniqueID][uint64(i)] = val
-		}
-
-		for techniqueID, answers := range techniqueToAnswers {
-			technique, ok := techniques.TechniquesLib[techniqueID]
-			if !ok {
-				return appErrors.ErrInternal
-			}
-
-			roomResultTechnique, err := technique.CountResult(
-				room.PersonalityTraitsMap,
-				room.TechniqueData,
-				answers,
-				candidateGender,
-				candidateBirthday,
-			)
-			if err != nil {
-				return err
-			}
-
-			room.Result.Techniques[techniqueID] = roomResultTechnique
-		}
-
-		metricMatches := make([]MetricMatch, 0)
-
-		for traitID, traitConfig := range room.PersonalityTraitsMap {
-			traitValueSum := decimal.Zero
-			count := decimal.Zero
-
-			for _, roomResultTechnique := range room.Result.Techniques {
-				for resTraitID, traitTechResult := range roomResultTechnique {
-					if resTraitID != traitID {
-						continue
-					}
-
-					traitValueSum, err = traitValueSum.Add(traitTechResult.Result)
-					if err != nil {
-						return appErrors.ErrInternal.WithWrap(err)
-					}
-
-					count, err = count.Add(decimal.One)
-					if err != nil {
-						return appErrors.ErrInternal.WithWrap(err)
-					}
+				count, err = count.Add(decimal.One)
+				if err != nil {
+					return appErrors.ErrInternal.WithWrap(err)
 				}
 			}
-
-			traitValue, err := traitValueSum.Quo(count)
-			if err != nil {
-				return appErrors.ErrInternal.WithWrap(err)
-			}
-
-			traitTarget, err := decimal.NewFromInt64(int64(traitConfig.Target), 0, 0)
-			if err != nil {
-				return appErrors.ErrInternal.WithWrap(err)
-			}
-
-			match, err := traitTarget.Sub(traitValue)
-			if err != nil {
-				return appErrors.ErrInternal.WithWrap(err)
-			}
-
-			match = match.Abs()
-
-			match, err = match.Mul(decimal.MustNew(10, 0))
-			if err != nil {
-				return appErrors.ErrInternal.WithWrap(err)
-			}
-
-			match, err = decimal.Hundred.Sub(match)
-			if err != nil {
-				return appErrors.ErrInternal.WithWrap(err)
-			}
-
-			tip := MetricTextMap[match]
-
-			room.Result.Traits[traitID] = entity.RoomResultTraitItem{
-				TotalResult: traitValue,
-				Match:       match,
-				Tip:         tip,
-			}
-
-			metricMatches = append(metricMatches, MetricMatch{
-				Priority: traitConfig.Priority,
-				Match:    match,
-			})
 		}
 
-		totalMatch, err := uc.сalcOverallMatch(metricMatches)
+		traitValue, err := traitValueSum.Quo(count)
 		if err != nil {
-			return err
+			return appErrors.ErrInternal.WithWrap(err)
 		}
 
-		room.Result.TotalMatch = totalMatch
-
-		bucket, _ := uc.roundToProfileBucket(totalMatch)
-		room.Result.TotalMatchTip = ProfileMatchText[bucket]
-
-		room.FinishedAt = lo.ToPtr(time.Now())
-
-		totalMatchInt := 0
-		i64, _, ok := totalMatch.Int64(0)
-		if ok {
-			totalMatchInt = int(i64)
-		}
-
-		room.ResultIndex = lo.ToPtr(totalMatchInt)
-
-		llmReq := &usecase.GenerateRoomResultsRequest{
-			Job: usecase.GenerateRoomResultsRequestJob{
-				Role:        roomDTO.ProfileDTO.Profile.Name,
-				Description: roomDTO.ProfileDTO.Profile.Description,
-			},
-			Candidate: usecase.GenerateRoomResultsRequestCandidate{
-				Sex: roomDTO.CandidateDTO.Candidate.CandidateGender,
-			},
-			PsyTestResult: usecase.GenerateRoomResultsRequestPsyTestResult{
-				SumResult: float64(totalMatchInt),
-				Traits:    make([]usecase.GenerateRoomResultsRequestTrait, 0, len(roomDTO.Room.TechniqueData)),
-			},
-		}
-
-		if roomDTO.CandidateDTO.Candidate.CandidateBirthday != nil {
-			llmReq.Candidate.Age = roomDTO.CandidateDTO.Candidate.CalcAge(time.Now())
-		}
-
-		for traitID, trait := range roomDTO.Room.Result.Traits {
-
-			teqTrait, err := uc.personalityTraitUC.FindOneByID(ctx, traitID)
-			if err != nil {
-				continue
-			}
-
-			traitTotalRes := 0
-			i64, _, ok := trait.TotalResult.Int64(0)
-			if ok {
-				traitTotalRes = int(i64)
-			}
-
-			roomTrait, ok := roomDTO.Room.PersonalityTraitsMap[traitID]
-			if !ok {
-				continue
-			}
-
-			llmReq.PsyTestResult.Traits = append(llmReq.PsyTestResult.Traits, usecase.GenerateRoomResultsRequestTrait{
-				Name:           teqTrait.GetName(),
-				Description:    teqTrait.GetDescription(),
-				LeftStateName:  teqTrait.GetLeftStateName(),
-				RightStateName: teqTrait.GetRightStateName(),
-				Result:         traitTotalRes,
-				Priority:       roomTrait.Priority,
-				Target:         roomTrait.Target,
-			})
-		}
-
-		llmResp, err := uc.repoLLM.GenerateRoomResults(ctx, llmReq)
+		traitTarget, err := decimal.NewFromInt64(int64(traitConfig.Target), 0, 0)
 		if err != nil {
-			uc.logger.ErrorContext(ctx, "repoLLM.GenerateRoomResults", slog.Any("error", err))
-		} else if llmResp != nil {
-			room.Result.Analyze = llmResp.Analyze
-
-			if room.Result.Analyze != nil {
-				room.ResultIndex = lo.ToPtr(room.Result.Analyze.PersonalityFit.Score)
-			}
+			return appErrors.ErrInternal.WithWrap(err)
 		}
 
-		err = uc.repo.Update(ctx, room)
+		match, err := traitTarget.Sub(traitValue)
 		if err != nil {
-			return err
+			return appErrors.ErrInternal.WithWrap(err)
 		}
 
-		return nil
-	})
+		match = match.Abs()
+
+		match, err = match.Mul(decimal.MustNew(10, 0))
+		if err != nil {
+			return appErrors.ErrInternal.WithWrap(err)
+		}
+
+		match, err = decimal.Hundred.Sub(match)
+		if err != nil {
+			return appErrors.ErrInternal.WithWrap(err)
+		}
+
+		tip := MetricTextMap[match]
+
+		roomDTO.Room.Result.Traits[traitID] = entity.RoomResultTraitItem{
+			TotalResult: traitValue,
+			Match:       match,
+			Tip:         tip,
+		}
+
+		metricMatches = append(metricMatches, MetricMatch{
+			Priority: traitConfig.Priority,
+			Match:    match,
+		})
+	}
+
+	totalMatch, err := uc.сalcOverallMatch(metricMatches)
 	if err != nil {
-		return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+		return err
+	}
+
+	roomDTO.Room.Result.TotalMatch = totalMatch
+
+	bucket, _ := uc.roundToProfileBucket(totalMatch)
+	roomDTO.Room.Result.TotalMatchTip = ProfileMatchText[bucket]
+
+	totalMatchInt := 0
+	i64, _, ok := totalMatch.Int64(0)
+	if ok {
+		totalMatchInt = int(i64)
+	}
+
+	roomDTO.Room.ResultIndex = lo.ToPtr(totalMatchInt)
+
+	llmReq := &usecase.GenerateRoomResultsRequest{
+		Job: usecase.GenerateRoomResultsRequestJob{
+			Role:        roomDTO.ProfileDTO.Profile.Name,
+			Description: roomDTO.ProfileDTO.Profile.Description,
+		},
+		Candidate: usecase.GenerateRoomResultsRequestCandidate{
+			Sex: roomDTO.CandidateDTO.Candidate.CandidateGender,
+		},
+		PsyTestResult: usecase.GenerateRoomResultsRequestPsyTestResult{
+			SumResult: float64(totalMatchInt),
+			Traits:    make([]usecase.GenerateRoomResultsRequestTrait, 0, len(roomDTO.Room.TechniqueData)),
+		},
+	}
+
+	if roomDTO.CandidateDTO.Candidate.CandidateBirthday != nil {
+		llmReq.Candidate.Age = roomDTO.CandidateDTO.Candidate.CalcAge(time.Now())
+	}
+
+	if roomDTO.CandidateDTO.Resume != nil &&
+		roomDTO.CandidateDTO.Resume.Resume != nil &&
+		roomDTO.CandidateDTO.Resume.Resume.AnalyzeData != nil {
+
+		llmReq.Candidate.Resume = lo.ToPtr(roomDTO.CandidateDTO.Resume.Resume.AnalyzeData.AnonymizedText)
+	}
+
+	for traitID, trait := range roomDTO.Room.Result.Traits {
+
+		teqTrait, err := uc.personalityTraitUC.FindOneByID(ctx, traitID)
+		if err != nil {
+			continue
+		}
+
+		traitTotalRes := 0
+		i64, _, ok := trait.TotalResult.Int64(0)
+		if ok {
+			traitTotalRes = int(i64)
+		}
+
+		roomTrait, ok := roomDTO.Room.PersonalityTraitsMap[traitID]
+		if !ok {
+			continue
+		}
+
+		llmReq.PsyTestResult.Traits = append(llmReq.PsyTestResult.Traits, usecase.GenerateRoomResultsRequestTrait{
+			Name:           teqTrait.GetName(),
+			Description:    teqTrait.GetDescription(),
+			LeftStateName:  teqTrait.GetLeftStateName(),
+			RightStateName: teqTrait.GetRightStateName(),
+			Result:         traitTotalRes,
+			Priority:       roomTrait.Priority,
+			Target:         roomTrait.Target,
+		})
+	}
+
+	llmResp, err := uc.repoLLM.GenerateRoomResults(ctx, llmReq)
+	if err != nil {
+		uc.logger.ErrorContext(ctx, "repoLLM.GenerateRoomResults", slog.Any("error", err))
+	} else if llmResp != nil {
+		roomDTO.Room.Result.Analyze = llmResp.Analyze
+
+		if roomDTO.Room.Result.Analyze != nil {
+			roomDTO.Room.ResultIndex = lo.ToPtr(roomDTO.Room.Result.Analyze.PersonalityFit.Score)
+		}
 	}
 
 	return nil

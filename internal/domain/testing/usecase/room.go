@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"net/netip"
+	"time"
 
 	"github.com/google/uuid"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
@@ -15,10 +16,19 @@ import (
 var ErrRoomAlreadyFinished = appErrors.ErrBadRequest.WithTextCode("ROOM_ALREADY_FINISHED").WithHints("room already finished")
 
 type RoomListOptions struct {
-	FilterTenantID    *uuid.UUID
-	FilterCandidateID *uuid.UUID
-	FilterProfileID   *uuid.UUID
-	Sort              []uctypes.SortOption[RoomListOptionsSortField]
+	FilterTenantID      *uuid.UUID
+	FilterCandidateID   *uuid.UUID
+	FilterProfileID     *uuid.UUID
+	FilterStatus        *entity.RoomStatusType
+	FilterIsProcessed   *bool
+	FilterProcessTries  *uctypes.CompareOption[int]
+	FilterNeedProcessAt *RoomListOptionsFilterNeedProcessAt
+	Sort                []uctypes.SortOption[RoomListOptionsSortField]
+}
+
+type RoomListOptionsFilterNeedProcessAt struct {
+	SelectNull   bool
+	CompareValue uctypes.CompareOption[time.Time]
 }
 
 type RoomListOptionsSortField string
@@ -107,6 +117,10 @@ type RoomUsecase interface {
 		ctx context.Context,
 		id uuid.UUID,
 	) (resErr error)
+
+	JobProcessRoomsResults(
+		ctx context.Context,
+	) (res bool, resErr error)
 }
 
 type RoomRepository interface {

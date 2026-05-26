@@ -213,6 +213,11 @@ func BackendAppInitInvoke(
 				in.Cfg.CronjobApp.Jobs.ProcessCrmCandidatesResumesToProcess.FailedTimeout,
 			)
 
+			in.JobsController.RegisterProcessRoomsResults(
+				in.Cfg.CronjobApp.Jobs.ProcessRoomsResults.Timeout,
+				in.Cfg.CronjobApp.Jobs.ProcessRoomsResults.FailedTimeout,
+			)
+
 			// Запускаем invoke функции до открытия
 			for _, invokeItem := range in.Invokes {
 				if invokeItem.StartBeforeOpen != nil {

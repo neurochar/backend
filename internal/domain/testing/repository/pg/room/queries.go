@@ -38,6 +38,56 @@ func (r *Repository) buildWhereForList(listOptions *usecase.RoomListOptions, wit
 		where = append(where, squirrel.Eq{"profile_id": *listOptions.FilterProfileID})
 	}
 
+	if listOptions.FilterStatus != nil {
+		where = append(where, squirrel.Eq{"status": *listOptions.FilterStatus})
+	}
+
+	if listOptions.FilterIsProcessed != nil {
+		where = append(where, squirrel.Eq{"is_processed": *listOptions.FilterIsProcessed})
+	}
+
+	if listOptions.FilterProcessTries != nil {
+		switch listOptions.FilterProcessTries.Type {
+		case uctypes.CompareEqual:
+			where = append(where, squirrel.Eq{"process_tries": listOptions.FilterProcessTries.Value})
+		case uctypes.CompareNotEqual:
+			where = append(where, squirrel.NotEq{"process_tries": listOptions.FilterProcessTries.Value})
+		case uctypes.CompareMore:
+			where = append(where, squirrel.Gt{"process_tries": listOptions.FilterProcessTries.Value})
+		case uctypes.CompareLess:
+			where = append(where, squirrel.Lt{"process_tries": listOptions.FilterProcessTries.Value})
+		case uctypes.CompareMoreOrEqual:
+			where = append(where, squirrel.GtOrEq{"process_tries": listOptions.FilterProcessTries.Value})
+		case uctypes.CompareLessOrEqual:
+			where = append(where, squirrel.LtOrEq{"process_tries": listOptions.FilterProcessTries.Value})
+		}
+	}
+
+	if listOptions.FilterNeedProcessAt != nil {
+		rule := squirrel.Or{}
+
+		if listOptions.FilterNeedProcessAt.SelectNull {
+			rule = append(rule, squirrel.Expr("need_process_at IS NULL"))
+		}
+
+		switch listOptions.FilterNeedProcessAt.CompareValue.Type {
+		case uctypes.CompareEqual:
+			rule = append(rule, squirrel.Eq{"need_process_at": listOptions.FilterNeedProcessAt.CompareValue.Value})
+		case uctypes.CompareNotEqual:
+			rule = append(rule, squirrel.NotEq{"need_process_at": listOptions.FilterNeedProcessAt.CompareValue.Value})
+		case uctypes.CompareMore:
+			rule = append(rule, squirrel.Gt{"need_process_at": listOptions.FilterNeedProcessAt.CompareValue.Value})
+		case uctypes.CompareLess:
+			rule = append(rule, squirrel.Lt{"need_process_at": listOptions.FilterNeedProcessAt.CompareValue.Value})
+		case uctypes.CompareMoreOrEqual:
+			rule = append(rule, squirrel.GtOrEq{"need_process_at": listOptions.FilterNeedProcessAt.CompareValue.Value})
+		case uctypes.CompareLessOrEqual:
+			rule = append(rule, squirrel.LtOrEq{"need_process_at": listOptions.FilterNeedProcessAt.CompareValue.Value})
+		}
+
+		where = append(where, rule)
+	}
+
 	return where
 }
 

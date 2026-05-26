@@ -16,6 +16,7 @@ import (
 	crmUC "github.com/neurochar/backend/internal/domain/crm/usecase"
 	emailingUC "github.com/neurochar/backend/internal/domain/emailing/usecase"
 	fileUC "github.com/neurochar/backend/internal/domain/file/usecase"
+	testingUC "github.com/neurochar/backend/internal/domain/testing/usecase"
 )
 
 const timeoutOnPanic = 5 * time.Second
@@ -31,14 +32,15 @@ type fnEntity struct {
 
 // Controller - cron and ticker jobs controller
 type Controller struct {
-	pkg        string
-	cfg        config.Config
-	activeFns  int32
-	fns        map[string]*fnEntity
-	logger     *slog.Logger
-	fileUC     fileUC.Usecase
-	emailingUC emailingUC.Usecase
-	crmFacade  *crmUC.Facade
+	pkg           string
+	cfg           config.Config
+	activeFns     int32
+	fns           map[string]*fnEntity
+	logger        *slog.Logger
+	fileUC        fileUC.Usecase
+	emailingUC    emailingUC.Usecase
+	crmFacade     *crmUC.Facade
+	testingFacade *testingUC.Facade
 }
 
 // NewController - constructor for Controller
@@ -48,15 +50,17 @@ func NewController(
 	fileUC fileUC.Usecase,
 	emailingUC emailingUC.Usecase,
 	crmFacade *crmUC.Facade,
+	testingFacade *testingUC.Facade,
 ) *Controller {
 	return &Controller{
-		pkg:        "jobs.Controller",
-		cfg:        cfg,
-		fns:        map[string]*fnEntity{},
-		logger:     logger,
-		fileUC:     fileUC,
-		emailingUC: emailingUC,
-		crmFacade:  crmFacade,
+		pkg:           "jobs.Controller",
+		cfg:           cfg,
+		fns:           map[string]*fnEntity{},
+		logger:        logger,
+		fileUC:        fileUC,
+		emailingUC:    emailingUC,
+		crmFacade:     crmFacade,
+		testingFacade: testingFacade,
 	}
 }
 

@@ -34,8 +34,9 @@ type GenerateRoomResultsRequestJob struct {
 }
 
 type GenerateRoomResultsRequestCandidate struct {
-	Age *int
-	Sex crmEntity.CandidateGender
+	Age    *int
+	Sex    crmEntity.CandidateGender
+	Resume *string
 }
 
 type GenerateRoomResultsRequestPsyTestResult struct {

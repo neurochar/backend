@@ -36,6 +36,10 @@ type RoomDBModel struct {
 	CreatedBy            *uuid.UUID      `db:"created_by"`
 	FinishedIP           *netip.Addr     `db:"finished_ip"`
 	FinishedAt           *time.Time      `db:"finished_at"`
+	IsProcessed          bool            `db:"is_processed"`
+	ProcessTries         int             `db:"process_tries"`
+	ProcessError         *string         `db:"process_error"`
+	NeedProcessAt        *time.Time      `db:"need_process_at"`
 
 	CreatedAt time.Time  `db:"created_at"`
 	UpdatedAt time.Time  `db:"updated_at"`
@@ -113,6 +117,10 @@ func (db *RoomDBModel) ToEntity() *entity.Room {
 		CreatedBy:            db.CreatedBy,
 		FinishedIP:           db.FinishedIP,
 		FinishedAt:           db.FinishedAt,
+		IsProcessed:          db.IsProcessed,
+		ProcessTries:         db.ProcessTries,
+		ProcessError:         db.ProcessError,
+		NeedProcessAt:        db.NeedProcessAt,
 
 		CreatedAt: db.CreatedAt,
 		UpdatedAt: db.UpdatedAt,
@@ -161,6 +169,10 @@ func MapRoomEntityToDBModel(entity *entity.Room) *RoomDBModel {
 		CreatedBy:            entity.CreatedBy,
 		FinishedAt:           entity.FinishedAt,
 		FinishedIP:           entity.FinishedIP,
+		IsProcessed:          entity.IsProcessed,
+		ProcessTries:         entity.ProcessTries,
+		ProcessError:         entity.ProcessError,
+		NeedProcessAt:        entity.NeedProcessAt,
 
 		CreatedAt: entity.CreatedAt,
 		UpdatedAt: entity.UpdatedAt,

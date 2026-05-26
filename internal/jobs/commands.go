@@ -12,6 +12,7 @@ const (
 	CommandProcessEmailsToDelete                = "process_emails_to_delete"
 	CommandProcessCrmCandidatesResumesNew       = "process_crm_candidates_resumes_new"
 	CommandProcessCrmCandidatesResumesToProcess = "process_crm_candidates_resumes_to_process"
+	CommandProcessRoomsResults                  = "process_rooms_results"
 )
 
 func (ctrl *Controller) RegisterProcessFilesToDelete(timeout time.Duration, failedTimeout time.Duration) {
@@ -47,5 +48,11 @@ func (ctrl *Controller) RegisterProcessCrmCandidatesResumesNew(timeout time.Dura
 func (ctrl *Controller) RegisterProcessCrmCandidatesResumesToProcess(timeout time.Duration, failedTimeout time.Duration) {
 	ctrl.registerFn(CommandProcessCrmCandidatesResumesToProcess, func(ctx context.Context) (time.Duration, error) {
 		return ctrl.processCrmCandidatesResumesToProcess(ctx, timeout, failedTimeout)
+	})
+}
+
+func (ctrl *Controller) RegisterProcessRoomsResults(timeout time.Duration, failedTimeout time.Duration) {
+	ctrl.registerFn(CommandProcessRoomsResults, func(ctx context.Context) (time.Duration, error) {
+		return ctrl.processRoomsResults(ctx, timeout, failedTimeout)
 	})
 }

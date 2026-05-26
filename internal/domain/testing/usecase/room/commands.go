@@ -3,8 +3,8 @@ package room
 import (
 	"context"
 	"errors"
-	"log/slog"
 	"net/netip"
+	"time"
 
 	"github.com/google/uuid"
 	appErrors "github.com/neurochar/backend/internal/app/errors"
@@ -15,6 +15,7 @@ import (
 	"github.com/neurochar/backend/internal/domain/testing/usecase"
 	"github.com/neurochar/backend/internal/infra/loghandler"
 	"github.com/neurochar/backend/pkg/auth"
+	"github.com/samber/lo"
 )
 
 func (uc *UsecaseImpl) CreateByDTO(
@@ -202,6 +203,7 @@ func (uc *UsecaseImpl) Finish(
 		}
 
 		room.FinishedIP = requestIP
+		room.FinishedAt = lo.ToPtr(time.Now())
 
 		err = uc.repo.Update(ctx, room)
 		if err != nil {
@@ -213,19 +215,6 @@ func (uc *UsecaseImpl) Finish(
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
 	}
-
-	go func(ctx context.Context) {
-		defer func() {
-			if err := recover(); err != nil {
-				uc.logger.ErrorContext(ctx, "failed to process room", slog.Any("err", err))
-			}
-		}()
-
-		err := uc.processRoom(ctx, id)
-		if err != nil {
-			uc.logger.ErrorContext(ctx, "failed to process room", slog.Any("room_id", id), slog.Any("err", err))
-		}
-	}(context.Background())
 
 	return nil
 }
@@ -248,7 +237,26 @@ func (uc *UsecaseImpl) Process(
 		}
 	}
 
-	err = uc.processRoom(ctx, id)
+	err = uc.dbMasterClient.Do(ctx, func(ctx context.Context) error {
+		roomDTO, err := uc.FindOneByID(ctx, id, &uctypes.QueryGetOneParams{
+			ForUpdate: true,
+		}, nil)
+		if err != nil {
+			return err
+		}
+
+		err = uc.processRoom(ctx, roomDTO)
+		if err != nil {
+			return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
+		}
+
+		err = uc.repo.Update(ctx, roomDTO.Room)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
 	if err != nil {
 		return appErrors.Chainf(err, "%s.%s", uc.pkg, op)
 	}
